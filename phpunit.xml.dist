@@ -15,12 +15,21 @@
     <testsuite name="Honeybadger Test Suite">
       <directory>./tests</directory>
     </testsuite>
-
-    <filter>
-      <whitelist>
-        <directory>./lib</directory>
-      </whitelist>
-    </filter>
   </testsuites>
+
+  <filter>
+    <whitelist>
+      <directory>./lib</directory>
+    </whitelist>
+
+    <blacklist>
+      <directory>./vendor</directory>
+    </blacklist>
+  </filter>
+
+  <logging>
+    <log type="coverage-html" target="./coverage" charset="UTF-8"
+         highlight="false" lowUpperBound="70" highLowerBound="80"/>
+  </logging>
 
 </phpunit>
