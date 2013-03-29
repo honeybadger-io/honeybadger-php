@@ -3,6 +3,7 @@
 namespace Honeybadger\Backtrace;
 
 use \Honeybadger\Filter;
+use \Honeybadger\Util\SemiOpenStruct;
 
 /**
  * Handles backtrace parsing line by line.
@@ -10,17 +11,9 @@ use \Honeybadger\Filter;
  * @package   Honeybadger
  * @category  Backtrace
  */
-class Line {
+class Line extends SemiOpenStruct {
 
-	protected static $attributes = array(
-		'file',
-		'number',
-		'method',
-		'source',
-		'filtered_file',
-		'filtered_number',
-		'filtered_method',
-	);
+	protected $_attribute_methods = array('source');
 
 	/**
 	 * @var  string  The file portion of the line.
@@ -121,40 +114,6 @@ class Line {
 		$this->file            = $file;
 		$this->number          = $number;
 		$this->method          = $method;
-	}
-
-	/**
-	 * Provides read-only access to the file, line number, and method of the
-	 * backtrace line.
-	 *
-	 * @param   string  $attr   `file`, `number`, or `method`
-	 * @return  string|integer  The requested property
-	 */
-	public function __get($attr)
-	{
-		if (in_array($attr, self::$attributes))
-		{
-			if ($attr == 'source')
-				return $this->source();
-
-			return $this->$attr;
-		}
-		else
-		{
-			throw new \Exception('Unknown property '.$attr);
-		}
-	}
-
-	public function __set($attr, $value)
-	{
-		if (in_array($attr, self::$attributes))
-		{
-			throw new \Exception('Properties are read-only');
-		}
-		else
-		{
-			throw new \Exception('Unknown property '.$attr);
-		}
 	}
 
 	/**
