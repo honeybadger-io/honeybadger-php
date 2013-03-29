@@ -3,6 +3,7 @@
 namespace Honeybadger;
 
 use \Honeybadger\Backtrace\Line;
+use \Honeybadger\Util\SemiOpenStruct;
 
 /**
  * Parses and represents backtraces of PHP exceptions for notices.
@@ -10,12 +11,7 @@ use \Honeybadger\Backtrace\Line;
  * @package   Honeybadger
  * @category  Backtrace
  */
-class Backtrace {
-
-	/**
-	 * @var  array  List of attributes that can be read through [__get].
-	 */
-	protected static $attributes = array('lines', 'application_lines');
+class Backtrace extends SemiOpenStruct {
 
 	/**
 	 * @var  array  Holder for an array of [Backtrace\Line]s.
@@ -73,42 +69,6 @@ class Backtrace {
 	}
 
 	/**
-	 * Provides read-only access to the backtrace's lines.
-	 *
-	 * @param   string  $attr   Attribute to read.
-	 * @return  mixed   The requested property.
-	 */
-	public function __get($attr)
-	{
-		if (in_array($attr, self::$attributes))
-		{
-			return $this->$attr;
-		}
-		else
-		{
-			throw new \Exception('Unknown property '.$attr);
-		}
-	}
-
-	/**
-	 * Throws exceptions (properties are read-only).
-	 *
-	 * @param   string  $attr   Attribute to set.
-	 * @param   mixed   $value  Value to set.
-	 */
-	public function __set($attr, $value)
-	{
-		if (in_array($attr, self::$attributes))
-		{
-			throw new \Exception('Properties are read-only');
-		}
-		else
-		{
-			throw new \Exception('Unknown property '.$attr);
-		}
-	}
-
-	/**
 	 * Formats the backtrace as a string, similar to the format of a typical
 	 * Ruby backtrace (mostly for compatability).
 	 *
@@ -126,21 +86,11 @@ class Backtrace {
 	 *
 	 * @return  array  The backtrace lines.
 	 */
-	public function to_array()
+	public function as_array()
 	{
 		return array_map(function($line) {
 			return $line->to_array();
 		}, $this->lines);
-	}
-
-	/**
-	 * Formats the backtrace as a JSON array.
-	 *
-	 * @return  string  The backtrace lines.
-	 */
-	public function to_json()
-	{
-		return json_encode($this->to_array());
 	}
 
 } // End Backtrace

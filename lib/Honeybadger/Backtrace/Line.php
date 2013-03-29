@@ -153,7 +153,7 @@ class Line extends SemiOpenStruct {
 	 *
 	 * @return  array  The backtrace line
 	 */
-	public function to_array()
+	public function as_array()
 	{
 		return array(
 			'file'   => $this->filtered_file,
