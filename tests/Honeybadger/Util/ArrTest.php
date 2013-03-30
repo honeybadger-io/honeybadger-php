@@ -7,13 +7,11 @@ use \ArrayIterator;
 use \stdClass;
 
 /**
- * Tests the Arr lib that's shipped with kohana
+ * Tests the Arr library that's shipped with Kohana.
  *
- * @group kohana
- * @group kohana.core
- * @group kohana.core.arr
+ * @group honeybadger
  *
- * @package    Kohana
+ * @package    Honeybadger
  * @category   Tests
  * @author     Kohana Team
  * @author     BRMatt <matthew@sigswitch.com>
