@@ -1,6 +1,6 @@
 # honeybadger-php [![Build Status](https://secure.travis-ci.org/gevans/honeybadger-php.png)](http://travis-ci.org/gevans/honeybadger-php)
 
-honeybadger-php is an unofficial library for reporting applications to
+honeybadger-php is an unofficial library for reporting application errors to
 [Honeybadger](http://honeybadger.io).
 
 ## Compatibility
@@ -16,6 +16,10 @@ honeybadger-php is tested against PHP 5.3 and 5.4.
 **TODO**
 
 ## Usage
+
+**TODO**
+
+## Development Requirements
 
 **TODO**
 
