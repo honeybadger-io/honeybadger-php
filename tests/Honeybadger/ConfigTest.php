@@ -2,6 +2,11 @@
 
 namespace Honeybadger;
 
+/**
+ * Tests Honeybadger\Config.
+ *
+ * @group honeybadger
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase {
 
 	private static $options = array(

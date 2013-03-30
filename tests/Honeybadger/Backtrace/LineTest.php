@@ -2,7 +2,6 @@
 
 namespace Honeybadger\Backtrace;
 
-
 /**
  * Tests Honeybadger\Backtrace\Line.
  *

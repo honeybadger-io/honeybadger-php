@@ -2,9 +2,13 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Backtrace;
 use Honeybadger\Backtrace\Line;
 
+/**
+ * Tests Honeybadger\Backtrace.
+ *
+ * @group honeybadger
+ */
 class BacktraceTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_parse_drops_null_lines()
