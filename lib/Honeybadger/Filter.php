@@ -11,12 +11,10 @@ class Filter {
 	 * @param   array    $data       Data to filter.
 	 * @return  array    Filtered data
 	 */
-	public static function run_callbacks(array $callbacks = array(), $data)
+	public static function callbacks(array $callbacks, array $data)
 	{
 		if (empty($callbacks) OR empty($data))
-		{
 			return $data;
-		}
 
 		$filtered = array();
 
@@ -39,12 +37,19 @@ class Filter {
 
 	public static function params(array $keys = array(), array $params = array())
 	{
-		foreach ($keys as $key)
-		{
-			if ( ! array_key_exists($key, $params))
-				continue;
+		if (empty($keys) OR empty($params))
+			return $params;
 
-			$params[$key] = '[FILTERED]';
+		foreach ($params as $param => &$value)
+		{
+			if (is_array($value))
+			{
+				$value = self::params($keys, $value);
+			}
+			elseif (in_array($param, $keys))
+			{
+				$value = '[FILTERED]';
+			}
 		}
 
 		return $params;

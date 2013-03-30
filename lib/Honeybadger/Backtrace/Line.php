@@ -65,7 +65,7 @@ class Line extends SemiOpenStruct {
 		if ( ! isset($options['filters']))
 			$options['filters'] = array();
 
-		$filtered = Filter::run_callbacks($options['filters'], $unparsed_line);
+		$filtered = Filter::callbacks($options['filters'], $unparsed_line);
 
 		if ($filtered === NULL)
 			return;
