@@ -107,4 +107,88 @@ class FilterTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expected, Filter::params($filter_keys, $params));
 	}
 
+	public function provider_project_root()
+	{
+		return array(
+			array(
+				'/var/www/application',
+				'[PROJECT_ROOT]/models/user.php',
+				'/var/www/application/models/user.php',
+			),
+			array(
+				'',
+				'/usr/local/share/php/Some/Library.php',
+				'/usr/local/share/php/Some/Library.php',
+			),
+			array(
+				'/var/www/application',
+				'[PROJECT_ROOT]/models/user.php',
+				'/var/www/application/models/user.php',
+			),
+			array(
+				'/srv/http/app',
+				'[PROJECT_ROOT]/index.php',
+				'/srv/http/app/index.php',
+			),
+			array(
+				'/srv/http/app',
+				'[PROJECT_ROOT]',
+				'/srv/http/app',
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider provider_project_root
+	 */
+	public function test_project_root_should_shorten_file_paths($project_root, $shortened, $full)
+	{
+		Honeybadger::$config = new Config(array(
+			'project_root' => $project_root,
+		));
+
+		$actual = Filter::project_root(array(
+			'file' => $full,
+		));
+
+		$this->assertEquals($shortened, $actual['file']);
+
+		Honeybadger::$config = new Config;
+	}
+
+	public function provider_expand_paths()
+	{
+		return array(
+			array(
+				realpath(__DIR__.'/BacktraceTest.php'),
+				__DIR__.'/Util/../BacktraceTest.php',
+			),
+			array(
+				realpath(__DIR__.'/../../README.md'),
+				__DIR__.'/Util/../../../././README.md',
+			),
+			array(
+				__DIR__.'/teehee/i/do/not/exist',
+				__DIR__.'/teehee/i/do/not/exist',
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider provider_expand_paths
+	 */
+	public function test_expand_paths($expanded, $relative)
+	{
+		$actual = Filter::expand_paths(array(
+			'file' => $relative,
+		));
+
+		$this->assertEquals($expanded, $actual['file']);
+	}
+
+	public function test_honeybadger_paths()
+	{
+		$this->markTestIncomplete();
+	}
+
 }

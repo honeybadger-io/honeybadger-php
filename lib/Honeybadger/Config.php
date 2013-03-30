@@ -173,7 +173,11 @@ class Config extends SemiOpenStruct {
 	/**
 	 * @var  array  Default backtrace filters.
 	 */
-	public static $default_backtrace_filters = array();
+	public static $default_backtrace_filters = array(
+		array('\\Honeybadger\\Filter', 'project_root'),
+		array('\\Honeybadger\\Filter', 'expand_paths'),
+		array('\\Honeybadger\\Filter', 'honeybadger_paths'),
+	);
 
 	/**
 	 * @var  array  Default ignored classes.
