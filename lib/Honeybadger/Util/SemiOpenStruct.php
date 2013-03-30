@@ -25,15 +25,6 @@ abstract class SemiOpenStruct implements \ArrayAccess {
 	 */
 	protected $_attribute_methods = array();
 
-	public function __construct(array $attributes = array())
-	{
-		foreach ($attributes as $attribute => $value)
-		{
-			$attribute = '_'.$attribute;
-			$this->$attribute = $value;
-		}
-	}
-
 	public function as_array()
 	{
 		$attributes = get_object_vars($this);
