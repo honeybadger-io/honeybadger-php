@@ -69,6 +69,26 @@ class Backtrace extends SemiOpenStruct {
 	}
 
 	/**
+	 * Checks whether the backtrace has lines.
+	 *
+	 * @return  `TRUE` when backtrace is not empty, `FALSE` otherwise.
+	 */
+	public function has_lines()
+	{
+		return ( ! empty($this->lines));
+	}
+
+	/**
+	 * Checks whether the backtrace has application lines.
+	 *
+	 * @return  `TRUE` when backtrace has application lines, `FALSE` otherwise.
+	 */
+	public function has_application_lines()
+	{
+		return ( ! empty($this->application_lines));
+	}
+
+	/**
 	 * Formats the backtrace as a string, similar to the format of a typical
 	 * Ruby backtrace (mostly for compatability).
 	 *

@@ -114,6 +114,28 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(array($lines[0], $lines[1]), $backtrace->application_lines);
 	}
 
+	public function test_has_lines()
+	{
+		$backtrace = new Backtrace;
+		$this->assertFalse($backtrace->has_lines());
+
+		$backtrace = new Backtrace(array(
+			new Line('super_cool_file.php', 3, 'super_cool_method')
+		));
+		$this->assertTrue($backtrace->has_lines());
+	}
+
+	public function test_has_application_lines()
+	{
+		$backtrace = new Backtrace;
+		$this->assertFalse($backtrace->has_application_lines());
+
+		$backtrace = new Backtrace(array(
+			new Line('[PROJECT_ROOT]/super_cool_file.php', 3, 'super_cool_method')
+		));
+		$this->assertTrue($backtrace->has_application_lines());
+	}
+
 	public function test_string_conversion_returns_ruby_style_backtrace()
 	{
 		$lines = array(
