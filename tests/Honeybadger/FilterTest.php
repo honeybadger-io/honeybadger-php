@@ -80,7 +80,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase {
 	public function test_should_filter_params_recursively()
 	{
 		$filter_keys = array(
-			'password', 'secret',
+			'password', 'secret', 'associative',
 		);
 
 		$params = array(
@@ -92,6 +92,16 @@ class FilterTest extends \PHPUnit_Framework_TestCase {
 					'baz' => array(
 						'secret' => 'bar',
 					),
+				),
+				array(
+					'a', 'real', 'array', 'not', 'a', 'hash',
+				),
+				array(
+					'a',
+					'fake' => 'and annoying',
+					'mixed up',
+					'jumbled',
+					'associative' => 'array',
 				),
 			),
 		);
@@ -105,6 +115,16 @@ class FilterTest extends \PHPUnit_Framework_TestCase {
 					'baz' => array(
 						'secret' => '[FILTERED]',
 					),
+				),
+				array(
+					'a', 'real', 'array', 'not', 'a', 'hash',
+				),
+				array(
+					'a',
+					'fake' => 'and annoying',
+					'mixed up',
+					'jumbled',
+					'associative' => '[FILTERED]',
 				),
 			),
 		);

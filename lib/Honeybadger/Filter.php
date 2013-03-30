@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use \Honeybadger\Util\Arr;
+
 class Filter {
 
 	/**
@@ -54,7 +56,7 @@ class Filter {
 			{
 				$value = self::params($keys, $value);
 			}
-			elseif (in_array($param, $keys))
+			elseif ( ! is_integer($param) AND in_array($param, $keys))
 			{
 				$value = '[FILTERED]';
 			}
@@ -86,9 +88,6 @@ class Filter {
 
 		return $line;
 	}
-
-	// '\\Honeybadger\\Filter::relative_paths',
-	// '\\Honeybadger\\Filter::honeybadger_paths',
 
 	/**
 	 * Attempts to expand paths to their real locations, if possible.
