@@ -2,8 +2,12 @@
 
 namespace Honeybadger\Backtrace;
 
-use Honeybadger\Backtrace\Line;
 
+/**
+ * Tests Honeybadger\Backtrace\Line.
+ *
+ * @group honeybadger
+ */
 class LineTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_attributes_read_only()
@@ -159,12 +163,11 @@ class LineTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_source()
 	{
-		$line = new Line(__FILE__, 6, 'foo');
+		$line = new Line(path_to_fixture('MyClass.php'), 1, 'does_amazing_things');
 		$this->assertEquals(array(
+			"<?php\n",
 			"\n",
-			"use Honeybadger\Backtrace\Line;\n",
-			"\n",
-			"class LineTest extends \PHPUnit_Framework_TestCase {\n",
+			"class MyClass {\n",
 			"\n",
 		), $line->source);
 	}
