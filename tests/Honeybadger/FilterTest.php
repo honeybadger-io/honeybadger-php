@@ -186,9 +186,44 @@ class FilterTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($expanded, $actual['file']);
 	}
 
-	public function test_honeybadger_paths()
+	public function provider_honeybadger_paths()
 	{
-		$this->markTestIncomplete();
+		return array(
+			array(
+				TRUE,
+				'lib/Honeybadger',
+			),
+			array(
+				FALSE,
+				'bananas.php',
+			),
+
+			array(
+				TRUE,
+				'/usr/local/share/php/lib/honeybadger-php/lib/Honeybadger/Config.php',
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider provider_honeybadger_paths
+	 */
+	public function test_honeybadger_paths($filtered, $file)
+	{
+		$line = array(
+			'file' => $file,
+		);
+
+		$actual = Filter::honeybadger_paths($line);
+
+		if ($filtered)
+		{
+			$this->assertNull($actual);
+		}
+		else
+		{
+			$this->assertEquals($line, $actual);
+		}
 	}
 
 }
