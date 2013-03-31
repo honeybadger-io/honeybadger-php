@@ -174,7 +174,7 @@ class Line extends SemiOpenStruct {
 
 		if ($start <= 0)
 		{
-			$start  = 0;
+			$start  = 1;
 			$before = 1;
 		}
 
@@ -184,14 +184,14 @@ class Line extends SemiOpenStruct {
 
 		$f = fopen($file, 'r');
 
-		for ($l = 0; $l < $size; $l++)
+		for ($l = 1; $l < $size; $l++)
 		{
 			$line = fgets($f);
 
 			if ($l < $start)
 				continue;
 
-			$lines[] = $line;
+			$lines["$l"] = trim($line);
 		}
 
 		return $lines;

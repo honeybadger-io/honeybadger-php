@@ -164,10 +164,10 @@ class LineTest extends \PHPUnit_Framework_TestCase {
 	{
 		$line = new Line(path_to_fixture('MyClass.php'), 1, 'does_amazing_things');
 		$this->assertEquals(array(
-			"<?php\n",
-			"\n",
-			"class MyClass {\n",
-			"\n",
+			'1' => '<?php',
+			'2' => '',
+			'3' => 'class MyClass {',
+			'4' => '',
 		), $line->source);
 	}
 
