@@ -22,7 +22,7 @@ class Filter {
 
 		foreach ($callbacks as $callback)
 		{
-			$data = $callback($data);
+			$data = call_user_func($callback, $data);
 
 			// A filter wants to hide this data.
 			if ($data === NULL)
