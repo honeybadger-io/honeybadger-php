@@ -11,6 +11,8 @@ use \Honeybadger\Errors\ReadOnly;
  * Retrieves, stores, and normalizes environment data from `$_SERVER` to prepare
  * information for serialization in [Notice]s. Additionally, provides
  * convenience methods for determining the URL of the request trigging an error.
+ *
+ * TODO: Refactor to follow better, consistent standards (Rack).
  */
 class Environment implements \ArrayAccess, \IteratorAggregate {
 
@@ -108,12 +110,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 
 	public function as_array()
 	{
-		foreach ($this->_attribute_methods as $method)
-		{
-			$array[$method] = $this->$method();
-		}
-
-		return $array;
+		return $this->data;
 	}
 
 	public function as_json()
