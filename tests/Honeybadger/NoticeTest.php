@@ -174,7 +174,7 @@ class NoticeTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('Notification', $notice->error_message);
 	}
 
-	public function test_should_deliver_to_sender()
+	public function test_should_deliver_to_sender_and_return_result()
 	{
 		$notice = $this->build_notice();
 
@@ -183,12 +183,13 @@ class NoticeTest extends \PHPUnit_Framework_TestCase {
 		));
 		$sender->expects($this->once())
                  ->method('send_to_honeybadger')
-                 ->with($this->equalTo($notice));
+                 ->with($this->equalTo($notice))
+                 ->will($this->returnValue('win'));
 
         $original_sender = Honeybadger::$sender;
         Honeybadger::$sender = $sender;
 
-        $notice->deliver();
+        $this->assertEquals('win', $notice->deliver());
 
         Honeybadger::$sender = $original_sender;
 	}

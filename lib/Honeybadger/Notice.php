@@ -232,7 +232,7 @@ class Notice extends SemiOpenStruct {
 
 	public function deliver()
 	{
-		Honeybadger::$sender->send_to_honeybadger($this);
+		return Honeybadger::$sender->send_to_honeybadger($this);
 	}
 
 	public function as_array()
