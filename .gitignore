@@ -15,3 +15,6 @@
 
 # Ignore composer-installed dependencies
 /vendor
+
+# Ignore developer-specific configs
+/phpunit.xml

@@ -17,6 +17,10 @@
     </testsuite>
   </testsuites>
 
+  <php>
+    <server name="HONEYBADGER_API_KEY" value="change me!" />
+  </php>
+
   <filter>
     <whitelist>
       <directory>./lib</directory>
