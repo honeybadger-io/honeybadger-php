@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		'development_environments', 'environment_name', 'project_root',
 		'notifier_name', 'notifier_version', 'notifier_url', 'logger',
 		'user_information', 'framework', 'source_extract_radius',
-		'send_request_session', 'debug',
+		'send_request_session', 'debug', 'certificate_authority',
 	);
 
 	public function test_config_has_default_params_filters()
@@ -28,6 +28,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	public function test_config_has_default_backtrace_filters()
 	{
 		$this->assertNotEmpty(Config::$default_backtrace_filters);
+	}
+
+	public function test_new_config_detects_certificate_authority_when_null()
+	{
+		$config = new Config;
+		$this->assertEquals(realpath(__DIR__.'/../../resources/ca-bundle.crt'),
+			$config->certificate_authority);
+	}
+
+	public function test_new_config_does_not_overwrite_certificate_authority()
+	{
+		$config = new Config(array(
+			'certificate_authority' => 'foo',
+		));
+
+		$this->assertEquals('foo', $config->certificate_authority);
 	}
 
 	public function test_new_config_sets_default_notifier_info()
@@ -46,6 +62,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 			'host'                     => 'my-notifier.io',
 			'port'                     => 123,
 			'secure'                   => FALSE,
+			'certificate_authority'    => '/etc/ssl/ca-bundle.crt',
 			'http_open_timeout'        => 11,
 			'http_read_timeout'        => 21,
 			'proxy_host'               => '127.0.0.1',

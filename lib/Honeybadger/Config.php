@@ -31,6 +31,14 @@ class Config extends SemiOpenStruct {
 	protected $_secure = TRUE;
 
 	/**
+	 * @var  mixed  `'system'` to use whatever CAs OpenSSL has
+	 *       installed on your system. `NULL` to use the ca-bundle.crt file
+	 *       included in Honeybadger itself (recommended and default), or
+	 *       specify a full path to a file or directory.
+	 */
+	protected $certificate_authority;
+
+	/**
 	 * @var  integer  The HTTP open timeout in seconds (defaults to `2`).
 	 */
 	public $http_open_timeout = 2;
@@ -213,6 +221,11 @@ class Config extends SemiOpenStruct {
 		{
 			$this->port = $this->default_port();
 		}
+
+		if ( ! $this->certificate_authority)
+		{
+			$this->certificate_authority = $this->default_certificate_authority();
+		}
 	}
 
 	/**
@@ -303,6 +316,19 @@ class Config extends SemiOpenStruct {
 		return ( ! in_array($this->environment_name, $this->development_environments));
 	}
 
+	public function base_url()
+	{
+		$base  = $this->secure ? 'https' : 'http';
+		$base .= '://'.$this->host;
+
+		if (($this->secure AND $this->port != 443) OR ( ! $this->secure AND $this->port != 80))
+		{
+			$base .= ':'.$this->port;
+		}
+
+		return $base;
+	}
+
 	public function set($option, $value)
 	{
 		if ($option == 'secure')
@@ -340,6 +366,17 @@ class Config extends SemiOpenStruct {
 	private function default_port()
 	{
 		return ($this->secure) ? 443 : 80;
+	}
+
+	/**
+	 * Determines the path to the certificate authority bundled with
+	 * the library.
+	 *
+	 * @return  string  Path to certificate authority bundle.
+	 */
+	private function default_certificate_authority()
+	{
+		return realpath(__DIR__.'/../../resources/ca-bundle.crt');
 	}
 
 } // End Config
