@@ -50,6 +50,7 @@ class Honeybadger {
 		// Honeybadger is now initialized.
 		self::$_init = TRUE;
 
+		self::$sender = new Sender;
 		self::$config = new Config;
 	}
 

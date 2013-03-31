@@ -45,7 +45,7 @@ class Filter {
 	 * @param   array  $params Parameters to filter.
 	 * @return  array  Filtered parameters.
 	 */
-	public static function params(array $keys = array(), array $params = array())
+	public static function params(array $keys = array(), $params = array())
 	{
 		if (empty($keys) OR empty($params))
 			return $params;
@@ -80,10 +80,13 @@ class Filter {
 	 */
 	public static function project_root($line)
 	{
-		if (empty(Honeybadger::$config->project_root))
+		$config = Notice::$current ?: Honeybadger::$config;
+		$project_root = (string) $config->project_root;
+
+		if (strlen($project_root) === 0)
 			return $line;
 
-		$pattern = '/'.preg_quote(Honeybadger::$config->project_root, '/').'/';
+		$pattern = '/'.preg_quote($project_root, '/').'/';
 		$line['file'] = preg_replace($pattern, '[PROJECT_ROOT]', $line['file']);
 
 		return $line;
