@@ -191,10 +191,23 @@ class Line extends SemiOpenStruct {
 			if ($l < $start)
 				continue;
 
-			$lines["$l"] = trim($line);
+			$lines["$l"] = $this->sanitize_line($line);
 		}
 
 		return $lines;
+	}
+
+	private function sanitize_line($line)
+	{
+		$trimmed = trim($line, "\n\r\0\x0B");
+
+		return preg_replace(array(
+			'/\s*$/',
+			'/\t/'
+		), array(
+			'',
+			'    ',
+		), $trimmed);
 	}
 
 } // End Line

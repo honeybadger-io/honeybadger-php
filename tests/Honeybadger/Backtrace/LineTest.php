@@ -171,6 +171,18 @@ class LineTest extends \PHPUnit_Framework_TestCase {
 		), $line->source);
 	}
 
+	public function test_source_replaces_tabs_with_spaces()
+	{
+		$line = new Line(path_to_fixture('MyClass.php'), 9, 'does_amazing_things');
+		$this->assertEquals(array(
+			'6'  => '    {',
+			'7'  => '        for ($i = 0; $i < 25; $i++)',
+			'8'  => '        {',
+			'9'  => '            echo "Check out this amazing stuff!\n";',
+			'10' => '        }',
+		), $line->source);
+	}
+
 	public function test_source_returns_empty_array_for_non_existent()
 	{
 		$line = new Line(NULL, 123, 'something');
