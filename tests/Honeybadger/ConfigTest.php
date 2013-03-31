@@ -239,4 +239,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(443, $config->port);
 	}
 
+	public function test_log_level_should_be_info_when_debug()
+	{
+		$config = new Config(array('debug' => TRUE));
+		$this->assertEquals(Logger::INFO, $config->log_level);
+	}
+
+	public function test_log_level_should_be_debug_when_not_debug()
+	{
+		$config = new Config(array('debug' => FALSE));
+		$this->assertEquals(Logger::DEBUG, $config->log_level);
+	}
+
 }

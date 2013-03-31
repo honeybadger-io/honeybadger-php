@@ -26,6 +26,11 @@ class Honeybadger {
 	public static $config;
 
 	/**
+	 * @var  Logger  Honeybadger logger.
+	 */
+	public static $logger;
+
+	/**
 	 * @var  array  Stores custom data for sending user-specific information
 	 *              in notifications.
 	 */
@@ -50,8 +55,9 @@ class Honeybadger {
 		// Honeybadger is now initialized.
 		self::$_init = TRUE;
 
-		self::$sender = new Sender;
+		self::$logger = new Logger\Void;
 		self::$config = new Config;
+		self::$sender = new Sender;
 	}
 
 } // End Honeybadger

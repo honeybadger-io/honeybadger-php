@@ -7,7 +7,7 @@ use \Honeybadger\Util\SemiOpenStruct;
 
 class Config extends SemiOpenStruct {
 
-	protected $_attribute_methods = array('secure');
+	protected $_attribute_methods = array('secure', 'log_level');
 
 	/**
 	 * @var  string  The API key for your project, found on the project edit form.
@@ -314,6 +314,11 @@ class Config extends SemiOpenStruct {
 	public function is_public()
 	{
 		return ( ! in_array($this->environment_name, $this->development_environments));
+	}
+
+	public function log_level()
+	{
+		return $this->debug ? Logger::INFO : Logger::DEBUG;
 	}
 
 	public function base_url()
