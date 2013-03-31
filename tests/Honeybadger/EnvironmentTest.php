@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use \Honeybadger\Util\Arr;
+
 /**
  * Tests Honeybadger\Environment.
  *
@@ -14,10 +16,12 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue(Environment::factory() instanceof Environment);
 	}
 
-	public function test_should_use_server_superglobal_when_not_supplied_data()
+	public function test_should_use_server_cookie_superglobals_when_not_supplied_data()
 	{
 		$environment1 = Environment::factory();
-		$environment2 = Environment::factory($_SERVER);
+		$environment2 = Environment::factory(Arr::merge($_SERVER, array(
+			'rack.request.cookie_hash' => $_COOKIE,
+		)));
 
 		$this->assertEquals($environment1, $environment2);
 	}

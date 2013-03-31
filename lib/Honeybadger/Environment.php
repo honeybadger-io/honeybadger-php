@@ -31,7 +31,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 	{
 		if ($data === NULL)
 		{
-			$data = $_SERVER;
+			$data = Arr::merge($_SERVER, array(
+				'rack.request.cookie_hash' => $_COOKIE,
+			));
 		}
 
 		$this->data = $data;
