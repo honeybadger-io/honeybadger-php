@@ -196,9 +196,9 @@ class Config extends SemiOpenStruct {
 	 * Instantiates a new configuration object, applies user-specified options,
 	 * and sets defaults.
 	 *
-	 * @param  array  $config  User-specified configuration settings
+	 * @param  array  $config  User-specified configuration.
 	 */
-	public function __construct($config = array())
+	public function __construct(array $config = array())
 	{
 		// Set default notifier info
 		$this->notifier_name = Honeybadger::NOTIFIER_NAME;
@@ -206,10 +206,7 @@ class Config extends SemiOpenStruct {
 		$this->notifier_url = Honeybadger::NOTIFIER_URL;
 
 		// Set user-specified configuration
-		foreach ($config as $item => $value)
-		{
-			$this->set($item, $value);
-		}
+		$this->values($config);
 
 		// Merge in preconfigured defaults
 		$this->params_filters    = Arr::merge($this->params_filters, self::$default_params_filters);
@@ -226,6 +223,23 @@ class Config extends SemiOpenStruct {
 		{
 			$this->certificate_authority = $this->default_certificate_authority();
 		}
+	}
+
+	/**
+	 * Sets configuration options for each supplied key-value pair.
+	 *
+	 * @param   array  $config  User-specified configuration.
+	 * @return  $this
+	 * @chainable
+	 */
+	public function values(array $config = array())
+	{
+		foreach ($config as $item => $value)
+		{
+			$this->set($item, $value);
+		}
+
+		return $this;
 	}
 
 	/**
