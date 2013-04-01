@@ -18,18 +18,10 @@ class Exception {
 
 	public static function handle(\Exception $e)
 	{
-		header('Content-Type: text/plain; charset=utf-8', TRUE, 500);
-
 		try
 		{
-			// $notice = Notice::factory(array(
-			// 	'exception' => $e,
-			// ));
-			// echo json_encode($notice->as_array(), JSON_PRETTY_PRINT);
-
 			// Attempt to send this exception to Honeybadger.
-			echo Honeybadger::notify_or_ignore($e);
-			exit;
+			Honeybadger::notify_or_ignore($e);
 		}
 		catch (Exception $e)
 		{
