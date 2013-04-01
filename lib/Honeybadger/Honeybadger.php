@@ -105,6 +105,78 @@ class Honeybadger {
 		return $info;
 	}
 
+	public static function notify($exception, array $options = array())
+	{
+		$notice = self::build_notice_for($exception, $options);
+		return self::send_notice(self::build_notice_for($exception, $options));
+	}
+
+	public static function notify_or_ignore($exception, array $options = array())
+	{
+		$notice = self::build_notice_for($exception, $options);
+
+		if ( ! $notice->ignored)
+		{
+			return self::send_notice($notice);
+		}
+	}
+
+	public static function build_lookup_hash_for($exception, array $options = array())
+	{
+		$notice = self::build_notice_for($exception, $options);
+
+		$result = array(
+			'action'           => $notice->action,
+			'component'        => $notice->component,
+			'environment_name' => 'production',
+		);
+
+		if ($notice->error_class)
+		{
+			$result['error_class'] = $notice->error_class;
+		}
+
+		if ($notice->backtrace->has_lines())
+		{
+			$result['file']        = $notice->backtrace->lines[0]->file;
+			$result['line_number'] = $notice->backtrace->lines[0]->number;
+		}
+
+		return $result;
+	}
+
+	private static function send_notice($notice)
+	{
+		if (self::$config->is_public())
+		{
+			return $notice->deliver();
+		}
+	}
+
+	private static function build_notice_for($exception, array $options = array())
+	{
+		if ($exception instanceof \Exception)
+		{
+			$options['exception'] = self::unwrap_exception($exception);
+		}
+		elseif (Arr::is_array($exception))
+		{
+			$options = Arr::merge($options, $exception);
+		}
+
+		return Notice::factory($options);
+	}
+
+	private static function unwrap_exception($exception)
+	{
+		if ($previous = $exception->getPrevious())
+		{
+			return self::unwrap_exception($previous);
+		}
+
+		return $exception;
+	}
+
 } // End Honeybadger
 
 // Additional measure to ensure defaults are initialized.
