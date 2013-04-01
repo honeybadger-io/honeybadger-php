@@ -10,6 +10,13 @@ use \Honeybadger\Util\Arr;
 
 class Notice extends SemiOpenStruct {
 
+	/**
+	 * Constructs and returns a new `Notice` with supplied options merged with
+	 * [Honeybadger::$config].
+	 *
+	 * @params  array   $options  Notice options.
+	 * @return  Notice  The constructed notice.
+	 */
 	public static function factory(array $options = array())
 	{
 		return new self(Honeybadger::$config->merge($options));

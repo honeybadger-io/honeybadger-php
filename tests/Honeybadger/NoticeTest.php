@@ -4,6 +4,7 @@ namespace Honeybadger;
 
 use \Honeybadger\Errors\HoneybadgerError;
 use \Honeybadger\Errors\NonExistentProperty;
+use \Honeybadger\Util\Arr;
 
 /**
  * Tests Honeybadger\Notice.
@@ -32,6 +33,32 @@ class NoticeTest extends \PHPUnit_Framework_TestCase {
 		}
 
 		return new Notice($config->merge($args));
+	}
+
+	public function build_exception(array $options = array())
+	{
+		if ( ! Arr::get($options, 'message'))
+		{
+			$options['message'] = 'This is my exception. There are many like it but this one is mine.';
+			$options['code']    = rand(0, 9000);
+		}
+
+		return new \Exception($options['message'], $options['code']);
+	}
+
+	public function test_factory_should_merge_config_options()
+	{
+		$exception = $this->build_exception();
+
+		$notice = Notice::factory(array(
+			'exception' => $exception,
+		));
+
+		$expected = new Notice(Honeybadger::$config->merge(array(
+			'exception' => $exception,
+		)));
+
+		$this->assertEquals($expected, $notice);
 	}
 
 	public function test_should_set_component()
