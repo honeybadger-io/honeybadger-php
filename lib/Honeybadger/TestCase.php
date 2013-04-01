@@ -31,6 +31,17 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 
 	protected $_default_config = array();
 
+	public function build_exception(array $options = array())
+	{
+		if ( ! Arr::get($options, 'message'))
+		{
+			$options['message'] = \Phaker::lorem()->sentence;
+			$options['code']    = rand(0, 999999);
+		}
+
+		return new \Exception($options['message'], $options['code']);
+	}
+
 	/**
 	 * Creates a predefined environment using the default environment
 	 *
@@ -43,10 +54,13 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 
 		if ( ! isset($this->_environment_default['\\Honeybadger\\Honeybadger::$config']))
 		{
+			$api_key = Arr::get($_SERVER, 'HONEYBADGER_API_KEY');
+
 			$config = new Config(Arr::merge(array(
 				'project_root'     => realpath(__DIR__.'/../..'),
 				'framework'        => 'PHPUnit',
 				'environment_name' => 'testing',
+				'api_key'          => empty($api_key) ? NULL : $api_key,
 			), $this->_default_config));
 			$this->_environment_default['\\Honeybadger\\Honeybadger::$config'] = $config;
 		}
