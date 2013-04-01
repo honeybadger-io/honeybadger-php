@@ -74,6 +74,12 @@ class Honeybadger {
 		return self::context($data);
 	}
 
+	public static function handle_errors()
+	{
+		Error::register_handler();
+		Exception::register_handler();
+	}
+
 	public static function report_environment_info()
 	{
 		self::$logger->add(self::$config->log_level, 'Environment info: :info', array(
