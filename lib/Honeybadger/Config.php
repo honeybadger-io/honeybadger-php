@@ -114,12 +114,13 @@ class Config extends SemiOpenStruct {
 
 	/**
 	 * @var  string  The path to the project in which the error occursed.
+	 *               TODO: Default to current working directory?
 	 */
 	public $project_root;
 
 	/**
 	 * @var  string  The name of the notifier library being used to
-	 *       send notifications.
+	 *               send notifications.
 	 */
 	public $notifier_name;
 
@@ -134,11 +135,6 @@ class Config extends SemiOpenStruct {
 	 *               send notifications.
 	 */
 	public $notifier_url;
-
-	/**
-	 * @var  object  The logger used by Honeybadger.
-	 */
-	public $logger;
 
 	/**
 	 * @var  string  The text that the placeholder is replaced with. `{{error_id}}` is the actual error number.

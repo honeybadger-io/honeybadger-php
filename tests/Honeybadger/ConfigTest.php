@@ -15,7 +15,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		'proxy_pass', 'backtrace_filters', 'params_filters',
 		'ignore_by_filters', 'ignore', 'ignore_user_agnets',
 		'development_environments', 'environment_name', 'project_root',
-		'notifier_name', 'notifier_version', 'notifier_url', 'logger',
+		'notifier_name', 'notifier_version', 'notifier_url',
 		'user_information', 'framework', 'source_extract_radius',
 		'send_request_session', 'debug', 'certificate_authority',
 	);
