@@ -223,9 +223,13 @@ class NoticeTest extends TestCase {
 
 	public function test_should_format_as_array_with_correct_layout()
 	{
-		$exception     = new \Exception('Something broke!');
-		$raw_backtrace = $exception->getTrace();
-		$backtrace     = Backtrace::parse($raw_backtrace);
+		$exception = new \Exception('Something broke!');
+
+		$raw_backtrace            = $exception->getTrace();
+		$raw_backtrace[0]['file'] = path_to_fixture('MyClass.php');
+		$raw_backtrace[0]['line'] = 1;
+
+		$backtrace = Backtrace::parse($raw_backtrace);
 
 		$data = array(
 			'backtrace'        => $raw_backtrace,

@@ -219,7 +219,13 @@ class Notice extends SemiOpenStruct {
 
 		if ($this->exception instanceof \Exception)
 		{
-			$backtrace           = $this->exception->getTrace();
+			$backtrace = $this->exception->getTrace();
+
+			if (empty($backtrace))
+			{
+				$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+			}
+
 			$this->error_class   = get_class($this->exception);
 			$this->error_message = HoneybadgerError::text($this->exception);
 		}
@@ -288,7 +294,7 @@ class Notice extends SemiOpenStruct {
 				'class'     => $this->error_class,
 				'message'   => $this->error_message,
 				'backtrace' => $this->backtrace->as_array(),
-				'source'    => $this->source_extract,
+				'source'    => $this->source_extract ?: NULL,
 			),
 			'request' => array(
 				'url'       => $this->url,
