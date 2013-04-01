@@ -18,3 +18,6 @@
 
 # Ignore developer-specific configs
 /phpunit.xml
+
+# Ignore composer.lock
+/composer.lock
