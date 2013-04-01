@@ -50,6 +50,17 @@ class NoticeTest extends TestCase {
 		$this->assertEquals($expected, $notice);
 	}
 
+	public function test_should_use_parameters()
+	{
+		$notice = $this->build_notice(array(
+			'parameters' => array(
+				'foo' => 'bar',
+			),
+		));
+
+		$this->assertEquals(array('foo' => 'bar'), $notice->params);
+	}
+
 	public function test_should_set_component()
 	{
 		$notice = $this->build_notice(array(

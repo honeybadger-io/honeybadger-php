@@ -182,7 +182,15 @@ class Notice extends SemiOpenStruct {
 		$this->ignore_by_filters = Arr::get($args, 'ignore_by_filters', array());
 		$this->backtrace_filters = Arr::get($args, 'backtrace_filters', array());
 		$this->params_filters    = Arr::get($args, 'params_filters', array());
-		$this->params            = Arr::get($args, 'params', array());
+
+		if (isset($args['parameters']))
+		{
+			$this->params = $args['parameters'];
+		}
+		elseif (isset($args['params']))
+		{
+			$this->params = $args['params'];
+		}
 
 		if (isset($args['component']))
 		{
