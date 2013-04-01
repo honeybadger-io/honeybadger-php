@@ -60,7 +60,7 @@ abstract class Logger {
 	 */
 	public function debug($message = NULL, array $variables = array())
 	{
-		return $this->add(self::DEBUG, $this->format($message));
+		return $this->add(self::DEBUG, $message);
 	}
 
 	/**
@@ -84,7 +84,7 @@ abstract class Logger {
 	 */
 	public function info($message = NULL, array $variables = array())
 	{
-		return $this->add(self::INFO, $this->format($message));
+		return $this->add(self::INFO, $message);
 	}
 
 	/**
@@ -108,7 +108,7 @@ abstract class Logger {
 	 */
 	public function warn($message = NULL, array $variables = array())
 	{
-		return $this->add(self::WARN, $this->format($message));
+		return $this->add(self::WARN, $message);
 	}
 
 	/**
@@ -132,7 +132,7 @@ abstract class Logger {
 	 */
 	public function error($message = NULL, array $variables = array())
 	{
-		return $this->add(self::ERROR, $this->format($message));
+		return $this->add(self::ERROR, $message);
 	}
 
 	/**
@@ -156,7 +156,7 @@ abstract class Logger {
 	 */
 	public function fatal($message = NULL, array $variables = array())
 	{
-		return $this->add(self::FATAL, $this->format($message));
+		return $this->add(self::FATAL, $message);
 	}
 
 	/**
@@ -180,11 +180,11 @@ abstract class Logger {
 	 * @return  $this
 	 * @chainable
 	 */
-	protected function add($severity, $message = NULL)
+	public function add($severity, $message = NULL, array $variables = array())
 	{
-		if ($severity <= $threshold)
+		if ($severity <= $this->threshold)
 		{
-			$this->write($severity, $message);
+			$this->write($severity, $this->format($message, $variables));
 		}
 
 		return $this;
