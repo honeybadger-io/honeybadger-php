@@ -30,6 +30,7 @@ class HoneybadgerTest extends TestCase {
 
 	public function test_initialized_with_void_logger()
 	{
+		$this->restoreEnvironment();
 		$this->assertTrue(Honeybadger::$logger instanceof Logger\Void);
 	}
 
@@ -76,6 +77,65 @@ class HoneybadgerTest extends TestCase {
 	public function test_reset_context_should_return_empty_array()
 	{
 		$this->assertEmpty(Honeybadger::reset_context());
+	}
+
+	public function test_should_report_environment_info()
+	{
+		Honeybadger::report_environment_info();
+		$entry = Honeybadger::$logger->last_entry();
+
+		$this->assertEquals('** [Honeybadger] Environment info: '.Honeybadger::environment_info(), $entry['message']);
+	}
+
+	public function test_environment_info_should_include_php_version()
+	{
+		$this->assertTrue(
+			strpos(Honeybadger::environment_info(),
+				phpversion()) !== FALSE
+		);
+	}
+
+	public function test_environment_info_should_include_framework()
+	{
+		$this->assertTrue(
+			strpos(Honeybadger::environment_info(),
+				Honeybadger::$config->framework) !== FALSE
+		);
+	}
+
+	public function test_environment_info_should_include_environment_name()
+	{
+		$this->assertTrue(
+			strpos(Honeybadger::environment_info(),
+				Honeybadger::$config->environment_name) !== FALSE
+		);
+	}
+
+	public function test_environment_info_should_exclude_framework_when_none()
+	{
+		Honeybadger::$config->framework = NULL;
+
+		$this->assertFalse(
+			strpos(Honeybadger::environment_info(), ' []')
+		);
+	}
+
+	public function test_environment_info_should_exclude_environment_name_when_none()
+	{
+		Honeybadger::$config->environment_name = NULL;
+
+		$this->assertFalse(
+			strpos(Honeybadger::environment_info(), ' []')
+		);
+	}
+
+	public function test_report_response_body_should_log_supplied_response_body()
+	{
+		Honeybadger::report_response_body("don't care!");
+		$entry = Honeybadger::$logger->last_entry();
+
+		$this->assertEquals("** [Honeybadger] Response from Honeybadger:\ndon't care!",
+			$entry['message']);
 	}
 
 }

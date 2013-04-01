@@ -74,6 +74,37 @@ class Honeybadger {
 		return self::context($data);
 	}
 
+	public static function report_environment_info()
+	{
+		self::$logger->add(self::$config->log_level, 'Environment info: :info', array(
+			':info' => self::environment_info(),
+		));
+	}
+
+	public static function report_response_body($response)
+	{
+		self::$logger->add(self::$config->log_level, "Response from Honeybadger:\n:response", array(
+			':response' => $response,
+		));
+	}
+
+	public static function environment_info()
+	{
+		$info = '[PHP: '.phpversion().']';
+
+		if (self::$config->framework)
+		{
+			$info .= ' ['.self::$config->framework.']';
+		}
+
+		if (self::$config->environment_name)
+		{
+			$info .= ' [Env: '.self::$config->environment_name.']';
+		}
+
+		return $info;
+	}
+
 } // End Honeybadger
 
 // Additional measure to ensure defaults are initialized.
