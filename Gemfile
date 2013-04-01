@@ -5,6 +5,12 @@ ruby '2.0.0'
 gem 'rake'
 gem 'pry'
 
+group :development do
+  # PHP support in Pow/Rack
+  gem 'rack-legacy'
+  gem 'rack-rewrite'
+end
+
 group :test do
   # Guard
   gem 'guard'

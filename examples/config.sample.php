@@ -13,4 +13,5 @@ Honeybadger::$config->values(array(
 	'http_read_timeout' => 15,
 	'environment_name'  => 'examples',
 	'debug'             => TRUE,
+	'project_root'      => __DIR__,
 ));
