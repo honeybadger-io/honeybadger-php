@@ -23,14 +23,110 @@ class EnvironmentTest extends TestCase {
 		$this->assertTrue(Environment::factory() instanceof Environment);
 	}
 
-	public function test_should_use_server_cookie_superglobals_when_not_supplied_data()
+	public function test_should_use_standard_server_superglobals_when_not_supplied_data()
 	{
-		$environment1 = Environment::factory();
-		$environment2 = Environment::factory(Arr::merge($_SERVER, array(
-			'rack.request.cookie_hash' => $_COOKIE,
-		)));
+		$environment = Environment::factory()->as_array();
+		$this->assertNotEmpty($environment);
+	}
 
-		$this->assertEquals($environment1, $environment2);
+	public function test_should_remove_non_standard_variables_when_not_supplied_data()
+	{
+		$this->setEnvironment(array(
+			'_SERVER' => array(
+				'DATABASE_URL'  => 'postgres://root:p4ssw0rd@localhost/some_db',
+				'PASSWORD_SALT' => 'abcdefghijklmnopqrstuvwxyz',
+			),
+			'_COOKIE' => array(
+			),
+		));
+
+		$environment = Environment::factory()->as_array();
+		$this->assertFalse(isset($environment['DATABASE_URL']));
+		$this->assertFalse(isset($environment['PASSWORD_SALT']));
+	}
+
+	public function test_should_not_remove_non_standard_variables_matching_http_headers()
+	{
+		$variables = array(
+			'PHP_SELF'             => '/var/www/index.php',
+			'argv'                 => array('foo', 'bar', 'baz'),
+			'argc'                 => 3,
+			'GATEWAY_INTERFACE'    => 'CGI 2.0',
+			'SERVER_ADDR'          => '127.0.0.1',
+			'SERVER_NAME'          => 'localhost',
+			'SERVER_SOFTWARE'      => 'Nginx',
+			'SERVER_PROTOCOL'      => 'HTTP/1.1',
+			'REQUEST_METHOD'       => 'POST',
+			'REQUEST_TIME'         => 123456,
+			'REQUEST_TIME_FLOAT'   => 123456.789,
+			'QUERY_STRING'         => 'foo=bar&baz[0]=2',
+			'DOCUMENT_ROOT'        => '/var/www',
+			'HTTPS'                => 'on',
+			'REMOTE_ADDR'          => '127.0.0.1',
+			'REMOTE_HOST'          => 'localhost',
+			'REMOTE_PORT'          => 23415,
+			'REMOTE_USER'          => 'admin',
+			'REDIRECT_REMOTE_USER' => 'what?',
+			'SCRIPT_FILENAME'      => '/var/www/index.php',
+			'SERVER_ADMIN'         => 'root',
+			'SERVER_PORT'          => 443,
+			'SERVER_SIGNATURE'     => 'Nginx v0.8.1-dev',
+			'PATH_TRANSLATED'      => 'again, what?',
+			'SCRIPT_NAME'          => 'see SCRIPT_FILENAME?',
+			'REQUEST_URI'          => '/show/me/something',
+			'PHP_AUTH_DIGEST'      => 'asldfhgerlig;asdv',
+			'PHP_AUTH_USER'        => 'admin',
+			'PHP_AUTH_PW'          => 'test123',
+			'AUTH_TYPE'            => 'basic',
+			'PATH_INFO'            => '/var/www/index.php/show/me/something',
+			'ORIG_PATH_INFO'       => '/',
+		);
+
+		$this->setEnvironment(array(
+			'_SERVER' => $variables,
+			'_COOKIE' => array(
+			),
+		));
+
+		$environment = Environment::factory()->as_array();
+
+		$this->assertEquals($variables, $environment);
+	}
+
+	public function test_should_include_http_headers_when_not_supplied_data()
+	{
+		$headers = array(
+			'HTTP_X_API_KEY'    => '123abc',
+			'HTTP_ACCEPT'       => 'application/json',
+			'HTTP_CONTENT_TYPE' => 'text/plain; charset=utf-16',
+			'HTTP_HOST'         => 'example.com',
+			'HTTP_USER_AGENT'   => 'cURL',
+		);
+
+		$this->setEnvironment(array(
+			'_SERVER' => $headers,
+			'_COOKIE' => array(
+			),
+		));
+
+		$environment = Environment::factory()->as_array();
+
+		$this->assertEquals($headers, $environment);
+	}
+
+	public function test_should_include_cookies_when_not_supplied_data()
+	{
+		$cookies = array(
+			'password' => 'smart people put sensitive data in plain text cookies',
+		);
+
+		$this->setEnvironment(array(
+			'_COOKIE' => $cookies,
+		));
+
+		$environment = Environment::factory()->as_array();
+
+		$this->assertEquals($cookies, $environment['rack.request.cookie_hash']);
 	}
 
 	public function test_protocol_should_be_http_when_https_blank()

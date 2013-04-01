@@ -172,9 +172,9 @@ class Config extends SemiOpenStruct {
 	public static $default_params_filters = array(
 		'password',
 		'password_confirmation',
-		'DATABASE_URL',
 		'HTTP_AUTHORIZATION',
-		'PHP_AUTH_USER',
+		'HTTP_PROXY_AUTHORIZATION',
+		'PHP_AUTH_DIGEST',
 		'PHP_AUTH_PW',
 	);
 
