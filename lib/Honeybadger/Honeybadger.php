@@ -61,6 +61,9 @@ class Honeybadger {
 		self::$logger = new Logger\Void;
 		self::$config = new Config;
 		self::$sender = new Sender;
+
+		// Set Honeybadger as the error and exception handler.
+		self::handle_errors();
 	}
 
 	public static function context(array $data = array())
