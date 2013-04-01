@@ -65,6 +65,25 @@ class Filter {
 		return $params;
 	}
 
+	public static function ignore_by_class(array $classes = array(), $object)
+	{
+		if ( ! is_object($object))
+			return FALSE;
+
+		$object_class = get_class($object);
+
+		foreach ($classes as $class)
+		{
+			// Remove trailing and prefixing backslash (unnecessary namespaces)
+			$class = trim($class, '\\');
+
+			if ($object_class === $class)
+				return TRUE;
+		}
+
+		return FALSE;
+	}
+
 	/**
 	 * Replaces occurances of configured project root with `[PROJECT_ROOT]` to
 	 * simplify backtraces.

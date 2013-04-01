@@ -390,4 +390,28 @@ class NoticeTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('http://example.com/index.php/sessions/create?one=1&two=2&three=3', $notice->url);
 	}
 
+	public function test_should_be_ignored_when_in_ignore()
+	{
+		$notice = $this->build_notice(array(
+			'exception' => new \Exception,
+			'ignore'    => array('\\Exception'),
+		));
+
+		$this->assertTrue($notice->ignored);
+	}
+
+	public function test_should_be_ignored_when_filtered_with_callback()
+	{
+		$notice = $this->build_notice(array(
+			'exception'         => new \Exception,
+			'ignore_by_filters' => array(
+				function($notice) {
+					return TRUE;
+				}
+			),
+		));
+
+		$this->assertTrue($notice->ignored);
+	}
+
 }

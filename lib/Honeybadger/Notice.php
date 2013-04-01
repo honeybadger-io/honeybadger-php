@@ -11,6 +11,11 @@ use \Honeybadger\Util\Arr;
 class Notice extends SemiOpenStruct {
 
 	/**
+	 * @var  array  The currently processing `Notice`.
+	 */
+	public static $current;
+
+	/**
 	 * Constructs and returns a new `Notice` with supplied options merged with
 	 * [Honeybadger::$config].
 	 *
@@ -22,10 +27,9 @@ class Notice extends SemiOpenStruct {
 		return new self(Honeybadger::$config->merge($options));
 	}
 
-	/**
-	 * @var  array  The currently processing `Notice`.
-	 */
-	public static $current;
+	protected $_attribute_methods = array(
+		'ignored',
+	);
 
 	/**
 	 * @var  array  Original arguments passed to constructor.
@@ -240,6 +244,20 @@ class Notice extends SemiOpenStruct {
 		$this->find_session_data();
 		$this->clean_params();
 		$this->set_context();
+	}
+
+	public function ignored()
+	{
+		if (Filter::ignore_by_class($this->ignore, $this->exception))
+			return TRUE;
+
+		foreach ($this->ignore_by_filters as $filter)
+		{
+			if (call_user_func($filter, $this))
+				return TRUE;
+		}
+
+		return FALSE;
 	}
 
 	public function deliver()
