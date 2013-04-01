@@ -9,7 +9,14 @@ use \Honeybadger\Util\Arr;
  *
  * @group honeybadger
  */
-class EnvironmentTest extends \PHPUnit_Framework_TestCase {
+class EnvironmentTest extends TestCase {
+
+	protected $_environment_default = array(
+		'_COOKIE' => array(
+			'PHPSESSID' => '5jo4beb11n218lr1p0ekdpc916',
+			'__utma'    => '1234567890.1234567890.1234567890.1234567890.1234567890.12',
+		),
+	);
 
 	public function test_factory_should_return_instance_of_environment()
 	{
@@ -183,6 +190,14 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		));
 
 		$this->assertEquals('http://www.example.com:123/foo/bar/xyz?one=1&two=2&three=3', $env['url']);
+	}
+
+	public function test_url_returns_null_when_empty_host_and_path()
+	{
+		$env = Environment::factory(array(
+		));
+
+		$this->assertNull($env->url);
 	}
 
 }

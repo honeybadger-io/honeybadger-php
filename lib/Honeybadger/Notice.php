@@ -267,6 +267,8 @@ class Notice extends SemiOpenStruct {
 
 	public function as_array()
 	{
+		$cgi_data = $this->cgi_data->as_array();
+
 		return array(
 			'notifier' => array(
 				'name'     => $this->notifier_name,
@@ -284,9 +286,9 @@ class Notice extends SemiOpenStruct {
 				'url'       => $this->url,
 				'component' => $this->component,
 				'action'    => $this->action,
-				'params'    => $this->params,
-				'session'   => $this->session_data,
-				'cgi_data'  => $this->cgi_data->as_array(),
+				'params'    => empty($this->params) ? NULL : $this->params,
+				'session'   => empty($this->params) ? NULL : $this->session_data,
+				'cgi_data'  => empty($cgi_data) ? NULL : $cgi_data,
 				'context'   => $this->context,
 			),
 			'server' => array(

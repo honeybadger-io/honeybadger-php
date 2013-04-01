@@ -32,7 +32,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		if ($data === NULL)
 		{
 			$data = Arr::merge($_SERVER, array(
-				'rack.request.cookie_hash' => $_COOKIE,
+				'rack.request.cookie_hash' => empty($_COOKIE) ? NULL : $_COOKIE,
 			));
 		}
 
@@ -107,7 +107,10 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 			$url .= ':'.$this->port;
 		}
 
-		return $url.$this->fullpath;
+		$url .= $this->fullpath;
+
+		if ( ! preg_match('/^https?:\/{3}$/', $url))
+			return $url;
 	}
 
 	public function as_array()

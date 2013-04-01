@@ -11,7 +11,7 @@ use \Honeybadger\Util\Arr;
  *
  * @group honeybadger
  */
-class NoticeTest extends \PHPUnit_Framework_TestCase {
+class NoticeTest extends TestCase {
 
 	public function configure()
 	{
@@ -33,17 +33,6 @@ class NoticeTest extends \PHPUnit_Framework_TestCase {
 		}
 
 		return new Notice($config->merge($args));
-	}
-
-	public function build_exception(array $options = array())
-	{
-		if ( ! Arr::get($options, 'message'))
-		{
-			$options['message'] = 'This is my exception. There are many like it but this one is mine.';
-			$options['code']    = rand(0, 9000);
-		}
-
-		return new \Exception($options['message'], $options['code']);
 	}
 
 	public function test_factory_should_merge_config_options()
