@@ -3,9 +3,11 @@
  * When all else fails, capture *everything* that slips through.
  */
 
-require 'config.php';
-
 use Honeybadger\Honeybadger;
+
+$options = include 'config.php';
+
+Honeybadger::$config->values($options);
 
 Honeybadger::handle_errors();
 

@@ -4,9 +4,11 @@
  * available options.
  */
 
-require 'config.php';
-
 use Honeybadger\Honeybadger;
+
+$options = include 'config.php';
+
+Honeybadger::$config->values($options);
 
 echo Honeybadger::notify(array(
 	'error_class'   => 'Special Error',

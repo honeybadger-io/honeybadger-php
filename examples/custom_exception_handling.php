@@ -3,9 +3,11 @@
  * Catch and notify of an exception you caught in your app.
  */
 
-require 'config.php';
-
 use Honeybadger\Honeybadger;
+
+$options = include 'config.php';
+
+Honeybadger::$config->values($options);
 
 try
 {
