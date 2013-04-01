@@ -10,6 +10,11 @@ use \Honeybadger\Util\Arr;
 
 class Notice extends SemiOpenStruct {
 
+	public static function factory(array $options = array())
+	{
+		return new self(Honeybadger::$config->merge($options));
+	}
+
 	/**
 	 * @var  array  The currently processing `Notice`.
 	 */
@@ -328,7 +333,7 @@ class Notice extends SemiOpenStruct {
 
 	private function set_context()
 	{
-		$this->context = Honeybadger::$context;
+		$this->context = Honeybadger::context();
 
 		if (isset($this->args['context']) AND is_array($this->args['context']))
 		{

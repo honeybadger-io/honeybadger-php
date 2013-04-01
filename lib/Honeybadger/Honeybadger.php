@@ -2,13 +2,16 @@
 
 namespace Honeybadger;
 
+use \Honeybadger\Util\Arr;
+
 /**
  * @package  Honeybadger
  */
 class Honeybadger {
 
-	// Library version
-	const VERSION = '0.1.0';
+	// Library versions
+	const VERSION    = '0.1.0';
+	const JS_VERSION = '0.0.2';
 
 	// Notifier constants
 	const NOTIFIER_NAME = 'honeybadger-php';
@@ -34,7 +37,7 @@ class Honeybadger {
 	 * @var  array  Stores custom data for sending user-specific information
 	 *              in notifications.
 	 */
-	public static $context = array();
+	protected static $context = array();
 
 	/**
 	 * @var  boolean  Whether Honeybadger has been initialized.
@@ -58,6 +61,17 @@ class Honeybadger {
 		self::$logger = new Logger\Void;
 		self::$config = new Config;
 		self::$sender = new Sender;
+	}
+
+	public static function context(array $data = array())
+	{
+		return self::$context = array_merge(self::$context, $data);
+	}
+
+	public static function reset_context(array $data = array())
+	{
+		self::$context = array();
+		return self::context($data);
 	}
 
 } // End Honeybadger
