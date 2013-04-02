@@ -61,10 +61,10 @@ $app = new Slim(array(
   // ...
 ));
 
-Honeybadger\Slim::init($app, array(
+$app->add(new Honeybadger\Slim(array(
     'api_key'      => '[your-api-key]',
     'project_root' => realpath(__DIR__),
-));
+)));
 
 // ...
 $app->run();

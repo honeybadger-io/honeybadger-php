@@ -14,13 +14,13 @@ $app = new Slim(array(
 ));
 
 // Configure Honeybadger to integrate with our app.
-Honeybadger\Slim::init($app, array(
+$app->add(new Honeybadger\Slim(array(
 	'api_key'           => $options['api_key'],
 	'http_open_timeout' => 15,
 	'http_read_timeout' => 15,
 	'debug'             => TRUE,
 	'project_root'      => realpath(__DIR__),
-));
+)));
 
 // Make some routes:
 
