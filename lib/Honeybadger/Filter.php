@@ -79,6 +79,9 @@ class Filter {
 
 			if ($object_class === $class)
 				return TRUE;
+
+			if (is_subclass_of($object, $class))
+				return TRUE;
 		}
 
 		return FALSE;
