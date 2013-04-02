@@ -5,7 +5,7 @@ honeybadger-php is an unofficial library for reporting application errors to
 
 ## Compatibility
 
-honeybadger-php is developed and tested against PHP versions 5.3, 5.4, and 5.5.
+honeybadger-php is developed and tested against PHP versions 5.3 and 5.4.
 
 ## Standalone Installation
 
