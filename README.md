@@ -75,9 +75,13 @@ $app->run();
 This library will work well by following the
 [standalone installation](https://github.com/gevans/honeybadger-php#standalone-installation)
 steps outlined above. However, if you want to integrate your favorite framework,
-feel free to send a pull request, using the
+you can use the
 [Slim integration](https://github.com/gevans/honeybadger-php/blob/master/lib/Honeybadger/Slim.php)
-as a reference.
+as a reference. If you've written your own integration that you'd like to share,
+send a [pull request](https://github.com/gevans/honeybadger-php/pull/new/master)
+adding it to the list:
+
+* *Nothing here yet...*
 
 ## Usage
 
