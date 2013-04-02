@@ -17,12 +17,6 @@ use \Honeybadger\Util\Arr;
 class Slim extends \Slim\Middleware {
 
 	/**
-	 * @var  boolean  Whether Honeybadger has been initialized with
-	 *                Slim integration.
-	 */
-	protected static $_init = FALSE;
-
-	/**
 	 * Configures Honeybadger for the supplied Slim app for exception catching.
 	 *
 	 * @param   Slim    $app      The Slim app.
@@ -31,12 +25,11 @@ class Slim extends \Slim\Middleware {
 	 */
 	protected static function init(\Slim\Slim $app, array $options = array())
 	{
-		// Already initialized?
-		if (self::$_init)
-			return;
-
-		// Slim middleware is now initialized.
-		self::$_init = TRUE;
+		if ($logger = $app->getLog())
+		{
+			// Wrap the application logger.
+			Honeybadger::$logger = new \Honeybadger\Logger\Slim($app->getLog());
+		}
 
 		// Add missing, detected options.
 		$options = Arr::merge(array(
@@ -44,14 +37,10 @@ class Slim extends \Slim\Middleware {
 			'framework'        => sprintf('Slim: %s', \Slim\Slim::VERSION),
 		), $options);
 
-		if ($logger = $app->getLog())
-		{
-			// Wrap the application logger.
-			Honeybadger::$logger = new \Honeybadger\Logger\Slim($app->getLog());
-		}
-
 		// Create a new configuration with the merged options.
-		Honeybadger::$config = new Config($options);
+		Honeybadger::$config = new Config(
+			Honeybadger::$config->merge($options)
+		);
 	}
 
 	/**
@@ -89,34 +78,23 @@ class Slim extends \Slim\Middleware {
 
 	/**
 	 * Called by Slim when processing requests. Initializes Honeybadger's
-	 * configuration, then calls [Slim::call_and_handle_exceptions] and
-	 * [Slim::call_and_inform_users] sequentially.
+	 * configuration, then continues the middleware call chain. If an uncaught
+	 * exception reaches this middleware, it will be sent to Honeybadger if it
+	 * is not filtered or ignored.
+	 *
+	 * When finished, a captured exception (if any) is re-thrown to allow Slim's
+	 * error handling to take over.
+	 *
+	 * The middleware will additionally search for `<!-- HONEYBADGER ERROR -->`
+	 * in the response body and replace it with the configured
+	 * `user_information`, substituting `{{error_id}}` with the error ID.
 	 *
 	 * @return  void
 	 */
 	public function call()
 	{
-		if ( ! self::$_init)
-		{
-			self::init($this->app, $this->options);
-		}
+		self::init($this->app, $this->options);
 
-		$this->call_and_handle_exceptions();
-		$this->call_and_inform_users();
-	}
-
-	/**
-	 * Continues the middleware call chain, catching exceptions that are left
-	 * uncaught. When one is encountered, a new notice is delivered if it is
-	 * not filtered or ignored.
-	 *
-	 * When finished, a captured exception (if any) is re-thrown to allow Slim's
-	 * error handling to take over.
-	 *
-	 * @return  void
-	 */
-	private function call_and_handle_exceptions()
-	{
 		try
 		{
 			$this->next->call();
@@ -125,7 +103,9 @@ class Slim extends \Slim\Middleware {
 		{
 			// Report the exception to Honeybadger and store the error ID in
 			// the environment.
-			$this->notify_honeybadger($e);
+			$this->inform_users(
+				$this->notify_honeybadger($e)
+			);
 
 			// Rethrow the exception to allow other middleware to handle it.
 			throw $e;
@@ -133,35 +113,13 @@ class Slim extends \Slim\Middleware {
 	}
 
 	/**
-	 * When an uncaught exception is handled, searches and replaces the
-	 * configured `user_information` with the error ID to allow displaying
-	 * informative messages to end-users.
-	 *
 	 * @return  void
 	 */
-	private function call_and_inform_users()
+	private function inform_users($error_id)
 	{
-		$env = $this->app->environment();
+		if (empty(Honeybadger::$config->user_information))
+			return;
 
-		if (isset($env['honeybadger.error_id']) AND ! empty(Honeybadger::$config->user_information))
-		{
-			$this->notify_user($env['honeybadger.error_id']);
-		}
-	}
-
-	/**
-	 * @return  void
-	 */
-	private function user_info($info, $error_id)
-	{
-		return preg_replace('%\{\{\s*error_id\s*\}\}%', $error_id, $info);
-	}
-
-	/**
-	 * @return  void
-	 */
-	private function notify_user($error_id)
-	{
 		$response  = $this->app->response();
 		$user_info = $this->user_info(Honeybadger::$config->user_information, $error_id);
 
@@ -169,6 +127,14 @@ class Slim extends \Slim\Middleware {
 		$response->body(str_replace(
 			'<!-- HONEYBADGER ERROR -->', $user_info, $response->body()
 		));
+	}
+
+	/**
+	 * @return  void
+	 */
+	private function user_info($info, $error_id)
+	{
+		return preg_replace('/\{\{\s*error_id\s*\}\}/', $error_id, $info);
 	}
 
 	/**
@@ -188,7 +154,7 @@ class Slim extends \Slim\Middleware {
 
 		if ( ! $this->ignored_user_agent($env))
 		{
-			$env['honeybadger.error_id'] = Honeybadger::notify_or_ignore(
+			return $env['honeybadger.error_id'] = Honeybadger::notify_or_ignore(
 				$exception, $this->notice_options($env)
 			);
 		}
