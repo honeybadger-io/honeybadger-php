@@ -7,7 +7,7 @@ your applications, both with and without a framework.
 
 You can test the files within this directory by copying `config.sample.php` to
 `config.php` and updating the API key. Feel free to play with additional options
-which you'll find in [Honeybadger\Config]().
+which you'll find in [Honeybadger\Config](https://github.com/gevans/honeybadger-php/blob/master/lib/Honeybadger/Config.php).
 
 ## Pow & rack-legacy
 
