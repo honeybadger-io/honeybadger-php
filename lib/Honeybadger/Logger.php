@@ -2,6 +2,9 @@
 
 namespace Honeybadger;
 
+use \Honeybadger\Errors\NonExistentProperty;
+use \Honeybadger\Errors\ReadOnly;
+
 /**
  * Abstract logger. Should be extended to add support for various frameworks and
  * libraries utilizing Honeybadger.
@@ -37,6 +40,25 @@ abstract class Logger {
 	{
 		$this->logger    = $logger;
 		$this->threshold = $threshold;
+	}
+
+	public function __get($key)
+	{
+		switch ($key)
+		{
+			case 'logger':
+			case 'threshold':
+				return $this->$key;
+				break;
+			default:
+				throw new NonExistentProperty($this, $key);
+				break;
+		}
+	}
+
+	public function __set($key, $value)
+	{
+		throw new ReadOnly($this);
 	}
 
 	/**
