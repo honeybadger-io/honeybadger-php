@@ -7,21 +7,311 @@ honeybadger-php is an unofficial library for reporting application errors to
 
 honeybadger-php is developed and tested against PHP versions 5.3, 5.4, and 5.5.
 
-## Installation
+## Standalone Installation
 
-**TODO**
+Add honeybadger-php to your `composer.json`:
 
-## Configuration
+```javascript
+{
+  // ...
+  "require": {
+    // ...
+    "gevans/honeybadger-php": "*"
+  }
+  // ...
+}
+```
 
-**TODO**
+Then configure `Honeybadger` in your bootstrap/`index.php`/initializers:
+
+```php
+<?php
+
+use Honeybadger\Honeybadger;
+
+Honeybadger::$config->values(array(
+    'api_key' => '[your-api-key]',
+));
+```
+
+Your application will then report unhandled errors and exceptions
+to Honeybadger. That's it!
+
+## Slim Installation
+
+Add honeybadger-php to your `composer.json`:
+
+```javascript
+{
+  // ...
+  "require": {
+    // ...
+    "gevans/honeybadger-php": "*"
+  }
+  // ...
+}
+```
+
+Call `Honeybadger\Slim::init()` after your application definition:
+
+```php
+<?php
+
+$app = new Slim(array(
+  // ...
+));
+
+Honeybadger\Slim::init($app, array(
+    'api_key'      => '[your-api-key]',
+    'project_root' => realpath(__DIR__),
+));
+
+// ...
+$app->run();
+```
+
+## Additional Integrations
+
+This library will work well by following the standard installation steps
+outlined above. However, if you want to integrate your favorite framework, feel
+free to send a pull request, using the [Slim integration](https://github.com/gevans/honeybadger-php/blob/master/lib/Honeybadger/Slim.php) as a reference.
 
 ## Usage
 
-**TODO**
+For the most part, Honeybadger works for itself.
 
-## Development Requirements
+It intercepts unhandled errors and uncaught exceptions and sends notifications.
 
-**TODO**
+If you want to log arbitrary things which you've caught yourself, you can do
+something like this:
+
+```php
+<?php
+
+try
+{
+  // ...
+}
+catch (Exception $e)
+{
+    Honeybadger::notify($e);
+}
+// ...
+```
+
+The `::notify()` call will send the notice over to Honeybadger for
+later analysis.
+
+## Ignored Environments
+
+Please note that in development mode, Honeybadger will **not** be notified of
+exceptions that occur. In production, make sure you sure you set the environment
+name for Honeybadger. For apps using the Slim integration, Honeybadger will
+handle this for you by using [your app's configured mode](http://docs.slimframework.com/#Application-Settings):
+
+```php
+<?php
+
+Honeybadger::$config->values(array(
+    // ...
+    'environment_name' => 'production',
+));
+```
+
+You can modify which environments are ignored by setting the
+`development_environments` option in your Honeybadger initializer:
+
+```php
+<?php
+
+// To add an additional environment to be ignored:
+Honeybadger::$config->development_environments[] = 'staging';
+
+// To override the default environments completely:
+Honeybadger::$config->development_environments = array(
+    'test', 'behat',
+);
+```
+
+If you choose to override the `development_environments` option for whatever
+reason, please make sure your test environments are ignored.
+
+## Sending Custom Data
+
+Honeybadger allows you to send custom data using `Honeybadger::context()`.
+Here's an example of sending some user-specific information in a Slim callback:
+
+```php
+<?php
+
+$authenticate_user = function() use $app {
+  // ...
+    if (isset($current_user))
+    {
+        Honeybadger::context(array(
+          'user_id'    => $current_user->id,
+          'user_email' => $current_user->email,
+        ));
+    }
+};
+
+// ...
+
+$app->get('/protected_resource', $authenticate_user, function() {
+    // ...
+});
+```
+
+Now whenever an error occurs, Honeybadger will display the affected user's ID
+and email address, if available.
+
+Subsequent calls to `::context()` will merge the existing array with any new
+data, so you can effectively build up context throughout your request's life
+cycle.
+
+## Going Beyond Exceptions
+
+You can also pass an array to the `Honeybadger::notify()` method and store
+whatever you want, not just an exception, anywhere in your app.
+
+```php
+<?php
+
+try
+{
+    $params = array(
+        // Params that you pass to a method that can throw an exception.
+    );
+    my_unpredictable_method($params);
+}
+catch (Exception $e)
+{
+    Honeybadger::notify(array(
+        'error_class'   => 'Special Error',
+        'error_message' => 'Special Error: '.$e->getMessage(),
+        'parameters'    => $params,
+    ));
+}
+```
+
+`Honeybadger::notify()` will get all the information about the error itself. As
+for an array, these are the keys you should pass:
+
+* `error_class` - Use this to group similar errors together. When Honeybadger catches an exception it sends the class name of that exception object.
+* `error_message` - This is the title of the error you see in the errors list. For exceptions it is "<exception class> [ <exception code> ] : <exception message>"
+* `parameters` - While there are several ways to send additional data to Honeybadger, passing an array as `parameters` as in the example above is the most common use case. When Honeybadger catches an exception in a controller, the actual HTTP client request parameters are sent using this key.
+
+Honeybadger merges the array you pass with these default options:
+
+```php
+<?php
+
+array(
+    'api_key'       => Honeybadger::$config->api_key,
+    'error_message' => 'Notification',
+    'backtrace'     => debug_backtrace(),
+    'parameters'    => array(),
+    'session'       => $_SESSION,
+    'context'       => Honeybadger::context(),
+);
+```
+
+You can override any of those parameters.
+
+### Sending shell environment variables when "Going beyond exceptions"
+
+> One common request we see is to send shell environment variables along with
+> manual exception notification.  We recommend sending them along with CGI data
+> or Rack environment (:cgi_data or :rack_env keys, respectively.)
+
+See `Honeybadger::Notice::__construct` in
+[lib/Honeybadger/Notice.php](https://github.com/gevans/honeybadger-php/blob/master/lib/Honeybadger/Notice.php)
+for more details.
+
+## Filtering
+
+You can specify a whitelist of errors that Honeybadger will not report on. Use
+this feature when you are so apathetic to certain errors that you don't want
+them even logged.
+
+This filter will only be applied to automatic notifications, not manual
+notifications (when `::notify()` is called directly).
+
+To ignore errors, specify their names in your Honeybadger configuration block:
+
+```php
+<?php
+
+Honeybadger::$config->ignore[] = 'SomeException';
+```
+
+To ignore *only* certain errors (and override the defaults), use the `ignore_only()` method:
+
+```php
+<?php
+
+Honeybadger::$config->ignore_only('RandomError');
+```
+
+Subclasses of ignored classes will also be ignored.
+
+To ignore certain user agents, add in the `ignore_user_agent` attribute:
+
+```php
+<?php
+
+Honeybadger::$config->ignore_user_agent[] = 'IgnoredUserAgent';
+```
+
+To ignore exceptions based on other conditions, use `ignore_by_filter`:
+
+```php
+<?php
+
+Honeybadger::$config->ignore_by_filter(function($notice) {
+    if ($notice->error_class == 'Exception')
+        return TRUE;
+});
+```
+
+To replace sensitive information sent to the Honeybadger service with
+`[FILTERED]` use `params_filters`:
+
+```php
+<?php
+
+Honeybadger::$config->params_filters[] = 'credit_card_number';
+```
+
+To disable sending session data:
+
+```php
+Honeybadger::$config->values(array(
+    'api_key' => '1234567890abcdef',
+    'send_request_session' => FALSE,
+));
+```
+
+## Proxy Support
+
+The notifier supports using a proxy, if your server is not able to
+directly reach the Honeybadger servers. To configure the proxy settings,
+add the following information to your Honeybadger configuration.
+
+```php
+<?php
+
+Honeybadger::$config->values(array(
+    'proxy_host' => 'proxy.host.com',
+    'proxy_port' => 4038,
+    'proxy_user' => 'foo', // optional
+    'proxy_pass' => 'bar', // optional
+));
+```
+
+## Troubleshooting
+
+*TODO*
 
 ## Contributing
 
@@ -30,6 +320,12 @@ honeybadger-php is developed and tested against PHP versions 5.3, 5.4, and 5.5.
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Credits
+
+The majority of this library's style, API, documentation, and structure
+directly follows the amazing
+[honeybadger-ruby](https://github.com/honeybadger-io/honeybadger-ruby) gem.
 
 ## License
 
