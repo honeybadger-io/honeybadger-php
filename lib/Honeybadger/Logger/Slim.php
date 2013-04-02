@@ -12,7 +12,7 @@ class Slim extends Logger {
 
 	public function write($severity, $message = NULL)
 	{
-		$this->logger->write($message, $severity);
+		$this->logger->write($message, $this->translate_severity($severity));
 	}
 
 	private function translate_severity($severity)
