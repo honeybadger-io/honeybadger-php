@@ -14,7 +14,7 @@ $app = new Slim(array(
 ));
 
 // Configure Honeybadger to integrate with our app.
-Honeybadger\Integrations\Slim::init($app, array(
+Honeybadger\Slim::init($app, array(
 	'api_key'           => $options['api_key'],
 	'http_open_timeout' => 15,
 	'http_read_timeout' => 15,
