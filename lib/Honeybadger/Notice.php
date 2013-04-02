@@ -214,7 +214,6 @@ class Notice extends SemiOpenStruct {
 			$this->action = $this->params['action'];
 		}
 
-
 		$this->exception = Arr::get($args, 'exception');
 
 		if ($this->exception instanceof \Exception)
