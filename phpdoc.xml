@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+  <parser>
+    <default-package-name>honeybadger-php</default-package-name>
+    <encoding>utf-8</encoding>
+    <target>tmp</target>
+    <markers>
+      <item>TODO</item>
+      <item>FIXME</item>
+      <item>HAX</item>
+    </markers>
+    <extensions>
+      <extension>php</extension>
+    </extensions>
+    <visibility></visibility>
+  </parser>
+  <files>
+    <directory>lib</directory>
+    <ignore-hidden>on</ignore-hidden>
+    <ignore-symlinks>on</ignore-symlinks>
+  </files>
+  <transformer>
+    <target>docs</target>
+  </transformer>
+  <transformations>
+    <template name="responsive"/>
+  </transformations>
+</phpdocumentor>
