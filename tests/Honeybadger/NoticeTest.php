@@ -401,7 +401,7 @@ class NoticeTest extends TestCase {
 			'ignore'    => array('\\Exception'),
 		));
 
-		$this->assertTrue($notice->ignored);
+		$this->assertTrue($notice->is_ignored());
 	}
 
 	public function test_should_be_ignored_when_filtered_with_callback()
@@ -415,7 +415,7 @@ class NoticeTest extends TestCase {
 			),
 		));
 
-		$this->assertTrue($notice->ignored);
+		$this->assertTrue($notice->is_ignored());
 	}
 
 }

@@ -412,6 +412,18 @@ class Config extends SemiOpenStruct {
 	}
 
 	/**
+	 * Alias for `secure`.
+	 *
+	 * @param   boolean        $value  The value to set.
+	 * @return  boolean|$this  The value or configuration object.
+	 * @chainable
+	 */
+	public function is_secure($value = NULL)
+	{
+		return $this->secure($value);
+	}
+
+	/**
 	 * Determines a default port, depending on whether a secure connection is
 	 * configured.
 	 *
@@ -419,7 +431,7 @@ class Config extends SemiOpenStruct {
 	 */
 	private function default_port()
 	{
-		return $this->secure ? 443 : 80;
+		return $this->is_secure() ? 443 : 80;
 	}
 
 	/**

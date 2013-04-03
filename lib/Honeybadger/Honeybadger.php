@@ -69,18 +69,33 @@ class Honeybadger {
 	/**
 	 * Merges supplied `$data` with current context. This can be anything,
 	 * such as user information.
+	 *
+	 * @param   array  $data  Data to add to the context.
+	 * @return  array  The current context.
 	 */
 	public static function context(array $data = array())
 	{
 		return self::$context = array_merge(self::$context, $data);
 	}
 
+	/**
+	 * Replaces the context with the supplied data. If no data is provided, the
+	 * context is emptied.
+	 *
+	 * @param   array  $data  Data to add to the context.
+	 * @return  array  The current context.
+	 */
 	public static function reset_context(array $data = array())
 	{
-		self::$context = array();
-		return self::context($data);
+		return self::$context = $data;
 	}
 
+	/**
+	 * Registers Honeybadger as the global error and exception handler. Any
+	 * uncaught exceptions and errors will be sent to Honeybadger by default.
+	 *
+	 * @return  void
+	 */
 	public static function handle_errors()
 	{
 		Error::register_handler();
@@ -118,17 +133,32 @@ class Honeybadger {
 		return $info;
 	}
 
+	/**
+	 * Sends a notice with the supplied `$exception` and `$options`.
+	 *
+	 * @param   Exception  $exception  The exception.
+	 * @param   array      $options    Additional options for the notice.
+	 * @return  string     The error identifier.
+	 */
 	public static function notify($exception, array $options = array())
 	{
 		$notice = self::build_notice_for($exception, $options);
 		return self::send_notice(self::build_notice_for($exception, $options));
 	}
 
+	/**
+	 * Sends a notice with the supplied `$exception` and `$options` if it is
+	 * not an ignored class or filtered.
+	 *
+	 * @param   Exception    $exception  The exception.
+	 * @param   array        $options    Additional options for the notice.
+	 * @return  string|null  The error identifier. `NULL` if skipped.
+	 */
 	public static function notify_or_ignore($exception, array $options = array())
 	{
 		$notice = self::build_notice_for($exception, $options);
 
-		if ( ! $notice->ignored)
+		if ( ! $notice->is_ignored())
 		{
 			return self::send_notice($notice);
 		}

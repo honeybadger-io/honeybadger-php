@@ -5,7 +5,10 @@ namespace Honeybadger;
 use \Honeybadger\Util\SemiOpenStruct;
 use \Guzzle\Http\Client;
 
-class Sender extends SemiOpenStruct {
+/**
+ * @package  Honeybadger
+ */
+class Sender {
 
 	const NOTICES_URI = '/v1/notices/';
 
@@ -64,7 +67,7 @@ class Sender extends SemiOpenStruct {
 			$options['curl.options']['CURLOPT_PROXYPORT']       = $config->proxy_user.':'.$config->proxy_pass;
 		}
 
-		if ($config->secure)
+		if ($config->is_secure())
 		{
 			$options['ssl.certificate_authority'] = $config->certificate_authority;
 		}

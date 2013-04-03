@@ -31,7 +31,7 @@ class Notice extends SemiOpenStruct {
 	}
 
 	protected $_attribute_methods = array(
-		'ignored',
+		'is_ignored',
 	);
 
 	/**
@@ -262,7 +262,7 @@ class Notice extends SemiOpenStruct {
 		$this->set_context();
 	}
 
-	public function ignored()
+	public function is_ignored()
 	{
 		if (Filter::ignore_by_class($this->ignore, $this->exception))
 			return TRUE;
@@ -380,7 +380,7 @@ class Notice extends SemiOpenStruct {
 
 		if (isset($this->args['context']) AND is_array($this->args['context']))
 		{
-			$this->context = Arr::merge($this->context, $this->args['context']);
+			$this->context = array_merge($this->context, $this->args['context']);
 		}
 
 		if (empty($this->context))
