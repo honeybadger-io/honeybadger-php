@@ -300,7 +300,7 @@ class Notice extends SemiOpenStruct {
 				'component' => $this->component,
 				'action'    => $this->action,
 				'params'    => empty($this->params) ? NULL : $this->params,
-				'session'   => empty($this->params) ? NULL : $this->session_data,
+				'session'   => empty($this->session_data) ? NULL : $this->session_data,
 				'cgi_data'  => empty($cgi_data) ? NULL : $cgi_data,
 				'context'   => $this->context,
 			),
