@@ -7,6 +7,9 @@ use \Slim\Log;
 
 /**
  * Writes log entries to a configured Slim application's logger.
+ *
+ * @package   Honeybadger/Integrations
+ * @category  Slim
  */
 class Slim extends Logger {
 

@@ -5,6 +5,12 @@ namespace Honeybadger;
 use \Honeybadger\Util\Arr;
 use \Honeybadger\Util\SemiOpenStruct;
 
+/**
+ * Stores Honeybadger configuration options. Accessible through
+ * `Honeybadger::$config`.
+ *
+ * @package  Honeybadger
+ */
 class Config extends SemiOpenStruct {
 
 	protected $_attribute_methods = array('secure', 'log_level');
@@ -21,7 +27,8 @@ class Config extends SemiOpenStruct {
 
 	/**
 	 * @var  integer  The port on which your Honeybadger server runs (defaults
-	 *       to `443` for secure connections, `80` for insecure connections).
+	 *                to `443` for secure connections, `80` for
+	 *                insecure connections).
 	 */
 	public $port;
 
@@ -31,10 +38,10 @@ class Config extends SemiOpenStruct {
 	protected $_secure = TRUE;
 
 	/**
-	 * @var  mixed  `'system'` to use whatever CAs OpenSSL has
-	 *       installed on your system. `NULL` to use the ca-bundle.crt file
-	 *       included in Honeybadger itself (recommended and default), or
-	 *       specify a full path to a file or directory.
+	 * @var  mixed  `system` to use whatever CAs OpenSSL has installed on your
+	 *              system. `NULL` to use the ca-bundle.crt file included in
+	 *              Honeybadger itself (recommended and default), or specify a
+	 *              full path to a file or directory.
 	 */
 	protected $certificate_authority;
 
@@ -60,32 +67,33 @@ class Config extends SemiOpenStruct {
 
 	/**
 	 * @var  string  The username to use when logging into your proxy server
-	 *       (if using a proxy).
+	 *               (if using a proxy).
 	 */
 	public $proxy_user;
 
 	/**
 	 * @var  string  The password to use hwen logging into your proxy server
-	 *       (if using a proxy).
+	 *               (if using a proxy).
 	 */
 	public $proxy_pass;
 
 	/**
 	 * @var  array  A list of filters for cleaning and pruning the backtrace.
-	 *       See [Config::filter_backtrace].
+	 *              See [Config::filter_backtrace].
 	 */
 	public $backtrace_filters = array();
 
 	/**
 	 * @var  array  A list of parameters that should be filtered out of what is
-	 *       sent to Honeybadger. By default, all `password` and
-	 *       `password_confirmation` attributes will have their contents replaced.
+	 *              sent to Honeybadger. By default, all `password` and
+	 *              `password_confirmation` attributes will have their contents
+	 *              replaced.
 	 */
 	public $params_filters = array();
 
 	/**
 	 * @var  array  A list of filters for ignoring exceptions.
-	 *       See [Config::ignore_by_filter].
+	 *              See [Config::ignore_by_filter].
 	 */
 	public $ignore_by_filters = array();
 
@@ -126,7 +134,7 @@ class Config extends SemiOpenStruct {
 
 	/**
 	 * @var  string  The version of the notifier library being used to
-	 *       send notifications.
+	 *               send notifications.
 	 */
 	public $notifier_version;
 
@@ -137,7 +145,8 @@ class Config extends SemiOpenStruct {
 	public $notifier_url;
 
 	/**
-	 * @var  string  The text that the placeholder is replaced with. `{{error_id}}` is the actual error number.
+	 * @var  string  The text that the placeholder is replaced with.
+	 *               `{{error_id}}` is the actual error number.
 	 */
 	public $user_information = 'Honeybadger Error {{error_id}}';
 
@@ -308,8 +317,9 @@ class Config extends SemiOpenStruct {
 
 	/**
 	 * Returns an array of all configurable options merged with `$config`.
+	 *
 	 * @param   array  $config  Options to merge with configuration
-	 * @return  array
+	 * @return  array  The merged configuration.
 	 */
 	public function merge(array $config = array())
 	{
@@ -317,7 +327,7 @@ class Config extends SemiOpenStruct {
 	}
 
 	/**
-	 * Determines if the notifier will send notices.
+	 * Determines whether the notifier will send notices.
 	 *
 	 * @return  boolean  `FALSE` if in a development environment
 	 */
@@ -326,11 +336,22 @@ class Config extends SemiOpenStruct {
 		return ( ! in_array($this->environment_name, $this->development_environments));
 	}
 
+	/**
+	 * Returns `Logger::INFO` when `debug` is `TRUE`, otherwise
+	 * returns `Logger::DEBUG`.
+	 *
+	 * @var  boolean  The detected log level.
+	 */
 	public function log_level()
 	{
 		return $this->debug ? Logger::INFO : Logger::DEBUG;
 	}
 
+	/**
+	 * Returns the base URL for Honeybadger's API endpoint.
+	 *
+	 * @return  string  The base URL.
+	 */
 	public function base_url()
 	{
 		$base  = $this->secure ? 'https' : 'http';
@@ -344,25 +365,41 @@ class Config extends SemiOpenStruct {
 		return $base;
 	}
 
+	/**
+	 * Replaces the supplied `$option` with the supplied `$value`. Used to
+	 * change configuration options through `__get` and `__set` but may be used
+	 * directly.
+	 *
+	 *     $config->set('api_key', '12345')
+	 *            ->set('secure', TRUE);
+	 *
+	 * @return  $this
+	 * @chainable
+	 */
 	public function set($option, $value)
 	{
 		if ($option == 'secure')
 			return $this->secure($value);
 
 		$this->$option = $value;
+
+		return $this;
 	}
 
-	public function offsetUnset($option)
-	{
-		$this->$option = NULL;
-	}
-
+	/**
+	 * When `$value is `NULL`, the current configured `secure` option is
+	 * returned. Otherwise, `secure` is set to the supplied `$value`.
+	 *
+	 * @param   boolean        $value  The value to set.
+	 * @return  boolean|$this  The value or configuration object.
+	 * @chainable
+	 */
 	public function secure($value = NULL)
 	{
 		if ($value === NULL)
 			return $this->_secure;
 
-		$use_default = ($this->port === NULL OR !is_integer($this->port) OR
+		$use_default = ($this->port === NULL OR ! is_integer($this->port) OR
 		                $this->port == $this->default_port());
 		$this->_secure = $value;
 
@@ -370,6 +407,8 @@ class Config extends SemiOpenStruct {
 		{
 			$this->port = $this->default_port();
 		}
+
+		return $this;
 	}
 
 	/**
@@ -380,7 +419,7 @@ class Config extends SemiOpenStruct {
 	 */
 	private function default_port()
 	{
-		return ($this->secure) ? 443 : 80;
+		return $this->secure ? 443 : 80;
 	}
 
 	/**
@@ -392,6 +431,11 @@ class Config extends SemiOpenStruct {
 	private function default_certificate_authority()
 	{
 		return realpath(__DIR__.'/../../resources/ca-bundle.crt');
+	}
+
+	public function offsetUnset($option)
+	{
+		$this->$option = NULL;
 	}
 
 } // End Config

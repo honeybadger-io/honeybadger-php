@@ -4,6 +4,8 @@ namespace Honeybadger;
 
 /**
  * Based on [Kohana's exception handler](https://github.com/kohana/core/blob/3.4/develop/classes/Kohana/Kohana/Exception.php#L102:L130).
+ *
+ * @package  Honeybadger
  */
 class Exception {
 

@@ -2,6 +2,12 @@
 
 namespace Honeybadger\Errors;
 
+/**
+ * Thrown when trying to change a read-only property.
+ *
+ * @package   Honeybadger
+ * @category  Errors
+ */
 class ReadOnly extends HoneybadgerError {
 
 	public function __construct($class)

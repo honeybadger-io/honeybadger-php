@@ -6,6 +6,9 @@ use \Honeybadger\Logger;
 
 /**
  * Logger used in unit tests.
+ *
+ * @package   Honeybadger/Tests
+ * @category  Logging
  */
 class Test extends Logger {
 

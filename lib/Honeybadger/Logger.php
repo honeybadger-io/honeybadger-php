@@ -8,6 +8,9 @@ use \Honeybadger\Errors\ReadOnly;
 /**
  * Abstract logger. Should be extended to add support for various frameworks and
  * libraries utilizing Honeybadger.
+ *
+ * @package   Honeybadger
+ * @category  Logging
  */
 abstract class Logger {
 

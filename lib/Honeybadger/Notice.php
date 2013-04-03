@@ -8,6 +8,9 @@ use \Honeybadger\Errors\HoneybadgerError;
 use \Honeybadger\Util\SemiOpenStruct;
 use \Honeybadger\Util\Arr;
 
+/**
+ * @package  Honeybadger
+ */
 class Notice extends SemiOpenStruct {
 
 	/**

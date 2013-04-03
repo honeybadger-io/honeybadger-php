@@ -73,6 +73,10 @@ class Slim extends \Slim\Middleware {
 	 */
 	public function __construct(array $options = array())
 	{
+		// Register Honeybadger as the global error and exception handler.
+		Honeybadger::init();
+
+		// Store the supplied options for later.
 		$this->options = $options;
 	}
 

@@ -13,6 +13,8 @@ use \Honeybadger\Errors\ReadOnly;
  * convenience methods for determining the URL of the request trigging an error.
  *
  * TODO: Refactor to follow better, consistent standards (Rack).
+ *
+ * @package  Honeybadger
  */
 class Environment implements \ArrayAccess, \IteratorAggregate {
 
@@ -117,7 +119,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 	public function fullpath()
 	{
 		$uri = $this['REQUEST_URI'] ?: $this['PATH_INFO'];
-		$uri = preg_replace('/\?.*$/i', '', $uri);
+		$uri = preg_replace('/\?.*$/', '', $uri);
 		$uri = '/'.ltrim($uri, '/');
 
 		if ( ! empty($this['QUERY_STRING']))

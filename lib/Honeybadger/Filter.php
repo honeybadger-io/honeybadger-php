@@ -4,6 +4,9 @@ namespace Honeybadger;
 
 use \Honeybadger\Util\Arr;
 
+/**
+ * @package  Honeybadger
+ */
 class Filter {
 
 	/**
@@ -50,9 +53,9 @@ class Filter {
 		if (empty($keys) OR empty($params))
 			return $params;
 
-		foreach ($params as $param => &$value)
+		foreach ($params as $param => & $value)
 		{
-			if (is_array($value))
+			if (Arr::is_array($value))
 			{
 				$value = self::params($keys, $value);
 			}
@@ -97,7 +100,7 @@ class Filter {
 	 *     ));
 	 *     // => array('file' => '[PROJECT_ROOT]/models/user.php')
 	 *
-	 * @param   array  Unparsed backtrace line.
+	 * @param   array  $line  Unparsed backtrace line.
 	 * @return  array  Filtered backtrace line.
 	 */
 	public static function project_root($line)
@@ -108,7 +111,7 @@ class Filter {
 		if (strlen($project_root) === 0)
 			return $line;
 
-		$pattern = '/'.preg_quote($project_root, '/').'/';
+		$pattern = '/^'.preg_quote($project_root, '/').'/';
 		$line['file'] = preg_replace($pattern, '[PROJECT_ROOT]', $line['file']);
 
 		return $line;
@@ -126,7 +129,9 @@ class Filter {
 	public static function expand_paths($line)
 	{
 		if ($path = realpath($line['file']))
+		{
 			$line['file'] = $path;
+		}
 
 		return $line;
 	}

@@ -4,6 +4,8 @@ namespace Honeybadger;
 
 /**
  * Based on [Kohana's error handler](https://github.com/kohana/core/blob/3.3/master/classes/Kohana/Core.php#L984:L995).
+ *
+ * @package  Honeybadger
  */
 class Error {
 

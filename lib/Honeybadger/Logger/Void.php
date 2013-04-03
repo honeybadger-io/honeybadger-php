@@ -11,6 +11,9 @@ use \Honeybadger\Logger;
  * default in [Honeybadger::$logger].
  *
  * TODO: Investigate to see if logging to STDERR by default is feasible.
+ *
+ * @package   Honeybadger
+ * @category  Logging
  */
 class Void extends Logger {
 

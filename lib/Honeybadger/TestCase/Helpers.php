@@ -8,6 +8,8 @@ use \ReflectionClass;
  * Collection of helper methods for use in unit tests.
  *
  * Ripped from [Kohana](http://kohanaframework.org/).
+ *
+ * @package   Honeybadger/Tests
  */
 class Helpers {
 

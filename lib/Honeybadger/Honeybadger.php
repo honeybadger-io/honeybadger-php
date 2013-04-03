@@ -42,7 +42,7 @@ class Honeybadger {
 	/**
 	 * @var  boolean  Whether Honeybadger has been initialized.
 	 */
-	protected static $_init;
+	protected static $init;
 
 	/**
 	 * Initializes Honeybadger with a new global configuration.
@@ -52,11 +52,11 @@ class Honeybadger {
 	public static function init()
 	{
 		// Already initialized?
-		if (self::$_init)
+		if (self::$init)
 			return;
 
 		// Honeybadger is now initialized.
-		self::$_init = TRUE;
+		self::$init = TRUE;
 
 		self::$logger = new Logger\Void;
 		self::$config = new Config;
@@ -66,6 +66,10 @@ class Honeybadger {
 		self::handle_errors();
 	}
 
+	/**
+	 * Merges supplied `$data` with current context. This can be anything,
+	 * such as user information.
+	 */
 	public static function context(array $data = array())
 	{
 		return self::$context = array_merge(self::$context, $data);

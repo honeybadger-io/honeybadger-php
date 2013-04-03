@@ -2,6 +2,12 @@
 
 namespace Honeybadger\Errors;
 
+/**
+ * Thrown when a non-existent property is called.
+ *
+ * @package   Honeybadger
+ * @category  Errors
+ */
 class NonExistentProperty extends HoneybadgerError {
 
 	public function __construct($class, $property)

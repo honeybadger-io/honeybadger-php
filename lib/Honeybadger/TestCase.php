@@ -7,6 +7,8 @@ use \Honeybadger\TestCase\Helpers;
 
 /**
  * Ripped from [Kohana](http://kohanaframework.org/).
+ *
+ * @package  Honeybadger/Tests
  */
 class TestCase extends \PHPUnit_Framework_TestCase {
 

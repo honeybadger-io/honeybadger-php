@@ -59,11 +59,15 @@ class Line extends SemiOpenStruct {
 	 */
 	public static function parse(array $unparsed_line, array $options = array())
 	{
-		if ( ! isset($unparsed_line['file']) || empty($unparsed_line['file']))
+		if ( ! isset($unparsed_line['file']) OR empty($unparsed_line['file']))
+		{
 			$unparsed_line['file'] = '{PHP internal call}';
+		}
 
 		if ( ! isset($options['filters']))
+		{
 			$options['filters'] = array();
+		}
 
 		$filtered = Filter::callbacks($options['filters'], $unparsed_line);
 
@@ -100,13 +104,19 @@ class Line extends SemiOpenStruct {
                                 $filtered_number = NULL, $filtered_method = NULL)
 	{
 		if ($filtered_file === NULL)
+		{
 			$filtered_file = $file;
+		}
 
 		if ($filtered_number === NULL)
+		{
 			$filtered_number = $number;
+		}
 
 		if ($filtered_method === NULL)
+		{
 			$filtered_method = $method;
+		}
 
 		$this->filtered_file   = $filtered_file;
 		$this->filtered_number = $filtered_number;
@@ -129,17 +139,36 @@ class Line extends SemiOpenStruct {
 			$this->filtered_number, $this->filtered_method);
 	}
 
+	/**
+	 * Checks if this `Line` matches another supplied `Line`.
+	 *
+	 * @param   Line     $other  The `Line` to match.
+	 * @return  boolean  `TRUE` if objects match, `FALSE` otherwise.
+	 */
 	public function equals($other)
 	{
-		return ((string) $this == (string) $other);
+		return ( (string) $this == (string) $other);
 	}
 
+	/**
+	 * Checks if this `Line` is a part of the configured project. Ignores files
+	 * under `[PROJECT_ROOT]/vendor`.
+	 *
+	 * @return  boolean  `TRUE` if application line, `FALSE` otherwise.
+	 */
 	public function is_application()
 	{
-		return (preg_match('/^\[PROJECT_ROOT\]/i', $this->filtered_file) AND
-			! preg_match('/^\[PROJECT_ROOT\]\/vendor/i', $this->filtered_file));
+		return (strpos($this->filtered_file, '[PROJECT_ROOT]') === 0 AND
+		        strpos($this->filtered_file, '[PROJECT_ROOT]/vendor') === FALSE);
 	}
 
+	/**
+	 * Extracts the source code of the line. Optionally, `$radius` can be
+	 * supplied to specificy the number of lines before and after to extract.
+	 *
+	 * @param   integer  $radius  Radius to extract.
+	 * @return  array    The extracted source code.
+	 */
 	public function source($radius = 2)
 	{
 		if ($this->source)
@@ -162,9 +191,15 @@ class Line extends SemiOpenStruct {
 		);
 	}
 
+	/**
+	 * Extracts source code from the specified `$file`, starting `$radius`
+	 * lines before the specified `$number`.
+	 *
+	 * @return  array  The extracted source.
+	 */
 	private function get_source($file, $number, $radius = 2)
 	{
-		if ( ! file_exists($file) || ! is_readable($file))
+		if ( ! is_file($file) OR ! is_readable($file))
 		{
 			return array();
 		}
@@ -191,18 +226,25 @@ class Line extends SemiOpenStruct {
 			if ($l < $start)
 				continue;
 
-			$lines["$l"] = $this->sanitize_line($line);
+			$lines["$l"] = $this->trim_line($line);
 		}
 
 		return $lines;
 	}
 
-	private function sanitize_line($line)
+	/**
+	 * Replaces tabs with spaces and strips endlines and trailing whitespace
+	 * from the supplied `$line`.
+	 *
+	 * @param   string  $line  The line to trim.
+	 * @return  string  The trimmed line.
+	 */
+	private function trim_line($line)
 	{
 		$trimmed = trim($line, "\n\r\0\x0B");
 
 		return preg_replace(array(
-			'/\s*$/',
+			'/\s*$/D',
 			'/\t/'
 		), array(
 			'',
