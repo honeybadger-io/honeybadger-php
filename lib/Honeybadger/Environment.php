@@ -232,7 +232,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 
 		foreach ($_SERVER as $key => $value)
 		{
-			if (preg_match('/^HTTP_/', $key))
+			if (strpos($key, 'HTTP_') === 0)
 			{
 				$env[$key] = $value;
 			}
