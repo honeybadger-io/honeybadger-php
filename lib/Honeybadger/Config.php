@@ -206,17 +206,17 @@ class Config extends SemiOpenStruct {
 	public function __construct(array $config = array())
 	{
 		// Set default notifier info
-		$this->notifier_name = Honeybadger::NOTIFIER_NAME;
+		$this->notifier_name    = Honeybadger::NOTIFIER_NAME;
 		$this->notifier_version = Honeybadger::VERSION;
-		$this->notifier_url = Honeybadger::NOTIFIER_URL;
+		$this->notifier_url     = Honeybadger::NOTIFIER_URL;
 
 		// Set user-specified configuration
 		$this->values($config);
 
 		// Merge in preconfigured defaults
-		$this->params_filters    = Arr::merge($this->params_filters, self::$default_params_filters);
-		$this->backtrace_filters = Arr::merge($this->backtrace_filters, self::$default_backtrace_filters);
-		$this->ignore            = Arr::merge($this->ignore, self::$default_ignore);
+		$this->params_filters    = array_merge($this->params_filters, self::$default_params_filters);
+		$this->backtrace_filters = array_merge($this->backtrace_filters, self::$default_backtrace_filters);
+		$this->ignore            = array_merge($this->ignore, self::$default_ignore);
 
 		// FIXME: This feels very brittle...
 		if ( ! $this->port)
