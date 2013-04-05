@@ -18,6 +18,14 @@ use \Honeybadger\Errors\ReadOnly;
  */
 class Environment implements \ArrayAccess, \IteratorAggregate {
 
+	/**
+	 * Constructs and returns a new `Environment` with the supplied `$data`. If
+	 * no data is provided, it will be detected based on `$_SERVER` and
+	 * `$_COOKIE`.
+	 *
+	 * @param   array  $data  The data to build the environment with.
+	 * @return  Environment   The constructed environment.
+	 */
 	public static function factory($data = NULL)
 	{
 		return new self($data);
@@ -27,6 +35,11 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		'protocol', 'host', 'port', 'fullpath', 'url',
 	);
 
+	/**
+	 * @var  array  List of `$_SERVER` keys to allow when building an
+	 *              environment automatically. Keys prefixed with `HTTP_`
+	 *              are also included.
+	 */
 	private $allowed_php_environment_keys = array(
 		'PHP_SELF'             => NULL,
 		'argv'                 => NULL,
@@ -62,9 +75,18 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		'ORIG_PATH_INFO'       => NULL,
 	);
 
+	/**
+	 * @var  array  The environment data.
+	 */
 	private $data = array();
 
-	private function __construct($data = NULL)
+	/**
+	 * Constructs a new environment with the supplied data or attempts to detect
+	 * the environment using `sanitized_php_environment`.
+	 *
+	 * @param  array  $data  The environment data.
+	 */
+	public function __construct($data = NULL)
 	{
 		if ($data === NULL)
 		{
@@ -74,21 +96,43 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		$this->data = $data;
 	}
 
+	/**
+	 * Determines the protocol of the request.
+	 *
+	 * @return  string  Either `http` or `https`.
+	 */
 	public function protocol()
 	{
 		return (empty($this['HTTPS']) OR $this['HTTPS'] == 'off') ? 'http' : 'https';
 	}
 
+	/**
+	 * Determines whether the request was made over HTTPS.
+	 *
+	 * @return  boolean  `TRUE` if the request is secure, `FALSE` otherwise.
+	 */
 	public function is_secure()
 	{
 		return ($this->protocol() === 'https');
 	}
 
+	/**
+	 * Determines the host of the request, using the `Host` header, falling back
+	 * to `SERVER_NAME` if none was set.
+	 *
+	 * @return  string  The request host.
+	 */
 	public function host()
 	{
 		return (empty($this['HTTP_HOST'])) ? $this['SERVER_NAME'] : $this['HTTP_HOST'];
 	}
 
+	/**
+	 * Determines the port of the web server. If none was found, defaults to
+	 * either `443` or `80` depending on whether the connection is secure.
+	 *
+	 * @return  integer  The server port.
+	 */
 	public function port()
 	{
 		if (empty($this['SERVER_PORT']))
@@ -101,6 +145,11 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		}
 	}
 
+	/**
+	 * Determines whether the connection is using a non-standard port.
+	 *
+	 * @return  boolean  `TRUE` if non-standard port is used, `FALSE` otherwise.
+	 */
 	public function is_non_standard_port()
 	{
 		if ($this->is_secure())
@@ -114,7 +163,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 	}
 
 	/**
-	 * Attempts to detect the full URL of the request.
+	 * Attempts to detect the full path of the request (including query string).
+	 *
+	 * @return  string  The full path of the request.
 	 */
 	public function fullpath()
 	{
@@ -130,6 +181,12 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 		return $uri;
 	}
 
+	/**
+	 * Returns the full request URL including protocol, host, port
+	 * (if non-standard), URI, and query string.
+	 *
+	 * @param  string  The request URL.
+	 */
 	public function url()
 	{
 		if (isset($this->data['url']) AND ! empty($this->data['url']))
@@ -148,19 +205,35 @@ class Environment implements \ArrayAccess, \IteratorAggregate {
 			return $url;
 	}
 
+	/**
+	 * Returns the environment data as an array.
+	 *
+	 * @param  array  The environment data.
+	 */
 	public function as_array()
 	{
 		return $this->data;
 	}
 
-	public function as_json()
+	/**
+	 * Alias for `as_array`.
+	 *
+	 * @param  array  The environment data.
+	 */
+	public function to_array()
 	{
 		return $this->as_array();
 	}
 
-	public function to_json()
+	/**
+	 * Returns the JSON-encoded environment data.
+	 *
+	 * @param   integer  $options  Options to pass to `json_encode()`.
+	 * @return  string   The JSON-encoded object attributes.
+	 */
+	public function to_json($options = 0)
 	{
-		return json_encode($this->as_array());
+		return json_encode($this->as_json(), $options);
 	}
 
 	public function __get($key)
