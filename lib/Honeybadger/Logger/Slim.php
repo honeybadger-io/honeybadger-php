@@ -24,12 +24,20 @@ class Slim extends Logger {
 		{
 			case self::FATAL:
 				$severity = Log::FATAL;
+				break;
+				
 			case self::ERROR:
-				$severity = Log::ERROR;
+				$severity = Log::ERROR;	
+				break;
+				
 			case self::WARN:
 				$severity = Log::WARN;
+				break;
+					
 			case self::INFO:
 				$severity = Log::INFO;
+				break;
+				
 			case self::DEBUG:
 				$severity = Log::DEBUG;
 				break;
