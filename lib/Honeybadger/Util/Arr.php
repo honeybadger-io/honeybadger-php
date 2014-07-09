@@ -547,7 +547,7 @@ class Arr {
 	public static function callback($str)
 	{
 		// Overloaded as parts are found
-		$command = $params = NULL;
+		$params = NULL;
 
 		// command[param,param]
 		if (preg_match('/^([^\(]*+)\((.*)\)$/', $str, $match))
