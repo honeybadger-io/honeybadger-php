@@ -143,7 +143,7 @@ class Honeybadger {
 	public static function notify($exception, array $options = array())
 	{
 		$notice = self::build_notice_for($exception, $options);
-		return self::send_notice(self::build_notice_for($exception, $options));
+		return self::send_notice($notice);
 	}
 
 	/**
