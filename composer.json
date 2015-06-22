@@ -1,7 +1,6 @@
 {
   "name": "gevans/honeybadger",
   "description": "Unofficial PHP library for reporting errors to honeybadger.io",
-  "version": "0.1.0",
   "type": "library",
   "keywords": ["error", "reporting", "honeybadger", "exception"],
   "homepage": "https://github.com/gevans/honeybadger-php",
