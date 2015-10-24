@@ -1,7 +1,8 @@
 # honeybadger-php [![Build Status](https://secure.travis-ci.org/honeybadger-io/honeybadger-php.png)](http://travis-ci.org/honeybadger-io/honeybadger-php)
 
-honeybadger-php is an unofficial library for reporting application errors to
-[Honeybadger](http://honeybadger.io).
+This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](http://honeybadger.io).
+
+When an unhandled exception or error occurs, Honeybadger will POST the relevant data to the Honeybadger server specified in your environment.
 
 ## Compatibility
 
