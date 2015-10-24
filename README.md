@@ -330,9 +330,7 @@ Honeybadger::$config->values(array(
 
 ## Credits
 
-The majority of this library's style, API, documentation, and structure
-directly follows the amazing
-[honeybadger-ruby](https://github.com/honeybadger-io/honeybadger-ruby) gem.
+This library was originally created by [Gabe Evans](/gevans). Thanks Gabe!
 
 ## License
 
