@@ -330,7 +330,7 @@ Honeybadger::$config->values(array(
 
 ## Credits
 
-This library was originally created by [Gabe Evans](/gevans). Thanks Gabe!
+This library was originally created by [Gabe Evans](https://github.com/gevans). Thanks Gabe!
 
 ## License
 
