@@ -317,10 +317,6 @@ Honeybadger::$config->values(array(
 ));
 ```
 
-## Troubleshooting
-
-*TODO*
-
 ## Contributing
 
 1. Fork it
