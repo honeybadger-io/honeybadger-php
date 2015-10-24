@@ -336,4 +336,4 @@ directly follows the amazing
 
 ## License
 
-MIT Licensed. See LICENSE.txt for details.
+MIT Licensed. See [LICENSE](./LICENSE) for details.
