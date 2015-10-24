@@ -1,4 +1,4 @@
-# honeybadger-php [![Build Status](https://secure.travis-ci.org/gevans/honeybadger-php.png)](http://travis-ci.org/gevans/honeybadger-php)
+# honeybadger-php [![Build Status](https://secure.travis-ci.org/honeybadger-io/honeybadger-php.png)](http://travis-ci.org/honeybadger-io/honeybadger-php)
 
 honeybadger-php is an unofficial library for reporting application errors to
 [Honeybadger](http://honeybadger.io).
