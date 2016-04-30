@@ -7,39 +7,43 @@ namespace Honeybadger;
  *
  * @package  Honeybadger
  */
-class Error {
+class Error
+{
+    private static $previous_handler;
 
-	private static $previous_handler;
+    public static function register_handler()
+    {
+        self::$previous_handler = set_error_handler(
+            array(
+                __CLASS__, 'handle',
+            )
+        );
+    }
 
-	public static function register_handler()
-	{
-		self::$previous_handler = set_error_handler(array(
-			__CLASS__, 'handle',
-		));
-	}
+    public static function handle($code, $error, $file = null, $line = null)
+    {
+        if (error_reporting() & $code) {
+            // This error is not suppressed by current error reporting settings.
+            // Convert the error into an ErrorException.
+            $exception = new \ErrorException($error, $code, 0, $file, $line);
 
-	public static function handle($code, $error, $file = NULL, $line = NULL)
-	{
-		if (error_reporting() & $code)
-		{
-			// This error is not suppressed by current error reporting settings.
-			// Convert the error into an ErrorException.
-			$exception = new \ErrorException($error, $code, 0, $file, $line);
+            // Send the error to Honeybadger.
+            Honeybadger::notify_or_ignore($exception);
+        }
 
-			// Send the error to Honeybadger.
-			Honeybadger::notify_or_ignore($exception);
-		}
+        if (is_callable(self::$previous_handler)) {
+            // Pass the triggered error on to the previous error handler.
+            return call_user_func(
+                self::$previous_handler,
+                $code,
+                $error,
+                $file,
+                $line
+            );
+        }
 
-		if (is_callable(self::$previous_handler))
-		{
-			// Pass the triggered error on to the previous error handler.
-			return call_user_func(self::$previous_handler,
-				$code, $error, $file, $line);
-		}
-
-		// Execute the PHP error handler.
-		return FALSE;
-	}
-
+        // Execute the PHP error handler.
+        return false;
+    }
 
 } // End Error

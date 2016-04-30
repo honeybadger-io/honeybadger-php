@@ -9,7 +9,7 @@ $options = include __DIR__.'/../config.php';
 
 // Create a Slim app with a few settings.
 $app = new Slim(array(
-    'debug' => TRUE,
+    'debug' => true,
     'mode'  => 'examples',
 ));
 
@@ -18,7 +18,7 @@ $app->add(new Honeybadger\Slim(array(
 	'api_key'           => $options['api_key'],
 	'http_open_timeout' => 15,
 	'http_read_timeout' => 15,
-	'debug'             => TRUE,
+	'debug'             => true,
 	'project_root'      => realpath(__DIR__),
 )));
 

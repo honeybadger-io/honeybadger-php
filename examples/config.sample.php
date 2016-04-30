@@ -10,6 +10,6 @@ return array(
 	'http_open_timeout' => 15,
 	'http_read_timeout' => 15,
 	'environment_name'  => 'examples',
-	'debug'             => TRUE,
+	'debug'             => true,
 	'project_root'      => __DIR__,
 );

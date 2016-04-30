@@ -7,49 +7,48 @@ namespace Honeybadger;
  *
  * @package  Honeybadger
  */
-class Exception {
 
-	private static $previous_handler;
+class Exception
+{
 
-	public static function register_handler()
-	{
-		self::$previous_handler = set_exception_handler(array(
-			__CLASS__, 'handle',
-		));
-	}
+    private static $previous_handler;
 
-	public static function handle(\Exception $e)
-	{
-		try
-		{
-			// Attempt to send this exception to Honeybadger.
-			Honeybadger::notify_or_ignore($e);
-		}
-		catch (Exception $e)
-		{
-			if (is_callable(self::$previous_handler))
-			{
-				return call_user_func(self::$previous_handler, $e);
-			}
-			else
-			{
-				// Clean the output buffer if one exists.
-				ob_get_level() AND ob_clean();
+    public static function register_handler()
+    {
+        self::$previous_handler = set_exception_handler(array(
+            __CLASS__, 'handle',
+        ));
+    }
 
-				// Set the Status code to 500, and Content-Type to text/plain.
-				header('Content-Type: text/plain; charset=utf-8', TRUE, 500);
+    /**
+     * @param \Exception $e
+     * @return mixed
+     */
+    public static function handle(\Exception $e)
+    {
+        try {
+            // Attempt to send this exception to Honeybadger.
+            Honeybadger::notify_or_ignore($e);
+        } catch (\Exception $e) {
+            if (is_callable(self::$previous_handler)) {
+                return call_user_func(self::$previous_handler, $e);
+            } else {
+                // Clean the output buffer if one exists.
+                ob_get_level() and ob_clean();
 
-				echo 'Something went terribly wrong.';
+                // Set the Status code to 500, and Content-Type to text/plain.
+                header('Content-Type: text/plain; charset=utf-8', true, 500);
 
-				// Exit with a non-zero status.
-				exit(1);
-			}
-		}
+                echo 'Something went terribly wrong.';
 
-		if (is_callable(self::$previous_handler))
-		{
-			return call_user_func(self::$previous_handler, $e);
-		}
-	}
+                // Exit with a non-zero status.
+                exit(1);
+            }
+        }
+
+        if (is_callable(self::$previous_handler)) {
+            return call_user_func(self::$previous_handler, $e);
+        }
+    }
 
 } // End Exception
