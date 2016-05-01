@@ -32,6 +32,7 @@ class HoneybadgerTest extends TestCase
     public function test_initialized_with_void_logger()
     {
         $this->restoreEnvironment();
+        Honeybadger::init();
         $this->assertTrue(Honeybadger::$logger instanceof Logger\Void);
     }
 

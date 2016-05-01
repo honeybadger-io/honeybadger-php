@@ -457,6 +457,3 @@ class Config extends SemiOpenStruct
     }
 
 } // End Config
-
-// Additional measure to ensure defaults are initialized.
-Honeybadger::init();

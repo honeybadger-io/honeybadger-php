@@ -220,6 +220,3 @@ class Honeybadger
     }
 
 } // End Honeybadger
-
-// Additional measure to ensure defaults are initialized.
-Honeybadger::init();
