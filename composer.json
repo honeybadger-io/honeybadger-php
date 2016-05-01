@@ -34,8 +34,8 @@
     "gevans/phaker": "dev-master"
   },
   "autoload": {
-    "psr-0": {
-      "Honeybadger": "lib"
+    "psr-4": {
+      "Honeybadger\\": "lib/Honeybadger/"
     }
   },
   "suggest": {
