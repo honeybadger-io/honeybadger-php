@@ -86,7 +86,7 @@ abstract class Logger
      */
     public function debug($message = null, array $variables = array())
     {
-        return $this->add(self::DEBUG, $message);
+        return $this->add(self::DEBUG, $message, $variables);
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class Logger
      */
     public function info($message = null, array $variables = array())
     {
-        return $this->add(self::INFO, $message);
+        return $this->add(self::INFO, $message, $variables);
     }
 
     /**
@@ -134,7 +134,7 @@ abstract class Logger
      */
     public function warn($message = null, array $variables = array())
     {
-        return $this->add(self::WARN, $message);
+        return $this->add(self::WARN, $message, $variables);
     }
 
     /**
@@ -158,7 +158,7 @@ abstract class Logger
      */
     public function error($message = null, array $variables = array())
     {
-        return $this->add(self::ERROR, $message);
+        return $this->add(self::ERROR, $message, $variables);
     }
 
     /**
@@ -182,7 +182,7 @@ abstract class Logger
      */
     public function fatal($message = null, array $variables = array())
     {
-        return $this->add(self::FATAL, $message);
+        return $this->add(self::FATAL, $message, $variables);
     }
 
     /**
@@ -203,6 +203,7 @@ abstract class Logger
      *
      * @param   integer $severity The severity of the message.
      * @param   string $message The message to log.
+     * @param   array $variables Values to replace in message.
      * @return  $this
      * @chainable
      */
