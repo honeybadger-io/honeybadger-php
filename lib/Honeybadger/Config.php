@@ -360,11 +360,11 @@ class Config extends SemiOpenStruct
      */
     public function base_url()
     {
-        $base = $this->secure ? 'https' : 'http';
+        $base = $this->secure() ? 'https' : 'http';
         $base .= '://' . $this->host;
 
-        if (($this->secure and $this->port != 443)
-            or (!$this->secure and $this->port != 80)
+        if (($this->secure() and $this->port != 443)
+            or (!$this->secure() and $this->port != 80)
         ) {
             $base .= ':' . $this->port;
         }
