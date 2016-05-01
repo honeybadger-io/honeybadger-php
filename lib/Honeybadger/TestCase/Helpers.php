@@ -2,7 +2,7 @@
 
 namespace Honeybadger\TestCase;
 
-use \ReflectionClass;
+use ReflectionClass;
 
 /**
  * Collection of helper methods for use in unit tests.
@@ -11,125 +11,124 @@ use \ReflectionClass;
  *
  * @package   Honeybadger/Tests
  */
-class Helpers {
+class Helpers
+{
 
-	/**
-	 * @var  boolean  Whether an internet connection is available.
-	 */
-	protected static $has_internet = NULL;
+    /**
+     * @var  boolean  Whether an internet connection is available.
+     */
+    protected static $has_internet = null;
 
-	/**
-	 * @var  array  Collection of names of superglobals.
-	 */
-	protected static $superglobals = array(
-		'_SERVER', '_GET', '_POST', '_FILES', '_COOKIE', '_SESSION', '_REQUEST',
-		'_ENV',
-	);
+    /**
+     * @var  array  Collection of names of superglobals.
+     */
+    protected static $superglobals = array(
+        '_SERVER',
+        '_GET',
+        '_POST',
+        '_FILES',
+        '_COOKIE',
+        '_SESSION',
+        '_REQUEST',
+        '_ENV',
+    );
 
-	/**
-	 * Checks for internet connectivity.
-	 *
-	 * @return  boolean  Whether an internet connection is available.
-	 */
-	public static function has_internet()
-	{
-		if (self::$has_internet === NULL)
-		{
-			// The @ operator is used here to avoid DNS errors when there is no connection.
-			$sock = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
-			self::$has_internet = (boolean) $sock;
-		}
+    /**
+     * Checks for internet connectivity.
+     *
+     * @return  boolean  Whether an internet connection is available.
+     */
+    public static function has_internet()
+    {
+        if (self::$has_internet === null) {
+            // The @ operator is used here to avoid DNS errors
+            // when there is no connection.
+            $sock = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
+            self::$has_internet = (boolean)$sock;
+        }
 
-		return self::$has_internet;
-	}
+        return self::$has_internet;
+    }
 
-	/**
-	 * Helper function which replaces foward slashes with
-	 * OS-specific delimiters.
-	 *
-	 * @param   string  $path  Path to replace slashes in.
-	 * @return  string
-	 */
-	public static function dir_separator($path)
-	{
-		return str_replace('/', DIRECTORY_SEPARATOR, $path);
-	}
+    /**
+     * Helper function which replaces foward slashes with
+     * OS-specific delimiters.
+     *
+     * @param   string $path Path to replace slashes in.
+     * @return  string
+     */
+    public static function dir_separator($path)
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
 
-	/**
-	 * @var  array  Backup of environment variables.
-	 */
-	protected $environment_backup = array();
+    /**
+     * @var  array  Backup of environment variables.
+     */
+    protected $environment_backup = array();
 
-	/**
-	 * Allows easy setting and backing up of enviroment configurations.
-	 *
-	 * Option types are checked in the following order:
-	 *
-	 * * Server Var
-	 * * Static Variable
-	 * * Config option
-	 *
-	 * @param  array  $environment  List of environment to set
-	 */
-	public function set_environment(array $environment = array())
-	{
-		if ( ! count($environment))
-			return FALSE;
+    /**
+     * Allows easy setting and backing up of enviroment configurations.
+     *
+     * Option types are checked in the following order:
+     *
+     * * Server Var
+     * * Static Variable
+     * * Config option
+     *
+     * @param  $environment  Array of environment to set
+     * @return void
+     */
+    public function set_environment(array $environment = array())
+    {
+        if (!count($environment))
+            return false;
 
-		foreach ($environment as $option => $value)
-		{
-			$backup_needed = ! array_key_exists($option, $this->environment_backup);
+        foreach ($environment as $option => $value) {
+            $backup_needed = !array_key_exists($option, $this->environment_backup);
 
-			// Handle changing superglobals
-			if (in_array($option, self::$superglobals))
-			{
-				// For some reason we need to do this in order to change the superglobals
-				global $$option;
+            // Handle changing superglobals
+            if (in_array($option, self::$superglobals)) {
+                // For some reason we need to do this in order to change the superglobals
+                global $$option;
 
-				if ($backup_needed)
-				{
-					$this->environment_backup[$option] = $$option;
-				}
+                if ($backup_needed) {
+                    $this->environment_backup[$option] = $$option;
+                }
 
-				// PHPUnit makes a backup of superglobals automatically
-				$$option = $value;
-			}
-			// If this is a static property i.e. Html::$windowed_urls
-			elseif (strpos($option, '::$') !== FALSE)
-			{
-				list($class, $var) = explode('::$', $option, 2);
+                // PHPUnit makes a backup of superglobals automatically
+                $$option = $value;
+            } // If this is a static property i.e. Html::$windowed_urls
+            elseif (strpos($option, '::$') !== false) {
+                list($class, $var) = explode('::$', $option, 2);
 
-				$class = new ReflectionClass($class);
+                $class = new ReflectionClass($class);
 
-				if ($backup_needed)
-				{
-					$this->environment_backup[$option] = $class->getStaticPropertyValue($var);
-				}
+                if ($backup_needed) {
+                    $this->environment_backup[$option] = $class->getStaticPropertyValue($var);
+                }
 
-				$class->setStaticPropertyValue($var, $value);
-			}
-			// If this is an environment variable
-			elseif (preg_match('/^[A-Z_-]+$/', $option) OR isset($_SERVER[$option]))
-			{
-				if ($backup_needed)
-				{
-					$this->environment_backup[$option] = isset($_SERVER[$option]) ? $_SERVER[$option] : '';
-				}
+                $class->setStaticPropertyValue($var, $value);
+            } // If this is an environment variable
+            elseif (preg_match('/^[A-Z_-]+$/', $option) or isset($_SERVER[$option])) {
+                if ($backup_needed) {
+                    $this->environment_backup[$option] = isset($_SERVER[$option]) ? $_SERVER[$option] : '';
+                }
 
-				$_SERVER[$option] = $value;
-			}
-		}
-	}
+                $_SERVER[$option] = $value;
+            }
+        }
+    }
 
-	/**
-	 * Restores the environment to its original state.
-	 *
-	 * @chainable
-	 * @return  $this
-	 */
-	public function restore_environment()
-	{
-		$this->set_environment($this->environment_backup);
-	}
+    /**
+     * Restores the environment to its original state.
+     *
+     * @chainable
+     * @return  $this
+     */
+    public function restore_environment()
+    {
+        $this->set_environment($this->environment_backup);
+    }
 
 } // End Helpers

@@ -2,7 +2,7 @@
 
 namespace Honeybadger\Logger;
 
-use \Honeybadger\Logger;
+use Honeybadger\Logger;
 
 /**
  * Writes log entries to nowhere with the expectation that developers interested
@@ -15,11 +15,12 @@ use \Honeybadger\Logger;
  * @package   Honeybadger
  * @category  Logging
  */
-class Void extends Logger {
+class Void extends Logger
+{
 
-	public function write($severity, $message = NULL)
-	{
-		// noop
-	}
+    public function write($severity, $message = null)
+    {
+        // noop
+    }
 
 }

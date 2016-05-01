@@ -12,7 +12,7 @@ honeybadger-php is developed and tested against PHP versions 5.3, 5.4 and 5.5.
 
 Add honeybadger-php to your `composer.json`:
 
-```javascript
+```json
 {
   // ...
   "require": {
@@ -42,7 +42,7 @@ to Honeybadger. That's it!
 
 Add honeybadger-php to your `composer.json`:
 
-```javascript
+```json
 {
   // ...
   "require": {
@@ -278,7 +278,7 @@ To ignore exceptions based on other conditions, use `ignore_by_filter`:
 
 Honeybadger::$config->ignore_by_filter(function($notice) {
     if ($notice->error_class == 'Exception')
-        return TRUE;
+        return true;
 });
 ```
 
@@ -296,7 +296,7 @@ To disable sending session data:
 ```php
 Honeybadger::$config->values(array(
     'api_key' => '1234567890abcdef',
-    'send_request_session' => FALSE,
+    'send_request_session' => false,
 ));
 ```
 

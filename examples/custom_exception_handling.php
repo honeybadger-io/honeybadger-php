@@ -11,9 +11,9 @@ Honeybadger::$config->values($options);
 
 try
 {
-	throw new Exception('Oh noes! Something broke!');
+	throw new \Exception('Oh noes! Something broke!');
 }
-catch (Exception $e)
+catch (\Exception $e)
 {
 	echo Honeybadger::notify_or_ignore($e);
 }

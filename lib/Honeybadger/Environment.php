@@ -2,10 +2,9 @@
 
 namespace Honeybadger;
 
-use \Honeybadger\Util\Arr;
-use \Honeybadger\Util\SemiOpenStruct;
-use \Honeybadger\Errors\NonExistentProperty;
-use \Honeybadger\Errors\ReadOnly;
+use Honeybadger\Errors\NonExistentProperty;
+use Honeybadger\Errors\ReadOnly;
+use Honeybadger\Util\Arr;
 
 /**
  * Retrieves, stores, and normalizes environment data from `$_SERVER` to prepare
@@ -16,310 +15,289 @@ use \Honeybadger\Errors\ReadOnly;
  *
  * @package  Honeybadger
  */
-class Environment implements \ArrayAccess, \IteratorAggregate {
+class Environment implements \ArrayAccess, \IteratorAggregate
+{
+    /**
+     * Constructs and returns a new `Environment` with the supplied `$data`. If
+     * no data is provided, it will be detected based on `$_SERVER` and
+     * `$_COOKIE`.
+     *
+     * @param   array $data The data to build the environment with.
+     * @return  Environment   The constructed environment.
+     */
+    public static function factory($data = null)
+    {
+        return new self($data);
+    }
 
-	/**
-	 * Constructs and returns a new `Environment` with the supplied `$data`. If
-	 * no data is provided, it will be detected based on `$_SERVER` and
-	 * `$_COOKIE`.
-	 *
-	 * @param   array  $data  The data to build the environment with.
-	 * @return  Environment   The constructed environment.
-	 */
-	public static function factory($data = NULL)
-	{
-		return new self($data);
-	}
+    private $_attribute_methods = array(
+        'protocol', 'host', 'port', 'fullpath', 'url',
+    );
 
-	private $_attribute_methods = array(
-		'protocol', 'host', 'port', 'fullpath', 'url',
-	);
+    /**
+     * @var  array  List of `$_SERVER` keys to allow when building an
+     *              environment automatically. Keys prefixed with `HTTP_`
+     *              are also included.
+     */
+    private $allowed_php_environment_keys = array(
+        'PHP_SELF' => null,
+        'argv' => null,
+        'argc' => null,
+        'GATEWAY_INTERFACE' => null,
+        'SERVER_ADDR' => null,
+        'SERVER_NAME' => null,
+        'SERVER_SOFTWARE' => null,
+        'SERVER_PROTOCOL' => null,
+        'REQUEST_METHOD' => null,
+        'REQUEST_TIME' => null,
+        'REQUEST_TIME_FLOAT' => null,
+        'QUERY_STRING' => null,
+        'DOCUMENT_ROOT' => null,
+        'HTTPS' => null,
+        'REMOTE_ADDR' => null,
+        'REMOTE_HOST' => null,
+        'REMOTE_PORT' => null,
+        'REMOTE_USER' => null,
+        'REDIRECT_REMOTE_USER' => null,
+        'SCRIPT_FILENAME' => null,
+        'SERVER_ADMIN' => null,
+        'SERVER_PORT' => null,
+        'SERVER_SIGNATURE' => null,
+        'PATH_TRANSLATED' => null,
+        'SCRIPT_NAME' => null,
+        'REQUEST_URI' => null,
+        'PHP_AUTH_DIGEST' => null,
+        'PHP_AUTH_USER' => null,
+        'PHP_AUTH_PW' => null,
+        'AUTH_TYPE' => null,
+        'PATH_INFO' => null,
+        'ORIG_PATH_INFO' => null,
+    );
 
-	/**
-	 * @var  array  List of `$_SERVER` keys to allow when building an
-	 *              environment automatically. Keys prefixed with `HTTP_`
-	 *              are also included.
-	 */
-	private $allowed_php_environment_keys = array(
-		'PHP_SELF'             => NULL,
-		'argv'                 => NULL,
-		'argc'                 => NULL,
-		'GATEWAY_INTERFACE'    => NULL,
-		'SERVER_ADDR'          => NULL,
-		'SERVER_NAME'          => NULL,
-		'SERVER_SOFTWARE'      => NULL,
-		'SERVER_PROTOCOL'      => NULL,
-		'REQUEST_METHOD'       => NULL,
-		'REQUEST_TIME'         => NULL,
-		'REQUEST_TIME_FLOAT'   => NULL,
-		'QUERY_STRING'         => NULL,
-		'DOCUMENT_ROOT'        => NULL,
-		'HTTPS'                => NULL,
-		'REMOTE_ADDR'          => NULL,
-		'REMOTE_HOST'          => NULL,
-		'REMOTE_PORT'          => NULL,
-		'REMOTE_USER'          => NULL,
-		'REDIRECT_REMOTE_USER' => NULL,
-		'SCRIPT_FILENAME'      => NULL,
-		'SERVER_ADMIN'         => NULL,
-		'SERVER_PORT'          => NULL,
-		'SERVER_SIGNATURE'     => NULL,
-		'PATH_TRANSLATED'      => NULL,
-		'SCRIPT_NAME'          => NULL,
-		'REQUEST_URI'          => NULL,
-		'PHP_AUTH_DIGEST'      => NULL,
-		'PHP_AUTH_USER'        => NULL,
-		'PHP_AUTH_PW'          => NULL,
-		'AUTH_TYPE'            => NULL,
-		'PATH_INFO'            => NULL,
-		'ORIG_PATH_INFO'       => NULL,
-	);
+    /**
+     * @var  array  The environment data.
+     */
+    private $data = array();
 
-	/**
-	 * @var  array  The environment data.
-	 */
-	private $data = array();
+    /**
+     * Constructs a new environment with the supplied data or attempts to detect
+     * the environment using `sanitized_php_environment`.
+     *
+     * @param  array $data The environment data.
+     */
+    public function __construct($data = null)
+    {
+        if ($data === null) {
+            $data = $this->sanitized_php_environment();
+        }
 
-	/**
-	 * Constructs a new environment with the supplied data or attempts to detect
-	 * the environment using `sanitized_php_environment`.
-	 *
-	 * @param  array  $data  The environment data.
-	 */
-	public function __construct($data = NULL)
-	{
-		if ($data === NULL)
-		{
-			$data = $this->sanitized_php_environment();
-		}
+        $this->data = $data;
+    }
 
-		$this->data = $data;
-	}
+    /**
+     * Determines the protocol of the request.
+     *
+     * @return  string  Either `http` or `https`.
+     */
+    public function protocol()
+    {
+        return (empty($this['HTTPS']) or $this['HTTPS'] == 'off') ? 'http' : 'https';
+    }
 
-	/**
-	 * Determines the protocol of the request.
-	 *
-	 * @return  string  Either `http` or `https`.
-	 */
-	public function protocol()
-	{
-		return (empty($this['HTTPS']) OR $this['HTTPS'] == 'off') ? 'http' : 'https';
-	}
+    /**
+     * Determines whether the request was made over HTTPS.
+     *
+     * @return  boolean  `true` if the request is secure, `false` otherwise.
+     */
+    public function is_secure()
+    {
+        return ($this->protocol() === 'https');
+    }
 
-	/**
-	 * Determines whether the request was made over HTTPS.
-	 *
-	 * @return  boolean  `TRUE` if the request is secure, `FALSE` otherwise.
-	 */
-	public function is_secure()
-	{
-		return ($this->protocol() === 'https');
-	}
+    /**
+     * Determines the host of the request, using the `Host` header, falling back
+     * to `SERVER_NAME` if none was set.
+     *
+     * @return  string  The request host.
+     */
+    public function host()
+    {
+        return (empty($this['HTTP_HOST'])) ? $this['SERVER_NAME'] : $this['HTTP_HOST'];
+    }
 
-	/**
-	 * Determines the host of the request, using the `Host` header, falling back
-	 * to `SERVER_NAME` if none was set.
-	 *
-	 * @return  string  The request host.
-	 */
-	public function host()
-	{
-		return (empty($this['HTTP_HOST'])) ? $this['SERVER_NAME'] : $this['HTTP_HOST'];
-	}
+    /**
+     * Determines the port of the web server. If none was found, defaults to
+     * either `443` or `80` depending on whether the connection is secure.
+     *
+     * @return  integer  The server port.
+     */
+    public function port()
+    {
+        if (empty($this['SERVER_PORT'])) {
+            return $this->is_secure() ? 443 : 80;
+        } else {
+            return $this['SERVER_PORT'];
+        }
+    }
 
-	/**
-	 * Determines the port of the web server. If none was found, defaults to
-	 * either `443` or `80` depending on whether the connection is secure.
-	 *
-	 * @return  integer  The server port.
-	 */
-	public function port()
-	{
-		if (empty($this['SERVER_PORT']))
-		{
-			return $this->is_secure() ? 443 : 80;
-		}
-		else
-		{
-			return $this['SERVER_PORT'];
-		}
-	}
+    /**
+     * Determines whether the connection is using a non-standard port.
+     *
+     * @return  boolean  `true` if non-standard port is used, `false` otherwise.
+     */
+    public function is_non_standard_port()
+    {
+        if ($this->is_secure()) {
+            return ($this->port() != 443);
+        } else {
+            return ($this->port() != 80);
+        }
+    }
 
-	/**
-	 * Determines whether the connection is using a non-standard port.
-	 *
-	 * @return  boolean  `TRUE` if non-standard port is used, `FALSE` otherwise.
-	 */
-	public function is_non_standard_port()
-	{
-		if ($this->is_secure())
-		{
-			return ($this->port() != 443);
-		}
-		else
-		{
-			return ($this->port() != 80);
-		}
-	}
+    /**
+     * Attempts to detect the full path of the request (including query string).
+     *
+     * @return  String  The full path of the request.
+     */
+    public function fullpath()
+    {
+        $uri = $this['REQUEST_URI'] ?: $this['PATH_INFO'];
+        $uri = preg_replace('/\?.*$/', '', $uri);
+        $uri = '/' . ltrim($uri, '/');
 
-	/**
-	 * Attempts to detect the full path of the request (including query string).
-	 *
-	 * @return  string  The full path of the request.
-	 */
-	public function fullpath()
-	{
-		$uri = $this['REQUEST_URI'] ?: $this['PATH_INFO'];
-		$uri = preg_replace('/\?.*$/', '', $uri);
-		$uri = '/'.ltrim($uri, '/');
+        if (!empty($this['QUERY_STRING'])) {
+            $uri .= '?' . $this['QUERY_STRING'];
+        }
 
-		if ( ! empty($this['QUERY_STRING']))
-		{
-			$uri .= '?'.$this['QUERY_STRING'];
-		}
+        return $uri;
+    }
 
-		return $uri;
-	}
+    /**
+     * Returns the full request URL including protocol, host, port
+     * (if non-standard), URI, and query string.
+     *
+     * @return String  The request URL.
+     */
+    public function url()
+    {
+        if (isset($this->data['url']) and !empty($this->data['url']))
+            return $this->data['url'];
 
-	/**
-	 * Returns the full request URL including protocol, host, port
-	 * (if non-standard), URI, and query string.
-	 *
-	 * @param  string  The request URL.
-	 */
-	public function url()
-	{
-		if (isset($this->data['url']) AND ! empty($this->data['url']))
-			return $this->data['url'];
+        $url = $this->protocol . '://' . $this->host;
 
-		$url = $this->protocol.'://'.$this->host;
+        if ($this->is_non_standard_port()) {
+            $url .= ':' . $this->port;
+        }
 
-		if ($this->is_non_standard_port())
-		{
-			$url .= ':'.$this->port;
-		}
+        $url .= $this->fullpath;
 
-		$url .= $this->fullpath;
+        if (!preg_match('/^https?:\/{3}$/', $url))
+            return $url;
+    }
 
-		if ( ! preg_match('/^https?:\/{3}$/', $url))
-			return $url;
-	}
+    /**
+     * Returns the environment data as an array.
+     *
+     * @return  array  The environment data.
+     */
+    public function as_array()
+    {
+        return $this->data;
+    }
 
-	/**
-	 * Returns the environment data as an array.
-	 *
-	 * @param  array  The environment data.
-	 */
-	public function as_array()
-	{
-		return $this->data;
-	}
+    /**
+     * Alias for `as_array`.
+     *
+     * @return  Array  The environment data.
+     */
+    public function to_array()
+    {
+        return $this->as_array();
+    }
 
-	/**
-	 * Alias for `as_array`.
-	 *
-	 * @param  array  The environment data.
-	 */
-	public function to_array()
-	{
-		return $this->as_array();
-	}
+    /**
+     * Returns the JSON-encoded environment data.
+     *
+     * @param   integer $options Options to pass to `json_encode()`.
+     * @return  string   The JSON-encoded object attributes.
+     */
+    public function to_json($options = 0)
+    {
+        return json_encode($this->as_json(), $options);
+    }
 
-	/**
-	 * Returns the JSON-encoded environment data.
-	 *
-	 * @param   integer  $options  Options to pass to `json_encode()`.
-	 * @return  string   The JSON-encoded object attributes.
-	 */
-	public function to_json($options = 0)
-	{
-		return json_encode($this->as_json(), $options);
-	}
+    public function __get($key)
+    {
+        if (in_array($key, $this->_attribute_methods)) {
+            return $this->$key();
+        } else {
+            throw new NonExistentProperty($this, $key);
+        }
+    }
 
-	public function __get($key)
-	{
-		if (in_array($key, $this->_attribute_methods))
-		{
-			return $this->$key();
-		}
-		else
-		{
-			throw new NonExistentProperty($this, $key);
-		}
-	}
+    public function offsetGet($key)
+    {
+        if (array_key_exists($key, $this->data)) {
+            return $this->data[$key];
+        } elseif (in_array($key, $this->_attribute_methods)) {
+            return $this->$key();
+        } else {
+            return null;
+        }
+    }
 
-	public function offsetGet($key)
-	{
-		if (array_key_exists($key, $this->data))
-		{
-			return $this->data[$key];
-		}
-		elseif (in_array($key, $this->_attribute_methods))
-		{
-			return $this->$key();
-		}
-		else
-		{
-			return NULL;
-		}
-	}
+    public function offsetSet($key, $value)
+    {
+        throw new ReadOnly($this);
+    }
 
-	public function offsetSet($key, $value)
-	{
-		throw new ReadOnly($this);
-	}
+    public function offsetExists($key)
+    {
+        return (array_key_exists($key, $this->data) or
+            in_array($key, $this->_attribute_methods));
+    }
 
-	public function offsetExists($key)
-	{
-		return (array_key_exists($key, $this->data) OR
-		        in_array($key, $this->_attribute_methods));
-	}
+    public function offsetUnset($key)
+    {
+        throw new ReadOnly($this);
+    }
 
-	public function offsetUnset($key)
-	{
-		throw new ReadOnly($this);
-	}
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->data);
+    }
 
-	public function getIterator()
-	{
-		return new \ArrayIterator($this->data);
-	}
+    /**
+     * Unfortunately, PHP has no separation between the shell and
+     * request environments. This means sensitive data such as database
+     * information (it's common practice to set these when using services like
+     * Heroku and Pagoda Box) must be filtered out.
+     *
+     * The following steps are taken to alleviate this issue:
+     *
+     * * Only allow the
+     *   [predefined variables](http://php.net/manual/en/reserved.variables.server.php)
+     *   in `$_SERVER`.
+     *
+     * * Allow variables prefixed with `HTTP_` (HTTP headers).
+     *
+     * @return  array  The filtered PHP request environment.
+     */
+    private function sanitized_php_environment()
+    {
+        $env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
 
-	/**
-	 * Unfortunately, PHP has no separation between the shell and
-	 * request environments. This means sensitive data such as database
-	 * information (it's common practice to set these when using services like
-	 * Heroku and Pagoda Box) must be filtered out.
-	 *
-	 * The following steps are taken to alleviate this issue:
-	 *
-	 * * Only allow the
-	 *   [predefined variables](http://php.net/manual/en/reserved.variables.server.php)
-	 *   in `$_SERVER`.
-	 *
-	 * * Allow variables prefixed with `HTTP_` (HTTP headers).
-	 *
-	 * @return  array  The filtered PHP request environment.
-	 */
-	private function sanitized_php_environment()
-	{
-		$env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
+        foreach ($_SERVER as $key => $value) {
+            if (strpos($key, 'HTTP_') === 0) {
+                $env[$key] = $value;
+            }
+        }
 
-		foreach ($_SERVER as $key => $value)
-		{
-			if (strpos($key, 'HTTP_') === 0)
-			{
-				$env[$key] = $value;
-			}
-		}
+        if (!empty($_COOKIE)) {
+            // Add cookies
+            $env['rack.request.cookie_hash'] = $_COOKIE;
+        }
 
-		if ( ! empty($_COOKIE))
-		{
-			// Add cookies
-			$env['rack.request.cookie_hash'] = $_COOKIE;
-		}
-
-		return array_filter($env);
-	}
-
+        return array_filter($env);
+    }
 }
