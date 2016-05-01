@@ -12,7 +12,7 @@ honeybadger-php is developed and tested against PHP versions 5.3, 5.4 and 5.5.
 
 Add honeybadger-php to your `composer.json`:
 
-```json
+```javascript
 {
   // ...
   "require": {
@@ -42,7 +42,7 @@ to Honeybadger. That's it!
 
 Add honeybadger-php to your `composer.json`:
 
-```json
+```javascript
 {
   // ...
   "require": {
