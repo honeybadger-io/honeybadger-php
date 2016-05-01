@@ -344,8 +344,7 @@ class Config extends SemiOpenStruct
     }
 
     /**
-     * @return `Logger::INFO` when `debug` is `true`, otherwise
-     * @return `Logger::DEBUG`.
+     * @return integer `Logger::INFO` when `debug` is `true`, otherwise `Logger::DEBUG`.
      *
      * @var  boolean  The detected log level.
      */
