@@ -76,7 +76,7 @@ abstract class Logger {
 	 *
 	 * Logs a message:
 	 *
-	 *     "** [Honeybadger] This message is bananans"
+	 *     "** [Honeybadger] This message is bananas"
 	 *
 	 * @param   string  $message    The message to log.
 	 * @param   array   $variables  Values to replace in message.
@@ -100,7 +100,7 @@ abstract class Logger {
 	 *
 	 * Logs a message:
 	 *
-	 *     "** [Honeybadger] This message is bananans"
+	 *     "** [Honeybadger] This message is bananas"
 	 *
 	 * @param   string  $message    The message to log.
 	 * @param   array   $variables  Values to replace in message.
@@ -124,7 +124,7 @@ abstract class Logger {
 	 *
 	 * Logs a message:
 	 *
-	 *     "** [Honeybadger] This message is bananans"
+	 *     "** [Honeybadger] This message is bananas"
 	 *
 	 * @param   string  $message    The message to log.
 	 * @param   array   $variables  Values to replace in message.
@@ -148,7 +148,7 @@ abstract class Logger {
 	 *
 	 * Logs a message:
 	 *
-	 *     "** [Honeybadger] This message is bananans"
+	 *     "** [Honeybadger] This message is bananas"
 	 *
 	 * @param   string  $message    The message to log.
 	 * @param   array   $variables  Values to replace in message.
@@ -172,7 +172,7 @@ abstract class Logger {
 	 *
 	 * Logs a message:
 	 *
-	 *     "** [Honeybadger] This message is bananans"
+	 *     "** [Honeybadger] This message is bananas"
 	 *
 	 * @param   string  $message    The message to log.
 	 * @param   array   $variables  Values to replace in message.

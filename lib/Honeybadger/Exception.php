@@ -39,7 +39,7 @@ class Exception {
 				// Set the Status code to 500, and Content-Type to text/plain.
 				header('Content-Type: text/plain; charset=utf-8', TRUE, 500);
 
-				echo 'Someting went terribly wrong.';
+				echo 'Something went terribly wrong.';
 
 				// Exit with a non-zero status.
 				exit(1);

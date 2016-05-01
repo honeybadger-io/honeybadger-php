@@ -255,8 +255,8 @@ class ArrTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @test
 	 * @dataProvider provider_is_array
-	 * @param mixed   $value     Value to check
-	 * @param boolean $expected  Is $value an array?
+	 * @param mixed   $array     Value to check
+	 * @param boolean $expected  Is $array an array?
 	 */
 	public function test_is_array($array, $expected)
 	{
