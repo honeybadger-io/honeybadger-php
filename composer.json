@@ -1,22 +1,28 @@
 {
-  "name": "gevans/honeybadger",
-  "description": "Unofficial PHP library for reporting errors to honeybadger.io",
+  "name": "honeybadger-io/honeybadger-php",
+  "description": "Official PHP library for reporting errors to honeybadger.io",
   "type": "library",
   "keywords": ["error", "reporting", "honeybadger", "exception"],
-  "homepage": "https://github.com/gevans/honeybadger-php",
+  "homepage": "https://github.com/honeybadger-io/honeybadger-php",
   "license": "MIT",
   "authors": [
+    {
+      "name": "Joshua Wood",
+      "email": "josh@honeybadger.io",
+      "homepage": "https://www.honeybadger.io/",
+      "role": "Maintainer"
+    },
     {
       "name": "Gabe Evans",
       "email": "gabe@ga.be",
       "homepage": "http://ga.be",
-      "role": "Maintainer"
+      "role": "Original Developer"
     }
   ],
   "support": {
-    "issues": "https://github.com/gevans/honeybadger-php/issues",
-    "wiki": "https://github.com/gevans/honeybadger-php/wiki",
-    "source": "https://github.com/gevans/honeybadger-php"
+    "issues": "https://github.com/honeybadger-io/honeybadger-php/issues",
+    "wiki": "https://github.com/honeybadger-io/honeybadger-php/wiki",
+    "source": "https://github.com/honeybadger-io/honeybadger-php"
   },
   "require": {
     "php": ">= 5.3.0",
