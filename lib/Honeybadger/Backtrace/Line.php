@@ -174,7 +174,7 @@ class Line extends SemiOpenStruct
         if ($this->source)
             return $this->source;
 
-        return $this->source = $this->get_source(
+        return $this->source = $this->getSource(
             $this->file,
             $this->number,
             $radius
@@ -201,7 +201,7 @@ class Line extends SemiOpenStruct
      *
      * @return  array  The extracted source.
      */
-    private function get_source($file, $number, $radius = 2)
+    private function getSource($file, $number, $radius = 2)
     {
         if (!is_file($file) or !is_readable($file)) {
             return array();
@@ -227,7 +227,7 @@ class Line extends SemiOpenStruct
             if ($l < $start)
                 continue;
 
-            $lines["$l"] = $this->trim_line($line);
+            $lines["$l"] = $this->trimLine($line);
         }
 
         return $lines;
@@ -240,7 +240,7 @@ class Line extends SemiOpenStruct
      * @param   string $line The line to trim.
      * @return  string  The trimmed line.
      */
-    private function trim_line($line)
+    private function trimLine($line)
     {
         $trimmed = trim($line, "\n\r\0\x0B");
 

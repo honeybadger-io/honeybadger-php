@@ -16,10 +16,10 @@ class Slim extends Logger
 
     public function write($severity, $message = null)
     {
-        $this->logger->write($message, $this->translate_severity($severity));
+        $this->logger->write($message, $this->translateSeverity($severity));
     }
 
-    private function translate_severity($severity)
+    private function translateSeverity($severity)
     {
         switch ($severity) {
             case self::FATAL:

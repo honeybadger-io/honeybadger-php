@@ -229,11 +229,11 @@ class Config extends SemiOpenStruct
 
         // FIXME: This feels very brittle...
         if (!$this->port) {
-            $this->port = $this->default_port();
+            $this->port = $this->defaultPort();
         }
 
         if (!$this->certificate_authority) {
-            $this->certificate_authority = $this->default_certificate_authority();
+            $this->certificate_authority = $this->defaultCertificateAuthority();
         }
     }
 
@@ -407,11 +407,11 @@ class Config extends SemiOpenStruct
             return $this->_secure;
 
         $use_default = ($this->port === null or !is_integer($this->port) or
-            $this->port == $this->default_port());
+            $this->port == $this->defaultPort());
         $this->_secure = $value;
 
         if ($use_default) {
-            $this->port = $this->default_port();
+            $this->port = $this->defaultPort();
         }
 
         return $this;
@@ -424,7 +424,7 @@ class Config extends SemiOpenStruct
      * @return  boolean|$this  The value or configuration object.
      * @chainable
      */
-    public function is_secure($value = null)
+    public function isSecure($value = null)
     {
         return $this->secure($value);
     }
@@ -435,9 +435,9 @@ class Config extends SemiOpenStruct
      *
      * @return  integer  Default port
      */
-    private function default_port()
+    private function defaultPort()
     {
-        return $this->is_secure() ? 443 : 80;
+        return $this->isSecure() ? 443 : 80;
     }
 
     /**
@@ -446,7 +446,7 @@ class Config extends SemiOpenStruct
      *
      * @return  string  Path to certificate authority bundle.
      */
-    private function default_certificate_authority()
+    private function defaultCertificateAuthority()
     {
         return realpath(__DIR__ . '/../../resources/ca-bundle.crt');
     }

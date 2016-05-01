@@ -146,8 +146,8 @@ class Honeybadger
      */
     public static function notify($exception, array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
-        return self::send_notice($notice);
+        $notice = self::buildNoticeFor($exception, $options);
+        return self::sendNotice($notice);
     }
 
     /**
@@ -161,17 +161,17 @@ class Honeybadger
     public static function notify_or_ignore($exception,
                                             array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
+        $notice = self::buildNoticeFor($exception, $options);
 
         if (!$notice->is_ignored()) {
-            return self::send_notice($notice);
+            return self::sendNotice($notice);
         }
     }
 
     public static function build_lookup_hash_for($exception,
                                                  array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
+        $notice = self::buildNoticeFor($exception, $options);
 
         $result = array(
             'action' => $notice->action,
@@ -191,18 +191,18 @@ class Honeybadger
         return $result;
     }
 
-    private static function send_notice($notice)
+    private static function sendNotice($notice)
     {
         if (self::$config->is_public()) {
             return $notice->deliver();
         }
     }
 
-    private static function build_notice_for($exception,
+    private static function buildNoticeFor($exception,
                                              array $options = array())
     {
         if ($exception instanceof \Exception) {
-            $options['exception'] = self::unwrap_exception($exception);
+            $options['exception'] = self::unwrapException($exception);
         } elseif (Arr::is_array($exception)) {
             $options = Arr::merge($options, $exception);
         }
@@ -210,10 +210,10 @@ class Honeybadger
         return Notice::factory($options);
     }
 
-    private static function unwrap_exception($exception)
+    private static function unwrapException($exception)
     {
         if ($previous = $exception->getPrevious()) {
-            return self::unwrap_exception($previous);
+            return self::unwrapException($previous);
         }
 
         return $exception;

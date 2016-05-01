@@ -103,8 +103,8 @@ class Slim extends \Slim\Middleware
         } catch (\Exception $e) {
             // Report the exception to Honeybadger and store the error ID in
             // the environment.
-            $this->inform_users(
-                $this->notify_honeybadger($e)
+            $this->informUsers(
+                $this->notifyHoneybadger($e)
             );
 
             // Rethrow the exception to allow other middleware to handle it.
@@ -116,13 +116,13 @@ class Slim extends \Slim\Middleware
      * @param $error_id integer error number
      * @return  void
      */
-    private function inform_users($error_id)
+    private function informUsers($error_id)
     {
         if (empty(Honeybadger::$config->user_information))
             return;
 
         $response = $this->app->response();
-        $user_info = $this->user_info(Honeybadger::$config->user_information,
+        $user_info = $this->userInfo(Honeybadger::$config->user_information,
             $error_id);
 
         // Substitute placeholder comment with user information.
@@ -136,7 +136,7 @@ class Slim extends \Slim\Middleware
      * @param $error_id error number
      * @return  String
      */
-    private function user_info($info, $error_id)
+    private function userInfo($info, $error_id)
     {
         return preg_replace('/\{\{\s*error_id\s*\}\}/', $error_id, $info);
     }
@@ -145,7 +145,7 @@ class Slim extends \Slim\Middleware
      * @param array $env environment values
      * @return  boolean
      */
-    private function ignored_user_agent($env)
+    private function ignoredUserAgent($env)
     {
         return in_array($env['USER_AGENT'],
             Honeybadger::$config->ignore_user_agents);
@@ -155,13 +155,13 @@ class Slim extends \Slim\Middleware
      * @param $exception \Exception
      * @return  Integer error id
      */
-    private function notify_honeybadger(\Exception $exception)
+    private function notifyHoneybadger(\Exception $exception)
     {
         $env = $this->app->environment();
 
-        if (!$this->ignored_user_agent($env)) {
+        if (!$this->ignoredUserAgent($env)) {
             return $env['honeybadger.error_id'] = Honeybadger::notify_or_ignore(
-                $exception, $this->notice_options($env)
+                $exception, $this->noticeOptions($env)
             );
         }
     }
@@ -173,14 +173,14 @@ class Slim extends \Slim\Middleware
      * @param   Slim\Environment $env The application environment.
      * @return  array  The notice options.
      */
-    private function notice_options($env)
+    private function noticeOptions($env)
     {
         $request = $this->app->request();
 
         return array(
-            'cgi_data' => $this->formatted_cgi_data($env),
-            'params' => $this->combined_params($request),
-            'url' => $this->request_url($env, $request),
+            'cgi_data' => $this->formattedCgiData($env),
+            'params' => $this->combinedParams($request),
+            'url' => $this->requestUrl($env, $request),
         );
     }
 
@@ -192,7 +192,7 @@ class Slim extends \Slim\Middleware
      * @param   Slim\Environment $env The application environment.
      * @return  array  The formatted CGI data.
      */
-    private function formatted_cgi_data($env)
+    private function formattedCgiData($env)
     {
         $cgi_data = array();
 
@@ -221,7 +221,7 @@ class Slim extends \Slim\Middleware
      * @param   Slim\Http\Request $request
      * @return  array  The combined request and route parameters.
      */
-    private function combined_params($request)
+    private function combinedParams($request)
     {
         $router = $this->app->router();
 
@@ -247,7 +247,7 @@ class Slim extends \Slim\Middleware
      * @param   Slim\Http\Request $request
      * @return  string  The request URL.
      */
-    private function request_url($env, $request)
+    private function requestUrl($env, $request)
     {
         $url = implode('', array(
             $request->getUrl(), $request->getRootUri(), $request->getPathInfo(),

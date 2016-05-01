@@ -235,13 +235,13 @@ class Notice extends SemiOpenStruct
         $this->hostname = gethostname();
 
         $this->source_extract_radius = Arr::get($args, 'source_extract_radius', 2);
-        $this->source_extract = $this->extract_source_from_backtrace();
+        $this->source_extract = $this->extractSourceFromBacktrace();
 
         $this->send_request_session = Arr::get($args, 'send_request_session', true);
 
-        $this->find_session_data();
-        $this->clean_params();
-        $this->set_context();
+        $this->findSessionData();
+        $this->cleanParams();
+        $this->setContext();
     }
 
     public function is_ignored()
@@ -296,7 +296,7 @@ class Notice extends SemiOpenStruct
         );
     }
 
-    private function extract_source_from_backtrace()
+    private function extractSourceFromBacktrace()
     {
         if (!$this->backtrace->has_lines())
             return null;
@@ -310,7 +310,7 @@ class Notice extends SemiOpenStruct
         return $line->source($this->source_extract_radius);
     }
 
-    private function find_session_data()
+    private function findSessionData()
     {
         if (!$this->send_request_session)
             return;
@@ -332,7 +332,7 @@ class Notice extends SemiOpenStruct
         $params = Filter::params($this->params_filters, $params);
     }
 
-    private function clean_params()
+    private function cleanParams()
     {
         $this->filter($this->params);
 
@@ -345,7 +345,7 @@ class Notice extends SemiOpenStruct
         }
     }
 
-    private function set_context()
+    private function setContext()
     {
         $this->context = Honeybadger::context();
 

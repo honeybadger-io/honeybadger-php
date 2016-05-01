@@ -88,7 +88,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     public function __construct($data = null)
     {
         if ($data === null) {
-            $data = $this->sanitized_php_environment();
+            $data = $this->sanitizedPhpEnvironment();
         }
 
         $this->data = $data;
@@ -283,7 +283,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *
      * @return  array  The filtered PHP request environment.
      */
-    private function sanitized_php_environment()
+    private function sanitizedPhpEnvironment()
     {
         $env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
 
