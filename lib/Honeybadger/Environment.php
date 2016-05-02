@@ -109,7 +109,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *
      * @return  boolean  `true` if the request is secure, `false` otherwise.
      */
-    public function is_secure()
+    public function isSecure()
     {
         return ($this->protocol() === 'https');
     }
@@ -134,7 +134,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     public function port()
     {
         if (empty($this['SERVER_PORT'])) {
-            return $this->is_secure() ? 443 : 80;
+            return $this->isSecure() ? 443 : 80;
         } else {
             return $this['SERVER_PORT'];
         }
@@ -145,9 +145,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *
      * @return  boolean  `true` if non-standard port is used, `false` otherwise.
      */
-    public function is_non_standard_port()
+    public function isNonStandardPort()
     {
-        if ($this->is_secure()) {
+        if ($this->isSecure()) {
             return ($this->port() != 443);
         } else {
             return ($this->port() != 80);
@@ -185,7 +185,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
 
         $url = $this->protocol . '://' . $this->host;
 
-        if ($this->is_non_standard_port()) {
+        if ($this->isNonStandardPort()) {
             $url .= ':' . $this->port;
         }
 
@@ -200,7 +200,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *
      * @return  array  The environment data.
      */
-    public function as_array()
+    public function asArray()
     {
         return $this->data;
     }
@@ -210,9 +210,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *
      * @return  Array  The environment data.
      */
-    public function to_array()
+    public function toArray()
     {
-        return $this->as_array();
+        return $this->asArray();
     }
 
     /**
@@ -221,7 +221,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      * @param   integer $options Options to pass to `json_encode()`.
      * @return  string   The JSON-encoded object attributes.
      */
-    public function to_json($options = 0)
+    public function toJson($options = 0)
     {
         return json_encode($this->as_json(), $options);
     }

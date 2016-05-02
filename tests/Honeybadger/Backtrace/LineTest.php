@@ -155,7 +155,7 @@ class LineTest extends \PHPUnit_Framework_TestCase
      */
     public function test_is_application($expected, $line)
     {
-        $this->assertEquals($expected, $line->is_application());
+        $this->assertEquals($expected, $line->isApplication());
     }
 
     public function test_source()
@@ -222,7 +222,7 @@ class LineTest extends \PHPUnit_Framework_TestCase
      */
     public function test_to_array($expectation, $line)
     {
-        $this->assertEquals($expectation, $line->to_array());
+        $this->assertEquals($expectation, $line->toArray());
     }
 
 }

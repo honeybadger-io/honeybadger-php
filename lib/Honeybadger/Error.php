@@ -28,7 +28,7 @@ class Error
             $exception = new \ErrorException($error, $code, 0, $file, $line);
 
             // Send the error to Honeybadger.
-            Honeybadger::notify_or_ignore($exception);
+            Honeybadger::notifyOrIgnore($exception);
         }
 
         if (is_callable(self::$previous_handler)) {

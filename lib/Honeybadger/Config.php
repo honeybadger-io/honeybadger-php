@@ -14,7 +14,7 @@ use Honeybadger\Util\SemiOpenStruct;
 class Config extends SemiOpenStruct
 {
 
-    protected $_attribute_methods = array('secure', 'log_level');
+    protected $_attribute_methods = array('secure', 'logLevel');
 
     /**
      * @var  string  The API key for your project,
@@ -189,9 +189,9 @@ class Config extends SemiOpenStruct
      * @var  array  Default backtrace filters.
      */
     public static $default_backtrace_filters = array(
-        array('\\Honeybadger\\Filter', 'project_root'),
-        array('\\Honeybadger\\Filter', 'expand_paths'),
-        array('\\Honeybadger\\Filter', 'honeybadger_paths'),
+        array('\\Honeybadger\\Filter', 'projectRoot'),
+        array('\\Honeybadger\\Filter', 'expandPaths'),
+        array('\\Honeybadger\\Filter', 'honeybadgerPaths'),
     );
 
     /**
@@ -269,7 +269,7 @@ class Config extends SemiOpenStruct
      * @param   callback $filter The new backtrace filter
      * @return  void
      */
-    public function filter_backtrace($filter)
+    public function filterBacktrace($filter)
     {
         $this->backtrace_filters[] = $filter;
     }
@@ -295,7 +295,7 @@ class Config extends SemiOpenStruct
      * @param   callback $filter The new ignore filter
      * @return  void
      */
-    public function ignore_by_filter($filter)
+    public function ignoreByFilter($filter)
     {
         $this->ignore_by_filters[] = $filter;
     }
@@ -306,7 +306,7 @@ class Config extends SemiOpenStruct
      * @param   array $names A list of exceptions to ignore
      * @return  void
      */
-    public function ignore_only(/* $name1, $name2, $name3, ... */)
+    public function ignoreOnly(/* $name1, $name2, $name3, ... */)
     {
         $this->ignore = func_get_args();
     }
@@ -316,7 +316,7 @@ class Config extends SemiOpenStruct
      *
      * @param  array $names A list of user agents to ignore
      */
-    public function ignore_user_agents_only(/* $name1, $name2, $name3, ... */)
+    public function ignoreUserAgentsOnly(/* $name1, $name2, $name3, ... */)
     {
         $this->ignore_user_agents = func_get_args();
     }
@@ -329,7 +329,7 @@ class Config extends SemiOpenStruct
      */
     public function merge(array $config = array())
     {
-        return Arr::merge($this->as_array(), $config);
+        return Arr::merge($this->asArray(), $config);
     }
 
     /**
@@ -337,7 +337,7 @@ class Config extends SemiOpenStruct
      *
      * @return  boolean  `false` if in a development environment
      */
-    public function is_public()
+    public function isPublic()
     {
         return (!in_array($this->environment_name,
             $this->development_environments));
@@ -348,7 +348,7 @@ class Config extends SemiOpenStruct
      *
      * @var  boolean  The detected log level.
      */
-    public function log_level()
+    public function logLevel()
     {
         return $this->debug ? Logger::INFO : Logger::DEBUG;
     }
@@ -358,7 +358,7 @@ class Config extends SemiOpenStruct
      *
      * @return  string  The base URL.
      */
-    public function base_url()
+    public function baseUrl()
     {
         $base = $this->secure() ? 'https' : 'http';
         $base .= '://' . $this->host;

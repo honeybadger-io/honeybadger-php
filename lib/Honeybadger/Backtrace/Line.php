@@ -156,7 +156,7 @@ class Line extends SemiOpenStruct
      *
      * @return  boolean  `true` if application line, `false` otherwise.
      */
-    public function is_application()
+    public function isApplication()
     {
         return (strpos($this->filtered_file, '[PROJECT_ROOT]') === 0 and
             strpos($this->filtered_file, '[PROJECT_ROOT]/vendor') === false);
@@ -186,7 +186,7 @@ class Line extends SemiOpenStruct
      *
      * @return  array  The backtrace line
      */
-    public function as_array()
+    public function asArray()
     {
         return array(
             'file' => $this->filtered_file,

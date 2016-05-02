@@ -160,7 +160,7 @@ class Slim extends \Slim\Middleware
         $env = $this->app->environment();
 
         if (!$this->ignoredUserAgent($env)) {
-            return $env['honeybadger.error_id'] = Honeybadger::notify_or_ignore(
+            return $env['honeybadger.error_id'] = Honeybadger::notifyOrIgnore(
                 $exception, $this->noticeOptions($env)
             );
         }

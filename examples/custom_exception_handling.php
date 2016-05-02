@@ -15,5 +15,5 @@ try
 }
 catch (\Exception $e)
 {
-	echo Honeybadger::notify_or_ignore($e);
+	echo Honeybadger::notifyOrIgnore($e);
 }

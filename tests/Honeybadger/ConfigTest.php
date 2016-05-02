@@ -139,7 +139,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_filter_backtrace_adds_supplied_callback_to_backtrace_filters()
     {
         $config = new Config;
-        $config->filter_backtrace('foo');
+        $config->filterBacktrace('foo');
 
         $this->assertEquals('foo', end($config->backtrace_filters));
     }
@@ -147,7 +147,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_ignore_by_filter_adds_supplied_callback_to_ignore_by_filters()
     {
         $config = new Config;
-        $config->ignore_by_filter('bar');
+        $config->ignoreByFilter('bar');
 
         $this->assertEquals('bar', end($config->ignore_by_filters));
     }
@@ -155,9 +155,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_ignore_only_overrides_existing_ignores()
     {
         $config = new Config;
-        $config->ignore_only('Some');
-        $config->ignore_only('Error');
-        $config->ignore_only('GenericError', 'Exception');
+        $config->ignoreOnly('Some');
+        $config->ignoreOnly('Error');
+        $config->ignoreOnly('GenericError', 'Exception');
 
         $this->assertEquals(array('GenericError', 'Exception'), $config->ignore);
     }
@@ -165,9 +165,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_ignore_user_agents_only_overrides_existing_ignored_user_agents()
     {
         $config = new Config;
-        $config->ignore_user_agents_only('Firefox');
-        $config->ignore_user_agents_only('Chrome');
-        $config->ignore_user_agents_only('Mozilla', 'Internet Explorer');
+        $config->ignoreUserAgentsOnly('Firefox');
+        $config->ignoreUserAgentsOnly('Chrome');
+        $config->ignoreUserAgentsOnly('Mozilla', 'Internet Explorer');
 
         $this->assertEquals(array('Mozilla', 'Internet Explorer'), $config->ignore_user_agents);
     }
@@ -195,7 +195,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'environment_name' => 'production',
         ));
 
-        $this->assertTrue($config->is_public());
+        $this->assertTrue($config->isPublic());
     }
 
     public function test_should_not_be_public_when_environment_development()
@@ -204,7 +204,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'environment_name' => 'development',
         ));
 
-        $this->assertFalse($config->is_public());
+        $this->assertFalse($config->isPublic());
     }
 
     public function test_options_should_be_accessible()
@@ -240,13 +240,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_log_level_should_be_info_when_debug()
     {
         $config = new Config(array('debug' => true));
-        $this->assertEquals(Logger::INFO, $config->log_level);
+        $this->assertEquals(Logger::INFO, $config->logLevel);
     }
 
     public function test_log_level_should_be_debug_when_not_debug()
     {
         $config = new Config(array('debug' => false));
-        $this->assertEquals(Logger::DEBUG, $config->log_level);
+        $this->assertEquals(Logger::DEBUG, $config->logLevel);
     }
 
 }

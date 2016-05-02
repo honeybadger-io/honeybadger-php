@@ -24,7 +24,7 @@ class EnvironmentTest extends TestCase
 
     public function test_should_use_standard_server_superglobals_when_not_supplied_data()
     {
-        $environment = Environment::factory()->as_array();
+        $environment = Environment::factory()->asArray();
         $this->assertNotEmpty($environment);
     }
 
@@ -38,7 +38,7 @@ class EnvironmentTest extends TestCase
             '_COOKIE' => array(),
         ));
 
-        $environment = Environment::factory()->as_array();
+        $environment = Environment::factory()->asArray();
         $this->assertFalse(isset($environment['DATABASE_URL']));
         $this->assertFalse(isset($environment['PASSWORD_SALT']));
     }
@@ -85,7 +85,7 @@ class EnvironmentTest extends TestCase
             '_COOKIE' => array(),
         ));
 
-        $environment = Environment::factory()->as_array();
+        $environment = Environment::factory()->asArray();
 
         $this->assertEquals($variables, $environment);
     }
@@ -105,7 +105,7 @@ class EnvironmentTest extends TestCase
             '_COOKIE' => array(),
         ));
 
-        $environment = Environment::factory()->as_array();
+        $environment = Environment::factory()->asArray();
 
         $this->assertEquals($headers, $environment);
     }
@@ -120,7 +120,7 @@ class EnvironmentTest extends TestCase
             '_COOKIE' => $cookies,
         ));
 
-        $environment = Environment::factory()->as_array();
+        $environment = Environment::factory()->asArray();
 
         $this->assertEquals($cookies, $environment['rack.request.cookie_hash']);
     }
@@ -182,11 +182,11 @@ class EnvironmentTest extends TestCase
     {
         $this->assertTrue(Environment::factory(array(
             'HTTPS' => 'on',
-        ))->is_secure());
+        ))->isSecure());
 
         $this->assertFalse(Environment::factory(array(
             'HTTPS' => 'off',
-        ))->is_secure());
+        ))->isSecure());
     }
 
     public function test_host_uses_server_name_when_http_host_unavailable()
@@ -227,12 +227,12 @@ class EnvironmentTest extends TestCase
         $this->assertTrue(Environment::factory(array(
             'HTTPS' => 'on',
             'SERVER_PORT' => 123,
-        ))->is_non_standard_port());
+        ))->isNonStandardPort());
 
         $this->assertFalse(Environment::factory(array(
             'HTTPS' => 'on',
             'SERVER_PORT' => 443,
-        ))->is_non_standard_port());
+        ))->isNonStandardPort());
     }
 
     public function test_non_standard_port_when_http()
@@ -240,12 +240,12 @@ class EnvironmentTest extends TestCase
         $this->assertTrue(Environment::factory(array(
             'HTTPS' => 'off',
             'SERVER_PORT' => 456,
-        ))->is_non_standard_port());
+        ))->isNonStandardPort());
 
         $this->assertFalse(Environment::factory(array(
             'HTTPS' => 'off',
             'SERVER_PORT' => 80,
-        ))->is_non_standard_port());
+        ))->isNonStandardPort());
     }
 
     public function test_url_uses_environment_when_present()

@@ -9,7 +9,7 @@ $options = include 'config.php';
 
 Honeybadger::$config->values($options);
 
-Honeybadger::handle_errors();
+Honeybadger::handleErrors();
 
 // Reference an undefined variable.
 echo $foo;

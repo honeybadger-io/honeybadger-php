@@ -17,10 +17,10 @@ class Sender
         'Content-Type' => 'application/json; charset=utf-8',
     );
 
-    public function send_to_honeybadger($notice)
+    public function sendToHoneybadger($notice)
     {
         if ($notice instanceof Notice) {
-            $data = $notice->to_json();
+            $data = $notice->toJson();
         } else {
             $data = (string)$notice;
         }
@@ -68,7 +68,7 @@ class Sender
         }
 
         try {
-            $client = new Client($config->base_url(), $options);
+            $client = new Client($config->baseUrl(), $options);
             $client->setDefaultHeaders(self::$default_headers);
             $client->setUserAgent($this->userAgent());
 
