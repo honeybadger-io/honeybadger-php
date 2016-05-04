@@ -104,20 +104,20 @@ class Honeybadger
 
     public static function reportEnvironmentInfo()
     {
-        self::$logger->add(self::$config->logLevel,
-            'Environment info: :info',
+        self::$logger->log(self::$config->logLevel,
+            'Environment info: {info}',
             array(
-                ':info' => self::environmentInfo(),
+                'info' => self::environmentInfo(),
             ));
     }
 
     public static function reportResponseBody($response)
     {
-        self::$logger->add(
+        self::$logger->log(
             self::$config->logLevel,
-            "Response from Honeybadger:\n:response",
+            "Response from Honeybadger:\n{response}",
             array(
-                ':response' => $response,
+                'response' => $response,
             )
         );
     }

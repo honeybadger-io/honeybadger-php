@@ -22,16 +22,28 @@ class Slim extends Logger
     private function translateSeverity($severity)
     {
         switch ($severity) {
-            case self::FATAL:
-                $severity = Log::FATAL;
+            case self::EMERGENCY:
+                $severity = Log::EMERGENCY;
+                break;
+
+            case self::ALERT:
+                $severity = Log::ALERT;
+                break;
+
+            case self::CRITICAL:
+                $severity = Log::CRITICAL;
                 break;
 
             case self::ERROR:
                 $severity = Log::ERROR;
                 break;
 
-            case self::WARN:
+            case self::WARNING:
                 $severity = Log::WARN;
+                break;
+
+            case self::NOTICE:
+                $severity = Log::NOTICE;
                 break;
 
             case self::INFO:
