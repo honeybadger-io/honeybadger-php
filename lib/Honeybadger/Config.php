@@ -14,7 +14,7 @@ use Honeybadger\Util\SemiOpenStruct;
 class Config extends SemiOpenStruct
 {
 
-    protected $_attribute_methods = array('secure', 'log_level');
+    protected $_attribute_methods = array('secure', 'logLevel');
 
     /**
      * @var  string  The API key for your project,
@@ -189,9 +189,9 @@ class Config extends SemiOpenStruct
      * @var  array  Default backtrace filters.
      */
     public static $default_backtrace_filters = array(
-        array('\\Honeybadger\\Filter', 'project_root'),
-        array('\\Honeybadger\\Filter', 'expand_paths'),
-        array('\\Honeybadger\\Filter', 'honeybadger_paths'),
+        array('\\Honeybadger\\Filter', 'projectRoot'),
+        array('\\Honeybadger\\Filter', 'expandPaths'),
+        array('\\Honeybadger\\Filter', 'honeybadgerPaths'),
     );
 
     /**
@@ -229,11 +229,11 @@ class Config extends SemiOpenStruct
 
         // FIXME: This feels very brittle...
         if (!$this->port) {
-            $this->port = $this->default_port();
+            $this->port = $this->defaultPort();
         }
 
         if (!$this->certificate_authority) {
-            $this->certificate_authority = $this->default_certificate_authority();
+            $this->certificate_authority = $this->defaultCertificateAuthority();
         }
     }
 
@@ -269,7 +269,7 @@ class Config extends SemiOpenStruct
      * @param   callback $filter The new backtrace filter
      * @return  void
      */
-    public function filter_backtrace($filter)
+    public function filterBacktrace($filter)
     {
         $this->backtrace_filters[] = $filter;
     }
@@ -295,7 +295,7 @@ class Config extends SemiOpenStruct
      * @param   callback $filter The new ignore filter
      * @return  void
      */
-    public function ignore_by_filter($filter)
+    public function ignoreByFilter($filter)
     {
         $this->ignore_by_filters[] = $filter;
     }
@@ -306,7 +306,7 @@ class Config extends SemiOpenStruct
      * @param   array $names A list of exceptions to ignore
      * @return  void
      */
-    public function ignore_only(/* $name1, $name2, $name3, ... */)
+    public function ignoreOnly(/* $name1, $name2, $name3, ... */)
     {
         $this->ignore = func_get_args();
     }
@@ -316,7 +316,7 @@ class Config extends SemiOpenStruct
      *
      * @param  array $names A list of user agents to ignore
      */
-    public function ignore_user_agents_only(/* $name1, $name2, $name3, ... */)
+    public function ignoreUserAgentsOnly(/* $name1, $name2, $name3, ... */)
     {
         $this->ignore_user_agents = func_get_args();
     }
@@ -329,7 +329,7 @@ class Config extends SemiOpenStruct
      */
     public function merge(array $config = array())
     {
-        return Arr::merge($this->as_array(), $config);
+        return Arr::merge($this->asArray(), $config);
     }
 
     /**
@@ -337,19 +337,18 @@ class Config extends SemiOpenStruct
      *
      * @return  boolean  `false` if in a development environment
      */
-    public function is_public()
+    public function isPublic()
     {
         return (!in_array($this->environment_name,
             $this->development_environments));
     }
 
     /**
-     * @return `Logger::INFO` when `debug` is `true`, otherwise
-     * @return `Logger::DEBUG`.
+     * @return integer `Logger::INFO` when `debug` is `true`, otherwise `Logger::DEBUG`.
      *
      * @var  boolean  The detected log level.
      */
-    public function log_level()
+    public function logLevel()
     {
         return $this->debug ? Logger::INFO : Logger::DEBUG;
     }
@@ -359,13 +358,13 @@ class Config extends SemiOpenStruct
      *
      * @return  string  The base URL.
      */
-    public function base_url()
+    public function baseUrl()
     {
-        $base = $this->secure ? 'https' : 'http';
+        $base = $this->secure() ? 'https' : 'http';
         $base .= '://' . $this->host;
 
-        if (($this->secure and $this->port != 443)
-            or (!$this->secure and $this->port != 80)
+        if (($this->secure() and $this->port != 443)
+            or (!$this->secure() and $this->port != 80)
         ) {
             $base .= ':' . $this->port;
         }
@@ -408,11 +407,11 @@ class Config extends SemiOpenStruct
             return $this->_secure;
 
         $use_default = ($this->port === null or !is_integer($this->port) or
-            $this->port == $this->default_port());
+            $this->port == $this->defaultPort());
         $this->_secure = $value;
 
         if ($use_default) {
-            $this->port = $this->default_port();
+            $this->port = $this->defaultPort();
         }
 
         return $this;
@@ -425,7 +424,7 @@ class Config extends SemiOpenStruct
      * @return  boolean|$this  The value or configuration object.
      * @chainable
      */
-    public function is_secure($value = null)
+    public function isSecure($value = null)
     {
         return $this->secure($value);
     }
@@ -436,9 +435,9 @@ class Config extends SemiOpenStruct
      *
      * @return  integer  Default port
      */
-    private function default_port()
+    private function defaultPort()
     {
-        return $this->is_secure() ? 443 : 80;
+        return $this->isSecure() ? 443 : 80;
     }
 
     /**
@@ -447,7 +446,7 @@ class Config extends SemiOpenStruct
      *
      * @return  string  Path to certificate authority bundle.
      */
-    private function default_certificate_authority()
+    private function defaultCertificateAuthority()
     {
         return realpath(__DIR__ . '/../../resources/ca-bundle.crt');
     }
@@ -458,6 +457,3 @@ class Config extends SemiOpenStruct
     }
 
 } // End Config
-
-// Additional measure to ensure defaults are initialized.
-Honeybadger::init();

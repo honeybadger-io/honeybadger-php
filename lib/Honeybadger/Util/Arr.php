@@ -23,15 +23,15 @@ class Arr
      * Tests if an array is associative or not.
      *
      *     // Returns true
-     *     Arr::is_assoc(array('username' => 'john.doe'));
+     *     Arr::isAssoc(array('username' => 'john.doe'));
      *
      *     // Returns false
-     *     Arr::is_assoc('foo', 'bar');
+     *     Arr::isAssoc('foo', 'bar');
      *
      * @param   array $array array to check
      * @return  boolean
      */
-    public static function is_assoc(array $array)
+    public static function isAssoc(array $array)
     {
         // Keys of the array
         $keys = array_keys($array);
@@ -45,18 +45,18 @@ class Arr
      * Test if a value is an array with an additional check for array-like objects.
      *
      *     // Returns true
-     *     Arr::is_array(array());
-     *     Arr::is_array(new ArrayObject);
+     *     Arr::isArray(array());
+     *     Arr::isArray(new ArrayObject);
      *
      *     // Returns false
-     *     Arr::is_array(false);
-     *     Arr::is_array('not an array!');
-     *     Arr::is_array(Database::instance());
+     *     Arr::isArray(false);
+     *     Arr::isArray('not an array!');
+     *     Arr::isArray(Database::instance());
      *
      * @param   mixed $value value to check
      * @return  boolean
      */
-    public static function is_array($value)
+    public static function isArray($value)
     {
         if (is_array($value)) {
             // Definitely an array
@@ -89,7 +89,7 @@ class Arr
      */
     public static function path($array, $path, $default = null, $delimiter = null)
     {
-        if (!Arr::is_array($array)) {
+        if (!Arr::isArray($array)) {
             // This is not an array!
             return $default;
         }
@@ -128,7 +128,7 @@ class Arr
 
             if (isset($array[$key])) {
                 if ($keys) {
-                    if (Arr::is_array($array[$key])) {
+                    if (Arr::isArray($array[$key])) {
                         // Dig down into the next part of the path
                         $array = $array[$key];
                     } else {
@@ -175,7 +175,7 @@ class Arr
      * @param mixed $value Value to set
      * @param string $delimiter Path delimiter
      */
-    public static function set_path(& $array, $path, $value, $delimiter = null)
+    public static function setPath(& $array, $path, $value, $delimiter = null)
     {
         if (!$delimiter) {
             // Use the default delimiter
@@ -268,7 +268,7 @@ class Arr
     {
         $found = array();
         foreach ($paths as $path) {
-            Arr::set_path($found, $path, Arr::path($array, $path, $default));
+            Arr::setPath($found, $path, Arr::path($array, $path, $default));
         }
 
         return $found;
@@ -385,7 +385,7 @@ class Arr
      */
     public static function merge($array1, $array2)
     {
-        if (Arr::is_assoc($array2)) {
+        if (Arr::isAssoc($array2)) {
             foreach ($array2 as $key => $value) {
                 if (is_array($value)
                     and isset($array1[$key])
@@ -406,7 +406,7 @@ class Arr
 
         if (func_num_args() > 2) {
             foreach (array_slice(func_get_args(), 2) as $array2) {
-                if (Arr::is_assoc($array2)) {
+                if (Arr::isAssoc($array2)) {
                     foreach ($array2 as $key => $value) {
                         if (is_array($value)
                             and isset($array1[$key])
@@ -524,7 +524,7 @@ class Arr
      */
     public static function flatten($array)
     {
-        $is_assoc = Arr::is_assoc($array);
+        $is_assoc = Arr::isAssoc($array);
 
         $flat = array();
         foreach ($array as $key => $value) {

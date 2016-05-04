@@ -116,23 +116,23 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
     public function test_has_lines()
     {
         $backtrace = new Backtrace;
-        $this->assertFalse($backtrace->has_lines());
+        $this->assertFalse($backtrace->hasLines());
 
         $backtrace = new Backtrace(array(
             new Line('super_cool_file.php', 3, 'super_cool_method')
         ));
-        $this->assertTrue($backtrace->has_lines());
+        $this->assertTrue($backtrace->hasLines());
     }
 
     public function test_has_application_lines()
     {
         $backtrace = new Backtrace;
-        $this->assertFalse($backtrace->has_application_lines());
+        $this->assertFalse($backtrace->hasApplicationLines());
 
         $backtrace = new Backtrace(array(
             new Line('[PROJECT_ROOT]/super_cool_file.php', 3, 'super_cool_method')
         ));
-        $this->assertTrue($backtrace->has_application_lines());
+        $this->assertTrue($backtrace->hasApplicationLines());
     }
 
     public function test_string_conversion_returns_ruby_style_backtrace()
@@ -172,7 +172,7 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertEquals($expected, $backtrace->to_array());
+        $this->assertEquals($expected, $backtrace->toArray());
     }
 
     public function test_to_json()
@@ -197,7 +197,7 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
             ),
         ));
 
-        $this->assertEquals($expected, $backtrace->to_json());
+        $this->assertEquals($expected, $backtrace->toJson());
     }
 
 }

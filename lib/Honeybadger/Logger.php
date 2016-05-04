@@ -5,6 +5,9 @@ namespace Honeybadger;
 use Honeybadger\Errors\NonExistentProperty;
 use Honeybadger\Errors\ReadOnly;
 
+use Psr\Log\LoggerInterface;
+use Psr\Log\InvalidArgumentException;
+
 /**
  * Abstract logger. Should be extended to add support for various frameworks and
  * libraries utilizing Honeybadger.
@@ -12,16 +15,66 @@ use Honeybadger\Errors\ReadOnly;
  * @package   Honeybadger
  * @category  Logging
  */
-
-abstract class Logger
+abstract class Logger implements LoggerInterface
 {
+    /**
+     * Detailed debug information
+     */
+    const DEBUG = 'debug';
+    /**
+     * Interesting events
+     *
+     * Examples: User logs in, SQL logs.
+     */
+    const INFO = 'info';
+    /**
+     * Uncommon events
+     */
+    const NOTICE = 'notice';
+    /**
+     * Exceptional occurrences that are not errors
+     *
+     * Examples: Use of deprecated APIs, poor use of an API,
+     * undesirable things that are not necessarily wrong.
+     */
+    const WARNING = 'warning';
+    /**
+     * Runtime errors
+     */
+    const ERROR = 'error';
+    /**
+     * Critical conditions
+     *
+     * Example: Application component unavailable, unexpected exception.
+     */
+    const CRITICAL = 'critical';
+    /**
+     * Action must be taken immediately
+     *
+     * Example: Entire website down, database unavailable, etc.
+     * This should trigger the SMS alerts and wake you up.
+     */
+    const ALERT = 'alert';
+    /**
+     * Urgent alert.
+     */
+    const EMERGENCY = 'emergency';
 
-    // Log levels
-    const FATAL = 10;
-    const ERROR = 20;
-    const WARN = 30;
-    const INFO = 40;
-    const DEBUG = 50;
+    /**
+     * Logging levels from syslog protocol defined in RFC 5424
+     *
+     * @var array $levels Logging levels
+     */
+    protected static $levels = array(
+        self::DEBUG,
+        self::INFO,
+        self::NOTICE,
+        self::WARNING,
+        self::ERROR,
+        self::CRITICAL,
+        self::ALERT,
+        self::EMERGENCY
+    );
 
     /**
      * @var  object  The real logger.
@@ -39,7 +92,7 @@ abstract class Logger
      * allow Honeybadger to log messages without issues.
      *
      * @param  object $logger The *real* logger.
-     * @param  integer $threshold The lowest severity to log.
+     * @param  string $threshold The lowest severity to log.
      */
     public function __construct($logger = null, $threshold = self::DEBUG)
     {
@@ -66,13 +119,28 @@ abstract class Logger
     }
 
     /**
+     * Interpolates context values into the message placeholders.
+     */
+    private function interpolate($message, array $context = array())
+    {
+        // build a replacement array with braces around the context keys
+        $replace = array();
+        foreach ($context as $key => $val) {
+            $replace['{' . $key . '}'] = $val;
+        }
+
+        // interpolate replacement values into the message and return
+        return strtr($message, $replace);
+    }
+
+    /**
      * Adds a new debug log entry with the supplied `$message`, replacing
-     * with `$variables`, if any. If the threshold is lower than
+     * with `$context`, if any. If the threshold is lower than
      * `Logger::DEBUG`, the message will be suppressed.
      *
      * @example
-     *     $logger->debug('This message is :fruit', array(
-     *         ':fruit' => 'bananas',
+     *     $logger->debug('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
      *     ));
      *
      * Logs a message:
@@ -80,23 +148,23 @@ abstract class Logger
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function debug($message = null, array $variables = array())
+    public function debug($message = null, array $context = array())
     {
-        return $this->add(self::DEBUG, $message, $variables);
+        return $this->log(self::DEBUG, $message, $context);
     }
 
     /**
      * Adds a new info log entry with the supplied `$message`, replacing
-     * with `$variables`, if any. If the threshold is lower than
+     * with `$context`, if any. If the threshold is lower than
      * `Logger::INFO`, the message will be suppressed.
      *
      * @example
-     *     $logger->info('This message is :fruit', array(
-     *         ':fruit' => 'bananas',
+     *     $logger->info('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
      *     ));
      *
      * Logs a message:
@@ -104,23 +172,23 @@ abstract class Logger
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function info($message = null, array $variables = array())
+    public function info($message = null, array $context = array())
     {
-        return $this->add(self::INFO, $message, $variables);
+        return $this->log(self::INFO, $message, $context);
     }
 
     /**
-     * Adds a new warn log entry with the supplied `$message`, replacing
-     * with `$variables`, if any. If the threshold is lower than
-     * `Logger::WARN`, the message will be suppressed.
+     * Adds a new notice log entry with the supplied `$message`, replacing
+     * with `$context`, if any. If the threshold is lower than
+     * `Logger::NOTICE`, the message will be suppressed.
      *
      * @example
-     *     $logger->warn('This message is :fruit', array(
-     *         ':fruit' => 'bananas',
+     *     $logger->error('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
      *     ));
      *
      * Logs a message:
@@ -128,23 +196,47 @@ abstract class Logger
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function warn($message = null, array $variables = array())
+    public function notice($message = null, array $context = array())
     {
-        return $this->add(self::WARN, $message, $variables);
+        return $this->log(self::NOTICE, $message, $context);
+    }
+
+    /**
+     * Adds a new warning log entry with the supplied `$message`, replacing
+     * with `$context`, if any. If the threshold is lower than
+     * `Logger::WARNING`, the message will be suppressed.
+     *
+     * @example
+     *     $logger->warning('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
+     *     ));
+     *
+     * Logs a message:
+     *
+     *     "** [Honeybadger] This message is bananas"
+     *
+     * @param   string $message The message to log.
+     * @param   array $context Values to replace in message.
+     * @return  $this
+     * @chainable
+     */
+    public function warning($message = null, array $context = array())
+    {
+        return $this->log(self::WARNING, $message, $context);
     }
 
     /**
      * Adds a new error log entry with the supplied `$message`, replacing
-     * with `$variables`, if any. If the threshold is lower than
+     * with `$context`, if any. If the threshold is lower than
      * `Logger::ERROR`, the message will be suppressed.
      *
      * @example
-     *     $logger->error('This message is :fruit', array(
-     *         ':fruit' => 'bananas',
+     *     $logger->error('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
      *     ));
      *
      * Logs a message:
@@ -152,23 +244,23 @@ abstract class Logger
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function error($message = null, array $variables = array())
+    public function error($message = null, array $context = array())
     {
-        return $this->add(self::ERROR, $message, $variables);
+        return $this->log(self::ERROR, $message, $context);
     }
 
     /**
-     * Adds a new fatal log entry with the supplied `$message`, replacing
-     * with `$variables`, if any. If the threshold is lower than
-     * `Logger::FATAL`, the message will be suppressed.
+     * Adds a new critical log entry with the supplied `$message`, replacing
+     * with `$context`, if any. If the threshold is lower than
+     * `Logger::CRITICAL`, the message will be suppressed.
      *
      * @example
-     *     $logger->fatal('This message is :fruit', array(
-     *         ':fruit' => 'bananas',
+     *     $logger->critical('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
      *     ));
      *
      * Logs a message:
@@ -176,13 +268,61 @@ abstract class Logger
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function fatal($message = null, array $variables = array())
+    public function critical($message = null, array $context = array())
     {
-        return $this->add(self::FATAL, $message, $variables);
+        return $this->log(self::ALERT, $message, $context);
+    }
+
+    /**
+     * Adds a new alert log entry with the supplied `$message`, replacing
+     * with `$context`, if any. If the threshold is lower than
+     * `Logger::ALERT`, the message will be suppressed.
+     *
+     * @example
+     *     $logger->alert('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
+     *     ));
+     *
+     * Logs a message:
+     *
+     *     "** [Honeybadger] This message is bananas"
+     *
+     * @param   string $message The message to log.
+     * @param   array $context Values to replace in message.
+     * @return  $this
+     * @chainable
+     */
+    public function alert($message = null, array $context = array())
+    {
+        return $this->log(self::ALERT, $message, $context);
+    }
+
+    /**
+     * Adds a new emergency log entry with the supplied `$message`, replacing
+     * with `$context`, if any. If the threshold is lower than
+     * `Logger::EMERGENCY`, the message will be suppressed.
+     *
+     * @example
+     *     $logger->emergency('This message is {fruit}', array(
+     *         'fruit' => 'bananas',
+     *     ));
+     *
+     * Logs a message:
+     *
+     *     "** [Honeybadger] This message is bananas"
+     *
+     * @param   string $message The message to log.
+     * @param   array $context Values to replace in message.
+     * @return  $this
+     * @chainable
+     */
+    public function emergency($message = null, array $context = array())
+    {
+        return $this->log(self::EMERGENCY, $message, $context);
     }
 
     /**
@@ -190,7 +330,7 @@ abstract class Logger
      * Subclasses must implement this method to handle the actual logging
      * of entries.
      *
-     * @param   integer $severity The severity of the message.
+     * @param   string $severity The severity of the message.
      * @param   string $message The message to log.
      * @return  $this
      * @chainable
@@ -201,38 +341,37 @@ abstract class Logger
      * Passes the supplied `$message` and `$severity` on to [Logger::write] if
      * `$severity` is within threshold.
      *
-     * @param   integer $severity The severity of the message.
+     * @param   string $severity The severity of the message.
      * @param   string $message The message to log.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  $this
      * @chainable
      */
-    public function add($severity, $message = null, array $variables = array())
+    public function log($severity, $message = null, array $context = array())
     {
-        if ($severity <= $this->threshold) {
-            $this->write($severity, $this->format($message, $variables));
+        if (array_search($severity, static::$levels) >= array_search($this->threshold, static::$levels)) {
+            $this->write($severity, $this->format($message, $context));
         }
 
         return $this;
     }
 
     /**
-     * Replaces `$variables` in `$message` and prefixes entries
+     * Replaces `$context` in `$message` and prefixes entries
      * with [Honeybadger::LOG_PREFIX].
      *
      * @example
-     *     $log->format('Hello, :something!', array(
-     *         ':something' => 'world',
+     *     $log->format('Hello, {something}!', array(
+     *         'something' => 'world',
      *     ));
      *     // => "** [Honeybadger] Hello, world!"
      *
      * @param   string $message The message to format.
-     * @param   array $variables Values to replace in message.
+     * @param   array $context Values to replace in message.
      * @return  string  The formatted message.
      */
-    protected function format($message, array $variables = array())
+    protected function format($message, array $context = array())
     {
-        return Honeybadger::LOG_PREFIX . strtr($message, $variables);
+        return Honeybadger::LOG_PREFIX . $this->interpolate($message, $context);
     }
-
 } // End Logger

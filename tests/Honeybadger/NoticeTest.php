@@ -179,7 +179,7 @@ class NoticeTest extends TestCase
     public function test_should_set_backtrace_from_debug_backtrace()
     {
         $notice = $this->build_notice();
-        $this->assertTrue($notice->backtrace->has_lines());
+        $this->assertTrue($notice->backtrace->hasLines());
     }
 
     public function test_should_set_error_class_from_arguments()
@@ -203,10 +203,10 @@ class NoticeTest extends TestCase
         $notice = $this->build_notice();
 
         $sender = $this->getMock('Honeybadger\Sender', array(
-            'send_to_honeybadger'
+            'sendToHoneybadger'
         ));
         $sender->expects($this->once())
-            ->method('send_to_honeybadger')
+            ->method('sendToHoneybadger')
             ->with($this->equalTo($notice))
             ->will($this->returnValue('win'));
 
@@ -266,7 +266,7 @@ class NoticeTest extends TestCase
             'error' => array(
                 'class' => $data['error_class'],
                 'message' => $data['error_message'],
-                'backtrace' => $backtrace->as_array(),
+                'backtrace' => $backtrace->asArray(),
                 'source' => $backtrace->lines[0]->source,
             ),
             'request' => array(
@@ -283,7 +283,7 @@ class NoticeTest extends TestCase
                 'environment_name' => $data['environment_name'],
                 'hostname' => gethostname(),
             ),
-        ), $notice->as_array());
+        ), $notice->asArray());
     }
 
     public function test_extract_source_from_backtrace_should_prefer_application_lines()
@@ -396,7 +396,7 @@ class NoticeTest extends TestCase
             'ignore' => array('\\Exception'),
         ));
 
-        $this->assertTrue($notice->is_ignored());
+        $this->assertTrue($notice->isIgnored());
     }
 
     public function test_should_be_ignored_when_filtered_with_callback()
@@ -410,7 +410,7 @@ class NoticeTest extends TestCase
             ),
         ));
 
-        $this->assertTrue($notice->is_ignored());
+        $this->assertTrue($notice->isIgnored());
     }
 
 }

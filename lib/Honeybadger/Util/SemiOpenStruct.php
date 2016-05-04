@@ -33,7 +33,7 @@ abstract class SemiOpenStruct implements \ArrayAccess
      *
      * @return  array  The object as an array.
      */
-    public function as_array()
+    public function asArray()
     {
         $attributes = get_object_vars($this);
 
@@ -57,9 +57,9 @@ abstract class SemiOpenStruct implements \ArrayAccess
      *
      * @return  array  Attributes to convert to JSON.
      */
-    public function as_json()
+    public function asJson()
     {
-        return $this->as_array();
+        return $this->asArray();
     }
 
     /**
@@ -67,9 +67,9 @@ abstract class SemiOpenStruct implements \ArrayAccess
      *
      * @return  array  The object as an array.
      */
-    public function to_array()
+    public function toArray()
     {
-        return $this->as_array();
+        return $this->asArray();
     }
 
     /**
@@ -78,9 +78,9 @@ abstract class SemiOpenStruct implements \ArrayAccess
      * @param   integer $options Options to pass to `json_encode()`.
      * @return  string   The JSON-encoded object attributes.
      */
-    public function to_json($options = 0)
+    public function toJson($options = 0)
     {
-        return json_encode($this->as_json(), $options);
+        return json_encode($this->asJson(), $options);
     }
 
     /**

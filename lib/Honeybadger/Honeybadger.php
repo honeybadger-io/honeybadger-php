@@ -63,7 +63,7 @@ class Honeybadger
         self::$sender = new Sender;
 
         // Set Honeybadger as the error and exception handler.
-        self::handle_errors();
+        self::handleErrors();
     }
 
     /**
@@ -85,7 +85,7 @@ class Honeybadger
      * @param   array $data Data to add to the context.
      * @return  array  The current context.
      */
-    public static function reset_context(array $data = array())
+    public static function resetContext(array $data = array())
     {
         return self::$context = $data;
     }
@@ -96,33 +96,33 @@ class Honeybadger
      *
      * @return  void
      */
-    public static function handle_errors()
+    public static function handleErrors()
     {
         Error::register_handler();
         Exception::register_handler();
     }
 
-    public static function report_environment_info()
+    public static function reportEnvironmentInfo()
     {
-        self::$logger->add(self::$config->log_level,
-            'Environment info: :info',
+        self::$logger->log(self::$config->logLevel,
+            'Environment info: {info}',
             array(
-                ':info' => self::environment_info(),
+                'info' => self::environmentInfo(),
             ));
     }
 
-    public static function report_response_body($response)
+    public static function reportResponseBody($response)
     {
-        self::$logger->add(
-            self::$config->log_level,
-            "Response from Honeybadger:\n:response",
+        self::$logger->log(
+            self::$config->logLevel,
+            "Response from Honeybadger:\n{response}",
             array(
-                ':response' => $response,
+                'response' => $response,
             )
         );
     }
 
-    public static function environment_info()
+    public static function environmentInfo()
     {
         $info = '[PHP: ' . phpversion() . ']';
 
@@ -146,8 +146,8 @@ class Honeybadger
      */
     public static function notify($exception, array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
-        return self::send_notice($notice);
+        $notice = self::buildNoticeFor($exception, $options);
+        return self::sendNotice($notice);
     }
 
     /**
@@ -158,20 +158,20 @@ class Honeybadger
      * @param   array $options Additional options for the notice.
      * @return  string|null  The error identifier. `null` if skipped.
      */
-    public static function notify_or_ignore($exception,
-                                            array $options = array())
+    public static function notifyOrIgnore($exception,
+                                          array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
+        $notice = self::buildNoticeFor($exception, $options);
 
-        if (!$notice->is_ignored()) {
-            return self::send_notice($notice);
+        if (!$notice->isIgnored()) {
+            return self::sendNotice($notice);
         }
     }
 
-    public static function build_lookup_hash_for($exception,
-                                                 array $options = array())
+    public static function buildLookupHashFor($exception,
+                                              array $options = array())
     {
-        $notice = self::build_notice_for($exception, $options);
+        $notice = self::buildNoticeFor($exception, $options);
 
         $result = array(
             'action' => $notice->action,
@@ -183,7 +183,7 @@ class Honeybadger
             $result['error_class'] = $notice->error_class;
         }
 
-        if ($notice->backtrace->has_lines()) {
+        if ($notice->backtrace->hasLines()) {
             $result['file'] = $notice->backtrace->lines[0]->file;
             $result['line_number'] = $notice->backtrace->lines[0]->number;
         }
@@ -191,35 +191,32 @@ class Honeybadger
         return $result;
     }
 
-    private static function send_notice($notice)
+    private static function sendNotice($notice)
     {
-        if (self::$config->is_public()) {
+        if (self::$config->isPublic()) {
             return $notice->deliver();
         }
     }
 
-    private static function build_notice_for($exception,
-                                             array $options = array())
+    private static function buildNoticeFor($exception,
+                                           array $options = array())
     {
         if ($exception instanceof \Exception) {
-            $options['exception'] = self::unwrap_exception($exception);
-        } elseif (Arr::is_array($exception)) {
+            $options['exception'] = self::unwrapException($exception);
+        } elseif (Arr::isArray($exception)) {
             $options = Arr::merge($options, $exception);
         }
 
         return Notice::factory($options);
     }
 
-    private static function unwrap_exception($exception)
+    private static function unwrapException($exception)
     {
         if ($previous = $exception->getPrevious()) {
-            return self::unwrap_exception($previous);
+            return self::unwrapException($previous);
         }
 
         return $exception;
     }
 
 } // End Honeybadger
-
-// Additional measure to ensure defaults are initialized.
-Honeybadger::init();

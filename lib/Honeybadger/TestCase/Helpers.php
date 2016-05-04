@@ -38,7 +38,7 @@ class Helpers
      *
      * @return  boolean  Whether an internet connection is available.
      */
-    public static function has_internet()
+    public static function hasInternet()
     {
         if (self::$has_internet === null) {
             // The @ operator is used here to avoid DNS errors
@@ -57,7 +57,7 @@ class Helpers
      * @param   string $path Path to replace slashes in.
      * @return  string
      */
-    public static function dir_separator($path)
+    public static function dirSeparator($path)
     {
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
@@ -79,7 +79,7 @@ class Helpers
      * @param  $environment  Array of environment to set
      * @return void
      */
-    public function set_environment(array $environment = array())
+    public function setEnvironment(array $environment = array())
     {
         if (!count($environment))
             return false;
@@ -126,9 +126,9 @@ class Helpers
      * @chainable
      * @return  $this
      */
-    public function restore_environment()
+    public function restoreEnvironment()
     {
-        $this->set_environment($this->environment_backup);
+        $this->setEnvironment($this->environment_backup);
     }
 
 } // End Helpers

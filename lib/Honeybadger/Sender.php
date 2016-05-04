@@ -17,10 +17,10 @@ class Sender
         'Content-Type' => 'application/json; charset=utf-8',
     );
 
-    public function send_to_honeybadger($notice)
+    public function sendToHoneybadger($notice)
     {
         if ($notice instanceof Notice) {
-            $data = $notice->to_json();
+            $data = $notice->toJson();
         } else {
             $data = (string)$notice;
         }
@@ -30,7 +30,7 @@ class Sender
             $headers['X-API-Key'] = $api_key;
         }
 
-        $response = $this->setup_http_client()
+        $response = $this->setupHttpClient()
             ->post(self::NOTICES_URI, $headers, $data)
             ->send();
 
@@ -39,7 +39,7 @@ class Sender
         return $body['id'];
     }
 
-    private function setup_http_client()
+    private function setupHttpClient()
     {
         // Fetch a copy of the configuration.
         $config = Honeybadger::$config;
@@ -63,14 +63,14 @@ class Sender
                 $config->proxy_user . ':' . $config->proxy_pass;
         }
 
-        if ($config->is_secure()) {
+        if ($config->isSecure()) {
             $options['ssl.certificate_authority'] = $config->certificate_authority;
         }
 
         try {
-            $client = new Client($config->base_url(), $options);
+            $client = new Client($config->baseUrl(), $options);
             $client->setDefaultHeaders(self::$default_headers);
-            $client->setUserAgent($this->user_agent());
+            $client->setUserAgent($this->userAgent());
 
             return $client;
         } catch (\Exception $e) {
@@ -82,7 +82,7 @@ class Sender
         }
     }
 
-    private function user_agent()
+    private function userAgent()
     {
         return sprintf('%s v%s (%s)', Honeybadger::NOTIFIER_NAME,
             Honeybadger::VERSION, Honeybadger::NOTIFIER_URL);

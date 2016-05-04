@@ -60,7 +60,7 @@ class Backtrace extends SemiOpenStruct
         $this->lines = $lines;
 
         foreach ($lines as $line) {
-            if (!$line->is_application())
+            if (!$line->isApplication())
                 continue;
 
             $this->application_lines[] = $line;
@@ -72,7 +72,7 @@ class Backtrace extends SemiOpenStruct
      *
      * @return Boolean `true` when backtrace is not empty, `false` otherwise.
      */
-    public function has_lines()
+    public function hasLines()
     {
         return (!empty($this->lines));
     }
@@ -83,7 +83,7 @@ class Backtrace extends SemiOpenStruct
      * @return Boolean `true` when backtrace has application lines,
      *                  `false` otherwise.
      */
-    public function has_application_lines()
+    public function hasApplicationLines()
     {
         return (!empty($this->application_lines));
     }
@@ -106,10 +106,10 @@ class Backtrace extends SemiOpenStruct
      *
      * @return  array  The backtrace lines.
      */
-    public function as_array()
+    public function asArray()
     {
         return array_map(function ($line) {
-            return $line->to_array();
+            return $line->toArray();
         }, $this->lines);
     }
 

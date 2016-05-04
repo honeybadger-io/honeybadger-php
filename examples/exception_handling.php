@@ -9,6 +9,6 @@ $options = include 'config.php';
 
 Honeybadger::$config->values($options);
 
-Honeybadger::handle_errors();
+Honeybadger::handleErrors();
 
 throw new Exception('We failed. :(');

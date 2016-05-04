@@ -235,18 +235,18 @@ class Notice extends SemiOpenStruct
         $this->hostname = gethostname();
 
         $this->source_extract_radius = Arr::get($args, 'source_extract_radius', 2);
-        $this->source_extract = $this->extract_source_from_backtrace();
+        $this->source_extract = $this->extractSourceFromBacktrace();
 
         $this->send_request_session = Arr::get($args, 'send_request_session', true);
 
-        $this->find_session_data();
-        $this->clean_params();
-        $this->set_context();
+        $this->findSessionData();
+        $this->cleanParams();
+        $this->setContext();
     }
 
-    public function is_ignored()
+    public function isIgnored()
     {
-        if (Filter::ignore_by_class($this->ignore, $this->exception))
+        if (Filter::ignoreByClass($this->ignore, $this->exception))
             return true;
 
         foreach ($this->ignore_by_filters as $filter) {
@@ -259,12 +259,12 @@ class Notice extends SemiOpenStruct
 
     public function deliver()
     {
-        return Honeybadger::$sender->send_to_honeybadger($this);
+        return Honeybadger::$sender->sendToHoneybadger($this);
     }
 
-    public function as_array()
+    public function asArray()
     {
-        $cgi_data = $this->cgi_data->as_array();
+        $cgi_data = $this->cgi_data->asArray();
 
         return array(
             'notifier' => array(
@@ -276,7 +276,7 @@ class Notice extends SemiOpenStruct
             'error' => array(
                 'class' => $this->error_class,
                 'message' => $this->error_message,
-                'backtrace' => $this->backtrace->as_array(),
+                'backtrace' => $this->backtrace->asArray(),
                 'source' => $this->source_extract ?: null,
             ),
             'request' => array(
@@ -296,12 +296,12 @@ class Notice extends SemiOpenStruct
         );
     }
 
-    private function extract_source_from_backtrace()
+    private function extractSourceFromBacktrace()
     {
-        if (!$this->backtrace->has_lines())
+        if (!$this->backtrace->hasLines())
             return null;
 
-        if ($this->backtrace->has_application_lines()) {
+        if ($this->backtrace->hasApplicationLines()) {
             $line = $this->backtrace->application_lines[0];
         } else {
             $line = $this->backtrace->lines[0];
@@ -310,7 +310,7 @@ class Notice extends SemiOpenStruct
         return $line->source($this->source_extract_radius);
     }
 
-    private function find_session_data()
+    private function findSessionData()
     {
         if (!$this->send_request_session)
             return;
@@ -332,7 +332,7 @@ class Notice extends SemiOpenStruct
         $params = Filter::params($this->params_filters, $params);
     }
 
-    private function clean_params()
+    private function cleanParams()
     {
         $this->filter($this->params);
 
@@ -345,7 +345,7 @@ class Notice extends SemiOpenStruct
         }
     }
 
-    private function set_context()
+    private function setContext()
     {
         $this->context = Honeybadger::context();
 

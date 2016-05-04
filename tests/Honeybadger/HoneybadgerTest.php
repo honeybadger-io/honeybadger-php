@@ -20,18 +20,19 @@ class HoneybadgerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        Honeybadger::reset_context($this->context);
+        Honeybadger::resetContext($this->context);
     }
 
     public function tearDown()
     {
         parent::tearDown();
-        Honeybadger::reset_context();
+        Honeybadger::resetContext();
     }
 
     public function test_initialized_with_void_logger()
     {
         $this->restoreEnvironment();
+        Honeybadger::init();
         $this->assertTrue(Honeybadger::$logger instanceof Logger\Void);
     }
 
@@ -71,27 +72,27 @@ class HoneybadgerTest extends TestCase
 
     public function test_reset_context_should_empty_context()
     {
-        Honeybadger::reset_context();
+        Honeybadger::resetContext();
         $this->assertEmpty(Honeybadger::context());
     }
 
     public function test_reset_context_should_return_empty_array()
     {
-        $this->assertEmpty(Honeybadger::reset_context());
+        $this->assertEmpty(Honeybadger::resetContext());
     }
 
     public function test_should_report_environment_info()
     {
-        Honeybadger::report_environment_info();
-        $entry = Honeybadger::$logger->last_entry();
+        Honeybadger::reportEnvironmentInfo();
+        $entry = Honeybadger::$logger->lastEntry();
 
-        $this->assertEquals('** [Honeybadger] Environment info: ' . Honeybadger::environment_info(), $entry['message']);
+        $this->assertEquals('** [Honeybadger] Environment info: ' . Honeybadger::environmentInfo(), $entry['message']);
     }
 
     public function test_environment_info_should_include_php_version()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environment_info(),
+            strpos(Honeybadger::environmentInfo(),
                 phpversion()) !== false
         );
     }
@@ -99,7 +100,7 @@ class HoneybadgerTest extends TestCase
     public function test_environment_info_should_include_framework()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environment_info(),
+            strpos(Honeybadger::environmentInfo(),
                 Honeybadger::$config->framework) !== false
         );
     }
@@ -107,7 +108,7 @@ class HoneybadgerTest extends TestCase
     public function test_environment_info_should_include_environment_name()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environment_info(),
+            strpos(Honeybadger::environmentInfo(),
                 Honeybadger::$config->environment_name) !== false
         );
     }
@@ -117,7 +118,7 @@ class HoneybadgerTest extends TestCase
         Honeybadger::$config->framework = null;
 
         $this->assertFalse(
-            strpos(Honeybadger::environment_info(), ' []')
+            strpos(Honeybadger::environmentInfo(), ' []')
         );
     }
 
@@ -126,14 +127,14 @@ class HoneybadgerTest extends TestCase
         Honeybadger::$config->environment_name = null;
 
         $this->assertFalse(
-            strpos(Honeybadger::environment_info(), ' []')
+            strpos(Honeybadger::environmentInfo(), ' []')
         );
     }
 
     public function test_report_response_body_should_log_supplied_response_body()
     {
-        Honeybadger::report_response_body("don't care!");
-        $entry = Honeybadger::$logger->last_entry();
+        Honeybadger::reportResponseBody("don't care!");
+        $entry = Honeybadger::$logger->lastEntry();
 
         $this->assertEquals("** [Honeybadger] Response from Honeybadger:\ndon't care!",
             $entry['message']);
@@ -177,7 +178,7 @@ class HoneybadgerTest extends TestCase
         if (!Honeybadger::$config->api_key)
             return $this->markTestSkipped('No API key configured.');
 
-        $this->assertNotEmpty(Honeybadger::notify_or_ignore(
+        $this->assertNotEmpty(Honeybadger::notifyOrIgnore(
             $this->build_exception()
         ));
     }
@@ -185,7 +186,7 @@ class HoneybadgerTest extends TestCase
     public function test_notify_or_ignore_does_not_notify_when_ignored()
     {
         Honeybadger::$config->ignore = array('Exception');
-        $this->assertEmpty(Honeybadger::notify_or_ignore(
+        $this->assertEmpty(Honeybadger::notifyOrIgnore(
             $this->build_exception()
         ));
     }

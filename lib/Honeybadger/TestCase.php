@@ -85,7 +85,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $this->_helpers->restore_environment();
+        $this->_helpers->restoreEnvironment();
     }
 
     /**
@@ -97,7 +97,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function dirSeparator($path)
     {
-        return Helpers::dir_separator($path);
+        return Helpers::dirSeparator($path);
     }
 
     /**
@@ -112,12 +112,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function setEnvironment(array $environment)
     {
-        return $this->_helpers->set_environment($environment);
+        return $this->_helpers->setEnvironment($environment);
     }
 
     public function restoreEnvironment()
     {
-        $this->_helpers->restore_environment();
+        $this->_helpers->restoreEnvironment();
     }
 
     /**
@@ -127,7 +127,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function hasInternet()
     {
-        return Helpers::has_internet();
+        return Helpers::hasInternet();
     }
 
 } // End TestCase

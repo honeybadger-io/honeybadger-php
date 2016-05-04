@@ -173,7 +173,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'project_root' => $project_root,
         ));
 
-        $actual = Filter::project_root(array(
+        $actual = Filter::projectRoot(array(
             'file' => $full,
         ));
 
@@ -205,7 +205,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function test_expand_paths($expanded, $relative)
     {
-        $actual = Filter::expand_paths(array(
+        $actual = Filter::expandPaths(array(
             'file' => $relative,
         ));
 
@@ -240,7 +240,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'file' => $file,
         );
 
-        $actual = Filter::honeybadger_paths($line);
+        $actual = Filter::honeybadgerPaths($line);
 
         if ($filtered) {
             $this->assertNull($actual);

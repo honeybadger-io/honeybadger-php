@@ -53,7 +53,7 @@ class Filter
             return $params;
 
         foreach ($params as $param => & $value) {
-            if (Arr::is_array($value)) {
+            if (Arr::isArray($value)) {
                 $value = self::params($keys, $value);
             } elseif (!is_integer($param) and in_array($param, $keys)) {
                 $value = '[FILTERED]';
@@ -68,7 +68,7 @@ class Filter
      * @param $object
      * @return bool
      */
-    public static function ignore_by_class(array $classes = array(), $object)
+    public static function ignoreByClass(array $classes = array(), $object)
     {
         if (!is_object($object))
             return false;
@@ -102,7 +102,7 @@ class Filter
      * @param   array $line Unparsed backtrace line.
      * @return  array  Filtered backtrace line.
      */
-    public static function project_root($line)
+    public static function projectRoot($line)
     {
         $config = Notice::$current ?: Honeybadger::$config;
         $project_root = (string)$config->project_root;
@@ -128,7 +128,7 @@ class Filter
      *     ));
      *     // => array('file' => '/usr/local')
      */
-    public static function expand_paths($line)
+    public static function expandPaths($line)
     {
         if ($path = realpath($line['file'])) {
             $line['file'] = $path;
@@ -148,7 +148,7 @@ class Filter
      * @param $line Array of backtrace content
      * @return array
      */
-    public static function honeybadger_paths($line)
+    public static function honeybadgerPaths($line)
     {
         if (!preg_match('/lib\/Honeybadger/', $line['file']))
             return $line;

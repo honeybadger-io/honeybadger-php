@@ -231,7 +231,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $expected,
-            Arr::is_assoc($array)
+            Arr::isAssoc($array)
         );
     }
 
@@ -263,7 +263,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(
             $expected,
-            Arr::is_array($array)
+            Arr::isArray($array)
         );
     }
 
@@ -504,7 +504,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function test_set_path($expected, $array, $path, $value, $delimiter = null)
     {
-        Arr::set_path($array, $path, $value, $delimiter);
+        Arr::setPath($array, $path, $value, $delimiter);
 
         $this->assertSame($expected, $array);
     }

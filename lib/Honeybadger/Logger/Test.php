@@ -23,7 +23,7 @@ class Test extends Logger
         );
     }
 
-    public function last_entry()
+    public function lastEntry()
     {
         return end($this->entries);
     }

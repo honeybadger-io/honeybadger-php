@@ -17,7 +17,7 @@ class SlimTest extends TestCase
 
         $sender = $this->getMock('Honeybadger\Sender');
         $sender->expects($this->any())
-            ->method('send_to_honeybadger')
+            ->method('sendToHoneybadger')
             ->will($this->returnValue('12345'));
 
         // Add our sender mock to the environment.
