@@ -18,14 +18,14 @@ class HoneybadgerError extends \Exception
      *     throw new HoneybadgerError('Something went terribly wrong, :user',
      *         array(':user' => $user));
      *
-     * @param   string $message error message
-     * @param   array $variables translation variables
-     * @param   integer|string $code the exception code
-     * @param   \Exception $previous Previous exception
+     * @param   string         $message   error message
+     * @param   array          $variables translation variables
+     * @param   integer|string $code      the exception code
+     * @param   \Exception     $previous  Previous exception
      */
     public function __construct(
         $message = '',
-        array $variables = array(),
+        array $variables = [],
         $code = 0,
         \Exception $previous = null
     )
@@ -60,12 +60,12 @@ class HoneybadgerError extends \Exception
      * Error [ Code ]: Message ~ File [ Line ]
      *
      * @param   \Exception $e
+     *
      * @return  string
      */
     public static function text(\Exception $e)
     {
         return sprintf('%s [ %s ]: %s', get_class($e), $e->getCode(),
-            strip_tags($e->getMessage()));
+                       strip_tags($e->getMessage()));
     }
-
 } // End HoneybadgerError

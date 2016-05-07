@@ -12,7 +12,6 @@ use Honeybadger\Util\Arr;
  */
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Make sure PHPUnit backs up globals
      * @var boolean
@@ -30,15 +29,15 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * A default set of environment to be applied before each test
      * @var array
      */
-    protected $_environment_default = array();
+    protected $_environment_default = [];
 
-    protected $_default_config = array();
+    protected $_default_config = [];
 
-    public function build_exception(array $options = array())
+    public function build_exception(array $options = [])
     {
         if (!Arr::get($options, 'message')) {
             $options['message'] = \Phaker::lorem()->sentence;
-            $options['code'] = rand(0, 999999);
+            $options['code']    = rand(0, 999999);
         }
 
         return new \Exception($options['message'], $options['code']);
@@ -57,12 +56,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if (!isset($this->_environment_default['\\Honeybadger\\Honeybadger::$config'])) {
             $api_key = Arr::get($_SERVER, 'HONEYBADGER_API_KEY');
 
-            $config = new Config(Arr::merge(array(
-                'project_root' => realpath(__DIR__ . '/../..'),
-                'framework' => 'PHPUnit',
-                'environment_name' => 'testing',
-                'api_key' => empty($api_key) ? null : $api_key,
-            ), $this->_default_config));
+            $config = new Config(Arr::merge([
+                                                'project_root'     => realpath(__DIR__ . '/../..'),
+                                                'framework'        => 'PHPUnit',
+                                                'environment_name' => 'testing',
+                                                'api_key'          => empty($api_key) ? null : $api_key,
+                                            ], $this->_default_config));
+
             $this->_environment_default['\\Honeybadger\\Honeybadger::$config'] = $config;
         }
 
@@ -78,7 +78,22 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Restores the original environment overriden with setEnvironment()
+     * Allows easy setting & backing up of environment config
+     *
+     * Option types are checked in the following order:
+     *
+     * * Server Var
+     * * Static Variable
+     *
+     * @param array $environment List of environment to set
+     */
+    public function setEnvironment(array $environment)
+    {
+        return $this->_helpers->setEnvironment($environment);
+    }
+
+    /**
+     * Restores the original environment overridden with setEnvironment()
      *
      * Extending classes that have their own tearDown()
      * should call parent::tearDown()
@@ -93,26 +108,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * the OS-specific directory separator
      *
      * @param string $path The path to act on
+     *
      * @return string
      */
     public function dirSeparator($path)
     {
         return Helpers::dirSeparator($path);
-    }
-
-    /**
-     * Allows easy setting & backing up of enviroment config
-     *
-     * Option types are checked in the following order:
-     *
-     * * Server Var
-     * * Static Variable
-     *
-     * @param array $environment List of environment to set
-     */
-    public function setEnvironment(array $environment)
-    {
-        return $this->_helpers->setEnvironment($environment);
     }
 
     public function restoreEnvironment()
@@ -129,5 +130,4 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         return Helpers::hasInternet();
     }
-
 } // End TestCase

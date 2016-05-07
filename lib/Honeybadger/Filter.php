@@ -14,7 +14,8 @@ class Filter
      * Applies a list of callbacks to an array of data.
      *
      * @param   array $callbacks Callbacks to run.
-     * @param   array $data Data to filter.
+     * @param   array $data      Data to filter.
+     *
      * @return  array    Filtered data
      */
     public static function callbacks(array $callbacks, array $data)
@@ -22,7 +23,7 @@ class Filter
         if (empty($callbacks) or empty($data))
             return $data;
 
-        $filtered = array();
+        $filtered = [];
 
         foreach ($callbacks as $callback) {
             $data = call_user_func($callback, $data);
@@ -41,13 +42,14 @@ class Filter
 
     /**
      * Filters a supplied `array` of `$params`, searching for `$keys` and
-     * replacing each occurance with `[FILTERED]`.
+     * replacing each occurence with `[FILTERED]`.
      *
      * @param   array $keys
      * @param   array $params Parameters to filter.
+     *
      * @return  array  Filtered parameters.
      */
-    public static function params(array $keys = array(), $params = array())
+    public static function params(array $keys = [], $params = [])
     {
         if (empty($keys) or empty($params))
             return $params;
@@ -65,10 +67,11 @@ class Filter
 
     /**
      * @param array $classes
-     * @param $object
+     * @param       $object
+     *
      * @return bool
      */
-    public static function ignoreByClass(array $classes = array(), $object)
+    public static function ignoreByClass(array $classes = [], $object)
     {
         if (!is_object($object))
             return false;
@@ -90,7 +93,7 @@ class Filter
     }
 
     /**
-     * Replaces occurances of configured project root with `[PROJECT_ROOT]` to
+     * Replaces occurences of configured project root with `[PROJECT_ROOT]` to
      * simplify backtraces.
      *
      * @example
@@ -100,17 +103,18 @@ class Filter
      *     // => array('file' => '[PROJECT_ROOT]/models/user.php')
      *
      * @param   array $line Unparsed backtrace line.
+     *
      * @return  array  Filtered backtrace line.
      */
     public static function projectRoot($line)
     {
-        $config = Notice::$current ?: Honeybadger::$config;
+        $config       = Notice::$current ?: Honeybadger::$config;
         $project_root = (string)$config->project_root;
 
         if (strlen($project_root) === 0)
             return $line;
 
-        $pattern = '/^' . preg_quote($project_root, '/') . '/';
+        $pattern      = '/^' . preg_quote($project_root, '/') . '/';
         $line['file'] = preg_replace($pattern, '[PROJECT_ROOT]', $line['file']);
 
         return $line;
@@ -120,6 +124,7 @@ class Filter
      * Attempts to expand paths to their real locations, if possible.
      *
      * @param array $line
+     *
      * @return array
      *
      * @example
@@ -145,13 +150,16 @@ class Filter
      *         'file' => 'path/to/lib/Honeybadger/Honeybadger.php',
      *     ));
      *     // => null
+     *
      * @param $line Array of backtrace content
+     *
      * @return array
      */
     public static function honeybadgerPaths($line)
     {
         if (!preg_match('/lib\/Honeybadger/', $line['file']))
             return $line;
-    }
 
+        return null;
+    }
 }

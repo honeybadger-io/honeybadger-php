@@ -19,172 +19,141 @@ class Notice extends SemiOpenStruct
     public static $current;
 
     /**
-     * Constructs and returns a new `Notice` with supplied options merged with
-     * [Honeybadger::$config].
-     *
-     * @param  $options  array of Notice options.
-     * @return  Notice  The constructed notice.
+     * @var array
      */
-    public static function factory(array $options = array())
-    {
-        return new self(Honeybadger::$config->merge($options));
-    }
-
-    protected $_attribute_methods = array(
+    protected $_attribute_methods = [
         'is_ignored',
-    );
-
+    ];
     /**
      * @var  array  Original arguments passed to constructor.
      */
-    protected $args = array();
-
+    protected $args = [];
     /**
      * @var  Exception  The exception that caused this notice, if any.
      */
     protected $exception;
-
     /**
      * @var  Backtrace  The backtrace from the given exception or hash.
      */
     protected $backtrace;
-
     /**
      * @var  string  The name of the class of error (such as `Exception`).
      */
     protected $error_class;
-
     /**
      * @var  string  Excerpt from source file.
      */
     protected $source_extract;
-
     /**
      * @var  integer  The number of lines of context to include before and after
      *                source excerpt.
      */
     protected $source_extract_radius = 2;
-
     /**
      * @var  string  The name of the server environment (such as `production`).
      */
     protected $environment_name;
-
     /**
      * @var  array  CGI variables such as `REQUEST_METHOD`.
      */
-    protected $cgi_data = array();
-
+    protected $cgi_data = [];
     /**
      * @var  string  The message from the exception, or a general description of
      *               the error.
      */
     protected $error_message;
-
     /**
      * @var  boolean  See Config#send_request_session.
      */
     protected $send_request_session;
-
     /**
      * @var  array  See Config#backtrace_filters
      */
-    protected $backtrace_filters = array();
-
+    protected $backtrace_filters = [];
     /**
      * @var  array  See Config#params_filters.
      */
-    protected $params_filters = array();
-
+    protected $params_filters = [];
     /**
      * @var  array  Parameters from the query string or request body.
      */
-    protected $params = array();
-
+    protected $params = [];
     /**
      * @var  string  The component (if any) which was used in this request
      *               (usually the controller).
      */
     protected $component;
-
     /**
      * @var  string  The action (if any) that was called in this request.
      */
     protected $action;
-
     /**
      * @var  array  Session data from the request.
      */
-    protected $session_data = array();
-
+    protected $session_data = [];
     /**
      * @var  array  Additional contextual information (custom data).
      */
-    protected $context = array();
-
+    protected $context = [];
     /**
      * @var  string  The path to the project that caused the error.
      */
     protected $project_root;
-
     /**
      * @var  string  The URL at which the error occurred (if any).
      */
     protected $url;
-
     /**
      * @var  array  See Config#ignore.
      */
-    protected $ignore = array();
-
+    protected $ignore = [];
     /**
      * @var  array  See Config#ignore_by_filters.
      */
-    protected $ignore_by_filters = array();
-
+    protected $ignore_by_filters = [];
     /**
      * @var  string  The name of the notifier library sending this notice,
      *               such as "Honeybadger Notifier".
      */
     protected $notifier_name;
-
     /**
      * @var  string  The version number of the notifier library sending this
      *               notice, such as "2.1.3".
      */
     protected $notifier_version;
-
     /**
      * @var  string  A URL for more information about the notifier library
      *               sending this notice.
      */
     protected $notifier_url;
-
     /**
      * @var  string  The host name where this error occurred (if any).
      */
     protected $hostname;
 
-    public function __construct(array $args = array())
+    /**
+     * @param array $args
+     */
+    public function __construct(array $args = [])
     {
         // Store self to allow access in callbacks.
         self::$current = $this;
 
         $this->args = $args;
 
-        $this->cgi_data = Environment::factory(Arr::get($args, 'cgi_data'));
-        $this->project_root = Arr::get($args, 'project_root');
-        $this->url = Arr::get($args, 'url', $this->cgi_data['url']);
+        $this->cgi_data         = Environment::factory(Arr::get($args, 'cgi_data'));
+        $this->project_root     = Arr::get($args, 'project_root');
+        $this->url              = Arr::get($args, 'url', $this->cgi_data['url']);
         $this->environment_name = Arr::get($args, 'environment_name');
 
-        $this->notifier_name = Arr::get($args, 'notifier_name');
+        $this->notifier_name    = Arr::get($args, 'notifier_name');
         $this->notifier_version = Arr::get($args, 'notifier_version');
-        $this->notifier_url = Arr::get($args, 'notifier_url');
+        $this->notifier_url     = Arr::get($args, 'notifier_url');
 
-        $this->ignore = Arr::get($args, 'ignore', array());
-        $this->ignore_by_filters = Arr::get($args, 'ignore_by_filters', array());
-        $this->backtrace_filters = Arr::get($args, 'backtrace_filters', array());
-        $this->params_filters = Arr::get($args, 'params_filters', array());
+        $this->ignore            = Arr::get($args, 'ignore', []);
+        $this->ignore_by_filters = Arr::get($args, 'ignore_by_filters', []);
+        $this->backtrace_filters = Arr::get($args, 'backtrace_filters', []);
+        $this->params_filters    = Arr::get($args, 'params_filters', []);
 
         if (isset($args['parameters'])) {
             $this->params = $args['parameters'];
@@ -215,7 +184,7 @@ class Notice extends SemiOpenStruct
                 $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             }
 
-            $this->error_class = get_class($this->exception);
+            $this->error_class   = get_class($this->exception);
             $this->error_message = HoneybadgerError::text($this->exception);
         } else {
             if (isset($args['backtrace']) and is_array($args['backtrace'])) {
@@ -224,18 +193,18 @@ class Notice extends SemiOpenStruct
                 $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
             }
 
-            $this->error_class = Arr::get($args, 'error_class');
+            $this->error_class   = Arr::get($args, 'error_class');
             $this->error_message = Arr::get($args, 'error_message', 'Notification');
         }
 
-        $this->backtrace = Backtrace::parse($backtrace, array(
+        $this->backtrace = Backtrace::parse($backtrace, [
             'filters' => $this->backtrace_filters,
-        ));
+        ]);
 
         $this->hostname = gethostname();
 
         $this->source_extract_radius = Arr::get($args, 'source_extract_radius', 2);
-        $this->source_extract = $this->extractSourceFromBacktrace();
+        $this->source_extract        = $this->extractSourceFromBacktrace();
 
         $this->send_request_session = Arr::get($args, 'send_request_session', true);
 
@@ -244,58 +213,9 @@ class Notice extends SemiOpenStruct
         $this->setContext();
     }
 
-    public function isIgnored()
-    {
-        if (Filter::ignoreByClass($this->ignore, $this->exception))
-            return true;
-
-        foreach ($this->ignore_by_filters as $filter) {
-            if (call_user_func($filter, $this))
-                return true;
-        }
-
-        return false;
-    }
-
-    public function deliver()
-    {
-        return Honeybadger::$sender->sendToHoneybadger($this);
-    }
-
-    public function asArray()
-    {
-        $cgi_data = $this->cgi_data->asArray();
-
-        return array(
-            'notifier' => array(
-                'name' => $this->notifier_name,
-                'url' => $this->notifier_url,
-                'version' => $this->notifier_version,
-                'language' => 'php',
-            ),
-            'error' => array(
-                'class' => $this->error_class,
-                'message' => $this->error_message,
-                'backtrace' => $this->backtrace->asArray(),
-                'source' => $this->source_extract ?: null,
-            ),
-            'request' => array(
-                'url' => $this->url,
-                'component' => $this->component,
-                'action' => $this->action,
-                'params' => empty($this->params) ? null : $this->params,
-                'session' => empty($this->session_data) ? null : $this->session_data,
-                'cgi_data' => empty($cgi_data) ? null : $cgi_data,
-                'context' => $this->context,
-            ),
-            'server' => array(
-                'project_root' => $this->project_root,
-                'environment_name' => $this->environment_name,
-                'hostname' => $this->hostname,
-            ),
-        );
-    }
-
+    /**
+     * @return null|string
+     */
     private function extractSourceFromBacktrace()
     {
         if (!$this->backtrace->hasLines())
@@ -310,6 +230,9 @@ class Notice extends SemiOpenStruct
         return $line->source($this->source_extract_radius);
     }
 
+    /**
+     *
+     */
     private function findSessionData()
     {
         if (!$this->send_request_session)
@@ -324,14 +247,9 @@ class Notice extends SemiOpenStruct
         }
     }
 
-    private function filter(&$params)
-    {
-        if (empty($this->params_filters))
-            return;
-
-        $params = Filter::params($this->params_filters, $params);
-    }
-
+    /**
+     *
+     */
     private function cleanParams()
     {
         $this->filter($this->params);
@@ -345,6 +263,20 @@ class Notice extends SemiOpenStruct
         }
     }
 
+    /**
+     * @param $params
+     */
+    private function filter(&$params)
+    {
+        if (empty($this->params_filters))
+            return;
+
+        $params = Filter::params($this->params_filters, $params);
+    }
+
+    /**
+     *
+     */
     private function setContext()
     {
         $this->context = Honeybadger::context();
@@ -358,4 +290,77 @@ class Notice extends SemiOpenStruct
         }
     }
 
+    /**
+     * Constructs and returns a new `Notice` with supplied options merged with
+     * [Honeybadger::$config].
+     *
+     * @param  $options  array of Notice options.
+     *
+     * @return  Notice  The constructed notice.
+     */
+    public static function factory(array $options = [])
+    {
+        return new self(Honeybadger::$config->merge($options));
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIgnored()
+    {
+        if (Filter::ignoreByClass($this->ignore, $this->exception))
+            return true;
+
+        foreach ($this->ignore_by_filters as $filter) {
+            if (call_user_func($filter, $this))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function deliver()
+    {
+        return Honeybadger::$sender->sendToHoneybadger($this);
+    }
+
+    /**
+     * @return array
+     */
+    public function asArray()
+    {
+        $cgi_data = $this->cgi_data->asArray();
+
+        return [
+            'notifier' => [
+                'name'     => $this->notifier_name,
+                'url'      => $this->notifier_url,
+                'version'  => $this->notifier_version,
+                'language' => 'php',
+            ],
+            'error'    => [
+                'class'     => $this->error_class,
+                'message'   => $this->error_message,
+                'backtrace' => $this->backtrace->asArray(),
+                'source'    => $this->source_extract ?: null,
+            ],
+            'request'  => [
+                'url'       => $this->url,
+                'component' => $this->component,
+                'action'    => $this->action,
+                'params'    => empty($this->params) ? null : $this->params,
+                'session'   => empty($this->session_data) ? null : $this->session_data,
+                'cgi_data'  => empty($cgi_data) ? null : $cgi_data,
+                'context'   => $this->context,
+            ],
+            'server'   => [
+                'project_root'     => $this->project_root,
+                'environment_name' => $this->environment_name,
+                'hostname'         => $this->hostname,
+            ],
+        ];
+    }
 } // End Notice

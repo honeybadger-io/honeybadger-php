@@ -14,11 +14,22 @@ use Slim\Log;
 class Slim extends Logger
 {
 
+    /**
+     * @param string      $severity
+     * @param string|null $message
+     *
+     * @return void
+     */
     public function write($severity, $message = null)
     {
         $this->logger->write($message, $this->translateSeverity($severity));
     }
 
+    /**
+     * @param $severity
+     *
+     * @return string
+     */
     private function translateSeverity($severity)
     {
         switch ($severity) {
@@ -57,5 +68,4 @@ class Slim extends Logger
 
         return $severity;
     }
-
 } // End Slim

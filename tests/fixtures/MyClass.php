@@ -11,5 +11,4 @@ class MyClass
 
         echo "It's done doing amazing things...\n";
     }
-
 }

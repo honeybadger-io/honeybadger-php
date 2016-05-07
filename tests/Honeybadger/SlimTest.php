@@ -17,8 +17,8 @@ class SlimTest extends TestCase
 
         $sender = $this->getMock('Honeybadger\Sender');
         $sender->expects($this->any())
-            ->method('sendToHoneybadger')
-            ->will($this->returnValue('12345'));
+               ->method('sendToHoneybadger')
+               ->will($this->returnValue('12345'));
 
         // Add our sender mock to the environment.
         Honeybadger::$sender = $sender;
@@ -31,20 +31,15 @@ class SlimTest extends TestCase
         parent::tearDown();
     }
 
-    public function build_middleware(array $options = array())
-    {
-        return new Slim($options);
-    }
-
     public function test_init_uses_app_mode()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo'
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'testing',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo'
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'testing',
+                              ]);
 
         $mw = $this->build_middleware();
         $mw->setApplication($app);
@@ -54,15 +49,20 @@ class SlimTest extends TestCase
         $this->assertEquals('testing', Honeybadger::$config->environment_name);
     }
 
+    public function build_middleware(array $options = [])
+    {
+        return new Slim($options);
+    }
+
     public function test_init_uses_framework()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo'
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'testing',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo'
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'testing',
+                              ]);
 
         $mw = $this->build_middleware();
         $mw->setApplication($app);
@@ -76,13 +76,13 @@ class SlimTest extends TestCase
 
     public function test_init_uses_app_logger()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo'
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'testing',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo'
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'testing',
+                              ]);
 
         $mw = $this->build_middleware();
         $mw->setApplication($app);
@@ -97,13 +97,13 @@ class SlimTest extends TestCase
      */
     public function test_call_should_rethrow_errors()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo'
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'development',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo'
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'development',
+                              ]);
 
         $app->get('/foo', function () {
             throw new \Exception('bleh! x.x');
@@ -117,13 +117,13 @@ class SlimTest extends TestCase
 
     public function test_call_should_set_error_id_in_env()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo'
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'production',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo'
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'production',
+                              ]);
 
         $app->get('/foo', function () {
             throw new \Exception('bleh! x.x');
@@ -135,7 +135,8 @@ class SlimTest extends TestCase
 
         try {
             $mw->call();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             // noop
         }
 
@@ -148,14 +149,14 @@ class SlimTest extends TestCase
     {
         Honeybadger::$config->ignore_user_agents[] = 'Internet Explorer';
 
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo',
-            'USER_AGENT' => 'Internet Explorer',
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'production',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo',
+                                    'USER_AGENT'  => 'Internet Explorer',
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'production',
+                              ]);
 
         $app->get('/foo', function () {
             throw new \Exception('bleh! x.x');
@@ -167,7 +168,8 @@ class SlimTest extends TestCase
 
         try {
             $mw->call();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             // noop
         }
 
@@ -178,13 +180,13 @@ class SlimTest extends TestCase
 
     public function test_call_should_replace_placeholder()
     {
-        \Slim\Environment::mock(array(
-            'SCRIPT_NAME' => '/index.php',
-            'PATH_INFO' => '/foo',
-        ));
-        $app = new \Slim\Slim(array(
-            'mode' => 'production',
-        ));
+        \Slim\Environment::mock([
+                                    'SCRIPT_NAME' => '/index.php',
+                                    'PATH_INFO'   => '/foo',
+                                ]);
+        $app = new \Slim\Slim([
+                                  'mode' => 'production',
+                              ]);
 
         $app->get('/foo', function () use ($app) {
             $app->response()->body('<!-- HONEYBADGER ERROR -->');
@@ -197,11 +199,11 @@ class SlimTest extends TestCase
 
         try {
             $mw->call();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             // noop
         }
 
         $this->assertEquals('Honeybadger Error 12345', $app->response()->body());
     }
-
 } // End SlimTest

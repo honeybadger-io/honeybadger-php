@@ -14,7 +14,7 @@ use Honeybadger\Util\SemiOpenStruct;
 class Line extends SemiOpenStruct
 {
 
-    protected $_attribute_methods = array('source');
+    protected $_attribute_methods = ['source'];
 
     /**
      * @var  string  The file portion of the line.
@@ -52,56 +52,22 @@ class Line extends SemiOpenStruct
     protected $filtered_method;
 
     /**
-     * Parses a single line of a given backtrace.
-     *
-     * @param   array $unparsed_line The raw line from `caller` or some backtrace.
-     * @param   array $options
-     * @return  Line    The parsed backtrace line.
-     */
-    public static function parse(array $unparsed_line, array $options = array())
-    {
-        if (!isset($unparsed_line['file']) or empty($unparsed_line['file'])) {
-            $unparsed_line['file'] = '{PHP internal call}';
-        }
-
-        if (!isset($options['filters'])) {
-            $options['filters'] = array();
-        }
-
-        $filtered = Filter::callbacks($options['filters'], $unparsed_line);
-
-        if ($filtered === null)
-            return;
-
-        // Extract the filtered line parameters
-        extract($filtered + array(
-                'filtered_file' => null,
-                'filtered_line' => null,
-                'filtered_function' => null,
-            ));
-
-        // Extract the original line parameters
-        extract($unparsed_line + array(
-                'file' => '',
-                'line' => '',
-                'function' => '',
-            ));
-
-        return new self($file, $line, $function, $filtered_file,
-            $filtered_line, $filtered_function);
-    }
-
-    /**
-     * Instantiates a new backtrace line from a given filename, line number, and
+     * Instantiates a new backtrace line from a given filename, line number,
+     * and
      * method name.
      *
-     * @param  string $file The filename in the given backtrace line
-     * @param  integer $number The line number of the file
-     * @param  string $method The method referenced in the given backtrace line
+     * @param  string  $file            The filename in the given backtrace
+     *                                  line
+     * @param  integer $number          The line number of the file
+     * @param  string  $method          The method referenced in the given
+     *                                  backtrace line
      *
-     * @param  string $filtered_file The filename in the given backtrace line after filter
-     * @param  integer $filtered_number The line number of the file after filter
-     * @param  string $filtered_method The method referenced in the given backtrace line after filter
+     * @param  string  $filtered_file   The filename in the given backtrace
+     *                                  line after filter
+     * @param  integer $filtered_number The line number of the file after
+     *                                  filter
+     * @param  string  $filtered_method The method referenced in the given
+     *                                  backtrace line after filter
      */
     public function __construct($file, $number, $method, $filtered_file = null,
                                 $filtered_number = null, $filtered_method = null)
@@ -118,12 +84,58 @@ class Line extends SemiOpenStruct
             $filtered_method = $method;
         }
 
-        $this->filtered_file = $filtered_file;
+        $this->filtered_file   = $filtered_file;
         $this->filtered_number = $filtered_number;
         $this->filtered_method = $filtered_method;
-        $this->file = $file;
-        $this->number = $number;
-        $this->method = $method;
+        $this->file            = $file;
+        $this->number          = $number;
+        $this->method          = $method;
+    }
+
+    /**
+     * Parses a single line of a given backtrace.
+     *
+     * @param   array $unparsed_line The raw line from `caller` or some
+     *                               backtrace.
+     * @param   array $options
+     *
+     * @return  Line    The parsed backtrace line.
+     */
+    public static function parse(array $unparsed_line, array $options = [])
+    {
+        if (!isset($unparsed_line['file']) or empty($unparsed_line['file'])) {
+            $unparsed_line['file'] = '{PHP internal call}';
+        }
+
+        if (!isset($options['filters'])) {
+            $options['filters'] = [];
+        }
+
+        $filtered = Filter::callbacks($options['filters'], $unparsed_line);
+
+        if ($filtered === null)
+            return null;
+
+        // Extract the filtered line parameters
+        extract($filtered + [
+                    'filtered_file'     => null,
+                    'filtered_line'     => null,
+                    'filtered_function' => null,
+                ]);
+
+        // Extract the original line parameters
+        extract($unparsed_line + [
+                    'file'     => '',
+                    'line'     => '',
+                    'function' => '',
+                ]);
+
+        return new self($file,
+                        $line,
+                        $function,
+                        $filtered_file,
+                        $filtered_line,
+                        $filtered_function);
     }
 
     /**
@@ -135,14 +147,17 @@ class Line extends SemiOpenStruct
      */
     public function __toString()
     {
-        return sprintf("%s:%d:in `%s'", $this->filtered_file,
-            $this->filtered_number, $this->filtered_method);
+        return sprintf("%s:%d:in `%s'",
+                       $this->filtered_file,
+                       $this->filtered_number,
+                       $this->filtered_method);
     }
 
     /**
      * Checks if this `Line` matches another supplied `Line`.
      *
      * @param   Line $other The `Line` to match.
+     *
      * @return  boolean  `true` if objects match, `false` otherwise.
      */
     public function equals($other)
@@ -167,6 +182,7 @@ class Line extends SemiOpenStruct
      * supplied to specify the number of lines before and after to extract.
      *
      * @param   integer $radius Radius to extract.
+     *
      * @return  array    The extracted source code.
      */
     public function source($radius = 2)
@@ -182,42 +198,32 @@ class Line extends SemiOpenStruct
     }
 
     /**
-     * Formats the backtrace line as an array.
-     *
-     * @return  array  The backtrace line
-     */
-    public function asArray()
-    {
-        return array(
-            'file' => $this->filtered_file,
-            'number' => $this->filtered_number,
-            'method' => $this->filtered_method,
-        );
-    }
-
-    /**
      * Extracts source code from the specified `$file`, starting `$radius`
      * lines before the specified `$number`.
      *
-     * @return  array  The extracted source.
+     * @param     $file
+     * @param     $number
+     * @param int $radius
+     *
+     * @return array The extracted source.
      */
     private function getSource($file, $number, $radius = 2)
     {
         if (!is_file($file) or !is_readable($file)) {
-            return array();
+            return [];
         }
 
         $before = $after = $radius;
-        $start = ($number - 1) - $before;
+        $start  = ($number - 1) - $before;
 
         if ($start <= 0) {
-            $start = 1;
+            $start  = 1;
             $before = 1;
         }
 
         $duration = $before + 1 + $after;
-        $size = $start + $duration;
-        $lines = array();
+        $size     = $start + $duration;
+        $lines    = [];
 
         $f = fopen($file, 'r');
 
@@ -238,6 +244,7 @@ class Line extends SemiOpenStruct
      * from the supplied `$line`.
      *
      * @param   string $line The line to trim.
+     *
      * @return  string  The trimmed line.
      */
     private function trimLine($line)
@@ -245,15 +252,28 @@ class Line extends SemiOpenStruct
         $trimmed = trim($line, "\n\r\0\x0B");
 
         return preg_replace(
-            array(
+            [
                 '/\s*$/D',
                 '/\t/'
-            ),
-            array(
+            ],
+            [
                 '',
                 '    ',
-            ),
+            ],
             $trimmed);
     }
 
+    /**
+     * Formats the backtrace line as an array.
+     *
+     * @return  array  The backtrace line
+     */
+    public function asArray()
+    {
+        return [
+            'file'   => $this->filtered_file,
+            'number' => $this->filtered_number,
+            'method' => $this->filtered_method,
+        ];
+    }
 } // End Line

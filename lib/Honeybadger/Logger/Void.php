@@ -18,9 +18,14 @@ use Honeybadger\Logger;
 class Void extends Logger
 {
 
+    /**
+     * @param string      $severity
+     * @param string|null $message
+     *
+     * @return void
+     */
     public function write($severity, $message = null)
     {
         // noop
     }
-
 }

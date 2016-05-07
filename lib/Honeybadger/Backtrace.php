@@ -17,12 +17,29 @@ class Backtrace extends SemiOpenStruct
     /**
      * @var  array  Holder for an array of [Backtrace\Line]s.
      */
-    protected $lines = array();
+    protected $lines = [];
 
     /**
      * @var  array  Holder for an array of app-specific [Backtrace\Line]s.
      */
-    protected $application_lines = array();
+    protected $application_lines = [];
+
+    /**
+     * Instantiates a new `Backtrace` with the supplied lines.
+     *
+     * @param  array $lines Backtrace lines.
+     */
+    public function __construct(array $lines = [])
+    {
+        $this->lines = $lines;
+
+        foreach ($lines as $line) {
+            if (!$line->isApplication())
+                continue;
+
+            $this->application_lines[] = $line;
+        }
+    }
 
     /**
      * Parses a PHP backtrace and returns a new `Backtrace` object. Provided
@@ -31,12 +48,13 @@ class Backtrace extends SemiOpenStruct
      * in the trace.
      *
      * @param   array $backtrace The raw PHP backtrace.
-     * @param   array $options Options and filters to apply to lines.
+     * @param   array $options   Options and filters to apply to lines.
+     *
      * @return  Backtrace          The parsed backtrace.
      */
-    public static function parse(array $backtrace, array $options = array())
+    public static function parse(array $backtrace, array $options = [])
     {
-        $lines = array();
+        $lines = [];
 
         // Parse each line in the backtrace.
         foreach ($backtrace as $line) {
@@ -48,23 +66,6 @@ class Backtrace extends SemiOpenStruct
 
         // Instantiate a new backtrace from the lines
         return new self($lines);
-    }
-
-    /**
-     * Instantiates a new `Backtrace` with the supplied lines.
-     *
-     * @param  array $lines Backtrace lines.
-     */
-    public function __construct(array $lines = array())
-    {
-        $this->lines = $lines;
-
-        foreach ($lines as $line) {
-            if (!$line->isApplication())
-                continue;
-
-            $this->application_lines[] = $line;
-        }
     }
 
     /**
@@ -90,7 +91,7 @@ class Backtrace extends SemiOpenStruct
 
     /**
      * Formats the backtrace as a string, similar to the format of a typical
-     * Ruby backtrace (mostly for compatability).
+     * Ruby backtrace (mostly for compatibility).
      *
      * @return  string  The backtrace as a string.
      */
@@ -112,5 +113,4 @@ class Backtrace extends SemiOpenStruct
             return $line->toArray();
         }, $this->lines);
     }
-
 } // End Backtrace

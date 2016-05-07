@@ -23,6 +23,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      * `$_COOKIE`.
      *
      * @param   array $data The data to build the environment with.
+     *
      * @return  Environment   The constructed environment.
      */
     public static function factory($data = null)
@@ -30,54 +31,57 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         return new self($data);
     }
 
-    private $_attribute_methods = array(
+    /**
+     * @var array
+     */
+    private $_attribute_methods = [
         'protocol', 'host', 'port', 'fullpath', 'url',
-    );
+    ];
 
     /**
      * @var  array  List of `$_SERVER` keys to allow when building an
      *              environment automatically. Keys prefixed with `HTTP_`
      *              are also included.
      */
-    private $allowed_php_environment_keys = array(
-        'PHP_SELF' => null,
-        'argv' => null,
-        'argc' => null,
-        'GATEWAY_INTERFACE' => null,
-        'SERVER_ADDR' => null,
-        'SERVER_NAME' => null,
-        'SERVER_SOFTWARE' => null,
-        'SERVER_PROTOCOL' => null,
-        'REQUEST_METHOD' => null,
-        'REQUEST_TIME' => null,
-        'REQUEST_TIME_FLOAT' => null,
-        'QUERY_STRING' => null,
-        'DOCUMENT_ROOT' => null,
-        'HTTPS' => null,
-        'REMOTE_ADDR' => null,
-        'REMOTE_HOST' => null,
-        'REMOTE_PORT' => null,
-        'REMOTE_USER' => null,
+    private $allowed_php_environment_keys = [
+        'PHP_SELF'             => null,
+        'argv'                 => null,
+        'argc'                 => null,
+        'GATEWAY_INTERFACE'    => null,
+        'SERVER_ADDR'          => null,
+        'SERVER_NAME'          => null,
+        'SERVER_SOFTWARE'      => null,
+        'SERVER_PROTOCOL'      => null,
+        'REQUEST_METHOD'       => null,
+        'REQUEST_TIME'         => null,
+        'REQUEST_TIME_FLOAT'   => null,
+        'QUERY_STRING'         => null,
+        'DOCUMENT_ROOT'        => null,
+        'HTTPS'                => null,
+        'REMOTE_ADDR'          => null,
+        'REMOTE_HOST'          => null,
+        'REMOTE_PORT'          => null,
+        'REMOTE_USER'          => null,
         'REDIRECT_REMOTE_USER' => null,
-        'SCRIPT_FILENAME' => null,
-        'SERVER_ADMIN' => null,
-        'SERVER_PORT' => null,
-        'SERVER_SIGNATURE' => null,
-        'PATH_TRANSLATED' => null,
-        'SCRIPT_NAME' => null,
-        'REQUEST_URI' => null,
-        'PHP_AUTH_DIGEST' => null,
-        'PHP_AUTH_USER' => null,
-        'PHP_AUTH_PW' => null,
-        'AUTH_TYPE' => null,
-        'PATH_INFO' => null,
-        'ORIG_PATH_INFO' => null,
-    );
+        'SCRIPT_FILENAME'      => null,
+        'SERVER_ADMIN'         => null,
+        'SERVER_PORT'          => null,
+        'SERVER_SIGNATURE'     => null,
+        'PATH_TRANSLATED'      => null,
+        'SCRIPT_NAME'          => null,
+        'REQUEST_URI'          => null,
+        'PHP_AUTH_DIGEST'      => null,
+        'PHP_AUTH_USER'        => null,
+        'PHP_AUTH_PW'          => null,
+        'AUTH_TYPE'            => null,
+        'PATH_INFO'            => null,
+        'ORIG_PATH_INFO'       => null,
+    ];
 
     /**
      * @var  array  The environment data.
      */
-    private $data = array();
+    private $data = [];
 
     /**
      * Constructs a new environment with the supplied data or attempts to detect
@@ -193,6 +197,8 @@ class Environment implements \ArrayAccess, \IteratorAggregate
 
         if (!preg_match('/^https?:\/{3}$/', $url))
             return $url;
+
+        return null;
     }
 
     /**
@@ -219,6 +225,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      * Returns the JSON-encoded environment data.
      *
      * @param   integer $options Options to pass to `json_encode()`.
+     *
      * @return  string   The JSON-encoded object attributes.
      */
     public function toJson($options = 0)
@@ -226,6 +233,12 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         return json_encode($this->as_json(), $options);
     }
 
+    /**
+     * @param $key
+     *
+     * @return mixed
+     * @throws NonExistentProperty
+     */
     public function __get($key)
     {
         if (in_array($key, $this->_attribute_methods)) {
@@ -235,6 +248,11 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * @param mixed $key
+     *
+     * @return null
+     */
     public function offsetGet($key)
     {
         if (array_key_exists($key, $this->data)) {
@@ -246,22 +264,41 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         }
     }
 
+    /**
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @throws ReadOnly
+     */
     public function offsetSet($key, $value)
     {
         throw new ReadOnly($this);
     }
 
+    /**
+     * @param mixed $key
+     *
+     * @return bool
+     */
     public function offsetExists($key)
     {
         return (array_key_exists($key, $this->data) or
             in_array($key, $this->_attribute_methods));
     }
 
+    /**
+     * @param mixed $key
+     *
+     * @throws ReadOnly
+     */
     public function offsetUnset($key)
     {
         throw new ReadOnly($this);
     }
 
+    /**
+     * @return \ArrayIterator
+     */
     public function getIterator()
     {
         return new \ArrayIterator($this->data);
@@ -276,8 +313,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      * The following steps are taken to alleviate this issue:
      *
      * * Only allow the
-     *   [predefined variables](http://php.net/manual/en/reserved.variables.server.php)
-     *   in `$_SERVER`.
+     *   [predefined
+     *   variables](http://php.net/manual/en/reserved.variables.server.php) in
+     *   `$_SERVER`.
      *
      * * Allow variables prefixed with `HTTP_` (HTTP headers).
      *

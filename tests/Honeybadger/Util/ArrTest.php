@@ -9,14 +9,14 @@ use stdClass;
 /**
  * Tests the Arr library that's shipped with Kohana.
  *
- * @group honeybadger
+ * @group          honeybadger
  *
- * @package    Honeybadger
- * @category   Tests
- * @author     Kohana Team
- * @author     BRMatt <matthew@sigswitch.com>
+ * @package        Honeybadger
+ * @category       Tests
+ * @author         Kohana Team
+ * @author         BRMatt <matthew@sigswitch.com>
  * @copyright  (c) 2008-2012 Kohana Team
- * @license    http://kohanaframework.org/license
+ * @license        http://kohanaframework.org/license
  */
 class ArrTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,20 +28,20 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_callback()
     {
-        return array(
+        return [
             // Tests....
             // That no parameters returns null
-            array('function', array('function', null)),
+            ['function', ['function', null]],
             // That we can get an array of parameters values
-            array('function(1,2,3)', array('function', array('1', '2', '3'))),
+            ['function(1,2,3)', ['function', ['1', '2', '3']]],
             // That it's not just using the callback "function"
-            array('different_name(harry,jerry)', array('different_name', array('harry', 'jerry'))),
+            ['different_name(harry,jerry)', ['different_name', ['harry', 'jerry']]],
             // That static callbacks are parsed into arrays
-            array('kohana::appify(this)', array(array('kohana', 'appify'), array('this'))),
+            ['kohana::appify(this)', [['kohana', 'appify'], ['this']]],
             // Spaces are preserved in parameters
-            array('deal::make(me, my mate )', array(array('deal', 'make'), array('me', ' my mate ')))
+            ['deal::make(me, my mate )', [['deal', 'make'], ['me', ' my mate ']]]
             // TODO: add more cases
-        );
+        ];
     }
 
     /**
@@ -49,8 +49,9 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_callback
-     * @param string $str String to parse
-     * @param array $expected Callback and its parameters
+     *
+     * @param string $str      String to parse
+     * @param array  $expected Callback and its parameters
      */
     public function test_callback($str, $expected)
     {
@@ -67,52 +68,52 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_extract()
     {
-        return array(
-            array(
-                array('kohana' => 'awesome', 'blueflame' => 'was'),
-                array('kohana', 'cakephp', 'symfony'),
+        return [
+            [
+                ['kohana' => 'awesome', 'blueflame' => 'was'],
+                ['kohana', 'cakephp', 'symfony'],
                 null,
-                array('kohana' => 'awesome', 'cakephp' => null, 'symfony' => null)
-            ),
+                ['kohana' => 'awesome', 'cakephp' => null, 'symfony' => null]
+            ],
             // I realise noone should EVER code like this in real life,
             // but unit testing is very very very very boring
-            array(
-                array('chocolate cake' => 'in stock', 'carrot cake' => 'in stock'),
-                array('carrot cake', 'humble pie'),
+            [
+                ['chocolate cake' => 'in stock', 'carrot cake' => 'in stock'],
+                ['carrot cake', 'humble pie'],
                 'not in stock',
-                array('carrot cake' => 'in stock', 'humble pie' => 'not in stock'),
-            ),
-            array(
+                ['carrot cake' => 'in stock', 'humble pie' => 'not in stock'],
+            ],
+            [
                 // Source Array
-                array('level1' => array('level2a' => 'value 1', 'level2b' => 'value 2')),
+                ['level1' => ['level2a' => 'value 1', 'level2b' => 'value 2']],
                 // Paths to extract
-                array('level1.level2a', 'level1.level2b'),
+                ['level1.level2a', 'level1.level2b'],
                 // Default
                 null,
                 // Expected Result
-                array('level1' => array('level2a' => 'value 1', 'level2b' => 'value 2')),
-            ),
-            array(
+                ['level1' => ['level2a' => 'value 1', 'level2b' => 'value 2']],
+            ],
+            [
                 // Source Array
-                array('level1a' => array('level2a' => 'value 1'), 'level1b' => array('level2b' => 'value 2')),
+                ['level1a' => ['level2a' => 'value 1'], 'level1b' => ['level2b' => 'value 2']],
                 // Paths to extract
-                array('level1a', 'level1b.level2b'),
+                ['level1a', 'level1b.level2b'],
                 // Default
                 null,
                 // Expected Result
-                array('level1a' => array('level2a' => 'value 1'), 'level1b' => array('level2b' => 'value 2')),
-            ),
-            array(
+                ['level1a' => ['level2a' => 'value 1'], 'level1b' => ['level2b' => 'value 2']],
+            ],
+            [
                 // Source Array
-                array('level1a' => array('level2a' => 'value 1'), 'level1b' => array('level2b' => 'value 2')),
+                ['level1a' => ['level2a' => 'value 1'], 'level1b' => ['level2b' => 'value 2']],
                 // Paths to extract
-                array('level1a', 'level1b.level2b', 'level1c', 'level1d.notfound'),
+                ['level1a', 'level1b.level2b', 'level1c', 'level1d.notfound'],
                 // Default
                 'default',
                 // Expected Result
-                array('level1a' => array('level2a' => 'value 1'), 'level1b' => array('level2b' => 'value 2'), 'level1c' => 'default', 'level1d' => array('notfound' => 'default')),
-            ),
-        );
+                ['level1a' => ['level2a' => 'value 1'], 'level1b' => ['level2b' => 'value 2'], 'level1c' => 'default', 'level1d' => ['notfound' => 'default']],
+            ],
+        ];
     }
 
     /**
@@ -120,6 +121,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_extract
+     *
      * @param array $array
      * @param array $paths
      * @param mixed $default
@@ -140,17 +142,17 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_pluck()
     {
-        return array(
-            array(
-                array(
-                    array('id' => 20, 'name' => 'John Smith'),
-                    array('name' => 'Linda'),
-                    array('id' => 25, 'name' => 'Fred'),
-                ),
+        return [
+            [
+                [
+                    ['id' => 20, 'name' => 'John Smith'],
+                    ['name' => 'Linda'],
+                    ['id' => 25, 'name' => 'Fred'],
+                ],
                 'id',
-                array(20, 25)
-            ),
-        );
+                [20, 25]
+            ],
+        ];
     }
 
     /**
@@ -158,9 +160,10 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_pluck
-     * @param array $array
+     *
+     * @param array  $array
      * @param string $key
-     * @param array $expected
+     * @param array  $expected
      */
     public function test_pluck(array $array, $key, $expected)
     {
@@ -177,15 +180,15 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_get()
     {
-        return array(
-            array(array('uno', 'dos', 'tress'), 1, null, 'dos'),
-            array(array('we' => 'can', 'make' => 'change'), 'we', null, 'can'),
+        return [
+            [['uno', 'dos', 'tress'], 1, null, 'dos'],
+            [['we' => 'can', 'make' => 'change'], 'we', null, 'can'],
 
-            array(array('uno', 'dos', 'tress'), 10, null, null),
-            array(array('we' => 'can', 'make' => 'change'), 'he', null, null),
-            array(array('we' => 'can', 'make' => 'change'), 'he', 'who', 'who'),
-            array(array('we' => 'can', 'make' => 'change'), 'he', array('arrays'), array('arrays')),
-        );
+            [['uno', 'dos', 'tress'], 10, null, null],
+            [['we' => 'can', 'make' => 'change'], 'he', null, null],
+            [['we' => 'can', 'make' => 'change'], 'he', 'who', 'who'],
+            [['we' => 'can', 'make' => 'change'], 'he', ['arrays'], ['arrays']],
+        ];
     }
 
     /**
@@ -193,10 +196,11 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_get()
-     * @param array $array Array to look in
-     * @param string|integer $key Key to look for
-     * @param mixed $default What to return if $key isn't set
-     * @param mixed $expected The expected value returned
+     *
+     * @param array          $array    Array to look in
+     * @param string|integer $key      Key to look for
+     * @param mixed          $default  What to return if $key isn't set
+     * @param mixed          $expected The expected value returned
      */
     public function test_get(array $array, $key, $default, $expected)
     {
@@ -213,10 +217,10 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_is_assoc()
     {
-        return array(
-            array(array('one', 'two', 'three'), false),
-            array(array('one' => 'o clock', 'two' => 'o clock', 'three' => 'o clock'), true),
-        );
+        return [
+            [['one', 'two', 'three'], false],
+            [['one' => 'o clock', 'two' => 'o clock', 'three' => 'o clock'], true],
+        ];
     }
 
     /**
@@ -224,7 +228,8 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_is_assoc
-     * @param array $array Array to check
+     *
+     * @param array   $array    Array to check
      * @param boolean $expected Is $array assoc
      */
     public function test_is_assoc(array $array, $expected)
@@ -242,13 +247,13 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_is_array()
     {
-        return array(
-            array($a = array('one', 'two', 'three'), true),
-            array(new ArrayObject($a), true),
-            array(new ArrayIterator($a), true),
-            array('not an array', false),
-            array(new stdClass, false),
-        );
+        return [
+            [$a = ['one', 'two', 'three'], true],
+            [new ArrayObject($a), true],
+            [new ArrayIterator($a), true],
+            ['not an array', false],
+            [new stdClass, false],
+        ];
     }
 
     /**
@@ -256,7 +261,8 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_is_array
-     * @param mixed $array Value to check
+     *
+     * @param mixed   $array    Value to check
      * @param boolean $expected Is $array an array?
      */
     public function test_is_array($array, $expected)
@@ -269,125 +275,125 @@ class ArrTest extends \PHPUnit_Framework_TestCase
 
     public function provider_merge()
     {
-        return array(
+        return [
             // Test how it merges arrays and sub arrays with assoc keys
-            array(
-                array('name' => 'mary', 'children' => array('fred', 'paul', 'sally', 'jane')),
-                array('name' => 'john', 'children' => array('fred', 'paul', 'sally', 'jane')),
-                array('name' => 'mary', 'children' => array('jane')),
-            ),
+            [
+                ['name' => 'mary', 'children' => ['fred', 'paul', 'sally', 'jane']],
+                ['name' => 'john', 'children' => ['fred', 'paul', 'sally', 'jane']],
+                ['name' => 'mary', 'children' => ['jane']],
+            ],
             // See how it merges sub-arrays with numerical indexes
-            array(
-                array(array('test1'), array('test2'), array('test3')),
-                array(array('test1'), array('test2')),
-                array(array('test2'), array('test3')),
-            ),
-            array(
-                array(array(array('test1')), array(array('test2')), array(array('test3'))),
-                array(array(array('test1')), array(array('test2'))),
-                array(array(array('test2')), array(array('test3'))),
-            ),
-            array(
-                array('a' => array('test1', 'test2'), 'b' => array('test2', 'test3')),
-                array('a' => array('test1'), 'b' => array('test2')),
-                array('a' => array('test2'), 'b' => array('test3')),
-            ),
-            array(
-                array('digits' => array(0, 1, 2, 3)),
-                array('digits' => array(0, 1)),
-                array('digits' => array(2, 3)),
-            ),
+            [
+                [['test1'], ['test2'], ['test3']],
+                [['test1'], ['test2']],
+                [['test2'], ['test3']],
+            ],
+            [
+                [[['test1']], [['test2']], [['test3']]],
+                [[['test1']], [['test2']]],
+                [[['test2']], [['test3']]],
+            ],
+            [
+                ['a' => ['test1', 'test2'], 'b' => ['test2', 'test3']],
+                ['a' => ['test1'], 'b' => ['test2']],
+                ['a' => ['test2'], 'b' => ['test3']],
+            ],
+            [
+                ['digits' => [0, 1, 2, 3]],
+                ['digits' => [0, 1]],
+                ['digits' => [2, 3]],
+            ],
             // See how it manages merging items with numerical indexes
-            array(
-                array(0, 1, 2, 3),
-                array(0, 1),
-                array(2, 3),
-            ),
+            [
+                [0, 1, 2, 3],
+                [0, 1],
+                [2, 3],
+            ],
             // Try and get it to merge assoc. arrays recursively
-            array(
-                array('foo' => 'bar', array('temp' => 'life')),
-                array('foo' => 'bin', array('temp' => 'name')),
-                array('foo' => 'bar', array('temp' => 'life')),
-            ),
+            [
+                ['foo' => 'bar', ['temp' => 'life']],
+                ['foo' => 'bin', ['temp' => 'name']],
+                ['foo' => 'bar', ['temp' => 'life']],
+            ],
             // Bug #3139
-            array(
-                array('foo' => array('bar')),
-                array('foo' => 'bar'),
-                array('foo' => array('bar')),
-            ),
-            array(
-                array('foo' => 'bar'),
-                array('foo' => array('bar')),
-                array('foo' => 'bar'),
-            ),
+            [
+                ['foo' => ['bar']],
+                ['foo' => 'bar'],
+                ['foo' => ['bar']],
+            ],
+            [
+                ['foo' => 'bar'],
+                ['foo' => ['bar']],
+                ['foo' => 'bar'],
+            ],
 
             // data set #9
             // Associative, Associative
-            array(
-                array('a' => 'K', 'b' => 'K', 'c' => 'L'),
-                array('a' => 'J', 'b' => 'K'),
-                array('a' => 'K', 'c' => 'L'),
-            ),
+            [
+                ['a' => 'K', 'b' => 'K', 'c' => 'L'],
+                ['a' => 'J', 'b' => 'K'],
+                ['a' => 'K', 'c' => 'L'],
+            ],
             // Associative, Indexed
-            array(
-                array('a' => 'J', 'b' => 'K', 'L'),
-                array('a' => 'J', 'b' => 'K'),
-                array('K', 'L'),
-            ),
+            [
+                ['a' => 'J', 'b' => 'K', 'L'],
+                ['a' => 'J', 'b' => 'K'],
+                ['K', 'L'],
+            ],
             // Associative, Mixed
-            array(
-                array('a' => 'J', 'b' => 'K', 'K', 'c' => 'L'),
-                array('a' => 'J', 'b' => 'K'),
-                array('K', 'c' => 'L'),
-            ),
+            [
+                ['a' => 'J', 'b' => 'K', 'K', 'c' => 'L'],
+                ['a' => 'J', 'b' => 'K'],
+                ['K', 'c' => 'L'],
+            ],
 
             // data set #12
             // Indexed, Associative
-            array(
-                array('J', 'K', 'a' => 'K', 'c' => 'L'),
-                array('J', 'K'),
-                array('a' => 'K', 'c' => 'L'),
-            ),
+            [
+                ['J', 'K', 'a' => 'K', 'c' => 'L'],
+                ['J', 'K'],
+                ['a' => 'K', 'c' => 'L'],
+            ],
             // Indexed, Indexed
-            array(
-                array('J', 'K', 'L'),
-                array('J', 'K'),
-                array('K', 'L'),
-            ),
+            [
+                ['J', 'K', 'L'],
+                ['J', 'K'],
+                ['K', 'L'],
+            ],
             // Indexed, Mixed
-            array(
-                array('K', 'K', 'c' => 'L'),
-                array('J', 'K'),
-                array('K', 'c' => 'L'),
-            ),
+            [
+                ['K', 'K', 'c' => 'L'],
+                ['J', 'K'],
+                ['K', 'c' => 'L'],
+            ],
 
             // data set #15
             // Mixed, Associative
-            array(
-                array('a' => 'K', 'K', 'c' => 'L'),
-                array('a' => 'J', 'K'),
-                array('a' => 'K', 'c' => 'L'),
-            ),
+            [
+                ['a' => 'K', 'K', 'c' => 'L'],
+                ['a' => 'J', 'K'],
+                ['a' => 'K', 'c' => 'L'],
+            ],
             // Mixed, Indexed
-            array(
-                array('a' => 'J', 'K', 'L'),
-                array('a' => 'J', 'K'),
-                array('J', 'L'),
-            ),
+            [
+                ['a' => 'J', 'K', 'L'],
+                ['a' => 'J', 'K'],
+                ['J', 'L'],
+            ],
             // Mixed, Mixed
-            array(
-                array('a' => 'K', 'L'),
-                array('a' => 'J', 'K'),
-                array('a' => 'K', 'L'),
-            ),
+            [
+                ['a' => 'K', 'L'],
+                ['a' => 'J', 'K'],
+                ['a' => 'K', 'L'],
+            ],
 
             // Bug #3141
-            array(
-                array('servers' => array(array('1.1.1.1', 4730), array('2.2.2.2', 4730))),
-                array('servers' => array(array('1.1.1.1', 4730))),
-                array('servers' => array(array('2.2.2.2', 4730))),
-            ),
-        );
+            [
+                ['servers' => [['1.1.1.1', 4730], ['2.2.2.2', 4730]]],
+                ['servers' => [['1.1.1.1', 4730]]],
+                ['servers' => [['2.2.2.2', 4730]]],
+            ],
+        ];
     }
 
     /**
@@ -410,49 +416,49 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_path()
     {
-        $array = array(
-            'foobar' => array('definition' => 'lost'),
+        $array = [
+            'foobar' => ['definition' => 'lost'],
             'kohana' => 'awesome',
-            'users' => array(
-                1 => array('name' => 'matt'),
-                2 => array('name' => 'john',
-                           'interests' => array('hocky' => array('length' => 2),
-                                                            'football' => array()
-                           )
-                ),
+            'users'  => [
+                1 => ['name' => 'matt'],
+                2 => ['name'      => 'john',
+                      'interests' => ['hocky'    => ['length' => 2],
+                                      'football' => []
+                      ]
+                ],
                 3 => 'frank', // Issue #3194
-            ),
-            'object' => new ArrayObject(array('iterator' => true)), // Iterable object should work exactly the same
-        );
+            ],
+            'object' => new ArrayObject(['iterator' => true]), // Iterable object should work exactly the same
+        ];
 
-        return array(
+        return [
             // Tests returns normal values
-            array($array['foobar'], $array, 'foobar'),
-            array($array['kohana'], $array, 'kohana'),
-            array($array['foobar']['definition'], $array, 'foobar.definition'),
+            [$array['foobar'], $array, 'foobar'],
+            [$array['kohana'], $array, 'kohana'],
+            [$array['foobar']['definition'], $array, 'foobar.definition'],
             // Custom delimiters
-            array($array['foobar']['definition'], $array, 'foobar/definition', null, '/'),
+            [$array['foobar']['definition'], $array, 'foobar/definition', null, '/'],
             // We should be able to use null as a default, returned if the key DNX
-            array(null, $array, 'foobar.alternatives', null),
-            array(null, $array, 'kohana.alternatives', null),
+            [null, $array, 'foobar.alternatives', null],
+            [null, $array, 'kohana.alternatives', null],
             // Try using a string as a default
-            array('nothing', $array, 'kohana.alternatives', 'nothing'),
+            ['nothing', $array, 'kohana.alternatives', 'nothing'],
             // Make sure you can use arrays as defaults
-            array(array('far', 'wide'), $array, 'cheese.origins', array('far', 'wide')),
+            [['far', 'wide'], $array, 'cheese.origins', ['far', 'wide']],
             // Ensures path() casts ints to actual integers for keys
-            array($array['users'][1]['name'], $array, 'users.1.name'),
+            [$array['users'][1]['name'], $array, 'users.1.name'],
             // Test that a wildcard returns the entire array at that "level"
-            array($array['users'], $array, 'users.*'),
+            [$array['users'], $array, 'users.*'],
             // Now we check that keys after a wilcard will be processed
-            array(array(0 => array(0 => 2)), $array, 'users.*.interests.*.length'),
+            [[0 => [0 => 2]], $array, 'users.*.interests.*.length'],
             // See what happens when it can't dig any deeper from a wildcard
-            array(null, $array, 'users.*.fans'),
+            [null, $array, 'users.*.fans'],
             // Starting wildcards, issue #3269
-            array(array('matt', 'john'), $array['users'], '*.name'),
+            [['matt', 'john'], $array['users'], '*.name'],
             // Path as array, issue #3260
-            array($array['users'][2]['name'], $array, array('users', 2, 'name')),
-            array($array['object']['iterator'], $array, 'object.iterator'),
-        );
+            [$array['users'][2]['name'], $array, ['users', 2, 'name']],
+            [$array['object']['iterator'], $array, 'object.iterator'],
+        ];
     }
 
     /**
@@ -460,10 +466,11 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_path
-     * @param string $path The path to follow
-     * @param mixed $default The value to return if dnx
-     * @param boolean $expected The expected value
-     * @param string $delimiter The path delimiter
+     *
+     * @param string  $path      The path to follow
+     * @param mixed   $default   The value to return if dnx
+     * @param boolean $expected  The expected value
+     * @param string  $delimiter The path delimiter
      */
     public function test_path($expected, $array, $path, $default = null, $delimiter = null)
     {
@@ -480,17 +487,17 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_set_path()
     {
-        return array(
+        return [
             // Tests returns normal values
-            array(array('foo' => 'bar'), array(), 'foo', 'bar'),
-            array(array('kohana' => array('is' => 'awesome')), array(), 'kohana.is', 'awesome'),
-            array(array('kohana' => array('is' => 'cool', 'and' => 'slow')),
-                array('kohana' => array('is' => 'cool')), 'kohana.and', 'slow'),
+            [['foo' => 'bar'], [], 'foo', 'bar'],
+            [['kohana' => ['is' => 'awesome']], [], 'kohana.is', 'awesome'],
+            [['kohana' => ['is' => 'cool', 'and' => 'slow']],
+             ['kohana' => ['is' => 'cool']], 'kohana.and', 'slow'],
             // Custom delimiters
-            array(array('kohana' => array('is' => 'awesome')), array(), 'kohana/is', 'awesome', '/'),
+            [['kohana' => ['is' => 'awesome']], [], 'kohana/is', 'awesome', '/'],
             // Ensures set_path() casts ints to actual integers for keys
-            array(array('foo' => array('bar')), array('foo' => array('test')), 'foo.0', 'bar'),
-        );
+            [['foo' => ['bar']], ['foo' => ['test']], 'foo.0', 'bar'],
+        ];
     }
 
     /**
@@ -498,9 +505,10 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_set_path
-     * @param string $path The path to follow
-     * @param boolean $expected The expected value
-     * @param string $delimiter The path delimiter
+     *
+     * @param string  $path      The path to follow
+     * @param boolean $expected  The expected value
+     * @param string  $delimiter The path delimiter
      */
     public function test_set_path($expected, $array, $path, $value, $delimiter = null)
     {
@@ -516,19 +524,20 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_range()
     {
-        return array(
-            array(1, 2),
-            array(1, 100),
-            array(25, 10),
-        );
+        return [
+            [1, 2],
+            [1, 100],
+            [25, 10],
+        ];
     }
 
     /**
      * Tests Arr::range()
      *
      * @dataProvider provider_range
+     *
      * @param integer $step The step between each value in the array
-     * @param integer $max The max value of the range (inclusive)
+     * @param integer $max  The max value of the range (inclusive)
      */
     public function test_range($step, $max)
     {
@@ -553,10 +562,10 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_unshift()
     {
-        return array(
-            array(array('one' => '1', 'two' => '2',), 'zero', '0'),
-            array(array('step 1', 'step 2', 'step 3'), 'step 0', 'wow')
-        );
+        return [
+            [['one' => '1', 'two' => '2',], 'zero', '0'],
+            [['step 1', 'step 2', 'step 3'], 'step 0', 'wow']
+        ];
     }
 
     /**
@@ -564,9 +573,10 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      *
      * @test
      * @dataProvider provider_unshift
-     * @param array $array
+     *
+     * @param array  $array
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function test_unshift(array $array, $key, $value)
     {
@@ -589,27 +599,27 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_overwrite()
     {
-        return array(
-            array(
-                array('name' => 'Henry',
-                    'mood' => 'tired',
-                    'food' => 'waffles',
-                    'sport' => 'checkers'),
+        return [
+            [
+                ['name'  => 'Henry',
+                 'mood'  => 'tired',
+                 'food'  => 'waffles',
+                 'sport' => 'checkers'],
 
-                array('name' => 'John',
-                    'mood' => 'bored',
-                    'food' => 'bacon',
-                    'sport' => 'checkers'),
+                ['name'  => 'John',
+                 'mood'  => 'bored',
+                 'food'  => 'bacon',
+                 'sport' => 'checkers'],
 
-                array('name' => 'Matt',
-                    'mood' => 'tired',
-                    'food' => 'waffles'),
+                ['name' => 'Matt',
+                 'mood' => 'tired',
+                 'food' => 'waffles'],
 
-                array('name' => 'Henry',
-                    'age' => 18,
-                    ),
-            ),
-        );
+                ['name' => 'Henry',
+                 'age'  => 18,
+                ],
+            ],
+        ];
     }
 
     /**
@@ -617,7 +627,7 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      * @test
      * @dataProvider provider_overwrite
      */
-    public function test_overwrite($expected, $arr1, $arr2, $arr3 = array(), $arr4 = array())
+    public function test_overwrite($expected, $arr1, $arr2, $arr3 = [], $arr4 = [])
     {
         $this->assertSame(
             $expected,
@@ -632,52 +642,52 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_map()
     {
-        return array(
-            array('strip_tags', array('<p>foobar</p>'), null, array('foobar')),
-            array('strip_tags', array(array('<p>foobar</p>'),
-                array('<p>foobar</p>')),
-                null,
-                array(array('foobar'), array('foobar'))),
-            array(
+        return [
+            ['strip_tags', ['<p>foobar</p>'], null, ['foobar']],
+            ['strip_tags', [['<p>foobar</p>'],
+                            ['<p>foobar</p>']],
+             null,
+             [['foobar'], ['foobar']]],
+            [
                 'strip_tags',
-                array(
+                [
                     'foo' => '<p>foobar</p>',
                     'bar' => '<p>foobar</p>',
-                ),
+                ],
                 null,
-                array(
+                [
                     'foo' => 'foobar',
                     'bar' => 'foobar',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'strip_tags',
-                array(
+                [
                     'foo' => '<p>foobar</p>',
                     'bar' => '<p>foobar</p>',
-                ),
-                array('foo'),
-                array(
+                ],
+                ['foo'],
+                [
                     'foo' => 'foobar',
                     'bar' => '<p>foobar</p>',
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'strip_tags',
                     'trim',
-                ),
-                array(
+                ],
+                [
                     'foo' => '<p>foobar </p>',
                     'bar' => '<p>foobar</p>',
-                ),
+                ],
                 null,
-                array(
+                [
                     'foo' => 'foobar',
                     'bar' => 'foobar',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -700,14 +710,14 @@ class ArrTest extends \PHPUnit_Framework_TestCase
      */
     public function provider_flatten()
     {
-        return array(
-            array(
-                array('set' => array('one' => 'something'),
-                      'two' => 'other'),
-                array('one' => 'something',
-                      'two' => 'other')
-            ),
-        );
+        return [
+            [
+                ['set' => ['one' => 'something'],
+                 'two' => 'other'],
+                ['one' => 'something',
+                 'two' => 'other']
+            ],
+        ];
     }
 
     /**
