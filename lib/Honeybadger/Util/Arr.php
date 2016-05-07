@@ -87,7 +87,7 @@ class Arr
     {
         $found = [];
         foreach ($paths as $path) {
-            Arr::setPath($found, $path, Arr::path($array, $path, $default));
+            self::setPath($found, $path, self::path($array, $path, $default));
         }
 
         return $found;
@@ -107,7 +107,7 @@ class Arr
     {
         if (!$delimiter) {
             // Use the default delimiter
-            $delimiter = Arr::$delimiter;
+            $delimiter = self::$delimiter;
         }
 
         // Split the keys by delimiter
@@ -158,7 +158,7 @@ class Arr
      */
     public static function path($array, $path, $default = null, $delimiter = null)
     {
-        if (!Arr::isArray($array)) {
+        if (!self::isArray($array)) {
             // This is not an array!
             return $default;
         }
@@ -174,7 +174,7 @@ class Arr
 
             if ($delimiter === null) {
                 // Use the default delimiter
-                $delimiter = Arr::$delimiter;
+                $delimiter = self::$delimiter;
             }
 
             // Remove starting delimiters and spaces
@@ -197,7 +197,7 @@ class Arr
 
             if (isset($array[$key])) {
                 if ($keys) {
-                    if (Arr::isArray($array[$key])) {
+                    if (self::isArray($array[$key])) {
                         // Dig down into the next part of the path
                         $array = $array[$key];
                     } else {
@@ -213,7 +213,7 @@ class Arr
 
                 $values = [];
                 foreach ($array as $arr) {
-                    if ($value = Arr::path($arr, implode('.', $keys))) {
+                    if ($value = self::path($arr, implode('.', $keys))) {
                         $values[] = $value;
                     }
                 }
@@ -257,10 +257,10 @@ class Arr
         if (is_array($value)) {
             // Definitely an array
             return true;
-        } else {
-            // Possibly a Traversable object, functionally the same as an array
-            return (is_object($value) and $value instanceof \Traversable);
         }
+
+        // Possibly a Traversable object, functionally the same as an array
+        return (is_object($value) and $value instanceof \Traversable);
     }
 
     /**
@@ -343,7 +343,7 @@ class Arr
     {
         foreach ($array as $key => $val) {
             if (is_array($val)) {
-                $array[$key] = Arr::map($callbacks, $array[$key]);
+                $array[$key] = self::map($callbacks, $array[$key]);
             } elseif (!is_array($keys) or in_array($key, $keys)) {
                 if (is_array($callbacks)) {
                     foreach ($callbacks as $cb) {
@@ -384,13 +384,13 @@ class Arr
      */
     public static function merge($array1, $array2)
     {
-        if (Arr::isAssoc($array2)) {
+        if (self::isAssoc($array2)) {
             foreach ($array2 as $key => $value) {
                 if (is_array($value)
                     and isset($array1[$key])
                     and is_array($array1[$key])
                 ) {
-                    $array1[$key] = Arr::merge($array1[$key], $value);
+                    $array1[$key] = self::merge($array1[$key], $value);
                 } else {
                     $array1[$key] = $value;
                 }
@@ -405,13 +405,13 @@ class Arr
 
         if (func_num_args() > 2) {
             foreach (array_slice(func_get_args(), 2) as $array2) {
-                if (Arr::isAssoc($array2)) {
+                if (self::isAssoc($array2)) {
                     foreach ($array2 as $key => $value) {
                         if (is_array($value)
                             and isset($array1[$key])
                             and is_array($array1[$key])
                         ) {
-                            $array1[$key] = Arr::merge($array1[$key], $value);
+                            $array1[$key] = self::merge($array1[$key], $value);
                         } else {
                             $array1[$key] = $value;
                         }
@@ -551,12 +551,12 @@ class Arr
      */
     public static function flatten($array)
     {
-        $is_assoc = Arr::isAssoc($array);
+        $is_assoc = self::isAssoc($array);
 
         $flat = [];
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $flat = array_merge($flat, Arr::flatten($value));
+                $flat = array_merge($flat, self::flatten($value));
             } else {
                 if ($is_assoc) {
                     $flat[$key] = $value;
