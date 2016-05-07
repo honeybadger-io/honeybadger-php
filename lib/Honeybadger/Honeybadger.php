@@ -252,7 +252,7 @@ class Honeybadger
     /**
      * API version
      */
-    const VERSION    = '0.1.0';
+    const VERSION = '0.1.0';
     /**
      * API name
      */
@@ -260,9 +260,9 @@ class Honeybadger
     /**
      * VCS location
      */
-    const NOTIFIER_URL  = 'https://github.com/honeybadger-io/honeybadger-php';
+    const NOTIFIER_URL = 'https://github.com/honeybadger-io/honeybadger-php';
     /**
      * Entry prefix
      */
-    const LOG_PREFIX    = '** [Honeybadger] ';
+    const LOG_PREFIX = '** [Honeybadger] ';
 } // End Honeybadger

@@ -388,7 +388,7 @@ class Config extends SemiOpenStruct
      *
      * @return  void
      */
-    public function ignoreOnly(/* $name1, $name2, $name3, ... */)
+    public function ignoreOnly($names)
     {
         $this->ignore = func_get_args();
     }
@@ -398,7 +398,7 @@ class Config extends SemiOpenStruct
      *
      * @param  array $names A list of user agents to ignore
      */
-    public function ignoreUserAgentsOnly(/* $name1, $name2, $name3, ... */)
+    public function ignoreUserAgentsOnly($names)
     {
         $this->ignore_user_agents = func_get_args();
     }

@@ -146,7 +146,7 @@ class HoneybadgerTest extends TestCase
     public function test_notify_should_return_null_when_not_public()
     {
         Honeybadger::$config->environment_name = 'development';
-        $this->assertEmpty(Honeybadger::notify($this->build_exception()));
+        $this->assertEmpty(Honeybadger::notify($this->buildException()));
     }
 
     public function test_notify_should_return_id_when_delivered()
@@ -156,7 +156,7 @@ class HoneybadgerTest extends TestCase
         if (!Honeybadger::$config->api_key)
             return $this->markTestSkipped('No API key configured.');
 
-        $this->assertNotEmpty(Honeybadger::notify($this->build_exception()));
+        $this->assertNotEmpty(Honeybadger::notify($this->buildException()));
     }
 
     public function test_notify_should_accept_array_for_exception()
@@ -179,7 +179,7 @@ class HoneybadgerTest extends TestCase
             return $this->markTestSkipped('No API key configured.');
 
         $this->assertNotEmpty(Honeybadger::notifyOrIgnore(
-            $this->build_exception()
+            $this->buildException()
         ));
     }
 
@@ -187,7 +187,7 @@ class HoneybadgerTest extends TestCase
     {
         Honeybadger::$config->ignore = ['Exception'];
         $this->assertEmpty(Honeybadger::notifyOrIgnore(
-            $this->build_exception()
+            $this->buildException()
         ));
     }
 }

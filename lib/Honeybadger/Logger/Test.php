@@ -19,8 +19,8 @@ class Test extends Logger
     public $entries = [];
 
     /**
-     * @param string $severity
-     * @param string|null   $message
+     * @param string      $severity
+     * @param string|null $message
      *
      * @return void
      */

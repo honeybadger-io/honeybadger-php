@@ -33,7 +33,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     protected $_default_config = [];
 
-    public function build_exception(array $options = [])
+    public function buildException(array $options = [])
     {
         if (!Arr::get($options, 'message')) {
             $options['message'] = \Phaker::lorem()->sentence;
@@ -54,13 +54,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->_helpers = new Helpers;
 
         if (!isset($this->_environment_default['\\Honeybadger\\Honeybadger::$config'])) {
-            $api_key = Arr::get($_SERVER, 'HONEYBADGER_API_KEY');
+            $apiKey = Arr::get($_SERVER, 'HONEYBADGER_API_KEY');
 
             $config = new Config(Arr::merge([
                                                 'project_root'     => realpath(__DIR__ . '/../..'),
                                                 'framework'        => 'PHPUnit',
                                                 'environment_name' => 'testing',
-                                                'api_key'          => empty($api_key) ? null : $api_key,
+                                                'api_key'          => empty($apiKey) ? null : $apiKey,
                                             ], $this->_default_config));
 
             $this->_environment_default['\\Honeybadger\\Honeybadger::$config'] = $config;
