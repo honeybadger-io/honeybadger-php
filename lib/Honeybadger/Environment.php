@@ -139,9 +139,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     {
         if (empty($this['SERVER_PORT'])) {
             return $this->isSecure() ? 443 : 80;
-        } else {
-            return $this['SERVER_PORT'];
         }
+
+        return $this['SERVER_PORT'];
     }
 
     /**
@@ -243,9 +243,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     {
         if (in_array($key, $this->_attribute_methods)) {
             return $this->$key();
-        } else {
-            throw new NonExistentProperty($this, $key);
         }
+
+        throw new NonExistentProperty($this, $key);
     }
 
     /**
@@ -259,9 +259,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
             return $this->data[$key];
         } elseif (in_array($key, $this->_attribute_methods)) {
             return $this->$key();
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

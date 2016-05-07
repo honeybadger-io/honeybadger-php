@@ -384,43 +384,22 @@ class Arr
      */
     public static function merge($array1, $array2)
     {
-        if (self::isAssoc($array2)) {
-            foreach ($array2 as $key => $value) {
-                if (is_array($value)
-                    and isset($array1[$key])
-                    and is_array($array1[$key])
-                ) {
-                    $array1[$key] = self::merge($array1[$key], $value);
-                } else {
-                    $array1[$key] = $value;
-                }
-            }
-        } else {
-            foreach ($array2 as $value) {
-                if (!in_array($value, $array1, true)) {
-                    $array1[] = $value;
-                }
-            }
-        }
-
-        if (func_num_args() > 2) {
-            foreach (array_slice(func_get_args(), 2) as $array2) {
-                if (self::isAssoc($array2)) {
-                    foreach ($array2 as $key => $value) {
-                        if (is_array($value)
-                            and isset($array1[$key])
-                            and is_array($array1[$key])
-                        ) {
-                            $array1[$key] = self::merge($array1[$key], $value);
-                        } else {
-                            $array1[$key] = $value;
-                        }
+        foreach (array_slice(func_get_args(), 1) as $array2) {
+            if (self::isAssoc($array2)) {
+                foreach ($array2 as $key => $value) {
+                    if (is_array($value)
+                        and isset($array1[$key])
+                        and is_array($array1[$key])
+                    ) {
+                        $array1[$key] = self::merge($array1[$key], $value);
+                    } else {
+                        $array1[$key] = $value;
                     }
-                } else {
-                    foreach ($array2 as $value) {
-                        if (!in_array($value, $array1, true)) {
-                            $array1[] = $value;
-                        }
+                }
+            } else {
+                foreach ($array2 as $value) {
+                    if (!in_array($value, $array1, true)) {
+                        $array1[] = $value;
                     }
                 }
             }
@@ -472,15 +451,9 @@ class Arr
      */
     public static function overwrite($array1, $array2)
     {
-        foreach (array_intersect_key($array2, $array1) as $key => $value) {
-            $array1[$key] = $value;
-        }
-
-        if (func_num_args() > 2) {
-            foreach (array_slice(func_get_args(), 2) as $array2) {
-                foreach (array_intersect_key($array2, $array1) as $key => $value) {
-                    $array1[$key] = $value;
-                }
+        foreach (array_slice(func_get_args(), 1) as $array2) {
+            foreach (array_intersect_key($array2, $array1) as $key => $value) {
+                $array1[$key] = $value;
             }
         }
 

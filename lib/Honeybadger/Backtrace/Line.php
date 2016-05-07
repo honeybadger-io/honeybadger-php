@@ -62,31 +62,35 @@ class Line extends SemiOpenStruct
      * @param  string  $method          The method referenced in the given
      *                                  backtrace line
      *
-     * @param  string  $filtered_file   The filename in the given backtrace
+     * @param  string  $filteredFile    The filename in the given backtrace
      *                                  line after filter
-     * @param  integer $filtered_number The line number of the file after
+     * @param  integer $filteredNumber  The line number of the file after
      *                                  filter
-     * @param  string  $filtered_method The method referenced in the given
+     * @param  string  $filteredMethod  The method referenced in the given
      *                                  backtrace line after filter
      */
-    public function __construct($file, $number, $method, $filtered_file = null,
-                                $filtered_number = null, $filtered_method = null)
+    public function __construct($file,
+                                $number,
+                                $method,
+                                $filteredFile = null,
+                                $filteredNumber = null,
+                                $filteredMethod = null)
     {
-        if ($filtered_file === null) {
-            $filtered_file = $file;
+        if ($filteredFile === null) {
+            $filteredFile = $file;
         }
 
-        if ($filtered_number === null) {
-            $filtered_number = $number;
+        if ($filteredNumber === null) {
+            $filteredNumber = $number;
         }
 
-        if ($filtered_method === null) {
-            $filtered_method = $method;
+        if ($filteredMethod === null) {
+            $filteredMethod = $method;
         }
 
-        $this->filtered_file   = $filtered_file;
-        $this->filtered_number = $filtered_number;
-        $this->filtered_method = $filtered_method;
+        $this->filtered_file   = $filteredFile;
+        $this->filtered_number = $filteredNumber;
+        $this->filtered_method = $filteredMethod;
         $this->file            = $file;
         $this->number          = $number;
         $this->method          = $method;
@@ -95,23 +99,23 @@ class Line extends SemiOpenStruct
     /**
      * Parses a single line of a given backtrace.
      *
-     * @param   array $unparsed_line The raw line from `caller` or some
+     * @param   array $unparsedLine  The raw line from `caller` or some
      *                               backtrace.
      * @param   array $options
      *
      * @return  Line    The parsed backtrace line.
      */
-    public static function parse(array $unparsed_line, array $options = [])
+    public static function parse(array $unparsedLine, array $options = [])
     {
-        if (!isset($unparsed_line['file']) or empty($unparsed_line['file'])) {
-            $unparsed_line['file'] = '{PHP internal call}';
+        if (!isset($unparsedLine['file']) or empty($unparsedLine['file'])) {
+            $unparsedLine['file'] = '{PHP internal call}';
         }
 
         if (!isset($options['filters'])) {
             $options['filters'] = [];
         }
 
-        $filtered = Filter::callbacks($options['filters'], $unparsed_line);
+        $filtered = Filter::callbacks($options['filters'], $unparsedLine);
 
         if ($filtered === null)
             return null;
@@ -124,7 +128,7 @@ class Line extends SemiOpenStruct
                 ]);
 
         // Extract the original line parameters
-        extract($unparsed_line + [
+        extract($unparsedLine + [
                     'file'     => '',
                     'line'     => '',
                     'function' => '',
@@ -225,10 +229,10 @@ class Line extends SemiOpenStruct
         $size     = $start + $duration;
         $lines    = [];
 
-        $f = fopen($file, 'r');
+        $file_handle = fopen($file, 'r');
 
         for ($l = 1; $l < $size; $l++) {
-            $line = fgets($f);
+            $line = fgets($file_handle);
 
             if ($l < $start)
                 continue;

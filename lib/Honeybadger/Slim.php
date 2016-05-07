@@ -97,7 +97,7 @@ class Slim extends \Slim\Middleware
      */
     protected static function init(\Slim\Slim $app, array $options = [])
     {
-        if ($logger = $app->getLog()) {
+        if ($app->getLog()) {
             // Wrap the application logger.
             Honeybadger::$logger = new \Honeybadger\Logger\Slim($app->getLog());
         }
@@ -115,34 +115,34 @@ class Slim extends \Slim\Middleware
     }
 
     /**
-     * @param int $error_id error number
+     * @param int $errorId error number
      *
      * @return  void
      */
-    private function informUsers($error_id)
+    private function informUsers($errorId)
     {
         if (empty(Honeybadger::$config->user_information))
             return;
 
-        $response  = $this->app->response();
-        $user_info = $this->userInfo(Honeybadger::$config->user_information,
-                                     $error_id);
+        $response = $this->app->response();
+        $userInfo = $this->userInfo(Honeybadger::$config->user_information,
+                                    $errorId);
 
         // Substitute placeholder comment with user information.
         $response->body(str_replace(
-                            '<!-- HONEYBADGER ERROR -->', $user_info, $response->body()
+                            '<!-- HONEYBADGER ERROR -->', $userInfo, $response->body()
                         ));
     }
 
     /**
      * @param $info     information string
-     * @param $error_id error number
+     * @param $errorId  error number
      *
      * @return  String
      */
-    private function userInfo($info, $error_id)
+    private function userInfo($info, $errorId)
     {
-        return preg_replace('/\{\{\s*error_id\s*\}\}/', $error_id, $info);
+        return preg_replace('/\{\{\s*error_id\s*\}\}/', $errorId, $info);
     }
 
     /**
@@ -204,7 +204,7 @@ class Slim extends \Slim\Middleware
      */
     private function formattedCgiData($env)
     {
-        $cgi_data = [];
+        $cgiData = [];
 
         foreach ($env as $key => $value) {
             // Honeybadger has an easier time picking up details when they
@@ -218,10 +218,10 @@ class Slim extends \Slim\Middleware
                 $value = '#<' . get_class($value) . ':' . spl_object_hash($value) . '>';
             }
 
-            $cgi_data[$key] = (string)$value;
+            $cgiData[$key] = (string)$value;
         }
 
-        return $cgi_data;
+        return $cgiData;
     }
 
     /**
@@ -241,11 +241,8 @@ class Slim extends \Slim\Middleware
         $router->getMatchedRoutes($request->getMethod(),
                                   $request->getPathInfo());
 
-        if ($route = $router->getCurrentRoute()) {
-            $params = $route->getParams();
-        } else {
-            $params = [];
-        }
+        $route  = $router->getCurrentRoute();
+        $params = $route ? $route->getParams() : [];
 
         // Merge the route and request parameters into one array.
         return Arr::merge($request->params(), $params);

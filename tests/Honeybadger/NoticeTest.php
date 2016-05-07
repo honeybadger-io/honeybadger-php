@@ -35,7 +35,7 @@ class NoticeTest extends TestCase
 
     public function test_factory_should_merge_config_options()
     {
-        $exception = $this->build_exception();
+        $exception = $this->buildException();
 
         $notice = Notice::factory([
                                       'exception' => $exception,
