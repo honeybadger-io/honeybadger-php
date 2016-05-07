@@ -13,19 +13,30 @@ use Honeybadger\Logger;
 class Test extends Logger
 {
 
-    public $entries = array();
+    /**
+     * @var array
+     */
+    public $entries = [];
 
+    /**
+     * @param string $severity
+     * @param string|null   $message
+     *
+     * @return void
+     */
     public function write($severity, $message = null)
     {
-        $this->entries[] = array(
+        $this->entries[] = [
             'severity' => $severity,
-            'message' => $message,
-        );
+            'message'  => $message,
+        ];
     }
 
+    /**
+     * @return array
+     */
     public function lastEntry()
     {
         return end($this->entries);
     }
-
 } // End Test

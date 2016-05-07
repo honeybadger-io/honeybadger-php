@@ -22,7 +22,7 @@ class Helpers
     /**
      * @var  array  Collection of names of superglobals.
      */
-    protected static $superglobals = array(
+    protected static $superglobals = [
         '_SERVER',
         '_GET',
         '_POST',
@@ -31,7 +31,11 @@ class Helpers
         '_SESSION',
         '_REQUEST',
         '_ENV',
-    );
+    ];
+    /**
+     * @var  array  Backup of environment variables.
+     */
+    protected $environment_backup = [];
 
     /**
      * Checks for internet connectivity.
@@ -43,7 +47,7 @@ class Helpers
         if (self::$has_internet === null) {
             // The @ operator is used here to avoid DNS errors
             // when there is no connection.
-            $sock = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
+            $sock               = @fsockopen("www.google.com", 80, $errno, $errstr, 1);
             self::$has_internet = (boolean)$sock;
         }
 
@@ -51,10 +55,11 @@ class Helpers
     }
 
     /**
-     * Helper function which replaces foward slashes with
+     * Helper function which replaces forward slashes with
      * OS-specific delimiters.
      *
      * @param   string $path Path to replace slashes in.
+     *
      * @return  string
      */
     public static function dirSeparator($path)
@@ -63,12 +68,18 @@ class Helpers
     }
 
     /**
-     * @var  array  Backup of environment variables.
+     * Restores the environment to its original state.
+     *
+     * @chainable
+     * @return  $this
      */
-    protected $environment_backup = array();
+    public function restoreEnvironment()
+    {
+        $this->setEnvironment($this->environment_backup);
+    }
 
     /**
-     * Allows easy setting and backing up of enviroment configurations.
+     * Allows easy setting and backing up of environment configurations.
      *
      * Option types are checked in the following order:
      *
@@ -77,12 +88,13 @@ class Helpers
      * * Config option
      *
      * @param  $environment  Array of environment to set
+     *
      * @return void
      */
-    public function setEnvironment(array $environment = array())
+    public function setEnvironment(array $environment = [])
     {
         if (!count($environment))
-            return false;
+            return;
 
         foreach ($environment as $option => $value) {
             $backup_needed = !array_key_exists($option, $this->environment_backup);
@@ -119,16 +131,4 @@ class Helpers
             }
         }
     }
-
-    /**
-     * Restores the environment to its original state.
-     *
-     * @chainable
-     * @return  $this
-     */
-    public function restoreEnvironment()
-    {
-        $this->setEnvironment($this->environment_backup);
-    }
-
 } // End Helpers

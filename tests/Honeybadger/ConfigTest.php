@@ -10,7 +10,7 @@ namespace Honeybadger;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
 
-    private static $options = array(
+    private static $options = [
         'api_key', 'host', 'port', 'secure', 'http_open_timeout',
         'http_read_timeout', 'proxy_host', 'proxy_port', 'proxy_user',
         'proxy_pass', 'backtrace_filters', 'params_filters',
@@ -19,7 +19,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         'notifier_name', 'notifier_version', 'notifier_url',
         'user_information', 'framework', 'source_extract_radius',
         'send_request_session', 'debug', 'certificate_authority',
-    );
+    ];
 
     public function test_config_has_default_params_filters()
     {
@@ -35,14 +35,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $config = new Config;
         $this->assertEquals(realpath(__DIR__ . '/../../resources/ca-bundle.crt'),
-            $config->certificate_authority);
+                            $config->certificate_authority);
     }
 
     public function test_new_config_does_not_overwrite_certificate_authority()
     {
-        $config = new Config(array(
-            'certificate_authority' => 'foo',
-        ));
+        $config = new Config([
+                                 'certificate_authority' => 'foo',
+                             ]);
 
         $this->assertEquals('foo', $config->certificate_authority);
     }
@@ -58,25 +58,25 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_new_config_sets_supplied_options()
     {
-        $options = array(
-            'api_key' => '123abc',
-            'host' => 'my-notifier.io',
-            'port' => 123,
-            'secure' => false,
-            'certificate_authority' => '/etc/ssl/ca-bundle.crt',
-            'http_open_timeout' => 11,
-            'http_read_timeout' => 21,
-            'proxy_host' => '127.0.0.1',
-            'proxy_port' => '8118',
-            'proxy_user' => 'admin',
-            'proxy_pass' => '12345',
-            'development_environments' => array('bananas'),
-            'environment_name' => 'winning',
-            'framework' => 'DIY',
-            'source_extract_radius' => 10,
-            'send_request_session' => false,
-            'debug' => true,
-        );
+        $options = [
+            'api_key'                  => '123abc',
+            'host'                     => 'my-notifier.io',
+            'port'                     => 123,
+            'secure'                   => false,
+            'certificate_authority'    => '/etc/ssl/ca-bundle.crt',
+            'http_open_timeout'        => 11,
+            'http_read_timeout'        => 21,
+            'proxy_host'               => '127.0.0.1',
+            'proxy_port'               => '8118',
+            'proxy_user'               => 'admin',
+            'proxy_pass'               => '12345',
+            'development_environments' => ['bananas'],
+            'environment_name'         => 'winning',
+            'framework'                => 'DIY',
+            'source_extract_radius'    => 10,
+            'send_request_session'     => false,
+            'debug'                    => true,
+        ];
 
         $config = new Config($options);
 
@@ -87,11 +87,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_new_config_merges_default_params_filters()
     {
-        $config = new Config(array(
-            'params_filters' => array('ssn'),
-        ));
+        $config = new Config([
+                                 'params_filters' => ['ssn'],
+                             ]);
 
-        $expected = array(
+        $expected = [
             'ssn',
             'password',
             'password_confirmation',
@@ -99,7 +99,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'HTTP_PROXY_AUTHORIZATION',
             'PHP_AUTH_DIGEST',
             'PHP_AUTH_PW',
-        );
+        ];
 
         $this->assertEquals($expected, $config->params_filters);
     }
@@ -107,15 +107,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_new_config_merges_default_backtrace_filters()
     {
         $original_default_backtrace_filters = Config::$default_backtrace_filters;
-        Config::$default_backtrace_filters = array('strtolower');
+        Config::$default_backtrace_filters  = ['strtolower'];
 
-        $config = new Config(array(
-            'backtrace_filters' => array('strtoupper'),
-        ));
+        $config = new Config([
+                                 'backtrace_filters' => ['strtoupper'],
+                             ]);
 
-        $this->assertEquals(array(
-            'strtoupper', 'strtolower',
-        ), $config->backtrace_filters);
+        $this->assertEquals([
+                                'strtoupper', 'strtolower',
+                            ], $config->backtrace_filters);
 
         Config::$default_backtrace_filters = $original_default_backtrace_filters;
     }
@@ -123,15 +123,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_new_config_merges_default_ignored_classes()
     {
         $original_default_ignore = Config::$default_ignore;
-        Config::$default_ignore = array('Exception');
+        Config::$default_ignore  = ['Exception'];
 
-        $config = new Config(array(
-            'ignore' => array('HoneybadgerError'),
-        ));
+        $config = new Config([
+                                 'ignore' => ['HoneybadgerError'],
+                             ]);
 
-        $this->assertEquals(array(
-            'HoneybadgerError', 'Exception',
-        ), $config->ignore);
+        $this->assertEquals([
+                                'HoneybadgerError', 'Exception',
+                            ], $config->ignore);
 
         Config::$default_ignore = $original_default_ignore;
     }
@@ -159,7 +159,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config->ignoreOnly('Error');
         $config->ignoreOnly('GenericError', 'Exception');
 
-        $this->assertEquals(array('GenericError', 'Exception'), $config->ignore);
+        $this->assertEquals(['GenericError', 'Exception'], $config->ignore);
     }
 
     public function test_ignore_user_agents_only_overrides_existing_ignored_user_agents()
@@ -169,20 +169,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config->ignoreUserAgentsOnly('Chrome');
         $config->ignoreUserAgentsOnly('Mozilla', 'Internet Explorer');
 
-        $this->assertEquals(array('Mozilla', 'Internet Explorer'), $config->ignore_user_agents);
+        $this->assertEquals(['Mozilla', 'Internet Explorer'], $config->ignore_user_agents);
     }
 
     public function test_merge_returns_array_merged_with_supplied_options()
     {
-        $config = new Config(array(
-            'api_key' => 'foo',
-            'http_open_timeout' => 10,
-        ));
+        $config = new Config([
+                                 'api_key'           => 'foo',
+                                 'http_open_timeout' => 10,
+                             ]);
 
-        $actual = $config->merge(array(
-            'api_key' => 'bar',
-            'host' => 'localhost',
-        ));
+        $actual = $config->merge([
+                                     'api_key' => 'bar',
+                                     'host'    => 'localhost',
+                                 ]);
 
         $this->assertEquals('bar', $actual['api_key']);
         $this->assertEquals('localhost', $actual['host']);
@@ -191,18 +191,18 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_be_public_when_environment_not_development()
     {
-        $config = new Config(array(
-            'environment_name' => 'production',
-        ));
+        $config = new Config([
+                                 'environment_name' => 'production',
+                             ]);
 
         $this->assertTrue($config->isPublic());
     }
 
     public function test_should_not_be_public_when_environment_development()
     {
-        $config = new Config(array(
-            'environment_name' => 'development',
-        ));
+        $config = new Config([
+                                 'environment_name' => 'development',
+                             ]);
 
         $this->assertFalse($config->isPublic());
     }
@@ -230,7 +230,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_changing_secure_updates_port_with_default()
     {
-        $config = new Config(array('secure' => false));
+        $config = new Config(['secure' => false]);
         $this->assertEquals(80, $config->port);
 
         $config->secure = true;
@@ -239,14 +239,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_log_level_should_be_info_when_debug()
     {
-        $config = new Config(array('debug' => true));
+        $config = new Config(['debug' => true]);
         $this->assertEquals(Logger::INFO, $config->logLevel);
     }
 
     public function test_log_level_should_be_debug_when_not_debug()
     {
-        $config = new Config(array('debug' => false));
+        $config = new Config(['debug' => false]);
         $this->assertEquals(Logger::DEBUG, $config->logLevel);
     }
-
 }

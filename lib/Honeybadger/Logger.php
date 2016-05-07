@@ -4,9 +4,8 @@ namespace Honeybadger;
 
 use Honeybadger\Errors\NonExistentProperty;
 use Honeybadger\Errors\ReadOnly;
-
-use Psr\Log\LoggerInterface;
 use Psr\Log\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Abstract logger. Should be extended to add support for various frameworks and
@@ -65,7 +64,7 @@ abstract class Logger implements LoggerInterface
      *
      * @var array $levels Logging levels
      */
-    protected static $levels = array(
+    protected static $levels = [
         self::DEBUG,
         self::INFO,
         self::NOTICE,
@@ -74,7 +73,7 @@ abstract class Logger implements LoggerInterface
         self::CRITICAL,
         self::ALERT,
         self::EMERGENCY
-    );
+    ];
 
     /**
      * @var  object  The real logger.
@@ -91,12 +90,12 @@ abstract class Logger implements LoggerInterface
      * Initializes by wrapping the supplied logger to offer a consistent API,
      * allow Honeybadger to log messages without issues.
      *
-     * @param  object $logger The *real* logger.
+     * @param  object $logger    The *real* logger.
      * @param  string $threshold The lowest severity to log.
      */
     public function __construct($logger = null, $threshold = self::DEBUG)
     {
-        $this->logger = $logger;
+        $this->logger    = $logger;
         $this->threshold = $threshold;
     }
 
@@ -120,11 +119,16 @@ abstract class Logger implements LoggerInterface
 
     /**
      * Interpolates context values into the message placeholders.
+     *
+     * @param       $message
+     * @param array $context
+     *
+     * @return string
      */
-    private function interpolate($message, array $context = array())
+    private function interpolate($message, array $context = [])
     {
         // build a replacement array with braces around the context keys
-        $replace = array();
+        $replace = [];
         foreach ($context as $key => $val) {
             $replace['{' . $key . '}'] = $val;
         }
@@ -148,11 +152,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function debug($message = null, array $context = array())
+    public function debug($message = null, array $context = [])
     {
         return $this->log(self::DEBUG, $message, $context);
     }
@@ -172,11 +177,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function info($message = null, array $context = array())
+    public function info($message = null, array $context = [])
     {
         return $this->log(self::INFO, $message, $context);
     }
@@ -196,11 +202,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function notice($message = null, array $context = array())
+    public function notice($message = null, array $context = [])
     {
         return $this->log(self::NOTICE, $message, $context);
     }
@@ -220,11 +227,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function warning($message = null, array $context = array())
+    public function warning($message = null, array $context = [])
     {
         return $this->log(self::WARNING, $message, $context);
     }
@@ -244,11 +252,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function error($message = null, array $context = array())
+    public function error($message = null, array $context = [])
     {
         return $this->log(self::ERROR, $message, $context);
     }
@@ -268,11 +277,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function critical($message = null, array $context = array())
+    public function critical($message = null, array $context = [])
     {
         return $this->log(self::ALERT, $message, $context);
     }
@@ -292,11 +302,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function alert($message = null, array $context = array())
+    public function alert($message = null, array $context = [])
     {
         return $this->log(self::ALERT, $message, $context);
     }
@@ -316,11 +327,12 @@ abstract class Logger implements LoggerInterface
      *     "** [Honeybadger] This message is bananas"
      *
      * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function emergency($message = null, array $context = array())
+    public function emergency($message = null, array $context = [])
     {
         return $this->log(self::EMERGENCY, $message, $context);
     }
@@ -331,7 +343,8 @@ abstract class Logger implements LoggerInterface
      * of entries.
      *
      * @param   string $severity The severity of the message.
-     * @param   string $message The message to log.
+     * @param   string $message  The message to log.
+     *
      * @return  $this
      * @chainable
      */
@@ -342,12 +355,13 @@ abstract class Logger implements LoggerInterface
      * `$severity` is within threshold.
      *
      * @param   string $severity The severity of the message.
-     * @param   string $message The message to log.
-     * @param   array $context Values to replace in message.
+     * @param   string $message  The message to log.
+     * @param   array  $context  Values to replace in message.
+     *
      * @return  $this
      * @chainable
      */
-    public function log($severity, $message = null, array $context = array())
+    public function log($severity, $message = null, array $context = [])
     {
         if (array_search($severity, static::$levels) >= array_search($this->threshold, static::$levels)) {
             $this->write($severity, $this->format($message, $context));
@@ -367,10 +381,11 @@ abstract class Logger implements LoggerInterface
      *     // => "** [Honeybadger] Hello, world!"
      *
      * @param   string $message The message to format.
-     * @param   array $context Values to replace in message.
+     * @param   array  $context Values to replace in message.
+     *
      * @return  string  The formatted message.
      */
-    protected function format($message, array $context = array())
+    protected function format($message, array $context = [])
     {
         return Honeybadger::LOG_PREFIX . $this->interpolate($message, $context);
     }

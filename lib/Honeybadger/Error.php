@@ -3,23 +3,38 @@
 namespace Honeybadger;
 
 /**
- * Based on [Kohana's error handler](https://github.com/kohana/core/blob/3.3/master/classes/Kohana/Core.php#L984:L995).
+ * Based on [Kohana's error
+ * handler](https://github.com/kohana/core/blob/3.3/master/classes/Kohana/Core.php#L984:L995).
  *
  * @package  Honeybadger
  */
 class Error
 {
+    /**
+     * @var
+     */
     private static $previous_handler;
 
+    /**
+     *
+     */
     public static function register_handler()
     {
         self::$previous_handler = set_error_handler(
-            array(
+            [
                 __CLASS__, 'handle',
-            )
+            ]
         );
     }
 
+    /**
+     * @param      $code
+     * @param      $error
+     * @param null $file
+     * @param null $line
+     *
+     * @return bool|mixed
+     */
     public static function handle($code, $error, $file = null, $line = null)
     {
         if (error_reporting() & $code) {
@@ -45,5 +60,4 @@ class Error
         // Execute the PHP error handler.
         return false;
     }
-
 } // End Error

@@ -12,16 +12,17 @@ class LineTest extends \PHPUnit_Framework_TestCase
 
     public function test_attributes_read_only()
     {
-        $attributes = array('file', 'number', 'method', 'source',
-            'filtered_file', 'filtered_number', 'filtered_method');
-        $line = new Line('foo', 'bar', 'baz');
+        $attributes = ['file', 'number', 'method', 'source',
+                       'filtered_file', 'filtered_number', 'filtered_method'];
+        $line       = new Line('foo', 'bar', 'baz');
 
         foreach ($attributes as $attribute) {
             $line->$attribute;
 
             try {
                 $line->$attribute = 'foo';
-            } catch (\Exception $ex) {
+            }
+            catch (\Exception $ex) {
                 continue;
             }
 
@@ -33,28 +34,31 @@ class LineTest extends \PHPUnit_Framework_TestCase
     {
         $scream = function ($line) {
             $line['file'] = strtoupper($line['file']);
+
             return $line;
         };
 
         $whisper = function ($line) {
             $line['function'] = strtolower($line['function']);
+
             return $line;
         };
 
         $lie = function ($line) {
             $line['line'] *= 3;
+
             return $line;
         };
 
-        $callbacks = array($scream, $whisper, $lie);
+        $callbacks = [$scream, $whisper, $lie];
 
-        $data = array(
-            'file' => 'whatisthis.php',
-            'line' => 4,
+        $data = [
+            'file'     => 'whatisthis.php',
+            'line'     => 4,
             'function' => 'I_DONT_EVEN',
-        );
+        ];
 
-        $line = Line::parse($data, array('filters' => $callbacks));
+        $line     = Line::parse($data, ['filters' => $callbacks]);
         $expected = new Line('WHATISTHIS.PHP', 12, 'i_dont_even');
 
         $this->assertEquals((string)$line, (string)$expected);
@@ -64,33 +68,33 @@ class LineTest extends \PHPUnit_Framework_TestCase
     {
         $callback = function ($line) {
         };
-        $line = Line::parse(array(), array(
-            'filters' => array($callback),
-        ));
+        $line     = Line::parse([], [
+            'filters' => [$callback],
+        ]);
 
         $this->assertNull($line);
     }
 
     public function provider_parse_returns_line()
     {
-        return array(
-            array(
+        return [
+            [
                 new Line('path/to/awesome.php', 14, 'failz'),
-                array(
-                    'file' => 'path/to/awesome.php',
-                    'line' => 14,
+                [
+                    'file'     => 'path/to/awesome.php',
+                    'line'     => 14,
                     'function' => 'failz',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 new Line('feeling', 'sorta', 'lucky'),
-                array(
-                    'file' => 'feeling',
-                    'line' => 'sorta',
+                [
+                    'file'     => 'feeling',
+                    'line'     => 'sorta',
                     'function' => 'lucky',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -104,20 +108,20 @@ class LineTest extends \PHPUnit_Framework_TestCase
 
     public function provider_string_conversion()
     {
-        return array(
-            array(
+        return [
+            [
                 "[PROJECT_ROOT]/app/models/user.php:14:in `find'",
                 new Line('[PROJECT_ROOT]/app/models/user.php', 14, 'find'),
-            ),
-            array(
+            ],
+            [
                 "{PHP internal call}:1:in `baz'",
                 new Line('{PHP internal call}', 1, 'baz'),
-            ),
-            array(
+            ],
+            [
                 "filtered:28:in `redacted'",
                 new Line('once', 'upon', 'a time', 'filtered', 28, 'redacted'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -130,24 +134,24 @@ class LineTest extends \PHPUnit_Framework_TestCase
 
     public function provider_is_application()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 new Line('[PROJECT_ROOT]/foo.php', 11, 'bar'),
-            ),
-            array(
+            ],
+            [
                 false,
                 new Line(' [PROJECT_ROOT]/bar.php', 22, 'baz'),
-            ),
-            array(
+            ],
+            [
                 true,
                 new Line('[PROJECT_ROOT]', 123, 'something'),
-            ),
-            array(
+            ],
+            [
                 false,
                 new Line('/var/www/baz.php', 58, 'echo'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -161,24 +165,24 @@ class LineTest extends \PHPUnit_Framework_TestCase
     public function test_source()
     {
         $line = new Line(path_to_fixture('MyClass.php'), 1, 'does_amazing_things');
-        $this->assertEquals(array(
-            '1' => '<?php',
-            '2' => '',
-            '3' => 'class MyClass',
-            '4' => '{',
-        ), $line->source);
+        $this->assertEquals([
+                                '1' => '<?php',
+                                '2' => '',
+                                '3' => 'class MyClass',
+                                '4' => '{',
+                            ], $line->source);
     }
 
     public function test_source_replaces_tabs_with_spaces()
     {
         $line = new Line(path_to_fixture('MyClass.php'), 10, 'does_amazing_things');
-        $this->assertEquals(array(
-            '7' => '    {',
-            '8' => '        for ($i = 0; $i < 25; $i++) {',
-            '9' => '            echo "Check out this amazing stuff!\n";',
-            '10' => '        }',
-            '11' => ''
-        ), $line->source);
+        $this->assertEquals([
+                                '7'  => '    {',
+                                '8'  => '        for ($i = 0; $i < 25; $i++) {',
+                                '9'  => '            echo "Check out this amazing stuff!\n";',
+                                '10' => '        }',
+                                '11' => ''
+                            ], $line->source);
     }
 
     public function test_source_returns_empty_array_for_non_existent()
@@ -189,32 +193,32 @@ class LineTest extends \PHPUnit_Framework_TestCase
 
     public function provider_to_array()
     {
-        return array(
-            array(
-                array(
-                    'file' => 'foo',
+        return [
+            [
+                [
+                    'file'   => 'foo',
                     'number' => 'bar',
                     'method' => 'baz'
-                ),
+                ],
                 new Line('foo', 'bar', 'baz'),
-            ),
-            array(
-                array(
-                    'file' => 'this',
+            ],
+            [
+                [
+                    'file'   => 'this',
                     'number' => 'is',
                     'method' => 'filtered'
-                ),
+                ],
                 new Line('foo', 'bar', 'baz', 'this', 'is', 'filtered'),
-            ),
-            array(
-                array(
-                    'file' => 'this is',
+            ],
+            [
+                [
+                    'file'   => 'this is',
                     'number' => 'partially',
                     'method' => 'filtered'
-                ),
+                ],
                 new Line('this is', 'partially', 'baz', null, null, 'filtered'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -224,5 +228,4 @@ class LineTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals($expectation, $line->toArray());
     }
-
 }

@@ -10,35 +10,25 @@ use Honeybadger\Util\Arr;
 class Honeybadger
 {
     // Library versions
-    const VERSION = '0.1.0';
-    const JS_VERSION = '0.0.2';
-
-    // Notifier constants
-    const NOTIFIER_NAME = 'honeybadger-php';
-    const NOTIFIER_URL = 'https://github.com/honeybadger-io/honeybadger-php';
-    const LOG_PREFIX = '** [Honeybadger] ';
-
     /**
      * @var  Sender  Object responding to `send_to_honeybadger`.
      */
     public static $sender;
-
     /**
      * @var  Config  Honeybadger configuration.
      */
     public static $config;
 
+    // Notifier constants
     /**
      * @var  Logger  Honeybadger logger.
      */
     public static $logger;
-
     /**
      * @var  array  Stores custom data for sending user-specific information
      *              in notifications.
      */
-    protected static $context = array();
-
+    protected static $context = [];
     /**
      * @var  boolean  Whether Honeybadger has been initialized.
      */
@@ -67,30 +57,6 @@ class Honeybadger
     }
 
     /**
-     * Merges supplied `$data` with current context. This can be anything,
-     * such as user information.
-     *
-     * @param   array $data Data to add to the context.
-     * @return  array  The current context.
-     */
-    public static function context(array $data = array())
-    {
-        return self::$context = array_merge(self::$context, $data);
-    }
-
-    /**
-     * Replaces the context with the supplied data. If no data is provided, the
-     * context is emptied.
-     *
-     * @param   array $data Data to add to the context.
-     * @return  array  The current context.
-     */
-    public static function resetContext(array $data = array())
-    {
-        return self::$context = $data;
-    }
-
-    /**
      * Registers Honeybadger as the global error and exception handler. Any
      * uncaught exceptions and errors will be sent to Honeybadger by default.
      *
@@ -102,26 +68,47 @@ class Honeybadger
         Exception::register_handler();
     }
 
+    /**
+     * Merges supplied `$data` with current context. This can be anything,
+     * such as user information.
+     *
+     * @param   array $data Data to add to the context.
+     *
+     * @return  array  The current context.
+     */
+    public static function context(array $data = [])
+    {
+        return self::$context = array_merge(self::$context, $data);
+    }
+
+    /**
+     * Replaces the context with the supplied data. If no data is provided, the
+     * context is emptied.
+     *
+     * @param   array $data Data to add to the context.
+     *
+     * @return  array  The current context.
+     */
+    public static function resetContext(array $data = [])
+    {
+        return self::$context = $data;
+    }
+
+    /**
+     *
+     */
     public static function reportEnvironmentInfo()
     {
         self::$logger->log(self::$config->logLevel,
-            'Environment info: {info}',
-            array(
-                'info' => self::environmentInfo(),
-            ));
+                           'Environment info: {info}',
+                           [
+                               'info' => self::environmentInfo(),
+                           ]);
     }
 
-    public static function reportResponseBody($response)
-    {
-        self::$logger->log(
-            self::$config->logLevel,
-            "Response from Honeybadger:\n{response}",
-            array(
-                'response' => $response,
-            )
-        );
-    }
-
+    /**
+     * @return string
+     */
     public static function environmentInfo()
     {
         $info = '[PHP: ' . phpversion() . ']';
@@ -138,68 +125,42 @@ class Honeybadger
     }
 
     /**
+     * @param $response
+     */
+    public static function reportResponseBody($response)
+    {
+        self::$logger->log(
+            self::$config->logLevel,
+            "Response from Honeybadger:\n{response}",
+            [
+                'response' => $response,
+            ]
+        );
+    }
+
+    /**
      * Sends a notice with the supplied `$exception` and `$options`.
      *
      * @param   \Exception $exception The exception.
-     * @param   array $options Additional options for the notice.
+     * @param   array      $options   Additional options for the notice.
+     *
      * @return  string     The error identifier.
      */
-    public static function notify($exception, array $options = array())
+    public static function notify($exception, array $options = [])
     {
         $notice = self::buildNoticeFor($exception, $options);
+
         return self::sendNotice($notice);
     }
 
     /**
-     * Sends a notice with the supplied `$exception` and `$options` if it is
-     * not an ignored class or filtered.
+     * @param       $exception
+     * @param array $options
      *
-     * @param   \Exception $exception The exception.
-     * @param   array $options Additional options for the notice.
-     * @return  string|null  The error identifier. `null` if skipped.
+     * @return Notice
      */
-    public static function notifyOrIgnore($exception,
-                                          array $options = array())
-    {
-        $notice = self::buildNoticeFor($exception, $options);
-
-        if (!$notice->isIgnored()) {
-            return self::sendNotice($notice);
-        }
-    }
-
-    public static function buildLookupHashFor($exception,
-                                              array $options = array())
-    {
-        $notice = self::buildNoticeFor($exception, $options);
-
-        $result = array(
-            'action' => $notice->action,
-            'component' => $notice->component,
-            'environment_name' => 'production',
-        );
-
-        if ($notice->error_class) {
-            $result['error_class'] = $notice->error_class;
-        }
-
-        if ($notice->backtrace->hasLines()) {
-            $result['file'] = $notice->backtrace->lines[0]->file;
-            $result['line_number'] = $notice->backtrace->lines[0]->number;
-        }
-
-        return $result;
-    }
-
-    private static function sendNotice($notice)
-    {
-        if (self::$config->isPublic()) {
-            return $notice->deliver();
-        }
-    }
-
     private static function buildNoticeFor($exception,
-                                           array $options = array())
+                                           array $options = [])
     {
         if ($exception instanceof \Exception) {
             $options['exception'] = self::unwrapException($exception);
@@ -210,6 +171,11 @@ class Honeybadger
         return Notice::factory($options);
     }
 
+    /**
+     * @param $exception
+     *
+     * @return mixed
+     */
     private static function unwrapException($exception)
     {
         if ($previous = $exception->getPrevious()) {
@@ -219,4 +185,84 @@ class Honeybadger
         return $exception;
     }
 
+    /**
+     * @param $notice
+     *
+     * @return null
+     */
+    private static function sendNotice($notice)
+    {
+        if (self::$config->isPublic()) {
+            return $notice->deliver();
+        }
+
+        return null;
+    }
+
+    /**
+     * Sends a notice with the supplied `$exception` and `$options` if it is
+     * not an ignored class or filtered.
+     *
+     * @param   \Exception $exception The exception.
+     * @param   array      $options   Additional options for the notice.
+     *
+     * @return  string|null  The error identifier. `null` if skipped.
+     */
+    public static function notifyOrIgnore($exception,
+                                          array $options = [])
+    {
+        $notice = self::buildNoticeFor($exception, $options);
+
+        if (!$notice->isIgnored()) {
+            return self::sendNotice($notice);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param       $exception
+     * @param array $options
+     *
+     * @return array
+     */
+    public static function buildLookupHashFor($exception,
+                                              array $options = [])
+    {
+        $notice = self::buildNoticeFor($exception, $options);
+
+        $result = [
+            'action'           => $notice->action,
+            'component'        => $notice->component,
+            'environment_name' => 'production',
+        ];
+
+        if ($notice->error_class) {
+            $result['error_class'] = $notice->error_class;
+        }
+
+        if ($notice->backtrace->hasLines()) {
+            $result['file']        = $notice->backtrace->lines[0]->file;
+            $result['line_number'] = $notice->backtrace->lines[0]->number;
+        }
+
+        return $result;
+    }
+
+    /**
+     * API version
+     */
+    const VERSION    = '0.1.0';
+    /**
+     * API name
+     */
+    const NOTIFIER_NAME = 'honeybadger-php';
+    /**
+     * VCS location
+     */
+    const NOTIFIER_URL  = 'https://github.com/honeybadger-io/honeybadger-php';
+    /**
+     * Entry prefix
+     */
+    const LOG_PREFIX    = '** [Honeybadger] ';
 } // End Honeybadger
