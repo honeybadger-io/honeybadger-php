@@ -93,8 +93,9 @@ class Helpers
      */
     public function setEnvironment(array $environment = [])
     {
-        if (!count($environment))
+        if (!count($environment)) {
             return;
+        }
 
         foreach ($environment as $option => $value) {
             $backup_needed = !array_key_exists($option, $this->environment_backup);

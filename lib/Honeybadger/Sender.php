@@ -11,6 +11,10 @@ class Sender
 {
 
     /**
+     * Endpoint URL prefix
+     */
+    const NOTICES_URI = '/v1/notices/';
+    /**
      * @var array
      */
     protected static $default_headers = [
@@ -99,12 +103,11 @@ class Sender
      */
     private function userAgent()
     {
-        return sprintf('%s v%s (%s)', Honeybadger::NOTIFIER_NAME,
-                       Honeybadger::VERSION, Honeybadger::NOTIFIER_URL);
+        return sprintf(
+            '%s v%s (%s)',
+            Honeybadger::NOTIFIER_NAME,
+            Honeybadger::VERSION,
+            Honeybadger::NOTIFIER_URL
+        );
     }
-
-    /**
-     * Endpoint URL prefix
-     */
-    const NOTICES_URI = '/v1/notices/';
 } // End Sender

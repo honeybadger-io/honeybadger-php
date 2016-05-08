@@ -213,11 +213,15 @@ class Config extends SemiOpenStruct
         $this->values($config);
 
         // Merge in preconfigured defaults
-        $this->params_filters = array_merge($this->params_filters,
-                                            self::$default_params_filters);
+        $this->params_filters = array_merge(
+            $this->params_filters,
+            self::$default_params_filters
+        );
 
-        $this->backtrace_filters = array_merge($this->backtrace_filters,
-                                               self::$default_backtrace_filters);
+        $this->backtrace_filters = array_merge(
+            $this->backtrace_filters,
+            self::$default_backtrace_filters
+        );
 
         $this->ignore = array_merge($this->ignore, self::$default_ignore);
 
@@ -264,8 +268,9 @@ class Config extends SemiOpenStruct
      */
     public function set($option, $value)
     {
-        if ($option == 'secure')
+        if ($option == 'secure') {
             return $this->secure($value);
+        }
 
         $this->$option = $value;
 
@@ -283,8 +288,9 @@ class Config extends SemiOpenStruct
      */
     public function secure($value = null)
     {
-        if ($value === null)
+        if ($value === null) {
             return $this->_secure;
+        }
 
         $use_default   = ($this->port === null or !is_integer($this->port) or
             $this->port == $this->defaultPort());
@@ -422,8 +428,10 @@ class Config extends SemiOpenStruct
      */
     public function isPublic()
     {
-        return (!in_array($this->environment_name,
-                          $this->development_environments));
+        return (!in_array(
+            $this->environment_name,
+            $this->development_environments
+        ));
     }
 
     /**

@@ -20,8 +20,9 @@ class Filter
      */
     public static function callbacks(array $callbacks, array $data)
     {
-        if (empty($callbacks) or empty($data))
+        if (empty($callbacks) or empty($data)) {
             return $data;
+        }
 
         $filtered = [];
 
@@ -29,8 +30,9 @@ class Filter
             $data = call_user_func($callback, $data);
 
             // A filter wants to hide this data.
-            if ($data === null)
+            if ($data === null) {
                 return $data;
+            }
         }
 
         foreach ($data as $key => $value) {
@@ -51,8 +53,9 @@ class Filter
      */
     public static function params(array $keys = [], $params = [])
     {
-        if (empty($keys) or empty($params))
+        if (empty($keys) or empty($params)) {
             return $params;
+        }
 
         foreach ($params as $param => & $value) {
             if (Arr::isArray($value)) {
@@ -73,8 +76,9 @@ class Filter
      */
     public static function ignoreByClass(array $classes = [], $object)
     {
-        if (!is_object($object))
+        if (!is_object($object)) {
             return false;
+        }
 
         $object_class = get_class($object);
 
@@ -82,11 +86,13 @@ class Filter
             // Remove trailing and prefixing backslash (unnecessary namespaces)
             $class = trim($class, '\\');
 
-            if ($object_class === $class)
+            if ($object_class === $class) {
                 return true;
+            }
 
-            if (is_subclass_of($object, $class))
+            if (is_subclass_of($object, $class)) {
                 return true;
+            }
         }
 
         return false;
@@ -111,8 +117,9 @@ class Filter
         $config       = Notice::$current ?: Honeybadger::$config;
         $project_root = (string)$config->project_root;
 
-        if (strlen($project_root) === 0)
+        if (strlen($project_root) === 0) {
             return $line;
+        }
 
         $pattern      = '/^' . preg_quote($project_root, '/') . '/';
         $line['file'] = preg_replace($pattern, '[PROJECT_ROOT]', $line['file']);
@@ -157,8 +164,9 @@ class Filter
      */
     public static function honeybadgerPaths($line)
     {
-        if (!preg_match('/lib\/Honeybadger/', $line['file']))
+        if (!preg_match('/lib\/Honeybadger/', $line['file'])) {
             return $line;
+        }
 
         return null;
     }

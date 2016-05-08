@@ -56,12 +56,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if (!isset($this->_environment_default['\\Honeybadger\\Honeybadger::$config'])) {
             $apiKey = Arr::get($_SERVER, 'HONEYBADGER_API_KEY');
 
-            $config = new Config(Arr::merge([
-                                                'project_root'     => realpath(__DIR__ . '/../..'),
-                                                'framework'        => 'PHPUnit',
-                                                'environment_name' => 'testing',
-                                                'api_key'          => empty($apiKey) ? null : $apiKey,
-                                            ], $this->_default_config));
+            $config = new Config(
+                Arr::merge(
+                    [
+                        'project_root'     => realpath(__DIR__ . '/../..'),
+                        'framework'        => 'PHPUnit',
+                        'environment_name' => 'testing',
+                        'api_key'          => empty($apiKey) ? null : $apiKey,
+                    ],
+                    $this->_default_config
+                )
+            );
 
             $this->_environment_default['\\Honeybadger\\Honeybadger::$config'] = $config;
         }

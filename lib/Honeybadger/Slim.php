@@ -103,10 +103,12 @@ class Slim extends \Slim\Middleware
         }
 
         // Add missing, detected options.
-        $options = Arr::merge([
-                                  'environment_name' => $app->getMode(),
-                                  'framework'        => sprintf('Slim: %s', \Slim\Slim::VERSION),
-                              ], $options);
+        $options = Arr::merge(
+            [
+                'environment_name' => $app->getMode(),
+                'framework'        => sprintf('Slim: %s', \Slim\Slim::VERSION),
+            ], $options
+        );
 
         // Create a new configuration with the merged options.
         Honeybadger::$config = new Config(
@@ -121,17 +123,22 @@ class Slim extends \Slim\Middleware
      */
     private function informUsers($errorId)
     {
-        if (empty(Honeybadger::$config->user_information))
+        if (empty(Honeybadger::$config->user_information)) {
             return;
+        }
 
         $response = $this->app->response();
-        $userInfo = $this->userInfo(Honeybadger::$config->user_information,
-                                    $errorId);
+        $userInfo = $this->userInfo(
+            Honeybadger::$config->user_information,
+            $errorId
+        );
 
         // Substitute placeholder comment with user information.
-        $response->body(str_replace(
-                            '<!-- HONEYBADGER ERROR -->', $userInfo, $response->body()
-                        ));
+        $response->body(
+            str_replace(
+                '<!-- HONEYBADGER ERROR -->', $userInfo, $response->body()
+            )
+        );
     }
 
     /**
@@ -170,8 +177,10 @@ class Slim extends \Slim\Middleware
      */
     private function ignoredUserAgent($env)
     {
-        return in_array($env['USER_AGENT'],
-                        Honeybadger::$config->ignore_user_agents);
+        return in_array(
+            $env['USER_AGENT'],
+            Honeybadger::$config->ignore_user_agents
+        );
     }
 
     /**
@@ -238,8 +247,10 @@ class Slim extends \Slim\Middleware
 
         // Find the matching route for the request, to extract parameters for
         // routes such as: `/books/:id`.
-        $router->getMatchedRoutes($request->getMethod(),
-                                  $request->getPathInfo());
+        $router->getMatchedRoutes(
+            $request->getMethod(),
+            $request->getPathInfo()
+        );
 
         $route  = $router->getCurrentRoute();
         $params = $route ? $route->getParams() : [];
@@ -258,11 +269,14 @@ class Slim extends \Slim\Middleware
      */
     private function requestUrl($env, $request)
     {
-        $url = implode('', [
-            $request->getUrl(),
-            $request->getRootUri(),
-            $request->getPathInfo(),
-        ]);
+        $url = implode(
+            '',
+            [
+                $request->getUrl(),
+                $request->getRootUri(),
+                $request->getPathInfo(),
+            ]
+        );
 
         if (isset($env['QUERY_STRING']) and !empty($env['QUERY_STRING'])) {
             $url .= '?' . $env['QUERY_STRING'];

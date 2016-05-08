@@ -197,9 +197,11 @@ class Notice extends SemiOpenStruct
             $this->error_message = Arr::get($args, 'error_message', 'Notification');
         }
 
-        $this->backtrace = Backtrace::parse($backtrace, [
-            'filters' => $this->backtrace_filters,
-        ]);
+        $this->backtrace = Backtrace::parse(
+            $backtrace, [
+                          'filters' => $this->backtrace_filters,
+                      ]
+        );
 
         $this->hostname = gethostname();
 
@@ -218,8 +220,9 @@ class Notice extends SemiOpenStruct
      */
     private function extractSourceFromBacktrace()
     {
-        if (!$this->backtrace->hasLines())
+        if (!$this->backtrace->hasLines()) {
             return null;
+        }
 
         if ($this->backtrace->hasApplicationLines()) {
             $line = $this->backtrace->application_lines[0];
@@ -235,8 +238,9 @@ class Notice extends SemiOpenStruct
      */
     private function findSessionData()
     {
-        if (!$this->send_request_session)
+        if (!$this->send_request_session) {
             return;
+        }
 
         if (isset($this->args['session_data'])) {
             $this->session_data = $this->args['session_data'];
@@ -268,8 +272,9 @@ class Notice extends SemiOpenStruct
      */
     private function filter(&$params)
     {
-        if (empty($this->params_filters))
+        if (empty($this->params_filters)) {
             return;
+        }
 
         $params = Filter::params($this->params_filters, $params);
     }
@@ -308,12 +313,14 @@ class Notice extends SemiOpenStruct
      */
     public function isIgnored()
     {
-        if (Filter::ignoreByClass($this->ignore, $this->exception))
+        if (Filter::ignoreByClass($this->ignore, $this->exception)) {
             return true;
+        }
 
         foreach ($this->ignore_by_filters as $filter) {
-            if (call_user_func($filter, $this))
+            if (call_user_func($filter, $this)) {
                 return true;
+            }
         }
 
         return false;

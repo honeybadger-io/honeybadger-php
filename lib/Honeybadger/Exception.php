@@ -23,9 +23,11 @@ class Exception
      */
     public static function register_handler()
     {
-        self::$previous_handler = set_exception_handler([
-                                                            __CLASS__, 'handle',
-                                                        ]);
+        self::$previous_handler = set_exception_handler(
+            [
+                __CLASS__, 'handle',
+            ]
+        );
     }
 
     /**

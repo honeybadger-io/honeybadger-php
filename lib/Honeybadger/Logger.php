@@ -58,7 +58,6 @@ abstract class Logger implements LoggerInterface
      * Urgent alert.
      */
     const EMERGENCY = 'emergency';
-
     /**
      * Logging levels from syslog protocol defined in RFC 5424
      *
@@ -74,12 +73,10 @@ abstract class Logger implements LoggerInterface
         self::ALERT,
         self::EMERGENCY
     ];
-
     /**
      * @var  object  The real logger.
      */
     protected $logger;
-
     /**
      * @var  integer  Severity threshold. Errors less severe than the threshold
      *                are silently ignored.
@@ -118,26 +115,6 @@ abstract class Logger implements LoggerInterface
     }
 
     /**
-     * Interpolates context values into the message placeholders.
-     *
-     * @param       $message
-     * @param array $context
-     *
-     * @return string
-     */
-    private function interpolate($message, array $context = [])
-    {
-        // build a replacement array with braces around the context keys
-        $replace = [];
-        foreach ($context as $key => $val) {
-            $replace['{' . $key . '}'] = $val;
-        }
-
-        // interpolate replacement values into the message and return
-        return strtr($message, $replace);
-    }
-
-    /**
      * Adds a new debug log entry with the supplied `$message`, replacing
      * with `$context`, if any. If the threshold is lower than
      * `Logger::DEBUG`, the message will be suppressed.
@@ -160,6 +137,79 @@ abstract class Logger implements LoggerInterface
     public function debug($message = null, array $context = [])
     {
         return $this->log(self::DEBUG, $message, $context);
+    }
+
+    /**
+     * Passes the supplied `$message` and `$severity` on to [Logger::write] if
+     * `$severity` is within threshold.
+     *
+     * @param   string $severity The severity of the message.
+     * @param   string $message  The message to log.
+     * @param   array  $context  Values to replace in message.
+     *
+     * @return  $this
+     * @chainable
+     */
+    public function log($severity, $message = null, array $context = [])
+    {
+        if (array_search($severity, static::$levels) >= array_search($this->threshold, static::$levels)) {
+            $this->write($severity, $this->format($message, $context));
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes the supplied `$message` to the logger with the supplied severity.
+     * Subclasses must implement this method to handle the actual logging
+     * of entries.
+     *
+     * @param   string $severity The severity of the message.
+     * @param   string $message  The message to log.
+     *
+     * @return  $this
+     * @chainable
+     */
+    abstract public function write($severity, $message = null);
+
+    /**
+     * Replaces `$context` in `$message` and prefixes entries
+     * with [Honeybadger::LOG_PREFIX].
+     *
+     * @example
+     *     $log->format('Hello, {something}!', array(
+     *         'something' => 'world',
+     *     ));
+     *     // => "** [Honeybadger] Hello, world!"
+     *
+     * @param   string $message The message to format.
+     * @param   array  $context Values to replace in message.
+     *
+     * @return  string  The formatted message.
+     */
+    protected function format($message, array $context = [])
+    {
+        return Honeybadger::LOG_PREFIX . $this->interpolate($message, $context);
+    }
+
+    /**
+     * Interpolates context values into the message placeholders.
+     *
+     * @param       $message
+     * @param array $context
+     *
+     * @return string
+     */
+    private function interpolate($message, array $context = [])
+    {
+        // build a replacement array with braces around the context keys
+        $replace = [];
+        foreach ($context as $key => $val) {
+            $replace['{' . $key . '}'] = $val;
+        }
+
+        // interpolate replacement values into the message and return
+        return strtr($message, $replace);
     }
 
     /**
@@ -335,58 +385,5 @@ abstract class Logger implements LoggerInterface
     public function emergency($message = null, array $context = [])
     {
         return $this->log(self::EMERGENCY, $message, $context);
-    }
-
-    /**
-     * Writes the supplied `$message` to the logger with the supplied severity.
-     * Subclasses must implement this method to handle the actual logging
-     * of entries.
-     *
-     * @param   string $severity The severity of the message.
-     * @param   string $message  The message to log.
-     *
-     * @return  $this
-     * @chainable
-     */
-    abstract public function write($severity, $message = null);
-
-    /**
-     * Passes the supplied `$message` and `$severity` on to [Logger::write] if
-     * `$severity` is within threshold.
-     *
-     * @param   string $severity The severity of the message.
-     * @param   string $message  The message to log.
-     * @param   array  $context  Values to replace in message.
-     *
-     * @return  $this
-     * @chainable
-     */
-    public function log($severity, $message = null, array $context = [])
-    {
-        if (array_search($severity, static::$levels) >= array_search($this->threshold, static::$levels)) {
-            $this->write($severity, $this->format($message, $context));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Replaces `$context` in `$message` and prefixes entries
-     * with [Honeybadger::LOG_PREFIX].
-     *
-     * @example
-     *     $log->format('Hello, {something}!', array(
-     *         'something' => 'world',
-     *     ));
-     *     // => "** [Honeybadger] Hello, world!"
-     *
-     * @param   string $message The message to format.
-     * @param   array  $context Values to replace in message.
-     *
-     * @return  string  The formatted message.
-     */
-    protected function format($message, array $context = [])
-    {
-        return Honeybadger::LOG_PREFIX . $this->interpolate($message, $context);
     }
 } // End Logger

@@ -65,7 +65,11 @@ class HoneybadgerError extends \Exception
      */
     public static function text(\Exception $e)
     {
-        return sprintf('%s [ %s ]: %s', get_class($e), $e->getCode(),
-                       strip_tags($e->getMessage()));
+        return sprintf(
+            '%s [ %s ]: %s',
+            get_class($e),
+            $e->getCode(),
+            strip_tags($e->getMessage())
+        );
     }
 } // End HoneybadgerError
