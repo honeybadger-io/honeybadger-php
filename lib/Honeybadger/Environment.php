@@ -184,8 +184,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      */
     public function url()
     {
-        if (isset($this->data['url']) and !empty($this->data['url']))
+        if (isset($this->data['url']) and !empty($this->data['url'])) {
             return $this->data['url'];
+        }
 
         $url = $this->protocol . '://' . $this->host;
 
@@ -195,8 +196,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
 
         $url .= $this->fullpath;
 
-        if (!preg_match('/^https?:\/{3}$/', $url))
+        if (!preg_match('/^https?:\/{3}$/', $url)) {
             return $url;
+        }
 
         return null;
     }

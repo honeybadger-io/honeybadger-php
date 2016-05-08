@@ -117,29 +117,36 @@ class Line extends SemiOpenStruct
 
         $filtered = Filter::callbacks($options['filters'], $unparsedLine);
 
-        if ($filtered === null)
+        if ($filtered === null) {
             return null;
+        }
 
         // Extract the filtered line parameters
-        extract($filtered + [
-                    'filtered_file'     => null,
-                    'filtered_line'     => null,
-                    'filtered_function' => null,
-                ]);
+        extract(
+            $filtered + [
+                'filtered_file'     => null,
+                'filtered_line'     => null,
+                'filtered_function' => null,
+            ]
+        );
 
         // Extract the original line parameters
-        extract($unparsedLine + [
-                    'file'     => '',
-                    'line'     => '',
-                    'function' => '',
-                ]);
+        extract(
+            $unparsedLine + [
+                'file'     => '',
+                'line'     => '',
+                'function' => '',
+            ]
+        );
 
-        return new self($file,
-                        $line,
-                        $function,
-                        $filtered_file,
-                        $filtered_line,
-                        $filtered_function);
+        return new self(
+            $file,
+            $line,
+            $function,
+            $filtered_file,
+            $filtered_line,
+            $filtered_function
+        );
     }
 
     /**
@@ -151,10 +158,12 @@ class Line extends SemiOpenStruct
      */
     public function __toString()
     {
-        return sprintf("%s:%d:in `%s'",
-                       $this->filtered_file,
-                       $this->filtered_number,
-                       $this->filtered_method);
+        return sprintf(
+            "%s:%d:in `%s'",
+            $this->filtered_file,
+            $this->filtered_number,
+            $this->filtered_method
+        );
     }
 
     /**
@@ -191,8 +200,9 @@ class Line extends SemiOpenStruct
      */
     public function source($radius = 2)
     {
-        if ($this->source)
+        if ($this->source) {
             return $this->source;
+        }
 
         return $this->source = $this->getSource(
             $this->file,
@@ -234,8 +244,9 @@ class Line extends SemiOpenStruct
         for ($l = 1; $l < $size; $l++) {
             $line = fgets($file_handle);
 
-            if ($l < $start)
+            if ($l < $start) {
                 continue;
+            }
 
             $lines["$l"] = $this->trimLine($line);
         }
@@ -264,7 +275,8 @@ class Line extends SemiOpenStruct
                 '',
                 '    ',
             ],
-            $trimmed);
+            $trimmed
+        );
     }
 
     /**

@@ -11,6 +11,24 @@ class Honeybadger
 {
     // Library versions
     /**
+     * API version
+     */
+    const VERSION = '0.1.0';
+    /**
+     * API name
+     */
+    const NOTIFIER_NAME = 'honeybadger-php';
+
+    // Notifier constants
+    /**
+     * VCS location
+     */
+    const NOTIFIER_URL = 'https://github.com/honeybadger-io/honeybadger-php';
+    /**
+     * Entry prefix
+     */
+    const LOG_PREFIX = '** [Honeybadger] ';
+    /**
      * @var  Sender  Object responding to `send_to_honeybadger`.
      */
     public static $sender;
@@ -18,8 +36,6 @@ class Honeybadger
      * @var  Config  Honeybadger configuration.
      */
     public static $config;
-
-    // Notifier constants
     /**
      * @var  Logger  Honeybadger logger.
      */
@@ -42,8 +58,9 @@ class Honeybadger
     public static function init()
     {
         // Already initialized?
-        if (self::$init)
+        if (self::$init) {
             return;
+        }
 
         // Honeybadger is now initialized.
         self::$init = true;
@@ -99,11 +116,13 @@ class Honeybadger
      */
     public static function reportEnvironmentInfo()
     {
-        self::$logger->log(self::$config->logLevel,
-                           'Environment info: {info}',
-                           [
-                               'info' => self::environmentInfo(),
-                           ]);
+        self::$logger->log(
+            self::$config->logLevel,
+            'Environment info: {info}',
+            [
+                'info' => self::environmentInfo(),
+            ]
+        );
     }
 
     /**
@@ -248,21 +267,4 @@ class Honeybadger
 
         return $result;
     }
-
-    /**
-     * API version
-     */
-    const VERSION = '0.1.0';
-    /**
-     * API name
-     */
-    const NOTIFIER_NAME = 'honeybadger-php';
-    /**
-     * VCS location
-     */
-    const NOTIFIER_URL = 'https://github.com/honeybadger-io/honeybadger-php';
-    /**
-     * Entry prefix
-     */
-    const LOG_PREFIX = '** [Honeybadger] ';
 } // End Honeybadger

@@ -34,8 +34,9 @@ class Backtrace extends SemiOpenStruct
         $this->lines = $lines;
 
         foreach ($lines as $line) {
-            if (!$line->isApplication())
+            if (!$line->isApplication()) {
                 continue;
+            }
 
             $this->application_lines[] = $line;
         }
@@ -60,8 +61,9 @@ class Backtrace extends SemiOpenStruct
         foreach ($backtrace as $line) {
             $parsed = Line::parse($line, $options);
 
-            if ($parsed !== null)
+            if ($parsed !== null) {
                 $lines[] = $parsed;
+            }
         }
 
         // Instantiate a new backtrace from the lines
@@ -97,9 +99,15 @@ class Backtrace extends SemiOpenStruct
      */
     public function __toString()
     {
-        return implode("\n", array_map(function ($line) {
-            return (string)$line;
-        }, $this->lines));
+        return implode(
+            "\n",
+            array_map(
+                function ($line) {
+                    return (string)$line;
+                },
+                $this->lines
+            )
+        );
     }
 
     /**
@@ -109,8 +117,11 @@ class Backtrace extends SemiOpenStruct
      */
     public function asArray()
     {
-        return array_map(function ($line) {
-            return $line->toArray();
-        }, $this->lines);
+        return array_map(
+            function ($line) {
+                return $line->toArray();
+            },
+            $this->lines
+        );
     }
 } // End Backtrace

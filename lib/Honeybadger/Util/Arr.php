@@ -32,8 +32,9 @@ class Arr
      */
     public static function range($step = 10, $max = 100)
     {
-        if ($step < 1)
+        if ($step < 1) {
             return [];
+        }
 
         $array = [];
         for ($i = $step; $i <= $max; $i += $step) {
