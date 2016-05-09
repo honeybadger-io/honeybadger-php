@@ -11,7 +11,7 @@ engines:
     config:
       standard: "PSR1,PSR2"
   phpmd:
-    enabled: true
+    enabled: false
     config:
       file_extensions: "php"
       rulesets: "cleancode,unusedcode,codesize,design"

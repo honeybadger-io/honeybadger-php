@@ -8,3 +8,5 @@ before_script:
   - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
 
 script: phpunit
+after_script:
+  - vendor/bin/test-reporter
