@@ -32,8 +32,7 @@
   </filter>
 
   <logging>
-    <log type="coverage-html" target="./coverage" charset="UTF-8"
-         highlight="false" lowUpperBound="70" highLowerBound="80"/>
+      <log type="coverage-clover" target="build/logs/clover.xml"/>
   </logging>
 
 </phpunit>
