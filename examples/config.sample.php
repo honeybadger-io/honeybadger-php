@@ -1,4 +1,6 @@
-<?php require __DIR__ . '/../vendor/autoload.php';
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
 /**
  * Copy or rename this file to `config.php` and update the values to
  * your liking.

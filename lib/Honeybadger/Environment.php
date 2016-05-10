@@ -9,7 +9,7 @@ use Honeybadger\Util\Arr;
 /**
  * Retrieves, stores, and normalizes environment data from `$_SERVER` to prepare
  * information for serialization in [Notice]s. Additionally, provides
- * convenience methods for determining the URL of the request trigging an error.
+ * convenience methods for determining the URL of the request triggering an error.
  *
  * TODO: Refactor to follow better, consistent standards (Rack).
  *

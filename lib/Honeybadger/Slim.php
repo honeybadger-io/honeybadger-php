@@ -66,7 +66,7 @@ class Slim extends \Slim\Middleware
      * `user_information`, substituting `{{error_id}}` with the error ID.
      *
      * @return  void
-     * @throws \Exception if middlewar should handle
+     * @throws \Exception if middleware should handle
      */
     public function call()
     {

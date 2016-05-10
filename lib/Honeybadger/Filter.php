@@ -44,7 +44,7 @@ class Filter
 
     /**
      * Filters a supplied `array` of `$params`, searching for `$keys` and
-     * replacing each occurence with `[FILTERED]`.
+     * replacing each occurrence with `[FILTERED]`.
      *
      * @param   array $keys
      * @param   array $params Parameters to filter.
