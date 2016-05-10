@@ -179,7 +179,7 @@ class Config extends SemiOpenStruct
     /**
      * @var array
      */
-    protected $_attribute_methods = ['secure', 'logLevel'];
+    protected $attribute_methods = ['secure', 'logLevel'];
     /**
      * @var  boolean  `true` for https connections, `false` for http
      *       connections.

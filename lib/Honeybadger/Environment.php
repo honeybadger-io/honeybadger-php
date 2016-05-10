@@ -34,7 +34,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     /**
      * @var array
      */
-    private $_attribute_methods = [
+    private $attribute_methods = [
         'protocol', 'host', 'port', 'fullpath', 'url',
     ];
 
@@ -153,9 +153,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     {
         if ($this->isSecure()) {
             return ($this->port() != 443);
-        } else {
-            return ($this->port() != 80);
         }
+
+        return ($this->port() != 80);
     }
 
     /**
@@ -243,7 +243,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      */
     public function __get($key)
     {
-        if (in_array($key, $this->_attribute_methods)) {
+        if (in_array($key, $this->attribute_methods)) {
             return $this->$key();
         }
 
@@ -259,7 +259,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     {
         if (array_key_exists($key, $this->data)) {
             return $this->data[$key];
-        } elseif (in_array($key, $this->_attribute_methods)) {
+        } elseif (in_array($key, $this->attribute_methods)) {
             return $this->$key();
         }
 
@@ -285,7 +285,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     public function offsetExists($key)
     {
         return (array_key_exists($key, $this->data) or
-            in_array($key, $this->_attribute_methods));
+            in_array($key, $this->attribute_methods));
     }
 
     /**

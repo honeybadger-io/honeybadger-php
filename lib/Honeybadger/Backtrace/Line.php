@@ -14,7 +14,7 @@ use Honeybadger\Util\SemiOpenStruct;
 class Line extends SemiOpenStruct
 {
 
-    protected $_attribute_methods = ['source'];
+    protected $attribute_methods = ['source'];
 
     /**
      * @var  string  The file portion of the line.
@@ -69,12 +69,14 @@ class Line extends SemiOpenStruct
      * @param  string  $filteredMethod  The method referenced in the given
      *                                  backtrace line after filter
      */
-    public function __construct($file,
-                                $number,
-                                $method,
-                                $filteredFile = null,
-                                $filteredNumber = null,
-                                $filteredMethod = null)
+    public function __construct(
+        $file,
+        $number,
+        $method,
+        $filteredFile = null,
+        $filteredNumber = null,
+        $filteredMethod = null
+    )
     {
         if ($filteredFile === null) {
             $filteredFile = $file;
