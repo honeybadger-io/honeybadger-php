@@ -31,18 +31,22 @@ $app->add(
 // Make some routes:
 
 $app->get(
-    '/', function () {
-    echo sprintf(
-        '<a href="%s/%s">%s</a>', '/slim/fail', rand(0, 999999),
-        'trigger an error'
-    );
-}
+    '/',
+    function () {
+        echo sprintf(
+            '<a href="%s/%s">%s</a>',
+            '/slim/fail',
+            rand(0, 999999),
+            'trigger an error'
+        );
+    }
 );
 
 $app->get(
-    '/fail/:id', function ($id) {
-    throw new Exception('bleh! ' . $id);
-}
+    '/fail/:id',
+    function ($id) {
+        throw new Exception('bleh! ' . $id);
+    }
 );
 
 // Run the app.
