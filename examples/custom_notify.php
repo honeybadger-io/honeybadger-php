@@ -10,12 +10,14 @@ $options = include 'config.php';
 
 Honeybadger::$config->values($options);
 
-echo Honeybadger::notify(array(
-	'error_class'   => 'Special Error',
-	'error_message' => 'A custom error message.',
-	'parameters'    => array(
-		'action'   => 'index',
-		'username' => 'somebody',
-		'password' => 'something',
-	),
-));
+echo Honeybadger::notify(
+    [
+        'error_class'   => 'Special Error',
+        'error_message' => 'A custom error message.',
+        'parameters'    => [
+            'action'   => 'index',
+            'username' => 'somebody',
+            'password' => 'something',
+        ],
+    ]
+);

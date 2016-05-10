@@ -76,8 +76,7 @@ class Line extends SemiOpenStruct
         $filteredFile = null,
         $filteredNumber = null,
         $filteredMethod = null
-    )
-    {
+    ) {
         if ($filteredFile === null) {
             $filteredFile = $file;
         }

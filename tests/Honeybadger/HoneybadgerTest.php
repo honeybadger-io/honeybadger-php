@@ -48,21 +48,26 @@ class HoneybadgerTest extends TestCase
 
     public function test_context_merges_supplied_data()
     {
-        Honeybadger::context([
-                                 'user'   => [
-                                     'id'   => 123,
-                                     'name' => 'Gabriel Evans',
-                                 ],
-                                 'device' => 'iPhone',
-                             ]);
+        Honeybadger::context(
+            [
+                'user'   => [
+                    'id'   => 123,
+                    'name' => 'Gabriel Evans',
+                ],
+                'device' => 'iPhone',
+            ]
+        );
 
-        $this->assertEquals([
-                                'user'   => [
-                                    'id'   => 123,
-                                    'name' => 'Gabriel Evans',
-                                ],
-                                'device' => 'iPhone',
-                            ], Honeybadger::context());
+        $this->assertEquals(
+            [
+                'user'   => [
+                    'id'   => 123,
+                    'name' => 'Gabriel Evans',
+                ],
+                'device' => 'iPhone',
+            ],
+            Honeybadger::context()
+        );
     }
 
     public function test_context_returns_data()
@@ -92,24 +97,30 @@ class HoneybadgerTest extends TestCase
     public function test_environment_info_should_include_php_version()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environmentInfo(),
-                   phpversion()) !== false
+            strpos(
+                Honeybadger::environmentInfo(),
+                phpversion()
+            ) !== false
         );
     }
 
     public function test_environment_info_should_include_framework()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environmentInfo(),
-                   Honeybadger::$config->framework) !== false
+            strpos(
+                Honeybadger::environmentInfo(),
+                Honeybadger::$config->framework
+            ) !== false
         );
     }
 
     public function test_environment_info_should_include_environment_name()
     {
         $this->assertTrue(
-            strpos(Honeybadger::environmentInfo(),
-                   Honeybadger::$config->environment_name) !== false
+            strpos(
+                Honeybadger::environmentInfo(),
+                Honeybadger::$config->environment_name
+            ) !== false
         );
     }
 
@@ -136,8 +147,10 @@ class HoneybadgerTest extends TestCase
         Honeybadger::reportResponseBody("don't care!");
         $entry = Honeybadger::$logger->lastEntry();
 
-        $this->assertEquals("** [Honeybadger] Response from Honeybadger:\ndon't care!",
-                            $entry['message']);
+        $this->assertEquals(
+            "** [Honeybadger] Response from Honeybadger:\ndon't care!",
+            $entry['message']
+        );
     }
 
     /**
@@ -153,8 +166,9 @@ class HoneybadgerTest extends TestCase
     {
         Honeybadger::$config->environment_name = 'production';
 
-        if (!Honeybadger::$config->api_key)
+        if (!Honeybadger::$config->api_key) {
             return $this->markTestSkipped('No API key configured.');
+        }
 
         $this->assertNotEmpty(Honeybadger::notify($this->buildException()));
     }
@@ -163,31 +177,41 @@ class HoneybadgerTest extends TestCase
     {
         Honeybadger::$config->environment_name = 'production';
 
-        if (!Honeybadger::$config->api_key)
+        if (!Honeybadger::$config->api_key) {
             return $this->markTestSkipped('No API key configured.');
+        }
 
-        $this->assertNotEmpty(Honeybadger::notify([
-                                                      'error_message' => 'There is none.',
-                                                  ]));
+        $this->assertNotEmpty(
+            Honeybadger::notify(
+                [
+                    'error_message' => 'There is none.',
+                ]
+            )
+        );
     }
 
     public function test_notify_or_ignore_notifies_when_not_ignored()
     {
         Honeybadger::$config->environment_name = 'production';
 
-        if (!Honeybadger::$config->api_key)
+        if (!Honeybadger::$config->api_key) {
             return $this->markTestSkipped('No API key configured.');
+        }
 
-        $this->assertNotEmpty(Honeybadger::notifyOrIgnore(
-            $this->buildException()
-        ));
+        $this->assertNotEmpty(
+            Honeybadger::notifyOrIgnore(
+                $this->buildException()
+            )
+        );
     }
 
     public function test_notify_or_ignore_does_not_notify_when_ignored()
     {
         Honeybadger::$config->ignore = ['Exception'];
-        $this->assertEmpty(Honeybadger::notifyOrIgnore(
-            $this->buildException()
-        ));
+        $this->assertEmpty(
+            Honeybadger::notifyOrIgnore(
+                $this->buildException()
+            )
+        );
     }
 }

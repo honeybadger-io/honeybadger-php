@@ -53,9 +53,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             return array_map('strtoupper', $data);
         };
 
-        $this->assertNull(Filter::callbacks($callbacks, [
-            'what' => 'is', 'this' => 'i dont even',
-        ]));
+        $this->assertNull(
+            Filter::callbacks(
+                $callbacks,
+                [
+                    'what' => 'is', 'this' => 'i dont even',
+                ]
+            )
+        );
     }
 
     public function test_should_filter_params()
@@ -172,13 +177,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function test_project_root_should_shorten_file_paths($project_root, $shortened, $full)
     {
-        Honeybadger::$config = new Config([
-                                              'project_root' => $project_root,
-                                          ]);
+        Honeybadger::$config = new Config(
+            [
+                'project_root' => $project_root,
+            ]
+        );
 
-        $actual = Filter::projectRoot([
-                                          'file' => $full,
-                                      ]);
+        $actual = Filter::projectRoot(
+            [
+                'file' => $full,
+            ]
+        );
 
         $this->assertEquals($shortened, $actual['file']);
 
@@ -208,9 +217,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function test_expand_paths($expanded, $relative)
     {
-        $actual = Filter::expandPaths([
-                                          'file' => $relative,
-                                      ]);
+        $actual = Filter::expandPaths(
+            [
+                'file' => $relative,
+            ]
+        );
 
         $this->assertEquals($expanded, $actual['file']);
     }
