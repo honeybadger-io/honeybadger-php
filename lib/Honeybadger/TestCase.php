@@ -109,7 +109,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Helper function that replaces all occurences of '/' with
+     * Helper function that replaces all occurrences of '/' with
      * the OS-specific directory separator
      *
      * @param string $path The path to act on

@@ -128,7 +128,7 @@ class Config extends SemiOpenStruct
     public $environment_name;
 
     /**
-     * @var  string  The path to the project in which the error occured.
+     * @var  string  The path to the project in which the error occurred.
      *               TODO: Default to current working directory?
      */
     public $project_root;

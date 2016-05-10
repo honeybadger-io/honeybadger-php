@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Catch and notify of an exception you caught in your app.
  */
