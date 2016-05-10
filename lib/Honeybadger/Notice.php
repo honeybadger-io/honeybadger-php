@@ -21,7 +21,7 @@ class Notice extends SemiOpenStruct
     /**
      * @var array
      */
-    protected $_attribute_methods = [
+    protected $attribute_methods = [
         'is_ignored',
     ];
     /**

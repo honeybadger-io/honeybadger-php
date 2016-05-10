@@ -8,7 +8,7 @@ use Honeybadger\Errors\ReadOnly;
 /**
  * Basic object emulating Ruby's `OpenStruct` for storing and retrieving
  * attributes in a read-only fashion. Attributes are stored internally as an
- * array and accessible as properties. Additionally, `$_attribute_methods` allow
+ * array and accessible as properties. Additionally, `$attribute_methods` allow
  * accessing methods (e.g. `$object->fullpath()`) as
  * attributes (`$object->fullpath`).
  *
@@ -26,7 +26,7 @@ abstract class SemiOpenStruct implements \ArrayAccess
     /**
      * @var  array  Method names that act as object attributes.
      */
-    protected $_attribute_methods = [];
+    protected $attribute_methods = [];
 
     /**
      * Alias for `as_array`.
@@ -48,15 +48,8 @@ abstract class SemiOpenStruct implements \ArrayAccess
         $attributes = get_object_vars($this);
 
         // Add methods to attributes.
-        foreach ($this->_attribute_methods as $method) {
+        foreach ($this->attribute_methods as $method) {
             $attributes[$method] = $this->$method();
-        }
-
-        // Remove attributes prefixed with an underscore.
-        foreach ($attributes as $attribute => $value) {
-            if (strpos($attribute, '_') === 0) {
-                unset($attributes[$attribute]);
-            }
         }
 
         return $attributes;
@@ -122,7 +115,7 @@ abstract class SemiOpenStruct implements \ArrayAccess
      */
     public function get($attribute)
     {
-        if (in_array($attribute, $this->_attribute_methods)) {
+        if (in_array($attribute, $this->attribute_methods)) {
             return $this->$attribute();
         } elseif (property_exists($this, $attribute)) {
             $attributes = get_object_vars($this);
@@ -184,7 +177,7 @@ abstract class SemiOpenStruct implements \ArrayAccess
     public function offsetExists($attribute)
     {
         return (property_exists($this, $attribute) or
-            in_array($attribute, $this->_attribute_methods));
+            in_array($attribute, $this->attribute_methods));
     }
 
     /**

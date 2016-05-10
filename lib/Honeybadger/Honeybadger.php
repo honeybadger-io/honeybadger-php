@@ -178,8 +178,7 @@ class Honeybadger
      *
      * @return Notice
      */
-    private static function buildNoticeFor($exception,
-                                           array $options = [])
+    private static function buildNoticeFor($exception, array $options = [])
     {
         if ($exception instanceof \Exception) {
             $options['exception'] = self::unwrapException($exception);
@@ -227,8 +226,7 @@ class Honeybadger
      *
      * @return  string|null  The error identifier. `null` if skipped.
      */
-    public static function notifyOrIgnore($exception,
-                                          array $options = [])
+    public static function notifyOrIgnore($exception, array $options = [])
     {
         $notice = self::buildNoticeFor($exception, $options);
 
@@ -245,8 +243,7 @@ class Honeybadger
      *
      * @return array
      */
-    public static function buildLookupHashFor($exception,
-                                              array $options = [])
+    public static function buildLookupHashFor($exception, array $options = [])
     {
         $notice = self::buildNoticeFor($exception, $options);
 
