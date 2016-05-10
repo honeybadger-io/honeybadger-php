@@ -88,10 +88,10 @@ class Sender
             $client->setUserAgent($this->userAgent());
 
             return $client;
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             // $this->log(Logger::ERROR,
-            // '['.__CLASS__.'::setup_http_client] Failure initializing the request client. Error: [ '.$e->getCode().' ] '.$e->getMessage());
+            // '['.__CLASS__.'::setup_http_client] Failure initializing the request client.
+            // Error: [ '.$e->getCode().' ] '.$e->getMessage());
 
             // Rethrow the exception
             throw $e;

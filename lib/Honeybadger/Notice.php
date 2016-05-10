@@ -198,9 +198,10 @@ class Notice extends SemiOpenStruct
         }
 
         $this->backtrace = Backtrace::parse(
-            $backtrace, [
-                          'filters' => $this->backtrace_filters,
-                      ]
+            $backtrace,
+            [
+                'filters' => $this->backtrace_filters,
+            ]
         );
 
         $this->hostname = gethostname();

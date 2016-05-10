@@ -40,8 +40,7 @@ class Exception
         try {
             // Attempt to send this exception to Honeybadger.
             Honeybadger::notifyOrIgnore($e);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             if (is_callable(self::$previous_handler)) {
                 return call_user_func(self::$previous_handler, $e);
             } else {

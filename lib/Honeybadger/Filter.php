@@ -74,7 +74,7 @@ class Filter
      *
      * @return bool
      */
-    public static function ignoreByClass(array $classes = [], $object)
+    public static function ignoreByClass(array $classes, $object)
     {
         if (!is_object($object)) {
             return false;
