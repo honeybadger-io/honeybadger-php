@@ -12,6 +12,7 @@
 
 # Ignore code coverage reports
 /coverage
+/build
 
 # Ignore composer-installed dependencies
 /vendor
