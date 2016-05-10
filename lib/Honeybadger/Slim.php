@@ -74,8 +74,7 @@ class Slim extends \Slim\Middleware
 
         try {
             $this->next->call();
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             // Report the exception to Honeybadger and store the error ID in
             // the environment.
             $this->informUsers(
@@ -107,7 +106,8 @@ class Slim extends \Slim\Middleware
             [
                 'environment_name' => $app->getMode(),
                 'framework'        => sprintf('Slim: %s', \Slim\Slim::VERSION),
-            ], $options
+            ],
+            $options
         );
 
         // Create a new configuration with the merged options.
@@ -136,7 +136,9 @@ class Slim extends \Slim\Middleware
         // Substitute placeholder comment with user information.
         $response->body(
             str_replace(
-                '<!-- HONEYBADGER ERROR -->', $userInfo, $response->body()
+                '<!-- HONEYBADGER ERROR -->',
+                $userInfo,
+                $response->body()
             )
         );
     }
@@ -163,7 +165,8 @@ class Slim extends \Slim\Middleware
 
         if (!$this->ignoredUserAgent($env)) {
             return $env['honeybadger.error_id'] = Honeybadger::notifyOrIgnore(
-                $exception, $this->noticeOptions($env)
+                $exception,
+                $this->noticeOptions($env)
             );
         }
 

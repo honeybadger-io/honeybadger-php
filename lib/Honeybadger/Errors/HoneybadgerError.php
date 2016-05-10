@@ -28,8 +28,7 @@ class HoneybadgerError extends \Exception
         array $variables = [],
         $code = 0,
         \Exception $previous = null
-    )
-    {
+    ) {
         // Set the message
         $message = strtr($message, $variables);
 
