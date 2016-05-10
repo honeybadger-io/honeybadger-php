@@ -34,15 +34,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function test_new_config_detects_certificate_authority_when_null()
     {
         $config = new Config;
-        $this->assertEquals(realpath(__DIR__ . '/../../resources/ca-bundle.crt'),
-                            $config->certificate_authority);
+        $this->assertEquals(
+            realpath(__DIR__ . '/../../resources/ca-bundle.crt'),
+            $config->certificate_authority
+        );
     }
 
     public function test_new_config_does_not_overwrite_certificate_authority()
     {
-        $config = new Config([
-                                 'certificate_authority' => 'foo',
-                             ]);
+        $config = new Config(
+            [
+                'certificate_authority' => 'foo',
+            ]
+        );
 
         $this->assertEquals('foo', $config->certificate_authority);
     }
@@ -87,9 +91,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_new_config_merges_default_params_filters()
     {
-        $config = new Config([
-                                 'params_filters' => ['ssn'],
-                             ]);
+        $config = new Config(
+            [
+                'params_filters' => ['ssn'],
+            ]
+        );
 
         $expected = [
             'ssn',
@@ -109,13 +115,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $original_default_backtrace_filters = Config::$default_backtrace_filters;
         Config::$default_backtrace_filters  = ['strtolower'];
 
-        $config = new Config([
-                                 'backtrace_filters' => ['strtoupper'],
-                             ]);
+        $config = new Config(
+            [
+                'backtrace_filters' => ['strtoupper'],
+            ]
+        );
 
-        $this->assertEquals([
-                                'strtoupper', 'strtolower',
-                            ], $config->backtrace_filters);
+        $this->assertEquals(
+            [
+                'strtoupper', 'strtolower',
+            ], $config->backtrace_filters
+        );
 
         Config::$default_backtrace_filters = $original_default_backtrace_filters;
     }
@@ -125,13 +135,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $original_default_ignore = Config::$default_ignore;
         Config::$default_ignore  = ['Exception'];
 
-        $config = new Config([
-                                 'ignore' => ['HoneybadgerError'],
-                             ]);
+        $config = new Config(
+            [
+                'ignore' => ['HoneybadgerError'],
+            ]
+        );
 
-        $this->assertEquals([
-                                'HoneybadgerError', 'Exception',
-                            ], $config->ignore);
+        $this->assertEquals(
+            [
+                'HoneybadgerError', 'Exception',
+            ], $config->ignore
+        );
 
         Config::$default_ignore = $original_default_ignore;
     }
@@ -174,15 +188,19 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_merge_returns_array_merged_with_supplied_options()
     {
-        $config = new Config([
-                                 'api_key'           => 'foo',
-                                 'http_open_timeout' => 10,
-                             ]);
+        $config = new Config(
+            [
+                'api_key'           => 'foo',
+                'http_open_timeout' => 10,
+            ]
+        );
 
-        $actual = $config->merge([
-                                     'api_key' => 'bar',
-                                     'host'    => 'localhost',
-                                 ]);
+        $actual = $config->merge(
+            [
+                'api_key' => 'bar',
+                'host'    => 'localhost',
+            ]
+        );
 
         $this->assertEquals('bar', $actual['api_key']);
         $this->assertEquals('localhost', $actual['host']);
@@ -191,18 +209,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function test_should_be_public_when_environment_not_development()
     {
-        $config = new Config([
-                                 'environment_name' => 'production',
-                             ]);
+        $config = new Config(
+            [
+                'environment_name' => 'production',
+            ]
+        );
 
         $this->assertTrue($config->isPublic());
     }
 
     public function test_should_not_be_public_when_environment_development()
     {
-        $config = new Config([
-                                 'environment_name' => 'development',
-                             ]);
+        $config = new Config(
+            [
+                'environment_name' => 'development',
+            ]
+        );
 
         $this->assertFalse($config->isPublic());
     }

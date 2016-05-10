@@ -160,7 +160,7 @@ class Honeybadger
     /**
      * Sends a notice with the supplied `$exception` and `$options`.
      *
-     * @param   \Exception $exception The exception.
+     * @param   array|\Exception $exception The exception.
      * @param   array      $options   Additional options for the notice.
      *
      * @return  string     The error identifier.

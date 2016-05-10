@@ -21,8 +21,7 @@ class LineTest extends \PHPUnit_Framework_TestCase
 
             try {
                 $line->$attribute = 'foo';
-            }
-            catch (\Exception $ex) {
+            } catch (\Exception $ex) {
                 continue;
             }
 
@@ -68,9 +67,11 @@ class LineTest extends \PHPUnit_Framework_TestCase
     {
         $callback = function ($line) {
         };
-        $line     = Line::parse([], [
+        $line     = Line::parse(
+            [], [
             'filters' => [$callback],
-        ]);
+        ]
+        );
 
         $this->assertNull($line);
     }
@@ -165,24 +166,28 @@ class LineTest extends \PHPUnit_Framework_TestCase
     public function test_source()
     {
         $line = new Line(path_to_fixture('MyClass.php'), 1, 'does_amazing_things');
-        $this->assertEquals([
-                                '1' => '<?php',
-                                '2' => '',
-                                '3' => 'class MyClass',
-                                '4' => '{',
-                            ], $line->source);
+        $this->assertEquals(
+            [
+                '1' => '<?php',
+                '2' => '',
+                '3' => 'class MyClass',
+                '4' => '{',
+            ], $line->source
+        );
     }
 
     public function test_source_replaces_tabs_with_spaces()
     {
         $line = new Line(path_to_fixture('MyClass.php'), 10, 'does_amazing_things');
-        $this->assertEquals([
-                                '7'  => '    {',
-                                '8'  => '        for ($i = 0; $i < 25; $i++) {',
-                                '9'  => '            echo "Check out this amazing stuff!\n";',
-                                '10' => '        }',
-                                '11' => ''
-                            ], $line->source);
+        $this->assertEquals(
+            [
+                '7'  => '    {',
+                '8'  => '        for ($i = 0; $i < 25; $i++) {',
+                '9'  => '            echo "Check out this amazing stuff!\n";',
+                '10' => '        }',
+                '11' => ''
+            ], $line->source
+        );
     }
 
     public function test_source_returns_empty_array_for_non_existent()

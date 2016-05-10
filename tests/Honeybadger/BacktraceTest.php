@@ -15,8 +15,9 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
     public function test_parse_drops_null_lines()
     {
         $callback = function ($line) {
-            if ($line['file'] == 'dropme.php')
+            if ($line['file'] == 'dropme.php') {
                 return null;
+            }
 
             return $line;
         };
@@ -34,9 +35,11 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $backtrace = Backtrace::parse($lines, [
+        $backtrace = Backtrace::parse(
+            $lines, [
             'filters' => [$callback],
-        ]);
+        ]
+        );
 
         $this->assertEquals([Line::parse($lines[1])], $backtrace->lines);
     }
@@ -76,8 +79,7 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
 
             try {
                 $line->$attribute = 'foo';
-            }
-            catch (\Exception $ex) {
+            } catch (\Exception $ex) {
                 continue;
             }
 
@@ -110,9 +112,11 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
 
         $backtrace = new Backtrace($lines);
 
-        $this->assertEquals([$lines[0],
-                             $lines[1]],
-                            $backtrace->application_lines);
+        $this->assertEquals(
+            [$lines[0],
+             $lines[1]],
+            $backtrace->application_lines
+        );
     }
 
     public function test_has_lines()
@@ -120,9 +124,11 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
         $backtrace = new Backtrace;
         $this->assertFalse($backtrace->hasLines());
 
-        $backtrace = new Backtrace([
-                                       new Line('super_cool_file.php', 3, 'super_cool_method')
-                                   ]);
+        $backtrace = new Backtrace(
+            [
+                new Line('super_cool_file.php', 3, 'super_cool_method')
+            ]
+        );
         $this->assertTrue($backtrace->hasLines());
     }
 
@@ -131,9 +137,11 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
         $backtrace = new Backtrace;
         $this->assertFalse($backtrace->hasApplicationLines());
 
-        $backtrace = new Backtrace([
-                                       new Line('[PROJECT_ROOT]/super_cool_file.php', 3, 'super_cool_method')
-                                   ]);
+        $backtrace = new Backtrace(
+            [
+                new Line('[PROJECT_ROOT]/super_cool_file.php', 3, 'super_cool_method')
+            ]
+        );
         $this->assertTrue($backtrace->hasApplicationLines());
     }
 
@@ -186,18 +194,20 @@ class BacktraceTest extends \PHPUnit_Framework_TestCase
 
         $backtrace = new Backtrace($lines);
 
-        $expected = json_encode([
-                                    [
-                                        'file'   => 'foo',
-                                        'number' => 11,
-                                        'method' => 'bar',
-                                    ],
-                                    [
-                                        'file'   => 'baz',
-                                        'number' => 2,
-                                        'method' => 'something',
-                                    ],
-                                ]);
+        $expected = json_encode(
+            [
+                [
+                    'file'   => 'foo',
+                    'number' => 11,
+                    'method' => 'bar',
+                ],
+                [
+                    'file'   => 'baz',
+                    'number' => 2,
+                    'method' => 'something',
+                ],
+            ]
+        );
 
         $this->assertEquals($expected, $backtrace->toJson());
     }

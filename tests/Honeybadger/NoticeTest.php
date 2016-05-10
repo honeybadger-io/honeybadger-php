@@ -37,73 +37,91 @@ class NoticeTest extends TestCase
     {
         $exception = $this->buildException();
 
-        $notice = Notice::factory([
-                                      'exception' => $exception,
-                                  ]);
+        $notice = Notice::factory(
+            [
+                'exception' => $exception,
+            ]
+        );
 
-        $expected = new Notice(Honeybadger::$config->merge([
-                                                               'exception' => $exception,
-                                                           ]));
+        $expected = new Notice(
+            Honeybadger::$config->merge(
+                [
+                    'exception' => $exception,
+                ]
+            )
+        );
 
         $this->assertEquals($expected, $notice);
     }
 
     public function test_should_use_parameters()
     {
-        $notice = $this->build_notice([
-                                          'parameters' => [
-                                              'foo' => 'bar',
-                                          ],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'parameters' => [
+                    'foo' => 'bar',
+                ],
+            ]
+        );
 
         $this->assertEquals(['foo' => 'bar'], $notice->params);
     }
 
     public function test_should_set_component()
     {
-        $notice = $this->build_notice([
-                                          'component' => 'Welcome',
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'component' => 'Welcome',
+            ]
+        );
 
         $this->assertEquals('Welcome', $notice->component);
     }
 
     public function test_should_set_controller_as_component()
     {
-        $notice = $this->build_notice([
-                                          'controller' => 'Products',
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'controller' => 'Products',
+            ]
+        );
 
         $this->assertEquals('Products', $notice->component);
     }
 
     public function test_should_set_controller_from_params()
     {
-        $notice = $this->build_notice([
-                                          'params' => [
-                                              'controller' => 'Messages',
-                                          ],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'params' => [
+                    'controller' => 'Messages',
+                ],
+            ]
+        );
 
         $this->assertEquals('Messages', $notice->component);
     }
 
     public function test_should_set_action()
     {
-        $notice = $this->build_notice([
-                                          'action' => 'index',
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'action' => 'index',
+            ]
+        );
 
         $this->assertEquals('index', $notice->action);
     }
 
     public function test_should_set_action_from_params()
     {
-        $notice = $this->build_notice([
-                                          'params' => [
-                                              'action' => 'destroy',
-                                          ],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'params' => [
+                    'action' => 'destroy',
+                ],
+            ]
+        );
 
         $this->assertEquals('destroy', $notice->action);
     }
@@ -112,9 +130,11 @@ class NoticeTest extends TestCase
     {
         $exception = new HoneybadgerError;
 
-        $notice = $this->build_notice([
-                                          'exception' => $exception,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception' => $exception,
+            ]
+        );
 
         $this->assertEquals($exception, $notice->exception);
     }
@@ -123,9 +143,11 @@ class NoticeTest extends TestCase
     {
         $exception = new HoneybadgerError;
 
-        $notice = $this->build_notice([
-                                          'exception' => $exception,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception' => $exception,
+            ]
+        );
 
         $backtrace = Backtrace::parse($exception->getTrace());
         $backtrace->lines[0]->source;
@@ -137,24 +159,32 @@ class NoticeTest extends TestCase
     {
         $exception = new NonExistentProperty($this, 'foo');
 
-        $notice = $this->build_notice([
-                                          'exception' => $exception,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception' => $exception,
+            ]
+        );
 
-        $this->assertEquals('Honeybadger\\Errors\\NonExistentProperty',
-                            $notice->error_class);
+        $this->assertEquals(
+            'Honeybadger\\Errors\\NonExistentProperty',
+            $notice->error_class
+        );
     }
 
     public function test_should_set_error_message_from_exception()
     {
         $exception = new \Exception('This is a generic exception.');
 
-        $notice = $this->build_notice([
-                                          'exception' => $exception,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception' => $exception,
+            ]
+        );
 
-        $this->assertEquals('Exception [ 0 ]: This is a generic exception.',
-                            $notice->error_message);
+        $this->assertEquals(
+            'Exception [ 0 ]: This is a generic exception.',
+            $notice->error_message
+        );
     }
 
     public function test_should_set_backtrace_from_arguments()
@@ -167,9 +197,11 @@ class NoticeTest extends TestCase
             ],
         ];
 
-        $notice = $this->build_notice([
-                                          'backtrace' => $backtrace,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'backtrace' => $backtrace,
+            ]
+        );
 
         $backtrace = Backtrace::parse($backtrace);
         $backtrace->lines[0]->source;
@@ -185,9 +217,11 @@ class NoticeTest extends TestCase
 
     public function test_should_set_error_class_from_arguments()
     {
-        $notice = $this->build_notice([
-                                          'error_class' => 'ArgumentError',
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'error_class' => 'ArgumentError',
+            ]
+        );
 
         $this->assertEquals('ArgumentError', $notice->error_class);
     }
@@ -203,9 +237,12 @@ class NoticeTest extends TestCase
     {
         $notice = $this->build_notice();
 
-        $sender = $this->getMock('Honeybadger\Sender', [
-            'sendToHoneybadger'
-        ]);
+        $sender = $this->getMock(
+            'Honeybadger\Sender',
+            [
+                'sendToHoneybadger'
+            ]
+        );
         $sender->expects($this->once())
                ->method('sendToHoneybadger')
                ->with($this->equalTo($notice))
@@ -257,34 +294,36 @@ class NoticeTest extends TestCase
 
         $notice = $this->build_notice($data);
 
-        $this->assertEquals([
-                                'notifier' => [
-                                    'name'     => Honeybadger::NOTIFIER_NAME,
-                                    'url'      => Honeybadger::NOTIFIER_URL,
-                                    'version'  => Honeybadger::VERSION,
-                                    'language' => 'php',
-                                ],
-                                'error'    => [
-                                    'class'     => $data['error_class'],
-                                    'message'   => $data['error_message'],
-                                    'backtrace' => $backtrace->asArray(),
-                                    'source'    => $backtrace->lines[0]->source,
-                                ],
-                                'request'  => [
-                                    'url'       => $data['url'],
-                                    'component' => $data['component'],
-                                    'action'    => $data['action'],
-                                    'params'    => $data['params'],
-                                    'session'   => $data['session'],
-                                    'cgi_data'  => $data['cgi_data'],
-                                    'context'   => $data['context'],
-                                ],
-                                'server'   => [
-                                    'project_root'     => $data['project_root'],
-                                    'environment_name' => $data['environment_name'],
-                                    'hostname'         => gethostname(),
-                                ],
-                            ], $notice->asArray());
+        $this->assertEquals(
+            [
+                'notifier' => [
+                    'name'     => Honeybadger::NOTIFIER_NAME,
+                    'url'      => Honeybadger::NOTIFIER_URL,
+                    'version'  => Honeybadger::VERSION,
+                    'language' => 'php',
+                ],
+                'error'    => [
+                    'class'     => $data['error_class'],
+                    'message'   => $data['error_message'],
+                    'backtrace' => $backtrace->asArray(),
+                    'source'    => $backtrace->lines[0]->source,
+                ],
+                'request'  => [
+                    'url'       => $data['url'],
+                    'component' => $data['component'],
+                    'action'    => $data['action'],
+                    'params'    => $data['params'],
+                    'session'   => $data['session'],
+                    'cgi_data'  => $data['cgi_data'],
+                    'context'   => $data['context'],
+                ],
+                'server'   => [
+                    'project_root'     => $data['project_root'],
+                    'environment_name' => $data['environment_name'],
+                    'hostname'         => gethostname(),
+                ],
+            ], $notice->asArray()
+        );
     }
 
     public function test_extract_source_from_backtrace_should_prefer_application_lines()
@@ -302,10 +341,12 @@ class NoticeTest extends TestCase
             ],
         ];
 
-        $notice = $this->build_notice([
-                                          'backtrace'    => $raw_backtrace,
-                                          'project_root' => FIXTURES_PATH,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'backtrace'    => $raw_backtrace,
+                'project_root' => FIXTURES_PATH,
+            ]
+        );
 
         $line = Backtrace\Line::parse($raw_backtrace[1]);
 
@@ -314,12 +355,14 @@ class NoticeTest extends TestCase
 
     public function test_should_not_set_session_data_when_send_request_session_is_false()
     {
-        $notice = $this->build_notice([
-                                          'send_request_session' => false,
-                                          'session_data'         => [
-                                              'message' => 'I am invisible.',
-                                          ],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'send_request_session' => false,
+                'session_data'         => [
+                    'message' => 'I am invisible.',
+                ],
+            ]
+        );
 
         $this->assertEmpty($notice->session_data);
     }
@@ -330,9 +373,11 @@ class NoticeTest extends TestCase
             'user_id' => 123,
         ];
 
-        $notice = $this->build_notice([
-                                          'session_data' => $session,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'session_data' => $session,
+            ]
+        );
 
         $this->assertEquals($session, $notice->session_data);
     }
@@ -345,9 +390,11 @@ class NoticeTest extends TestCase
             ]
         ];
 
-        $notice = $this->build_notice([
-                                          'session' => $session,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'session' => $session,
+            ]
+        );
 
         $this->assertEquals($session, $notice->session_data);
     }
@@ -383,33 +430,39 @@ class NoticeTest extends TestCase
             'HTTPS'        => '',
         ];
 
-        $notice = $this->build_notice([
-                                          'cgi_data' => $env,
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'cgi_data' => $env,
+            ]
+        );
 
         $this->assertEquals('http://example.com/index.php/sessions/create?one=1&two=2&three=3', $notice->url);
     }
 
     public function test_should_be_ignored_when_in_ignore()
     {
-        $notice = $this->build_notice([
-                                          'exception' => new \Exception,
-                                          'ignore'    => ['\\Exception'],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception' => new \Exception,
+                'ignore'    => ['\\Exception'],
+            ]
+        );
 
         $this->assertTrue($notice->isIgnored());
     }
 
     public function test_should_be_ignored_when_filtered_with_callback()
     {
-        $notice = $this->build_notice([
-                                          'exception'         => new \Exception,
-                                          'ignore_by_filters' => [
-                                              function ($notice) {
-                                                  return true;
-                                              }
-                                          ],
-                                      ]);
+        $notice = $this->build_notice(
+            [
+                'exception'         => new \Exception,
+                'ignore_by_filters' => [
+                    function ($notice) {
+                        return true;
+                    }
+                ],
+            ]
+        );
 
         $this->assertTrue($notice->isIgnored());
     }

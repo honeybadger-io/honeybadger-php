@@ -30,13 +30,15 @@ class EnvironmentTest extends TestCase
 
     public function test_should_remove_non_standard_variables_when_not_supplied_data()
     {
-        $this->setEnvironment([
-                                  '_SERVER' => [
-                                      'DATABASE_URL'  => 'postgres://root:p4ssw0rd@localhost/some_db',
-                                      'PASSWORD_SALT' => 'abcdefghijklmnopqrstuvwxyz',
-                                  ],
-                                  '_COOKIE' => [],
-                              ]);
+        $this->setEnvironment(
+            [
+                '_SERVER' => [
+                    'DATABASE_URL'  => 'postgres://root:p4ssw0rd@localhost/some_db',
+                    'PASSWORD_SALT' => 'abcdefghijklmnopqrstuvwxyz',
+                ],
+                '_COOKIE' => [],
+            ]
+        );
 
         $environment = Environment::factory()->asArray();
         $this->assertFalse(isset($environment['DATABASE_URL']));
@@ -80,10 +82,12 @@ class EnvironmentTest extends TestCase
             'ORIG_PATH_INFO'       => '/',
         ];
 
-        $this->setEnvironment([
-                                  '_SERVER' => $variables,
-                                  '_COOKIE' => [],
-                              ]);
+        $this->setEnvironment(
+            [
+                '_SERVER' => $variables,
+                '_COOKIE' => [],
+            ]
+        );
 
         $environment = Environment::factory()->asArray();
 
@@ -100,10 +104,12 @@ class EnvironmentTest extends TestCase
             'HTTP_USER_AGENT'   => 'cURL',
         ];
 
-        $this->setEnvironment([
-                                  '_SERVER' => $headers,
-                                  '_COOKIE' => [],
-                              ]);
+        $this->setEnvironment(
+            [
+                '_SERVER' => $headers,
+                '_COOKIE' => [],
+            ]
+        );
 
         $environment = Environment::factory()->asArray();
 
@@ -116,9 +122,11 @@ class EnvironmentTest extends TestCase
             'password' => 'smart people put sensitive data in plain text cookies',
         ];
 
-        $this->setEnvironment([
-                                  '_COOKIE' => $cookies,
-                              ]);
+        $this->setEnvironment(
+            [
+                '_COOKIE' => $cookies,
+            ]
+        );
 
         $environment = Environment::factory()->asArray();
 
@@ -132,16 +140,24 @@ class EnvironmentTest extends TestCase
 
     public function test_protocol_should_be_http_when_https_off()
     {
-        $this->assertEquals('http', Environment::factory([
-                                                             'HTTPS' => 'off',
-                                                         ])->protocol());
+        $this->assertEquals(
+            'http', Environment::factory(
+            [
+                'HTTPS' => 'off',
+            ]
+        )->protocol()
+        );
     }
 
     public function test_protocol_should_be_https_when_https_on()
     {
-        $this->assertEquals('https', Environment::factory([
-                                                              'HTTPS' => 'on',
-                                                          ])->protocol());
+        $this->assertEquals(
+            'https', Environment::factory(
+            [
+                'HTTPS' => 'on',
+            ]
+        )->protocol()
+        );
     }
 
     public function provider_https_on()
@@ -173,113 +189,167 @@ class EnvironmentTest extends TestCase
      */
     public function test_protocol_should_be_https_when_https_not_blank($value)
     {
-        $this->assertEquals('https', Environment::factory([
-                                                              'HTTPS' => $value,
-                                                          ])->protocol());
+        $this->assertEquals(
+            'https', Environment::factory(
+            [
+                'HTTPS' => $value,
+            ]
+        )->protocol()
+        );
     }
 
     public function test_is_secure()
     {
-        $this->assertTrue(Environment::factory([
-                                                   'HTTPS' => 'on',
-                                               ])->isSecure());
+        $this->assertTrue(
+            Environment::factory(
+                [
+                    'HTTPS' => 'on',
+                ]
+            )->isSecure()
+        );
 
-        $this->assertFalse(Environment::factory([
-                                                    'HTTPS' => 'off',
-                                                ])->isSecure());
+        $this->assertFalse(
+            Environment::factory(
+                [
+                    'HTTPS' => 'off',
+                ]
+            )->isSecure()
+        );
     }
 
     public function test_host_uses_server_name_when_http_host_unavailable()
     {
-        $this->assertEquals('example.com', Environment::factory([
-                                                                    'SERVER_NAME' => 'example.com',
-                                                                ])->host());
+        $this->assertEquals(
+            'example.com', Environment::factory(
+            [
+                'SERVER_NAME' => 'example.com',
+            ]
+        )->host()
+        );
     }
 
     public function test_host_prefers_http_host()
     {
-        $this->assertEquals('foo.net', Environment::factory([
-                                                                'SERVER_NAME' => 'example.com',
-                                                                'HTTP_HOST'   => 'foo.net',
-                                                            ])->host());
+        $this->assertEquals(
+            'foo.net', Environment::factory(
+            [
+                'SERVER_NAME' => 'example.com',
+                'HTTP_HOST'   => 'foo.net',
+            ]
+        )->host()
+        );
     }
 
     public function test_port_should_return_server_port()
     {
-        $this->assertEquals('123', Environment::factory([
-                                                            'SERVER_PORT' => '123',
-                                                        ])->port());
+        $this->assertEquals(
+            '123', Environment::factory(
+            [
+                'SERVER_PORT' => '123',
+            ]
+        )->port()
+        );
     }
 
     public function test_port_should_detect_default_when_missing()
     {
-        $this->assertEquals(80, Environment::factory([
-                                                         'HTTPS' => 'off',
-                                                     ])->port());
+        $this->assertEquals(
+            80, Environment::factory(
+            [
+                'HTTPS' => 'off',
+            ]
+        )->port()
+        );
 
-        $this->assertEquals(443, Environment::factory([
-                                                          'HTTPS' => 'on',
-                                                      ])->port());
+        $this->assertEquals(
+            443, Environment::factory(
+            [
+                'HTTPS' => 'on',
+            ]
+        )->port()
+        );
     }
 
     public function test_non_standard_port_when_ssl()
     {
-        $this->assertTrue(Environment::factory([
-                                                   'HTTPS'       => 'on',
-                                                   'SERVER_PORT' => 123,
-                                               ])->isNonStandardPort());
+        $this->assertTrue(
+            Environment::factory(
+                [
+                    'HTTPS'       => 'on',
+                    'SERVER_PORT' => 123,
+                ]
+            )->isNonStandardPort()
+        );
 
-        $this->assertFalse(Environment::factory([
-                                                    'HTTPS'       => 'on',
-                                                    'SERVER_PORT' => 443,
-                                                ])->isNonStandardPort());
+        $this->assertFalse(
+            Environment::factory(
+                [
+                    'HTTPS'       => 'on',
+                    'SERVER_PORT' => 443,
+                ]
+            )->isNonStandardPort()
+        );
     }
 
     public function test_non_standard_port_when_http()
     {
-        $this->assertTrue(Environment::factory([
-                                                   'HTTPS'       => 'off',
-                                                   'SERVER_PORT' => 456,
-                                               ])->isNonStandardPort());
+        $this->assertTrue(
+            Environment::factory(
+                [
+                    'HTTPS'       => 'off',
+                    'SERVER_PORT' => 456,
+                ]
+            )->isNonStandardPort()
+        );
 
-        $this->assertFalse(Environment::factory([
-                                                    'HTTPS'       => 'off',
-                                                    'SERVER_PORT' => 80,
-                                                ])->isNonStandardPort());
+        $this->assertFalse(
+            Environment::factory(
+                [
+                    'HTTPS'       => 'off',
+                    'SERVER_PORT' => 80,
+                ]
+            )->isNonStandardPort()
+        );
     }
 
     public function test_url_uses_environment_when_present()
     {
-        $env = Environment::factory([
-                                        'url' => 'http://example.com/',
-                                    ]);
+        $env = Environment::factory(
+            [
+                'url' => 'http://example.com/',
+            ]
+        );
 
         $this->assertEquals('http://example.com/', $env['url']);
     }
 
     public function test_url_returns_combined_protocol_host_uri_query_string()
     {
-        $env = Environment::factory([
-                                        'REQUEST_URI'  => '/foo/bar/xyz?one=1&two=2&three=3',
-                                        'SCRIPT_NAME'  => '/foo/index.php',
-                                        'HTTPS'        => 'on',
-                                        'HTTP_HOST'    => 'www.example.com',
-                                        'QUERY_STRING' => 'one=1&two=2&three=3',
-                                    ]);
+        $env = Environment::factory(
+            [
+                'REQUEST_URI'  => '/foo/bar/xyz?one=1&two=2&three=3',
+                'SCRIPT_NAME'  => '/foo/index.php',
+                'HTTPS'        => 'on',
+                'HTTP_HOST'    => 'www.example.com',
+                'QUERY_STRING' => 'one=1&two=2&three=3',
+            ]
+        );
 
         $this->assertEquals('https://www.example.com/foo/bar/xyz?one=1&two=2&three=3', $env['url']);
     }
 
     public function test_url_adds_port_when_non_standard()
     {
-        $env = Environment::factory([
-                                        'REQUEST_URI'  => '/foo/bar/xyz?one=1&two=2&three=3',
-                                        'SCRIPT_NAME'  => '/foo/index.php',
-                                        'HTTPS'        => '',
-                                        'HTTP_HOST'    => 'www.example.com',
-                                        'QUERY_STRING' => 'one=1&two=2&three=3',
-                                        'SERVER_PORT'  => '123',
-                                    ]);
+        $env = Environment::factory(
+            [
+                'REQUEST_URI'  => '/foo/bar/xyz?one=1&two=2&three=3',
+                'SCRIPT_NAME'  => '/foo/index.php',
+                'HTTPS'        => '',
+                'HTTP_HOST'    => 'www.example.com',
+                'QUERY_STRING' => 'one=1&two=2&three=3',
+                'SERVER_PORT'  => '123',
+            ]
+        );
 
         $this->assertEquals('http://www.example.com:123/foo/bar/xyz?one=1&two=2&three=3', $env['url']);
     }
