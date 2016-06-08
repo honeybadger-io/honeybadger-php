@@ -51,6 +51,20 @@ class Honeybadger
     protected static $init;
 
     /**
+     * Configures Honeybadger with a new global configuration. If not yet
+     * initialized then this also invokes a lazy initialization.
+     *
+     * @param array $options configuration options
+     *
+     * @return void
+     */
+    public static function configure(array $options = [])
+    {
+        self::init();
+        self::$config->values($options);
+    }
+
+    /**
      * Initializes Honeybadger with a new global configuration.
      *
      * @return  void
@@ -161,7 +175,7 @@ class Honeybadger
      * Sends a notice with the supplied `$exception` and `$options`.
      *
      * @param   array|\Exception $exception The exception.
-     * @param   array      $options   Additional options for the notice.
+     * @param   array            $options   Additional options for the notice.
      *
      * @return  string     The error identifier.
      */
