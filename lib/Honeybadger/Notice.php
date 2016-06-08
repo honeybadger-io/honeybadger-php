@@ -306,6 +306,8 @@ class Notice extends SemiOpenStruct
      */
     public static function factory(array $options = [])
     {
+        Honeybadger::init(); // ensure prior initialization
+
         return new self(Honeybadger::$config->merge($options));
     }
 
