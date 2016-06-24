@@ -79,7 +79,7 @@ class Honeybadger
         // Honeybadger is now initialized.
         self::$init = true;
 
-        self::$logger = new Logger\Void;
+        self::$logger = new Logger\Standard;
         self::$config = new Config;
         self::$sender = new Sender;
 
