@@ -84,6 +84,18 @@ adding it to the list:
 
 * *Nothing here yet...*
 
+## Sample Application
+
+If you'd like to see the library in action before you integrate it with your apps, check out our [sample application](https://github.com/honeybadger-io/crywolf-laravel). 
+
+You can deploy the sample app to your Heroku account by clicking this button:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/honeybadger-io/crywolf-laravel)
+
+Don't forget to destroy the Heroku app after you're done so that you aren't charged for usage.
+
+The code for the sample app is [available on Github](https://github.com/honeybadger-io/crywolf-laravel), in case you'd like to read through it, or run it locally.
+
 ## Usage
 
 For the most part, Honeybadger works for itself.
