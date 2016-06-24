@@ -33,7 +33,7 @@ class HoneybadgerTest extends TestCase
     {
         $this->restoreEnvironment();
         Honeybadger::init();
-        $this->assertTrue(Honeybadger::$logger instanceof Logger\Void);
+        $this->assertTrue(Honeybadger::$logger instanceof Logger\Standard);
     }
 
     public function test_configured()

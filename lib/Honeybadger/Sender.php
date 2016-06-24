@@ -2,7 +2,7 @@
 
 namespace Honeybadger;
 
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 /**
  * @package  Honeybadger
@@ -14,12 +14,15 @@ class Sender
      * Endpoint URL prefix
      */
     const NOTICES_URI = '/v1/notices/';
+
     /**
+     * Headers for all requests
+     *
      * @var array
      */
     protected static $default_headers = [
         'Accept'       => 'application/json',
-        'Content-Type' => 'application/json; charset=utf-8',
+        'Content-Type' => 'application/json; charset=utf-8'
     ];
 
     /**
@@ -36,72 +39,74 @@ class Sender
             $data = (string)$notice;
         }
 
-        $headers = [];
-        if ($api_key = Honeybadger::$config->api_key) {
-            $headers['X-API-Key'] = $api_key;
+        $headers = self::$default_headers;
+        $options = ['exceptions' => false];
+
+        $config  = Honeybadger::$config;
+        $api_key = $config->api_key;
+
+        if (!$api_key) {
+            Honeybadger::$logger->critical(
+                '[' . __CLASS__ . '::setup_http_client] Failure to send.
+             Error: Missing API_KEY - required.'
+            );
+
+            return;
         }
 
-        $response = $this->setupHttpClient()
-                         ->post(self::NOTICES_URI, $headers, $data)
-                         ->send();
+        $headers['X-API-Key']  = $api_key;
+        $headers['user-agent'] = $this->_userAgent();
 
-        $body = $response->json();
+        $options['base_uri'] = $config->baseUrl();
+        $options['timeout']  = $config->http_open_timeout;
 
-        return $body['id'];
-    }
-
-    /**
-     * @return Client
-     * @throws \Exception
-     */
-    private function setupHttpClient()
-    {
-        // Fetch a copy of the configuration.
-        $config = Honeybadger::$config;
-
-        $options = [
-            'curl.options' => [
-                // Timeouts
-                'CURLOPT_CONNECTTIMEOUT' => $config->http_open_timeout,
-                'CURLOPT_TIMEOUT'        => $config->http_read_timeout,
-                // Location redirects
-                'CURLOPT_AUTOREFERER'    => true,
-                'CURLOPT_FOLLOWLOCATION' => true,
-                'CURLOPT_MAXREDIRS'      => 10,
-            ],
-        ];
+        // $options['debug']    = true;
 
         if ($config->proxy_host) {
-            $options['curl.options']['CURLOPT_HTTPPROXYTUNNEL'] = true;
-            $options['curl.options']['CURLOPT_PROXY']           = $config->proxy_host;
-            $options['curl.options']['CURLOPT_PROXYPORT']       =
-                $config->proxy_user . ':' . $config->proxy_pass;
+            $options['proxy'] = 'tcp://' .
+                $config->proxy_user .
+                ':' .
+                $config->proxy_pass .
+                '@' .
+                $config->proxy_host .
+                ':' .
+                $config->proxy_port;
         }
 
         if ($config->isSecure()) {
             $options['ssl.certificate_authority'] = $config->certificate_authority;
         }
 
-        try {
-            $client = new Client($config->baseUrl(), $options);
-            $client->setDefaultHeaders(self::$default_headers);
-            $client->setUserAgent($this->userAgent());
+        $client = new Client($options);
 
-            return $client;
-        } catch (\Exception $e) {
-            // $this->log(Logger::ERROR,
-            // '['.__CLASS__.'::setup_http_client] Failure initializing the request client.
-            // Error: [ '.$e->getCode().' ] '.$e->getMessage());
+        $response = $client->post(
+            self::NOTICES_URI,
+            ['headers' => $headers,
+             'body'    => $data]
+        );
 
-            // Rethrow the exception
-            throw $e;
+        if ($response->getStatusCode() != 201) {
+            Honeybadger::$logger->critical(
+                '[' . __CLASS__ . '::http_client] Failure response. ' .
+                $response->getStatusCode() .
+                ' ' . $response->getReasonPhrase() .
+                ' ' . $response->getBody()
+            );
+
+            return;
         }
+
+        $body = (array)json_decode($response->getBody());
+
+        return $body['id'];
     }
 
     /**
+     * User agent for Honeybadger
+     *
      * @return string
      */
-    private function userAgent()
+    private function _userAgent()
     {
         return sprintf(
             '%s v%s (%s)',
