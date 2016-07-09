@@ -8,7 +8,7 @@ When an unhandled exception or error occurs, Honeybadger will POST the relevant 
 
 honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
 
-## Getting started
+## Getting Started
 
 1. Add honeybadger-php to your `composer.json`:
 
