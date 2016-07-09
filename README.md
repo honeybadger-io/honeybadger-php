@@ -38,6 +38,32 @@ Honeybadger::$config->values(array(
 Your application will then report unhandled errors and exceptions
 to Honeybadger. That's it!
 
+## Laravel Installation
+
+1. Add honeybadger-php to your `composer.json`:
+
+        {
+          // ...
+          "require": {
+            // ...
+            "honeybadger-io/honeybadger": "*"
+          }
+          // ...
+        }
+
+2. Run `composer install`.
+
+3. Report exceptions to Honeybadger from Laravel's exception handler in app/start/global.php (under the "Application Error Handler" heading):
+
+        use Honeybadger\Honeybadger;
+        App::error(function(Exception $exception, $code)
+        {
+        	Honeybadger::notify($exception);
+        	Log::error($exception);
+        });
+
+See [crywolf-laravel](https://github.com/honeybadger-io/crywolf-laravel) for an example Laravel application.
+
 ## Slim Installation
 
 Add honeybadger-php to your `composer.json`:
