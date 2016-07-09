@@ -8,37 +8,7 @@ When an unhandled exception or error occurs, Honeybadger will POST the relevant 
 
 honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
 
-## Standalone Installation
-
-Add honeybadger-php to your `composer.json`:
-
-```javascript
-{
-  // ...
-  "require": {
-    // ...
-    "honeybadger-io/honeybadger": "*"
-  }
-  // ...
-}
-```
-
-Then configure `Honeybadger` in your bootstrap/`index.php`/initializers:
-
-```php
-<?php
-
-use Honeybadger\Honeybadger;
-
-Honeybadger::$config->values(array(
-    'api_key' => '[your-api-key]',
-));
-```
-
-Your application will then report unhandled errors and exceptions
-to Honeybadger. That's it!
-
-## Laravel Installation
+## Getting started
 
 1. Add honeybadger-php to your `composer.json`:
 
@@ -54,8 +24,28 @@ to Honeybadger. That's it!
     ```
 
 2. Run `composer install`.
+3. Complete the installation for your app/framework:
 
-3. Report exceptions to Honeybadger from Laravel's exception handler in app/start/global.php (under the "Application Error Handler" heading):
+### Standalone Installation
+
+Configure `Honeybadger` in your bootstrap/`index.php`/initializers:
+
+```php
+<?php
+
+use Honeybadger\Honeybadger;
+
+Honeybadger::$config->values(array(
+    'api_key' => '[your-api-key]',
+));
+```
+
+Your application will then report unhandled errors and exceptions
+to Honeybadger. That's it!
+
+### Laravel Installation
+
+Report exceptions to Honeybadger from Laravel's exception handler in *app/start/global.php* (under the "Application Error Handler" heading):
 
     ```php
     use Honeybadger\Honeybadger;
@@ -73,20 +63,7 @@ to Honeybadger. That's it!
 
 See [crywolf-laravel](https://github.com/honeybadger-io/crywolf-laravel) for an example Laravel application.
 
-## Slim Installation
-
-Add honeybadger-php to your `composer.json`:
-
-```javascript
-{
-  // ...
-  "require": {
-    // ...
-    "honeybadger-io/honeybadger": "*"
-  }
-  // ...
-}
-```
+### Slim Installation
 
 Call `Honeybadger\Slim::init()` after your application definition:
 
