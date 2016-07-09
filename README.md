@@ -47,19 +47,19 @@ to Honeybadger. That's it!
 
 Report exceptions to Honeybadger from Laravel's exception handler in *app/start/global.php* (under the "Application Error Handler" heading):
 
-    ```php
-    use Honeybadger\Honeybadger;
-    
-    Honeybadger::$config->values(array(
-      'api_key' => '[your-api-key]',
-    ));
-    
-    App::error(function(Exception $exception, $code)
-    {
-    	Honeybadger::notify($exception);
-    	Log::error($exception);
-    });
-    ```
+```php
+use Honeybadger\Honeybadger;
+
+Honeybadger::$config->values(array(
+  'api_key' => '[your-api-key]',
+));
+
+App::error(function(Exception $exception, $code)
+{
+	Honeybadger::notify($exception);
+	Log::error($exception);
+});
+```
 
 See [crywolf-laravel](https://github.com/honeybadger-io/crywolf-laravel) for an example Laravel application.
 
