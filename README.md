@@ -10,7 +10,7 @@ honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
 
 ## Getting Started
 
-1. Add honeybadger-php to your `composer.json`:
+### 1. Add honeybadger-php to your `composer.json`:
 
     ```javascript
     {
@@ -23,10 +23,10 @@ honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
     }
     ```
 
-2. Run `composer install`.
-3. Complete the installation for your app/framework:
+### 2. Run `composer install`.
+### 3. Complete the installation for your app/framework:
 
-### Standalone Installation
+#### Standalone Installation
 
 Configure `Honeybadger` in your bootstrap/`index.php`/initializers:
 
@@ -43,7 +43,7 @@ Honeybadger::$config->values(array(
 Your application will then report unhandled errors and exceptions
 to Honeybadger. That's it!
 
-### Laravel Installation
+#### Laravel Installation
 
 Report exceptions to Honeybadger from Laravel's exception handler in *app/start/global.php* (under the "Application Error Handler" heading):
 
@@ -63,7 +63,7 @@ App::error(function(Exception $exception, $code)
 
 See [crywolf-laravel](https://github.com/honeybadger-io/crywolf-laravel) for an example Laravel application.
 
-### Slim Installation
+#### Slim Installation
 
 Call `Honeybadger\Slim::init()` after your application definition:
 
@@ -343,16 +343,20 @@ Honeybadger::$config->values(array(
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+If you're adding a new feature, please [submit an issue](https://github.com/honeybadger-io/honeybadger-php/issues/new) as a preliminary step; that way you can be (moderately) sure that your pull request will be accepted.
+
+### To contribute your code:
+
+1. Fork it.
+2. Create a topic branch `git checkout -b my_branch`
+3. Commit your changes `git commit -am "Boom"`
+3. Push to your branch `git push origin my_branch`
+4. Send a [pull request](https://github.com/honeybadger-io/honeybadger-php/pulls)
 
 ## Credits
 
 This library was originally created by [Gabe Evans](https://github.com/gevans). Thanks Gabe!
 
-## License
+### License
 
-MIT Licensed. See [LICENSE](./LICENSE) for details.
+This library is MIT licensed. See the [LICENSE](https://raw.github.com/honeybadger-io/honeybadger-php/master/LICENSE) file in this repository for details.
