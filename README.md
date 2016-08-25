@@ -149,6 +149,7 @@ catch (Exception $e)
 | --- | ----------- | ---- |
 | `api_key` | The API key used by Honeybadger to locate your project. | `String` |
 | `context` | Any custom or arbitrary data should be sent in the context array. Local context is automatically merged with global context set via `Honeybadger::context()` when reporting the error. | `Array` |
+| `cgi_data` | Used for server environment variables. | `Array` |
 | `error_class` | Use this to group similar errors together. When Honeybadger catches an exception it sends the class name of that exception object. | `String` |
 | `error_message` | This is the title of the error you see in the errors list. For exceptions it is "\<exception class\> [ \<exception code\> ] : \<exception message\>" | `String` |
 | `parameters` | When Honeybadger catches an exception in a controller, the actual HTTP client request parameters are sent using this key. | `Array` |
@@ -167,16 +168,17 @@ array(
     'parameters'    => array(),
     'session'       => $_SESSION,
     'context'       => Honeybadger::context(),
+    'cgi_data'    => array(),
 );
 ```
 
 You can override any of the default options.
 
-### Sending shell environment variables when "Going beyond exceptions"
+### Sending shell environment variables
 
 > One common request we see is to send shell environment variables along with
-> manual exception notification.  We recommend sending them along with CGI data
-> or Rack environment (:cgi_data or :rack_env keys, respectively.)
+> manual exception notification. We recommend sending them along with CGI data
+> (:cgi_data key).
 
 See `Honeybadger::Notice::__construct` in
 [lib/Honeybadger/Notice.php](https://github.com/honeybadger-io/honeybadger-php/blob/master/lib/Honeybadger/Notice.php)
