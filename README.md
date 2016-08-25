@@ -98,6 +98,45 @@ Don't forget to destroy the Heroku app after you're done so that you aren't char
 
 The code for the sample app is [available on Github](https://github.com/honeybadger-io/crywolf-laravel), in case you'd like to read through it, or run it locally.
 
+## Configuration
+
+To set configuration options, update the `Honeybadger::$config` array, like so:
+
+```php
+<?php
+
+Honeybadger::$config->values(array(
+  'api_key'          => '[your-api-key]',
+  'environment_name' => 'production',
+));
+
+```
+The following options are available to you:
+
+|  Name | Type | Description |
+| ----- | ---- | ----------- |
+| api_key | `string` | The API key for your project, found on the project edit form. |
+| host | `string` | The host to connect to (defaults to `api.honeybadger.io`). |
+| port | `integer` | The port on which your Honeybadger server runs (defaults to `443` for secure connections, `80` for insecure connections).  |
+| http_open_timeout | `integer` | The HTTP open timeout in seconds (defaults to `2`). |
+| http_read_timeout | `integer` | The HTTP read timeout in seconds (defaults to `5`). |
+| proxy_host | `string` | The hostname of your proxy server (if using a proxy). |
+| proxy_port | `integer` | The port of your proxy server (if using a proxy). |
+| proxy_user | `string` | The username to use when logging into your proxy server (if using a proxy). |
+| proxy_pass | `string` | The password to use when logging into your proxy server (if using a proxy). |
+| backtrace_filters | `array` | A list of filters for cleaning and pruning the backtrace. See `Config::filter_backtrace`. |
+| params_filters | `array` | A list of parameters that should be filtered out of what is sent to Honeybadger. By default, all `password` and `password_confirmation` attributes will have their contents replaced. |
+| ignore_by_filters | `array` | A list of filters for ignoring exceptions. See `Config::ignore_by_filter`. |
+| ignore | `array` | A list of exception classes to ignore. |
+| ignore_user_agents | `array` | A list of user agents to ignore. |
+| development_environments | `array` | A list of environments in which notifications should not be sent. |
+| environment_name | `string` | The name of the environment the application is running in. |
+| project_root | `string` | The path to the project in which the error occurred. |
+| user_information | `string` | The text that the placeholder is replaced with. `{{error_id}}` is the actual error number. |
+| source_extract_radius | `integer` | The radius around trace line to include in source excerpt. |
+| send_request_session | `boolean` | `true` to send session data, `false` to exclude. |
+| debug | `boolean` | `true` to log extra debug info, `false` to suppress. |
+
 ## Public Interface
 
 ### `Honeybadger::notify()`: Send an error to Honeybadger.
