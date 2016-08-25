@@ -98,14 +98,13 @@ Don't forget to destroy the Heroku app after you're done so that you aren't char
 
 The code for the sample app is [available on Github](https://github.com/honeybadger-io/crywolf-laravel), in case you'd like to read through it, or run it locally.
 
-## Usage
+## Public Interface
 
-For the most part, Honeybadger works for itself.
+### `Honeybadger::notify()`: Send an error to Honeybadger.
 
-It intercepts unhandled errors and uncaught exceptions and sends notifications.
+If you've caught an exception in your code, but would still like to report the error to Honeybadger, this is the method for you. 
 
-If you want to log arbitrary things which you've caught yourself, you can do
-something like this:
+#### Examples:
 
 ```php
 <?php
@@ -121,8 +120,49 @@ catch (Exception $e)
 // ...
 ```
 
-The `::notify()` call will send the notice over to Honeybadger for
-later analysis.
+---
+
+### `Honeybadger::context()`: Set metadata to be sent if an error occurs
+
+This method lets you set context data that will be sent if an error should occur.
+
+For example, it's often useful to record the current user's ID when an error occurs in a web app. To do that, just use `::context` to set the user id on each request. If an error occurs, the id will be reported with it.
+
+#### Examples:
+
+```php
+<?php
+
+Honeybadger::context(array(
+  'user_id' => 1
+));
+```
+
+---
+
+### `Honeybadger::resetContext()`: Clear context metadata
+
+If you've used `Honeybadger::context()` to store context data, you can clear it with `Honeybadger::resetContext()`.
+
+#### Example:
+
+```php
+<?php
+
+Honeybadger::resetContext();
+```
+
+You can also pass an array as the first argument to replace the context data:
+
+```php
+<?php
+
+Honeybadger::resetContext(array(
+  'user_email' => 'user@example.com'
+));
+```
+
+---
 
 ## Ignored Environments
 
