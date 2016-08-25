@@ -36,13 +36,6 @@ class HoneybadgerTest extends TestCase
         $this->assertTrue(Honeybadger::$logger instanceof Logger\Standard);
     }
 
-    public function test_configured()
-    {
-        $this->restoreEnvironment();
-        Honeybadger::configure([]);
-        $this->assertTrue(Honeybadger::$config instanceof Config);
-    }
-
     public function test_initialized_with_config()
     {
         $this->assertTrue(Honeybadger::$config instanceof Config);
