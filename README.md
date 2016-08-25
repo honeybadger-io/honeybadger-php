@@ -86,19 +86,6 @@ $app->add(new Honeybadger\Slim(array(
 $app->run();
 ```
 
-## Additional Integrations
-
-This library will work well by following the
-[standalone installation](https://github.com/honeybadger-io/honeybadger-php#standalone-installation)
-steps outlined above. However, if you want to integrate your favorite framework,
-you can use the
-[Slim integration](https://github.com/honeybadger-io/honeybadger-php/blob/master/lib/Honeybadger/Slim.php)
-as a reference. If you've written your own integration that you'd like to share,
-send a [pull request](https://github.com/honeybadger-io/honeybadger-php/pull/new/master)
-adding it to the list:
-
-* *Nothing here yet...*
-
 ## Sample Application
 
 If you'd like to see the library in action before you integrate it with your apps, check out our [sample application](https://github.com/honeybadger-io/crywolf-laravel). 
