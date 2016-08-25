@@ -10,7 +10,9 @@ honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
 
 ## Getting Started
 
-### 1. Add honeybadger-php to your `composer.json`:
+### 1. Install the library
+
+First, add honeybadger-php to your `composer.json`:
 
     ```javascript
     {
@@ -23,8 +25,9 @@ honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
     }
     ```
 
-### 2. Run `composer install`.
-### 3. Complete the installation for your app/framework:
+Then run `composer install`.
+
+### 2. Complete the installation for your app/framework:
 
 #### Standalone Installation
 
