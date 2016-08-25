@@ -120,13 +120,75 @@ catch (Exception $e)
 // ...
 ```
 
+You can also pass an array to the `Honeybadger::notify()` method and store
+whatever you want, not just an exception, anywhere in your app.
+
+```php
+<?php
+
+try
+{
+    $params = array(
+        // Params that you pass to a method that can throw an exception.
+    );
+    my_unpredictable_method($params);
+}
+catch (Exception $e)
+{
+    Honeybadger::notify(array(
+        'error_class'   => 'Special Error',
+        'error_message' => 'Special Error: '.$e->getMessage(),
+        'parameters'    => $params,
+    ));
+}
+```
+
+`Honeybadger::notify()` will get all the information about the error itself. These are the keys you can provide to the array:
+
+| Key | Description | Type |
+| --- | ----------- | ---- |
+| `api_key` | The API key used by Honeybadger to locate your project. | `String` |
+| `context` | Any custom or arbitrary data should be sent in the context array. Local context is automatically merged with global context set via `Honeybadger::context()` when reporting the error. | `Array` |
+| `error_class` | Use this to group similar errors together. When Honeybadger catches an exception it sends the class name of that exception object. | `String` |
+| `error_message` | This is the title of the error you see in the errors list. For exceptions it is "\<exception class\> [ \<exception code\> ] : \<exception message\>" | `String` |
+| `parameters` | When Honeybadger catches an exception in a controller, the actual HTTP client request parameters are sent using this key. | `Array` |
+| `session` | The current session, for web requests. | `Array` |
+| `backtrace` | A PHP backtrace pointing to the location in the code which caused the error. | `Array` |
+
+Honeybadger merges the array you pass with these default options:
+
+```php
+<?php
+
+array(
+    'api_key'       => Honeybadger::$config->api_key,
+    'error_message' => 'Notification',
+    'backtrace'     => debug_backtrace(),
+    'parameters'    => array(),
+    'session'       => $_SESSION,
+    'context'       => Honeybadger::context(),
+);
+```
+
+You can override any of the default options.
+
+### Sending shell environment variables when "Going beyond exceptions"
+
+> One common request we see is to send shell environment variables along with
+> manual exception notification.  We recommend sending them along with CGI data
+> or Rack environment (:cgi_data or :rack_env keys, respectively.)
+
+See `Honeybadger::Notice::__construct` in
+[lib/Honeybadger/Notice.php](https://github.com/honeybadger-io/honeybadger-php/blob/master/lib/Honeybadger/Notice.php)
+for more details.
+
 ---
 
 ### `Honeybadger::context()`: Set metadata to be sent if an error occurs
 
 This method lets you set context data that will be sent if an error should occur.
 
-For example, it's often useful to record the current user's ID when an error occurs in a web app. To do that, just use `::context` to set the user id on each request. If an error occurs, the id will be reported with it.
+For example, it's often useful to record the current user's ID and/or email address when an error occurs in a web app. To do that, just use `::context` to set the user info on each request. If an error occurs, the id will be reported with it.
 
 #### Examples:
 
@@ -134,9 +196,17 @@ For example, it's often useful to record the current user's ID when an error occ
 <?php
 
 Honeybadger::context(array(
-  'user_id' => 1
+  'user_id'    => 1,
+  'user_email' => 'user@example.com',
 ));
 ```
+
+Now whenever an error occurs, Honeybadger will display the affected user's ID
+and email address, if available.
+
+Subsequent calls to `::context()` will merge the existing array with any new
+data, so you can effectively build up context throughout your request's life
+cycle.
 
 ---
 
@@ -197,98 +267,6 @@ Honeybadger::$config->development_environments = array(
 
 If you choose to override the `development_environments` option for whatever
 reason, please make sure your test environments are ignored.
-
-## Sending Custom Data
-
-Honeybadger allows you to send custom data using `Honeybadger::context()`.
-Here's an example of sending some user-specific information in a Slim callback:
-
-```php
-<?php
-
-$authenticate_user = function() use $app {
-  // ...
-    if (isset($current_user))
-    {
-        Honeybadger::context(array(
-          'user_id'    => $current_user->id,
-          'user_email' => $current_user->email,
-        ));
-    }
-};
-
-// ...
-
-$app->get('/protected_resource', $authenticate_user, function() {
-    // ...
-});
-```
-
-Now whenever an error occurs, Honeybadger will display the affected user's ID
-and email address, if available.
-
-Subsequent calls to `::context()` will merge the existing array with any new
-data, so you can effectively build up context throughout your request's life
-cycle.
-
-## Going Beyond Exceptions
-
-You can also pass an array to the `Honeybadger::notify()` method and store
-whatever you want, not just an exception, anywhere in your app.
-
-```php
-<?php
-
-try
-{
-    $params = array(
-        // Params that you pass to a method that can throw an exception.
-    );
-    my_unpredictable_method($params);
-}
-catch (Exception $e)
-{
-    Honeybadger::notify(array(
-        'error_class'   => 'Special Error',
-        'error_message' => 'Special Error: '.$e->getMessage(),
-        'parameters'    => $params,
-    ));
-}
-```
-
-`Honeybadger::notify()` will get all the information about the error itself. As
-for an array, these are the keys you should pass:
-
-* `error_class` - Use this to group similar errors together. When Honeybadger catches an exception it sends the class name of that exception object.
-* `error_message` - This is the title of the error you see in the errors list. For exceptions it is "<exception class> [ <exception code> ] : <exception message>"
-* `parameters` - While there are several ways to send additional data to Honeybadger, passing an array as `parameters` as in the example above is the most common use case. When Honeybadger catches an exception in a controller, the actual HTTP client request parameters are sent using this key.
-
-Honeybadger merges the array you pass with these default options:
-
-```php
-<?php
-
-array(
-    'api_key'       => Honeybadger::$config->api_key,
-    'error_message' => 'Notification',
-    'backtrace'     => debug_backtrace(),
-    'parameters'    => array(),
-    'session'       => $_SESSION,
-    'context'       => Honeybadger::context(),
-);
-```
-
-You can override any of those parameters.
-
-### Sending shell environment variables when "Going beyond exceptions"
-
-> One common request we see is to send shell environment variables along with
-> manual exception notification.  We recommend sending them along with CGI data
-> or Rack environment (:cgi_data or :rack_env keys, respectively.)
-
-See `Honeybadger::Notice::__construct` in
-[lib/Honeybadger/Notice.php](https://github.com/honeybadger-io/honeybadger-php/blob/master/lib/Honeybadger/Notice.php)
-for more details.
 
 ## Filtering
 
