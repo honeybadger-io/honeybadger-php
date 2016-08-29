@@ -16,12 +16,12 @@ First, add honeybadger-php to your `composer.json`:
 
 ```javascript
 {
-// ...
-"require": {
-// ...
-"honeybadger-io/honeybadger": "*"
-}
-// ...
+    // ...
+    "require": {
+        // ...
+        "honeybadger-io/honeybadger": "*"
+    }
+    // ...
 }
 ```
 
@@ -54,13 +54,13 @@ Report exceptions to Honeybadger from Laravel's exception handler in *app/start/
 use Honeybadger\Honeybadger;
 
 Honeybadger::$config->values(array(
-  'api_key' => '[your-api-key]',
+    'api_key' => '[your-api-key]',
 ));
 
 App::error(function(Exception $exception, $code)
 {
-	Honeybadger::notify($exception);
-	Log::error($exception);
+    Honeybadger::notify($exception);
+    Log::error($exception);
 });
 ```
 
@@ -74,7 +74,7 @@ Call `Honeybadger\Slim::init()` after your application definition:
 <?php
 
 $app = new Slim(array(
-  // ...
+    // ...
 ));
 
 $app->add(new Honeybadger\Slim(array(
@@ -106,8 +106,8 @@ To set configuration options, update the `Honeybadger::$config` array, like so:
 <?php
 
 Honeybadger::$config->values(array(
-  'api_key'          => '[your-api-key]',
-  'environment_name' => 'production',
+    'api_key'          => '[your-api-key]',
+    'environment_name' => 'production',
 ));
 
 ```
@@ -150,7 +150,7 @@ If you've caught an exception in your code, but would still like to report the e
 
 try
 {
-  // ...
+    // ...
 }
 catch (Exception $e)
 {
@@ -237,8 +237,8 @@ For example, it's often useful to record the current user's ID and/or email addr
 <?php
 
 Honeybadger::context(array(
-  'user_id'    => 1,
-  'user_email' => 'user@example.com',
+    'user_id'    => 1,
+    'user_email' => 'user@example.com',
 ));
 ```
 
@@ -269,7 +269,7 @@ You can also pass an array as the first argument to replace the context data:
 <?php
 
 Honeybadger::resetContext(array(
-  'user_email' => 'user@example.com'
+    'user_email' => 'user@example.com'
 ));
 ```
 
