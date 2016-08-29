@@ -14,16 +14,16 @@ honeybadger-php is developed and tested against PHP versions 5.5 and 5.6.
 
 First, add honeybadger-php to your `composer.json`:
 
-    ```javascript
-    {
-      // ...
-      "require": {
-        // ...
-        "honeybadger-io/honeybadger": "*"
-      }
-      // ...
-    }
-    ```
+```javascript
+{
+// ...
+"require": {
+// ...
+"honeybadger-io/honeybadger": "*"
+}
+// ...
+}
+```
 
 Then run `composer install`.
 
