@@ -390,6 +390,10 @@ Honeybadger::$config->values(array(
 ));
 ```
 
+## Changelog
+
+See https://github.com/honeybadger-io/honeybadger-php/blob/master/CHANGELOG.md
+
 ## Contributing
 
 If you're adding a new feature, please [submit an issue](https://github.com/honeybadger-io/honeybadger-php/issues/new) as a preliminary step; that way you can be (moderately) sure that your pull request will be accepted.
