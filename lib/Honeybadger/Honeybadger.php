@@ -265,3 +265,6 @@ class Honeybadger
         return $result;
     }
 } // End Honeybadger
+
+// Additional measure to ensure defaults are initialized.
+Honeybadger::init();
