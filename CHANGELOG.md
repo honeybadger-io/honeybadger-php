@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.3.1] - 2016-10-31
+### Fixed
+- Fix a bug where `$config` was not initialized until calling
+  `Honeybadger::init()`.
+
 ## [0.3.0] - 2016-08-29
 ### Added
 - Updated fig standards
