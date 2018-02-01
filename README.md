@@ -46,7 +46,35 @@ Honeybadger::$config->values(array(
 Your application will then report unhandled errors and exceptions
 to Honeybadger. That's it!
 
-#### Laravel Installation
+
+#### Laravel 5.x Installation
+
+Add Honeybadger to Laravel's exception handler in *app/exceptions/Handler.php*.  Before the Handler class is opened load Honeybadger:
+
+```php
+use Honeybadger\Honeybadger;
+
+Honeybadger::$config->values(array(
+    'api_key' => '[your-api-key]',
+));
+
+```
+
+And in the *report* function add the code that sends the exception to Honeybadger:
+
+```php
+public function report(Exception $exception)
+{
+    if ($this->shouldReport($exception)) {
+        Honeybadger::notify($exception);
+    }
+
+    parent::report($exception);
+}
+
+```
+
+#### Laravel 4.x Installation
 
 Report exceptions to Honeybadger from Laravel's exception handler in *app/start/global.php* (under the "Application Error Handler" heading):
 
