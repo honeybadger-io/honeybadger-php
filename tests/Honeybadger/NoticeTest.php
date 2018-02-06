@@ -237,7 +237,7 @@ class NoticeTest extends TestCase
     {
         $notice = $this->build_notice();
 
-        $sender = $this->getMock(
+        $sender = $this->createMock(
             'Honeybadger\Sender',
             [
                 'sendToHoneybadger'

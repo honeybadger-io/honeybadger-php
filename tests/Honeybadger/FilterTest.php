@@ -7,7 +7,7 @@ namespace Honeybadger;
  *
  * @group honeybadger
  */
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_should_filter_data_using_supplied_callbacks()

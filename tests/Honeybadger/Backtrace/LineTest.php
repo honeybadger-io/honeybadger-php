@@ -7,7 +7,7 @@ namespace Honeybadger\Backtrace;
  *
  * @group honeybadger
  */
-class LineTest extends \PHPUnit_Framework_TestCase
+class LineTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_attributes_read_only()

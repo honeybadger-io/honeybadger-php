@@ -18,7 +18,7 @@ use stdClass;
  * @copyright  (c) 2008-2012 Kohana Team
  * @license        http://kohanaframework.org/license
  */
-class ArrTest extends \PHPUnit_Framework_TestCase
+class ArrTest extends \PHPUnit\Framework\TestCase
 {
 
     /**

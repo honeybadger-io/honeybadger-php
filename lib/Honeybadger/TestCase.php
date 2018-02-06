@@ -10,7 +10,7 @@ use Honeybadger\Util\Arr;
  *
  * @package  Honeybadger/Tests
  */
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * Make sure PHPUnit backs up globals

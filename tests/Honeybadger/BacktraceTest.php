@@ -9,7 +9,7 @@ use Honeybadger\Backtrace\Line;
  *
  * @group honeybadger
  */
-class BacktraceTest extends \PHPUnit_Framework_TestCase
+class BacktraceTest extends \PHPUnit\Framework\TestCase
 {
 
     public function test_parse_drops_null_lines()
