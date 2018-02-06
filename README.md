@@ -47,7 +47,7 @@ Your application will then report unhandled errors and exceptions
 to Honeybadger. That's it!
 
 
-#### Laravel 5.x Installation
+#### Laravel Installation
 
 Add Honeybadger to Laravel's exception handler in *app/exceptions/Handler.php*.  Before the Handler class is opened load Honeybadger:
 
@@ -73,26 +73,6 @@ public function report(Exception $exception)
 }
 
 ```
-
-#### Laravel 4.x Installation
-
-Report exceptions to Honeybadger from Laravel's exception handler in *app/start/global.php* (under the "Application Error Handler" heading):
-
-```php
-use Honeybadger\Honeybadger;
-
-Honeybadger::$config->values(array(
-    'api_key' => '[your-api-key]',
-));
-
-App::error(function(Exception $exception, $code)
-{
-    Honeybadger::notify($exception);
-    Log::error($exception);
-});
-```
-
-See [crywolf-laravel](https://github.com/honeybadger-io/crywolf-laravel) for an example Laravel application.
 
 #### Slim Installation
 
