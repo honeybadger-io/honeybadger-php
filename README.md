@@ -6,7 +6,7 @@ When an unhandled exception or error occurs, Honeybadger will POST the relevant 
 
 ## Compatibility
 
-honeybadger-php is developed and tested against PHP versions 5.6, 7.0, and 7.1.
+honeybadger-php is developed and tested against PHP versions 5.6, 7.0, 7.1, and 7.2.
 
 ## Getting Started
 
