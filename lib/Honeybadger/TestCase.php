@@ -4,6 +4,7 @@ namespace Honeybadger;
 
 use Honeybadger\TestCase\Helpers;
 use Honeybadger\Util\Arr;
+use Honeybadger\GuzzleFactory;
 
 /**
  * Ripped from [Kohana](http://kohanaframework.org/).
@@ -72,7 +73,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
         }
 
         if (!isset($this->_environment_default['\\Honeybadger\\Honeybadger::$sender'])) {
-            $this->_environment_default['\\Honeybadger\\Honeybadger::$sender'] = new Sender;
+            $this->_environment_default['\\Honeybadger\\Honeybadger::$sender'] = new Sender(new GuzzleFactory);
         }
 
         if (!isset($this->_environment_default['\\Honeybadger\\Honeybadger::$logger'])) {

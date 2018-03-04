@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use Honeybadger\GuzzleFactory;
+
 /**
  * Tests Honeybadger.
  *
