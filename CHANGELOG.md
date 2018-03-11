@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.3.2] - 2018-03-11
+### Fixed
+- Fixes a bug in proxy URL configuration based on settings
+
 ## [0.3.1] - 2016-10-31
 ### Fixed
 - Fix a bug where `$config` was not initialized until calling
