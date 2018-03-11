@@ -360,4 +360,15 @@ class EnvironmentTest extends TestCase
 
         $this->assertNull($env->url);
     }
+
+    public function test_http_keys_can_be_filtered()
+    {
+      Honeybadger::$config->filteredHttpEnviromentKeys = ['HTTP_SESSION_ID'];
+
+      $_SERVER['HTTP_SESSION_ID'] = 'bar';
+
+      $env = Environment::factory();
+
+      $this->assertNull($env['HTTP_SESSION_ID']);
+    }
 }

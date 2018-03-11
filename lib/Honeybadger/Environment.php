@@ -328,7 +328,7 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         $env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
 
         foreach ($_SERVER as $key => $value) {
-            if (strpos($key, 'HTTP_') === 0) {
+            if ($this->isAllowedHttpKey($key)) {
                 $env[$key] = $value;
             }
         }
@@ -339,5 +339,11 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         }
 
         return array_filter($env);
+    }
+
+    private function isAllowedHttpKey($key)
+    {
+      return strpos($key, 'HTTP_') === 0
+        && ! in_array($key, Honeybadger::$config->filteredHttpEnviromentKeys);
     }
 }
