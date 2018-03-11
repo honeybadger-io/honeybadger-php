@@ -73,6 +73,7 @@ class BacktraceTest extends \PHPUnit\Framework\TestCase
     {
         $attributes = ['lines', 'application_lines'];
         $line       = new Backtrace;
+        $thrown = [];
 
         foreach ($attributes as $attribute) {
             $line->$attribute;
@@ -80,11 +81,11 @@ class BacktraceTest extends \PHPUnit\Framework\TestCase
             try {
                 $line->$attribute = 'foo';
             } catch (\Exception $ex) {
-                continue;
+                $thrown[] = $attribute;
             }
-
-            $this->fail('An exception was not raised for ' . $line);
         }
+
+        $this->assertEquals($attributes, $thrown);
     }
 
     public function test_lines()
