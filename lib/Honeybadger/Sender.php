@@ -63,14 +63,17 @@ class Sender
         // $options['debug']    = true;
 
         if ($config->proxy_host) {
-            $options['proxy'] = 'tcp://' .
-                $config->proxy_user .
-                ':' .
-                $config->proxy_pass .
-                '@' .
-                $config->proxy_host .
-                ':' .
-                $config->proxy_port;
+            $options['proxy'] = 'tcp://';
+
+            if ($config->proxy_user) {
+                $options['proxy'] .= $config->proxy_user;
+                if ($config->proxy_pass) {
+                    $options['proxy'] .= ':' . $config->proxy_pass;
+                }
+                $options['proxy'] .= '@';
+            }
+
+            $options['proxy'] .= $config->proxy_host . ':' . $config->proxy_port;
         }
 
         if ($config->isSecure()) {
