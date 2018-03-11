@@ -16,17 +16,19 @@ class LineTest extends \PHPUnit\Framework\TestCase
                        'filtered_file', 'filtered_number', 'filtered_method'];
         $line       = new Line('foo', 'bar', 'baz');
 
+        $thrown = [];
+
         foreach ($attributes as $attribute) {
             $line->$attribute;
 
             try {
                 $line->$attribute = 'foo';
             } catch (\Exception $ex) {
-                continue;
+                $thrown[] = $attribute;
             }
-
-            $this->fail('An exception was not raised for ' . $line);
         }
+
+        $this->assertEquals($attributes, $thrown);
     }
 
     public function test_parse_filters_with_provided_callbacks()

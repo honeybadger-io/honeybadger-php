@@ -3,6 +3,7 @@
 namespace Honeybadger;
 
 use Honeybadger\Util\Arr;
+use Honeybadger\GuzzleFactory;
 
 /**
  * @package  Honeybadger
@@ -67,7 +68,7 @@ class Honeybadger
 
         self::$logger = new Logger\Standard;
         self::$config = new Config;
-        self::$sender = new Sender;
+        self::$sender = new Sender(new GuzzleFactory);
 
         // Set Honeybadger as the error and exception handler.
         self::handleErrors();

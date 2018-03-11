@@ -26,6 +26,16 @@ class Sender
     ];
 
     /**
+     * @var \HoneyBadger\GuzzleFactory
+     */
+    protected $guzzleFactory;
+
+    public function __construct($guzzleFactory)
+    {
+      $this->guzzleFactory = $guzzleFactory;
+    }
+
+    /**
      * @param $notice
      *
      * @return mixed
@@ -80,7 +90,7 @@ class Sender
             $options['ssl.certificate_authority'] = $config->certificate_authority;
         }
 
-        $client = new Client($options);
+        $client = $this->guzzleFactory->make($options);
 
         $response = $client->post(
             self::NOTICES_URI,

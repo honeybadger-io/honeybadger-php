@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use Honeybadger\GuzzleFactory;
+
 /**
  * Tests Honeybadger\Backtrace.
  *
@@ -26,7 +28,7 @@ class SlimTest extends TestCase
 
     public function tearDown()
     {
-        Honeybadger::$sender = new Sender;
+        Honeybadger::$sender = new Sender(new GuzzleFactory);
 
         parent::tearDown();
     }
