@@ -328,10 +328,14 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         $env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
 
         foreach ($_SERVER as $key => $value) {
-            if ($this->isAllowedHttpKey($key)) {
+            if ($this->isHttpKey($key)) {
                 $env[$key] = $value;
             }
         }
+
+        $env = array_filter($env, function ($key) {
+            return ! in_array($key, Honeybadger::$config->filter_keys);
+        }, ARRAY_FILTER_USE_KEY);
 
         if (!empty($_COOKIE)) {
             // Add cookies
@@ -341,9 +345,8 @@ class Environment implements \ArrayAccess, \IteratorAggregate
         return array_filter($env);
     }
 
-    private function isAllowedHttpKey($key)
+    private function isHttpKey($key)
     {
-      return strpos($key, 'HTTP_') === 0
-        && ! in_array($key, Honeybadger::$config->ignore_http_keys);
+      return strpos($key, 'HTTP_') === 0;
     }
 }

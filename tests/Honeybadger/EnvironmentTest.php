@@ -363,12 +363,14 @@ class EnvironmentTest extends TestCase
 
     public function test_http_keys_can_be_filtered()
     {
-      Honeybadger::$config->ignore_http_keys = ['HTTP_SESSION_ID'];
+      Honeybadger::$config->filter_keys = ['HTTP_SESSION_ID', 'PATH_INFO'];
 
       $_SERVER['HTTP_SESSION_ID'] = 'bar';
+      $_SERVER['PATH_INFO'] = 'bax';
 
       $env = Environment::factory();
 
       $this->assertNull($env['HTTP_SESSION_ID']);
+      $this->assertNull($env['PATH_INFO']);
     }
 }

@@ -273,6 +273,6 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
 
     public function test_filtered_keys_is_set_by_default()
     {
-      $this->assertEquals([], (new Config())->ignore_http_keys);
+      $this->assertEquals([], (new Config())->filter_keys);
     }
 }

@@ -144,7 +144,7 @@ The following options are available to you:
 | source_extract_radius | `integer` | The radius around trace line to include in source excerpt. |
 | send_request_session | `boolean` | `true` to send session data, `false` to exclude. |
 | debug | `boolean` | `true` to log extra debug info, `false` to suppress. |
-| `ignore_http_keys` | `array` | `HTTP_*` keys to ignore when sending env data to Honeybadger. |
+| `filter_keys` | `array` | Filters the provided keys from then environment before sending it to Honeybadger. |
 
 ## Public Interface
 
