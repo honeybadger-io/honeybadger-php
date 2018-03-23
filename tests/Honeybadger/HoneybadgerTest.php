@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use Honeybadger\Error;
+use Honeybadger\Exception;
 use Honeybadger\GuzzleFactory;
 
 /**
@@ -214,5 +216,77 @@ class HoneybadgerTest extends TestCase
                 $this->buildException()
             )
         );
+    }
+
+    public function test_exception_handler_can_be_registered()
+    {
+        Honeybadger::registerExceptionHandler();
+
+        $handler = set_exception_handler(function () {
+            //
+        });
+
+        $this->assertEquals([
+            Exception::class,
+            'handle'
+        ], $handler);
+    }
+
+    public function test_error_handler_can_be_registered()
+    {
+        Honeybadger::registerErrorHandler();
+
+        $handler = set_error_handler(function () {
+            //
+        });
+
+        $this->assertEquals([
+            Error::class,
+            'handle'
+        ], $handler);
+    }
+
+    public function test_error_and_exception_handlers_can_be_registered()
+    {
+        Honeybadger::registerGlobalHandlers();
+
+        $errorHandler = set_error_handler(function () {
+            //
+        });
+
+        $exceptionHandler = set_exception_handler(function () {
+            //
+        });
+
+        $this->assertEquals([
+            Exception::class,
+            'handle'
+        ], $exceptionHandler);
+
+        $this->assertEquals([
+            Error::class,
+            'handle'
+        ], $errorHandler);
+    }
+
+    public function test_handlers_are_not_registered_by_default()
+    {
+        $errorHandler = set_error_handler(function () {
+            //
+        });
+
+        $exceptionHandler = set_exception_handler(function () {
+            //
+        });
+
+        $this->assertNotEquals([
+            Exception::class,
+            'handle'
+        ], $exceptionHandler);
+
+        $this->assertNotEquals([
+            Error::class,
+            'handle'
+        ], $errorHandler);
     }
 }
