@@ -363,7 +363,7 @@ class EnvironmentTest extends TestCase
 
     public function test_http_keys_can_be_filtered()
     {
-      Honeybadger::$config->filteredHttpEnviromentKeys = ['HTTP_SESSION_ID'];
+      Honeybadger::$config->ignore_http_keys = ['HTTP_SESSION_ID'];
 
       $_SERVER['HTTP_SESSION_ID'] = 'bar';
 

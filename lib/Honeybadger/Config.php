@@ -206,7 +206,7 @@ class Config extends SemiOpenStruct
         $this->notifier_version = Honeybadger::VERSION;
         $this->notifier_url     = Honeybadger::NOTIFIER_URL;
 
-        $this->filteredHttpEnviromentKeys = [];
+        $this->ignore_http_keys = [];
 
         // Read config from environment variables
         $this->api_key = getenv('HONEYBADGER_API_KEY');

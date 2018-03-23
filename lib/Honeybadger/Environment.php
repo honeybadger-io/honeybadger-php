@@ -344,6 +344,6 @@ class Environment implements \ArrayAccess, \IteratorAggregate
     private function isAllowedHttpKey($key)
     {
       return strpos($key, 'HTTP_') === 0
-        && ! in_array($key, Honeybadger::$config->filteredHttpEnviromentKeys);
+        && ! in_array($key, Honeybadger::$config->ignore_http_keys);
     }
 }

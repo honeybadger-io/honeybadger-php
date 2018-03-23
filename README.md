@@ -96,7 +96,7 @@ $app->run();
 
 ## Sample Application
 
-If you'd like to see the library in action before you integrate it with your apps, check out our [sample application](https://github.com/honeybadger-io/crywolf-laravel). 
+If you'd like to see the library in action before you integrate it with your apps, check out our [sample application](https://github.com/honeybadger-io/crywolf-laravel).
 
 You can deploy the sample app to your Heroku account by clicking this button:
 
@@ -117,8 +117,8 @@ Honeybadger::$config->values(array(
     'api_key'          => '[your-api-key]',
     'environment_name' => 'production',
 ));
-
 ```
+
 The following options are available to you:
 
 |  Name | Type | Description |
@@ -144,12 +144,13 @@ The following options are available to you:
 | source_extract_radius | `integer` | The radius around trace line to include in source excerpt. |
 | send_request_session | `boolean` | `true` to send session data, `false` to exclude. |
 | debug | `boolean` | `true` to log extra debug info, `false` to suppress. |
+| `ignore_http_keys` | `array` | `HTTP_*` keys to ignore when sending env data to Honeybadger. |
 
 ## Public Interface
 
 ### `Honeybadger::notify()`: Send an error to Honeybadger.
 
-If you've caught an exception in your code, but would still like to report the error to Honeybadger, this is the method for you. 
+If you've caught an exception in your code, but would still like to report the error to Honeybadger, this is the method for you.
 
 #### Examples:
 
