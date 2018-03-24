@@ -365,6 +365,7 @@ class EnvironmentTest extends TestCase
     {
       Honeybadger::$config->filter_keys = ['HTTP_SESSION_ID', 'PATH_INFO'];
 
+      $_SERVER['SERVER_NAME'] = 'CryWolfServer';
       $_SERVER['HTTP_SESSION_ID'] = 'bar';
       $_SERVER['PATH_INFO'] = 'bax';
 
@@ -372,5 +373,6 @@ class EnvironmentTest extends TestCase
 
       $this->assertNull($env['HTTP_SESSION_ID']);
       $this->assertNull($env['PATH_INFO']);
+      $this->assertEquals('CryWolfServer', $_SERVER['SERVER_NAME']);
     }
 }
