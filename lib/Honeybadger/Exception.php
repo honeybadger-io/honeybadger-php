@@ -31,6 +31,16 @@ class Exception
     }
 
     /**
+     * Restores the previous handler
+     *
+     * @return  void
+     */
+    public static function restore_handler()
+    {
+        set_exception_handler(self::$previous_handler);
+    }
+
+    /**
      * @param \Exception $e
      *
      * @return mixed

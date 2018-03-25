@@ -69,31 +69,46 @@ class Honeybadger
         self::$logger = new Logger\Standard;
         self::$config = new Config;
         self::$sender = new Sender(new GuzzleFactory);
+
+        // Set Honeybadger as the error and exception handler.
+        self::handleErrors();
     }
 
     /**
-     * @return void
+     * Registers Honeybadger as the global error and exception handler. Any
+     * uncaught exceptions and errors will be sent to Honeybadger by default.
+     *
+     * @return  void
      */
-    public static function registerExceptionHandler()
+    public static function handleErrors()
     {
+        Error::register_handler();
         Exception::register_handler();
     }
 
     /**
      * @return void
      */
-    public static function registerErrorHandler()
+    public static function disableExceptionHandler()
     {
-        Error::register_handler();
+        Exception::restore_handler();
     }
 
     /**
      * @return void
      */
-    public static function registerGlobalHandlers()
+    public static function disableErrorHandler()
     {
-        self::registerErrorHandler();
-        self::registerExceptionHandler();
+        Error::restore_handler();
+    }
+
+    /**
+     * @return void
+     */
+    public static function disableGlobalHandlers()
+    {
+        self::disableErrorHandler();
+        self::disableExceptionHandler();
     }
 
     /**
