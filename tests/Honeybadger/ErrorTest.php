@@ -17,11 +17,10 @@ class ErrorTest extends TestCase
         $this->assertEquals([Error::class, 'handle'], $this->getErrorHandler());
 
         Error::restore_handler();
-
-        $this->assertEquals(
-            [\PHPUnit\Util\ErrorHandler::class, 'handleError'],
-            $this->getErrorHandler()
-        );
+        $this->assertTrue(in_array($this->getErrorHandler()[0], [
+            \PHPUnit\Util\ErrorHandler::class,
+            'PHPUnit_Util_ErrorHandler'
+        ]));
     }
 
     private function getErrorHandler()
