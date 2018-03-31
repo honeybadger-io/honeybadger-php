@@ -381,6 +381,24 @@ Honeybadger::$config->values(array(
 ));
 ```
 
+## Disabling Global Handlers
+To disable global error and exception handler registration and restore what was previously set you can use several options.
+
+```php
+<?php
+
+// Disable and restore the exception handler
+Honeybadger::disableExceptionHandler();
+
+// Disable and restore the error handler
+Honeybadger::disableErrorHandler();
+
+// Disable and restore both the error and exception handlers
+Honeybadger::disableGlobalHandlers();
+
+```
+
+
 ## Proxy Support
 
 The notifier supports using a proxy, if your server is not able to
