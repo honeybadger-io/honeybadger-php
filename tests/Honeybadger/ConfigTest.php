@@ -270,4 +270,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = new Config(['debug' => false]);
         $this->assertEquals(Logger::DEBUG, $config->logLevel);
     }
+
+    public function test_filtered_keys_is_set_by_default()
+    {
+      $this->assertEquals([], (new Config())->filter_keys);
+    }
 }

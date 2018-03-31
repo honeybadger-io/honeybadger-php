@@ -319,25 +319,48 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      *   variables](http://php.net/manual/en/reserved.variables.server.php) in
      *   `$_SERVER`.
      *
-     * * Allow variables prefixed with `HTTP_` (HTTP headers).
-     *
      * @return  array  The filtered PHP request environment.
      */
     private function sanitizedPhpEnvironment()
     {
-        $env = Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
-
-        foreach ($_SERVER as $key => $value) {
-            if (strpos($key, 'HTTP_') === 0) {
-                $env[$key] = $value;
-            }
-        }
+        $env = array_merge(
+            $this->serverEnvironment(),
+            $this->httpEnvironment()
+        );
 
         if (!empty($_COOKIE)) {
             // Add cookies
             $env['rack.request.cookie_hash'] = $_COOKIE;
         }
 
-        return array_filter($env);
+        return array_filter($this->filteredEnvironment($env));
+    }
+
+    /**
+     * @return array
+     */
+    private function serverEnvironment()
+    {
+        return Arr::overwrite($this->allowed_php_environment_keys, $_SERVER);
+    }
+
+    /**
+     * @return array
+     */
+    private function httpEnvironment()
+    {
+        return array_filter($_SERVER, function ($key) {
+            return strpos($key, 'HTTP_') === 0;
+        }, ARRAY_FILTER_USE_KEY);
+    }
+
+    /**
+     * @return  array
+     */
+    private function filteredEnvironment($environment)
+    {
+        return array_filter($environment, function ($key) {
+            return ! in_array($key, Honeybadger::$config->filter_keys);
+        }, ARRAY_FILTER_USE_KEY);
     }
 }
