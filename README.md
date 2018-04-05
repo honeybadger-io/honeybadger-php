@@ -382,7 +382,7 @@ Honeybadger::$config->values(array(
 ```
 
 ## Disabling Global Handlers
-To disable global error and exception handler registration and restore what was previously set you can use several options.
+To disable global error and exception handler registration and restore what was previously set you have several options.
 
 ```php
 <?php
