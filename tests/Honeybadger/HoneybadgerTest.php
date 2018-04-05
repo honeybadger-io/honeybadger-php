@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use Honeybadger\Error;
+use Honeybadger\Exception;
 use Honeybadger\GuzzleFactory;
 
 /**

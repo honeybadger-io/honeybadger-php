@@ -28,6 +28,16 @@ class Error
     }
 
     /**
+     * Restores the previous handler
+     *
+     * @return  void
+     */
+    public static function restore_handler()
+    {
+        set_error_handler(self::$previous_handler);
+    }
+
+    /**
      * @param      $code
      * @param      $error
      * @param null $file

@@ -87,6 +87,31 @@ class Honeybadger
     }
 
     /**
+     * @return void
+     */
+    public static function disableExceptionHandler()
+    {
+        Exception::restore_handler();
+    }
+
+    /**
+     * @return void
+     */
+    public static function disableErrorHandler()
+    {
+        Error::restore_handler();
+    }
+
+    /**
+     * @return void
+     */
+    public static function disableGlobalHandlers()
+    {
+        self::disableErrorHandler();
+        self::disableExceptionHandler();
+    }
+
+    /**
      * Merges supplied `$data` with current context. This can be anything,
      * such as user information.
      *
