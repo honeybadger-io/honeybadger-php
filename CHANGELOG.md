@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.4.0] - 2018-04-08
+### Added
+- Adds the ability to disable and restore error and exception handlers (#50)
+- Adds the ability to filter reported keys (#48)
+
 ## [0.3.2] - 2018-03-11
 ### Fixed
 - Fixes a bug in proxy URL configuration based on settings
