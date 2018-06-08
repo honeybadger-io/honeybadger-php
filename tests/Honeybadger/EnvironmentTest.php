@@ -354,6 +354,22 @@ class EnvironmentTest extends TestCase
         $this->assertEquals('http://www.example.com:123/foo/bar/xyz?one=1&two=2&three=3', $env['url']);
     }
 
+    public function test_url_adds_port_when_also_in_host_key()
+    {
+        $env = Environment::factory(
+            [
+                'REQUEST_URI'  => '/foo/bar/xyz?one=1&two=2&three=3',
+                'SCRIPT_NAME'  => '/foo/index.php',
+                'HTTPS'        => '',
+                'HTTP_HOST'    => 'www.example.com:123',
+                'QUERY_STRING' => 'one=1&two=2&three=3',
+                'SERVER_PORT'  => '123',
+            ]
+        );
+
+        $this->assertEquals('http://www.example.com:123/foo/bar/xyz?one=1&two=2&three=3', $env['url']);
+    }
+
     public function test_url_returns_null_when_empty_host_and_path()
     {
         $env = Environment::factory([]);
