@@ -349,9 +349,9 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      */
     private function httpEnvironment()
     {
-        return array_filter($_SERVER, function ($key) {
+        return Arr::filterKeys($_SERVER, function ($key) {
             return strpos($key, 'HTTP_') === 0;
-        }, ARRAY_FILTER_USE_KEY);
+        });
     }
 
     /**
@@ -359,8 +359,8 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      */
     private function filteredEnvironment($environment)
     {
-        return array_filter($environment, function ($key) {
+        return Arr::filterKeys($environment, function ($key) {
             return ! in_array($key, Honeybadger::$config->filter_keys);
-        }, ARRAY_FILTER_USE_KEY);
+        });
     }
 }
