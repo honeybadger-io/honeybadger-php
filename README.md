@@ -76,6 +76,8 @@ public function report(Exception $exception)
 
 #### Slim Installation
 
+Comptaible with Slim 2.x.
+
 Call `Honeybadger\Slim::init()` after your application definition:
 
 ```php
