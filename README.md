@@ -1,4 +1,4 @@
-# honeybadger-php [![Build Status](https://secure.travis-ci.org/honeybadger-io/honeybadger-php.png)](http://travis-ci.org/honeybadger-io/honeybadger-php)
+# honeybadger-php [![Build Status](https://travis-ci.org/honeybadger-io/honeybadger-php.svg?branch=master)](https://travis-ci.org/honeybadger-io/honeybadger-php)
 
 This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](http://honeybadger.io).
 
