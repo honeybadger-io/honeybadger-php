@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased][unreleased]
 
+## [0.4.1] - 2018-06-12
+## Fixes 
+- PHP 5.5 support (#54)
+- Fixes port duplication in URL (#53)
+
 ## [0.4.0] - 2018-04-08
 ### Added
 - Adds the ability to disable and restore error and exception handlers (#50)
