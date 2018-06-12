@@ -542,4 +542,11 @@ class Arr
 
         return $flat;
     }
+
+    public static function filterKeys($array, $callable)
+    {
+        $keys = array_filter(array_keys($array), $callable);
+
+        return array_intersect_key($array, array_flip($keys));
+    }
 } // End Arr
