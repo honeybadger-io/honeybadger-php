@@ -126,7 +126,13 @@ class Environment implements \ArrayAccess, \IteratorAggregate
      */
     public function host()
     {
-        return (empty($this['HTTP_HOST'])) ? $this['SERVER_NAME'] : $this['HTTP_HOST'];
+        if (!empty($this['HTTP_HOST'])) {
+            $host =  $this['HTTP_HOST'];
+        } else {
+            $host = $this['SERVER_NAME'];
+        }
+
+        return explode(':', $host)[0];
     }
 
     /**
