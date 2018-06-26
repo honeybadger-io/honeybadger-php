@@ -1,14 +1,23 @@
 language: php
 
 php:
-  - 5.6
-  - 7.0
   - 7.1
   - 7.2
 
-before_script:
-  - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
+env:
+  matrix:
+    - COMPOSER_FLAGS="--prefer-lowest"
+    - COMPOSER_FLAGS=""
 
-script: phpunit
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - vendor/bin/phpunit
+
 after_script:
-  - vendor/bin/test-reporter
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

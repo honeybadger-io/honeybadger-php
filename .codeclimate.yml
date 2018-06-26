@@ -1,22 +1,8 @@
-engines:
-  duplication:
-    enabled: true
-    config:
-      languages:
-        php:
-          mass_threshold: 40
-
-  phpcodesniffer:
-    enabled: true
-    config:
-      standard: "PSR1,PSR2"
-  phpmd:
-    enabled: false
-    config:
-      file_extensions: "php"
-      rulesets: "cleancode,unusedcode,codesize,design"
-ratings:
-  paths:
-  - "lib/**.php"
-exclude_paths:
-- tests/
+version: "2"         # required to adjust maintainability checks
+checks:
+    method-complexity:
+        config:
+            threshold: 6
+    method-lines:
+        config:
+            threshold: 30

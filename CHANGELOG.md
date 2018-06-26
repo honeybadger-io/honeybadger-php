@@ -3,7 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased][unreleased]
+## [Unreleased]
+
+## [1.0.0] - 2018-07-07
+### Changes
+- Full library rewrite
+- PHP 7.1|7.2 requirement
+- See [README](README.md) for new installation, usage, and configuration details
 
 ## [0.4.1] - 2018-06-12
 ## Fixes 
