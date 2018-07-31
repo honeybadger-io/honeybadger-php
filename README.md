@@ -10,6 +10,10 @@
 
 This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](http://honeybadger.io).
 
+## Framework Integrations
+
+* Laravel - [honeybadger-io/honeybadger-laravel](https://github.com/honeybadger-io/honeybadger-laravel)
+
 ## Installation
 You can install the package via composer:
 
@@ -177,7 +181,7 @@ composer test
 ```
 
 ## Code Style
-In addition to the php-cs-fixer rules, StyleCI will apply the [Laravel preset](https://docs.styleci.io/presets#laravel). 
+In addition to the php-cs-fixer rules, StyleCI will apply the [Laravel preset](https://docs.styleci.io/presets#laravel).
 ```bash
 composer styles:lint
 composer styles:fix
