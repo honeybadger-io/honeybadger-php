@@ -353,4 +353,31 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEmpty($client->calls());
     }
+
+    /** @test */
+    public function it_returns_the_error_id()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201, [], json_encode([
+                'id' => 'asdf123',
+            ])),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $response = $badger->customNotification([
+            'title'   => 'Special Error',
+            'message' => 'Special Error: this was a super special case',
+        ]);
+
+        $this->assertEquals([
+            'id' => 'asdf123',
+        ], $response);
+    }
 }
