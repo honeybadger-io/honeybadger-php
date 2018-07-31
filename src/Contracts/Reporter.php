@@ -10,19 +10,19 @@ interface Reporter
     /**
      * @param  \Throwable  $throwable
      * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @return void
+     * @return array
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null) : void;
+    public function notify(Throwable $throwable, FoundationRequest $request = null) : array;
 
     /**
      * @param  array  $payload
-     * @return void
+     * @return array
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function customNotification(array $payload) : void;
+    public function customNotification(array $payload) : array;
 
     /**
      * @param  string  $key

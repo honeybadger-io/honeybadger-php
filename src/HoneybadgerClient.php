@@ -32,11 +32,11 @@ class HoneybadgerClient
 
     /**
      * @param  array  $notification
-     * @return void
+     * @return array
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notification($notification) : void
+    public function notification($notification) : array
     {
         try {
             $response = $this->client->post(
@@ -50,6 +50,10 @@ class HoneybadgerClient
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
             throw (new ServiceExceptionFactory($response))->make();
         }
+
+        return (string) $response->getBody()
+            ? json_decode($response->getBody(), true)
+            : [];
     }
 
     /**
