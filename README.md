@@ -70,7 +70,7 @@ Default values are listed below.
 
 ```php
 [
-    // Honeybadger API Key (required)
+    // Honeybadger API Key
     'api_key' => null,
 
     'environment' => [
