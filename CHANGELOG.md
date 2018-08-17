@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.1.0] - 2018-08-17
 ### Changed
 - Allow `null` value for `api_key` config to improve local project development.
 
