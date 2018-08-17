@@ -400,4 +400,27 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEmpty($client->calls());
     }
+
+    /** @test */
+    public function custom_notifications_do_not_get_reported_when_config_key_is_null()
+    {
+        $client = HoneybadgerClient::new([
+             new Response(201),
+         ]);
+
+        $badger = Honeybadger::new([
+             'api_key' => null,
+             'handlers' => [
+                 'exception' => false,
+                 'error' => false,
+             ],
+         ], $client->make());
+
+        $response = $badger->customNotification([
+            'title' => 'Test Notification',
+            'message' => 'Test notification message',
+        ]);
+
+        $this->assertEmpty($client->calls());
+    }
 }

@@ -75,6 +75,10 @@ class Honeybadger implements Reporter
      */
     public function customNotification(array $payload) : array
     {
+        if (is_null($this->config['api_key'])) {
+            return [];
+        }
+
         $notification = (new CustomNotification($this->config, $this->context))
             ->make($payload);
 
