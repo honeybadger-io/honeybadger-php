@@ -60,7 +60,7 @@ class Honeybadger implements Reporter
      */
     public function notify(Throwable $throwable, FoundationRequest $request = null) : array
     {
-        if ($this->excludedException($throwable)) {
+        if (! $this->shouldReport($throwable)) {
             return [];
         }
 
@@ -124,5 +124,14 @@ class Honeybadger implements Reporter
                 get_class($throwable),
                 $this->config['excluded_exceptions']
             );
+    }
+
+    /**
+     * @param  \Throwable  $throwable
+     * @return bool
+     */
+    private function shouldReport(Throwable $throwable) : bool
+    {
+        return ! $this->excludedException($throwable) && ! is_null($this->config['api_key']);
     }
 }

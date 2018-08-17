@@ -4,19 +4,10 @@ namespace Honeybadger\Tests;
 
 use Honeybadger\Config;
 use Honeybadger\Honeybadger;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
-    /** @test */
-    public function it_requires_the_api_key()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new Config;
-    }
-
     /** @test */
     public function it_merges_configuration_values()
     {

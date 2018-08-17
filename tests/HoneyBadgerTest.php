@@ -380,4 +380,24 @@ class HoneyBadgerTest extends TestCase
             'id' => 'asdf123',
         ], $response);
     }
+
+    /** @test */
+    public function exceptions_do_not_get_reported_when_config_key_is_null()
+    {
+        $client = HoneybadgerClient::new([
+             new Response(201),
+         ]);
+
+        $badger = Honeybadger::new([
+             'api_key' => null,
+             'handlers' => [
+                 'exception' => false,
+                 'error' => false,
+             ],
+         ], $client->make());
+
+        $response = $badger->notify(new InvalidArgumentException('Test exception'));
+
+        $this->assertEmpty($client->calls());
+    }
 }

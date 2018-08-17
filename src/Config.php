@@ -2,7 +2,6 @@
 
 namespace Honeybadger;
 
-use InvalidArgumentException;
 use Honeybadger\Support\Repository;
 
 class Config extends Repository
@@ -13,7 +12,6 @@ class Config extends Repository
     public function __construct($config = [])
     {
         $this->items = $this->mergeConfig($config);
-        $this->validateRequiredKeys();
     }
 
     /**
@@ -50,17 +48,5 @@ class Config extends Repository
             ],
             'excluded_exceptions' => [],
         ], $config);
-    }
-
-    /**
-     * @return void
-     *
-     * @throws \InvalidArgument\Exception
-     */
-    private function validateRequiredKeys() : void
-    {
-        if (! isset($this->items['api_key']) || is_null($this->items['api_key'])) {
-            throw new InvalidArgumentException('$config[\'api_key\'] is required');
-        }
     }
 }
