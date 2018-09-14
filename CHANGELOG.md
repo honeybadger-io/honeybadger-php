@@ -4,8 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.2.0] - 2018-09-13
 ### Changed
-- Lowered http-foundation version requirements
+- Lowered required version of `symfony/http-foundation` ([#65](https://github.com/honeybadger-io/honeybadger-php/pull/65))
 
 ## [1.1.0] - 2018-08-17
 ### Changed
