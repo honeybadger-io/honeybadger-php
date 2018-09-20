@@ -8,7 +8,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/5dfccab91329acaa9444/test_coverage)](https://codeclimate.com/github/honeybadger-io/honeybadger-php/test_coverage)
 [![StyleCI](https://styleci.io/repos/9077424/shield)](https://github.styleci.io/repos/9077424)
 
-This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](http://honeybadger.io).
+This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](https://www.honeybadger.io/for/php/?utm_source=github&utm_medium=readme&utm_campaign=php&utm_content=Honeybadger+Exception+Notifier+for+PHP).
 
 ## Framework Integrations
 
