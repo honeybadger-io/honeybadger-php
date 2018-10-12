@@ -88,6 +88,30 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
+    public function rawNotification(callable $callable) : array
+    {
+        if (is_null($this->config['api_key'])) {
+            return [];
+        }
+
+        $notification = (new RawNotification($this->config, $this->context))
+            ->make($callable($this->config, $this->context));
+
+        return $this->client->notification($notification);
+    }
+
+    public function dynamicNotification(callable $closure)
+    {
+        if (is_null($this->config['api_key'])) {
+            return [];
+        }
+
+        return $this->client->notification($closure($this->config, $this->context));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function checkin(string $key) : void
     {
         $this->client->checkin($key);

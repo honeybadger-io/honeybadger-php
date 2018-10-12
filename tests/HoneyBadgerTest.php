@@ -427,4 +427,110 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEmpty($client->calls());
     }
+
+    /** @test */
+    public function a_raw_notification_can_be_sent()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->context('foo', 'bar');
+
+        $response = $badger->rawNotification(function ($config, $context) {
+            $this->assertEquals('asdf', $config['api_key']);
+            $this->assertEquals('bar', $context['foo']);
+
+            return [
+                'error' => [
+                    'class' => 'Special Error',
+                    'message' => 'Special Error: this was a super special case',
+                    'tags' => ['foo'],
+                ],
+                'request' => [
+                    'context' => ['baz' => 'qux'],
+                ],
+            ];
+        });
+
+        $request = $client->requestBody();
+
+        $this->assertArraySubset([
+            'error' => [
+                'class' => 'Special Error',
+                'message' => 'Special Error: this was a super special case',
+                'tags' => ['foo'],
+            ],
+            'request' => [
+                'context' => [
+                    'baz' => 'qux',
+                ],
+            ],
+        ], $request);
+
+        $this->assertArrayHasKey('notifier', $request);
+    }
+
+    /** @test */
+    public function raw_notification_notifier_name_field_is_required()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        try {
+            $response = $badger->rawNotification(function ($config, $context) {
+                return [
+                    'notifier' => [],
+                    'error' => [
+                        'class' => 'Special Error',
+                    ],
+                ];
+            });
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals('The notification notifier.name field is required', $e->getMessage());
+        }
+    }
+
+    /** @test */
+    public function raw_notification_error_class_field_is_required()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        try {
+            $response = $badger->rawNotification(function ($config, $context) {
+                return [
+                    'error' => [],
+                ];
+            });
+        } catch (\InvalidArgumentException $e) {
+            $this->assertEquals('The notification error.class field is required', $e->getMessage());
+        }
+    }
 }
