@@ -100,15 +100,6 @@ class Honeybadger implements Reporter
         return $this->client->notification($notification);
     }
 
-    public function dynamicNotification(callable $closure)
-    {
-        if (is_null($this->config['api_key'])) {
-            return [];
-        }
-
-        return $this->client->notification($closure($this->config, $this->context));
-    }
-
     /**
      * {@inheritdoc}
      */
