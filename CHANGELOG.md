@@ -4,8 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.2.1] 2018-11-08
 ### Fixed
-- Fixed an issue with merging a custom notifier from the config
+- Fixed an issue with merging a custom notifier from the config ([#67](https://github.com/honeybadger-io/honeybadger-php/pull/67))
 
 ## [1.2.0] - 2018-09-13
 ### Changed
