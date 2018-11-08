@@ -34,13 +34,15 @@ class HoneyBadgerTest extends TestCase
         $notification = $client->requestBody();
 
         $this->assertArraySubset([
-          'name' => 'Honeybadger PHP',
-          'version' => Honeybadger::VERSION,
-          'error' => [
+            'notifier' => [
+                'name' => 'Honeybadger PHP',
+                'version' => Honeybadger::VERSION,
+            ],
+            'error' => [
                 'message' => 'Test exception',
                 'class' => Exception::class,
             ],
-          ], $notification);
+        ], $notification);
 
         $this->assertArrayHasKey('backtrace', $notification['error']);
         $this->assertArrayHasKey('server', $notification);
@@ -73,9 +75,11 @@ class HoneyBadgerTest extends TestCase
         $notification = $client->requestBody();
 
         $this->assertArraySubset([
-        'name' => 'Honeybadger FUTURE',
-        'url' => 'https://honeybadger.io/awesome-notifier',
-        'version' => 66,
+            'notifier' => [
+                'name' => 'Honeybadger FUTURE',
+                'url' => 'https://honeybadger.io/awesome-notifier',
+                'version' => 66,
+            ],
        ], $notification);
     }
 

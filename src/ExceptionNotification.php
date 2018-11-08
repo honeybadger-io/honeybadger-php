@@ -68,7 +68,8 @@ class ExceptionNotification
      */
     private function format() : array
     {
-        return array_merge([], $this->config['notifier'], [
+        return [
+            'notifier' => $this->config['notifier'],
             'error' => [
                 'class' => get_class($this->throwable),
                 'message' => $this->throwable->getMessage(),
@@ -89,7 +90,7 @@ class ExceptionNotification
                 'project_root' => $this->config['project_root'],
                 'environment_name' => $this->config['environment_name'],
             ],
-        ]);
+        ];
     }
 
     /**
