@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Fixed an issue with merging a custom notifier from the config
 
 ## [1.2.0] - 2018-09-13
 ### Changed
