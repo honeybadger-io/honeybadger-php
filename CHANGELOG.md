@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Removed
+* php-cs-fixer dev dependency
 
 ## [1.2.1] 2018-11-08
 ### Fixed
