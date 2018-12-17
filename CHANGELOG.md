@@ -4,6 +4,9 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+* PHP 7.3 to the Travis build matrix
+
 ### Removed
 * php-cs-fixer dev dependency
 
