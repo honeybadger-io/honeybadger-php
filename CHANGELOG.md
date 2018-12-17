@@ -4,11 +4,13 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.3.0] 2018-12-17
 ### Added
-* PHP 7.3 to the Travis build matrix
+* PHP 7.3 to the Travis build matrix ([#68](https://github.com/honeybadger-io/honeybadger-php/pull/68))
 
 ### Removed
-* php-cs-fixer dev dependency
+* php-cs-fixer dev dependency ([#69](https://github.com/honeybadger-io/honeybadger-php/pull/69))
 
 ## [1.2.1] 2018-11-08
 ### Fixed
