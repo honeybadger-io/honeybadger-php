@@ -2,12 +2,12 @@
 
 namespace Honeybadger\Tests;
 
+use Monolog\Logger;
 use Honeybadger\LogHandler;
+use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
 use Honeybadger\Contracts\Reporter;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Logger;
-use Honeybadger\Honeybadger;
 
 class LogHandlerTest extends TestCase
 {
@@ -17,7 +17,7 @@ class LogHandlerTest extends TestCase
         $reporter = $this->createMock(Reporter::class);
 
         $this->assertInstanceOf(
-            AbstractProcessingHandler::class, 
+            AbstractProcessingHandler::class,
             new LogHandler($reporter)
         );
     }
@@ -28,7 +28,8 @@ class LogHandlerTest extends TestCase
         $reporter = new class extends Honeybadger {
             public $notification;
 
-            public function __construct() {
+            public function __construct()
+            {
                 parent::__construct();
             }
 
@@ -44,7 +45,7 @@ class LogHandlerTest extends TestCase
         $logger->pushHandler(new LogHandler($reporter));
 
         $logger->info('Test log message');
-        
+
         $this->assertArraySubset([
             'notifier' => [
                 'name' => 'Honeybadger Log Handler',
@@ -64,16 +65,16 @@ class LogHandlerTest extends TestCase
                     'level_name' => 'INFO',
                     'log_channel' => 'test-logger',
                     'message' => 'Test log message',
-                ]
-            ]
+                ],
+            ],
           ], $reporter->notification);
 
         // [2019-01-20 14:56:20] test-logger.INFO: Test log message
         $this->assertRegExp(
-           '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/', 
+           '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
             $reporter->notification['error']['message']
         );
-        
+
         $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
     }
 }
