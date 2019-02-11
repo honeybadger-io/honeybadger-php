@@ -27,8 +27,10 @@
         "symfony/http-foundation": ">=3.3 || ^4.1"
     },
     "require-dev": {
+        "larapack/dd": "^1.1",
         "mockery/mockery": "^1.1",
-        "phpunit/phpunit": "^7.0|^8.0"
+        "phpunit/phpunit": "^7.0|^8.0",
+        "sixlive/json-schema-assertions": "dev-master"
     },
     "autoload": {
         "psr-4": {
