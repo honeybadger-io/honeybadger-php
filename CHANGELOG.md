@@ -6,6 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 * Fully customizable notification method.
+* Ability to reset context
 
 ## [1.3.0] 2018-12-17
 ### Added

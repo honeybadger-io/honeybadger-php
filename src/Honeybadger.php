@@ -121,6 +121,22 @@ class Honeybadger implements Reporter
     /**
      * @return void
      */
+    public function resetContext() : void
+    {
+        $this->context = new Repository;
+    }
+    
+    /**
+     * @return \Honeybadger\Support\Repository
+     */
+    public function getContext() : Repository
+    {
+        return $this->context;
+    }
+
+    /**
+     * @return void
+     */
     private function setHandlers() : void
     {
         if ($this->config['handlers']['exception']) {
