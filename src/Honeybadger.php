@@ -125,7 +125,7 @@ class Honeybadger implements Reporter
     {
         $this->context = new Repository;
     }
-    
+
     /**
      * @return \Honeybadger\Support\Repository
      */
