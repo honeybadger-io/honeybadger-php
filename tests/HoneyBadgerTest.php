@@ -533,4 +533,22 @@ class HoneyBadgerTest extends TestCase
             $this->assertEquals('The notification error.class field is required', $e->getMessage());
         }
     }
+
+    /** @test */
+    public function context_can_be_reset()
+    {
+        $badger = Honeybadger::new([
+            'api_key' => null,
+        ]);
+
+        $badger->context('foo', 'bar');
+
+        $this->assertEquals([
+            'foo' => 'bar',
+        ], $badger->getContext()->all());
+
+        $badger->resetContext();
+
+        $this->assertEmpty($badger->getContext()->all());
+    }
 }
