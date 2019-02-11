@@ -25,6 +25,15 @@ interface Reporter
     public function customNotification(array $payload) : array;
 
     /**
+     * @param  callable  $callable
+     * @return array
+     *
+     * @throws \Honeybadger\Exceptions\ServiceException
+     * @throws \InvalidArgumentException
+     */
+    public function rawNotification(callable $callable) : array;
+
+    /**
      * @param  string  $key
      * @return void
      *

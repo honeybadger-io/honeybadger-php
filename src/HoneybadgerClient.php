@@ -36,7 +36,7 @@ class HoneybadgerClient
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notification($notification) : array
+    public function notification(array $notification) : array
     {
         try {
             $response = $this->client->post(
