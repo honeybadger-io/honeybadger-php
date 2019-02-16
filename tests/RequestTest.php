@@ -165,7 +165,6 @@ class RequestTest extends TestCase
         $session->invalidate();
     }
 
-
     /** @test */
     public function it_acccept_grouping_option_component()
     {
@@ -195,5 +194,4 @@ class RequestTest extends TestCase
             (new Request($request, $options))->action()
         );
     }
-
 }
