@@ -164,4 +164,36 @@ class RequestTest extends TestCase
 
         $session->invalidate();
     }
+
+
+    /** @test */
+    public function it_acccept_grouping_option_component()
+    {
+        $request = FoundationRequest::create(
+            'http://honeybadger.dev/test',
+            'GET'
+        );
+
+        $options = ['component' => 'test'];
+        $this->assertEquals(
+            $options['component'],
+            (new Request($request, $options))->component()
+        );
+    }
+
+    /** @test */
+    public function it_acccept_grouping_option_action()
+    {
+        $request = FoundationRequest::create(
+            'http://honeybadger.dev/test',
+            'GET'
+        );
+
+        $options = ['action' => 'index'];
+        $this->assertEquals(
+            $options['action'],
+            (new Request($request, $options))->action()
+        );
+    }
+
 }
