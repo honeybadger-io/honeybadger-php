@@ -51,13 +51,14 @@ class ExceptionNotification
     /**
      * @param  \Throwable  $e
      * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  array  $options
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null) : array
+    public function make(Throwable $e, FoundationRequest $request = null, array $options = []) : array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
-        $this->request = $this->makeRequest($request);
+        $this->request = $this->makeRequest($request, $options);
         $this->environment = $this->makeEnvironment();
 
         return $this->format();
@@ -82,6 +83,8 @@ class ExceptionNotification
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
                 'context' => $this->context->all(),
+                'component' => $this->request->component(),
+                'action' => $this->request->action(),
             ],
             'server' => [
                 'pid' => getmypid(),
@@ -113,11 +116,12 @@ class ExceptionNotification
 
     /**
      * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  array  $options
      * @return \Honeybadger\Request
      */
-    private function makeRequest(FoundationRequest $request = null) : Request
+    private function makeRequest(FoundationRequest $request = null, array $options = []) : Request
     {
-        return (new Request($request))
+        return (new Request($request, $options))
             ->filterKeys($this->config['request']['filter']);
     }
 }

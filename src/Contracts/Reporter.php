@@ -10,11 +10,12 @@ interface Reporter
     /**
      * @param  \Throwable  $throwable
      * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  array  $options
      * @return array
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null) : array;
+    public function notify(Throwable $throwable, FoundationRequest $request = null, array $options = []) : array;
 
     /**
      * @param  array  $payload

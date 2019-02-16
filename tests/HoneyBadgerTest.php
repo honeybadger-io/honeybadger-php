@@ -551,4 +551,31 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEmpty($badger->getContext()->all());
     }
+
+    /** @test */
+    public function it_can_send_grouping_options()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $options = [
+            'component' => 'sample',
+            'action' => 'index',
+        ];
+        $badger->notify(new Exception('Test exception'), null, $options);
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals($options['component'], $notification['request']['component']);
+        $this->assertEquals($options['action'], $notification['request']['action']);
+    }
 }
