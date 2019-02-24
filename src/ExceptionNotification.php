@@ -38,11 +38,11 @@ class ExceptionNotification
      * @var \Honeybadger\Environment
      */
     protected $environment;
-    
+
     /**
      * @var array
      */
-    protected $options;
+    protected $additionalParams;
 
     /**
      * @param  \Honeybadger\Config  $config
@@ -57,15 +57,15 @@ class ExceptionNotification
     /**
      * @param  \Throwable  $e
      * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  array  $options
+     * @param  array  $additionalParams
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null, array $options = []) : array
+    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []) : array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
         $this->request = $this->makeRequest($request);
-        $this->options = $options;
+        $this->additionalParams = $additionalParams;
         $this->environment = $this->makeEnvironment();
 
         return $this->format();
@@ -90,8 +90,8 @@ class ExceptionNotification
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
                 'context' => $this->context->all(),
-                'component' => Arr::get($this->options, 'component', null),
-                'action' => Arr::get($this->options, 'action', null),
+                'component' => Arr::get($this->additionalParams, 'component', null),
+                'action' => Arr::get($this->additionalParams, 'action', null),
             ],
             'server' => [
                 'pid' => getmypid(),

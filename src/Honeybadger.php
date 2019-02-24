@@ -58,14 +58,14 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null, array $options = []) : array
+    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []) : array
     {
         if (! $this->shouldReport($throwable)) {
             return [];
         }
 
         $notification = (new ExceptionNotification($this->config, $this->context))
-            ->make($throwable, $request, $options);
+            ->make($throwable, $request, $additionalParams);
 
         return $this->client->notification($notification);
     }
