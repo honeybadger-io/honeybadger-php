@@ -5,6 +5,7 @@ namespace Honeybadger;
 use Throwable;
 use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use Honeybadger\Support\Arr;
 
 class ExceptionNotification
 {
@@ -39,6 +40,11 @@ class ExceptionNotification
     protected $environment;
 
     /**
+     * @var array
+     */
+    protected $additionalParams;
+
+    /**
      * @param  \Honeybadger\Config  $config
      * @param  \Honeybadger\Support\Repository  $context
      */
@@ -51,14 +57,15 @@ class ExceptionNotification
     /**
      * @param  \Throwable  $e
      * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  array  $options
+     * @param  array  $additionalParams
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null, array $options = []) : array
+    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []) : array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
-        $this->request = $this->makeRequest($request, $options);
+        $this->request = $this->makeRequest($request);
+        $this->additionalParams = $additionalParams;
         $this->environment = $this->makeEnvironment();
 
         return $this->format();
@@ -83,8 +90,8 @@ class ExceptionNotification
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
                 'context' => $this->context->all(),
-                'component' => $this->request->component(),
-                'action' => $this->request->action(),
+                'component' => Arr::get($this->additionalParams, 'component', null),
+                'action' => Arr::get($this->additionalParams, 'action', null),
             ],
             'server' => [
                 'pid' => getmypid(),
@@ -116,12 +123,11 @@ class ExceptionNotification
 
     /**
      * @param  \Symfony\Component\HttpFoundation\Request  $request
-     * @param  array  $options
      * @return \Honeybadger\Request
      */
-    private function makeRequest(FoundationRequest $request = null, array $options = []) : Request
+    private function makeRequest(FoundationRequest $request = null) : Request
     {
-        return (new Request($request, $options))
+        return (new Request($request))
             ->filterKeys($this->config['request']['filter']);
     }
 }

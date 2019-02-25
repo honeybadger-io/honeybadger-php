@@ -15,18 +15,12 @@ class Request
     protected $request;
 
     /**
-     * @var array
-     */
-    protected $options;
-
-    /**
      * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @param  array  $options
      */
-    public function __construct(FoundationRequest $request = null, array $options = [])
+    public function __construct(FoundationRequest $request = null)
     {
         $this->request = $request ?? FoundationRequest::createFromGlobals();
-        $this->options = $options;
 
         $this->keysToFilter = [
             'password',
@@ -71,22 +65,6 @@ class Request
     }
 
     /**
-     * @return string
-     */
-    public function component() : string
-    {
-        return $this->getOptionsByKey('component');
-    }
-
-    /**
-     * @return string
-     */
-    public function action() : string
-    {
-        return $this->getOptionsByKey('action');
-    }
-
-    /**
      * @return bool
      */
     private function httpRequest() : bool
@@ -108,10 +86,5 @@ class Request
         }
 
         return [];
-    }
-
-    private function getOptionsByKey($key) : string
-    {
-        return isset($this->options[$key]) ? $this->options[$key] : '';
     }
 }

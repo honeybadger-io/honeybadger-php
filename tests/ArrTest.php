@@ -24,4 +24,16 @@ class ArrTest extends TestCase
             'baz' => 'baxqux',
         ], $result);
     }
+
+    /** @test */
+    public function can_get_an_item_from_an_array()
+    {
+        $this->assertEquals('bar', Arr::get(['foo' => 'bar'], 'foo'));
+    }
+
+    /** @test */
+    public function will_use_default_if_key_does_not_exist()
+    {
+        $this->assertEquals('bar', Arr::get(['foo' => 'baz'], 'baz', 'bar'));
+    }
 }
