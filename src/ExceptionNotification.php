@@ -83,6 +83,8 @@ class ExceptionNotification
                 'message' => $this->throwable->getMessage(),
                 'backtrace' => $this->backtrace->trace(),
                 'causes' => $this->backtrace->previous(),
+                'fingerprint' => Arr::get($this->additionalParams, 'fingerprint', null),
+                'tags' => Arr::wrap(Arr::get($this->additionalParams, 'tags', null)),
             ],
             'request' => [
                 'cgi_data' => $this->environment->values(),
