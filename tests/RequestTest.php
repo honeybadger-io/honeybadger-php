@@ -36,13 +36,13 @@ class RequestTest extends TestCase
 
         $request->overrideGlobals();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'method' => 'POST',
             'query' => [
                 'query1' => 'foo',
                 'query2' => 'bar',
             ],
-        ], (new Request($request))->params());
+        ], array_only((new Request($request))->params(), ['method', 'query']));
     }
 
     /** @test */
