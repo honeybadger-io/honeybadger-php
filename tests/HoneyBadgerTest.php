@@ -33,16 +33,14 @@ class HoneyBadgerTest extends TestCase
 
         $notification = $client->requestBody();
 
-        $this->assertArraySubset([
-            'notifier' => [
-                'name' => 'Honeybadger PHP',
-                'version' => Honeybadger::VERSION,
-            ],
-            'error' => [
-                'message' => 'Test exception',
-                'class' => Exception::class,
-            ],
-        ], $notification);
+        $this->assertEquals([
+            'name' => 'Honeybadger PHP',
+            'version' => Honeybadger::VERSION,
+            'url' => 'https://github.com/honeybadger-io/honeybadger-php',
+        ], $notification['notifier']);
+
+        $this->assertEquals('Test exception', $notification['error']['message']);
+        $this->assertEquals(Exception::class, $notification['error']['class']);
 
         $this->assertArrayHasKey('backtrace', $notification['error']);
         $this->assertArrayHasKey('server', $notification);
@@ -74,13 +72,11 @@ class HoneyBadgerTest extends TestCase
 
         $notification = $client->requestBody();
 
-        $this->assertArraySubset([
-            'notifier' => [
-                'name' => 'Honeybadger FUTURE',
-                'url' => 'https://honeybadger.io/awesome-notifier',
-                'version' => 66,
-            ],
-       ], $notification);
+        $this->assertEquals([
+            'name' => 'Honeybadger FUTURE',
+            'url' => 'https://honeybadger.io/awesome-notifier',
+            'version' => 66,
+       ], $notification['notifier']);
     }
 
     /** @test */
@@ -323,7 +319,7 @@ class HoneyBadgerTest extends TestCase
 
         $request = $client->requestBody();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
@@ -333,7 +329,7 @@ class HoneyBadgerTest extends TestCase
                     'foo'  => 'bar',
                 ],
             ],
-        ], $request);
+        ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
     }
@@ -463,7 +459,7 @@ class HoneyBadgerTest extends TestCase
 
         $request = $client->requestBody();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
@@ -474,7 +470,7 @@ class HoneyBadgerTest extends TestCase
                     'baz' => 'qux',
                 ],
             ],
-        ], $request);
+        ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
     }
