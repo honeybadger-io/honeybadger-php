@@ -4,9 +4,17 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.4.0] 2019-04-17
+
 ### Added
-* Fully customizable notification method.
-* Ability to reset context
+* Fully customizable notification method ([#70](https://github.com/honeybadger-io/honeybadger-php/pull/70))
+* Ability to reset context ([#71](https://github.com/honeybadger-io/honeybadger-php/pull/71))
+* Monolog Handler ([#70](https://github.com/honeybadger-io/honeybadger-php/pull/70))
+* PHPUnit 8 support ([#79](https://github.com/honeybadger-io/honeybadger-php/pull/79))
+
+## Fixed
+* Empty `api_key` value ([#80](https://github.com/honeybadger-io/honeybadger-php/pull/80))
 
 ## [1.3.0] 2018-12-17
 ### Added
