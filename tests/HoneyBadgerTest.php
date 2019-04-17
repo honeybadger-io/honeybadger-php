@@ -382,14 +382,14 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function exceptions_do_not_get_reported_when_config_key_is_null()
+    public function exceptions_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
              new Response(201),
          ]);
 
         $badger = Honeybadger::new([
-             'api_key' => null,
+             'api_key' => '',
              'handlers' => [
                  'exception' => false,
                  'error' => false,
@@ -402,14 +402,14 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function custom_notifications_do_not_get_reported_when_config_key_is_null()
+    public function custom_notifications_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
              new Response(201),
          ]);
 
         $badger = Honeybadger::new([
-             'api_key' => null,
+             'api_key' => '',
              'handlers' => [
                  'exception' => false,
                  'error' => false,
