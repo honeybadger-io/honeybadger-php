@@ -47,6 +47,7 @@ class Config extends Repository
                 'proxy' => [],
             ],
             'excluded_exceptions' => [],
+            'report_data' => true,
         ], $config);
     }
 }
