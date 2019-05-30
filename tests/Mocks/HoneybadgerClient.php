@@ -6,7 +6,7 @@ class HoneybadgerClient extends Client
 {
     public function request()
     {
-        return $this->calls() ?? $this->calls()[0]['request'];
+        return $this->calls();
     }
 
     public function requestBody()

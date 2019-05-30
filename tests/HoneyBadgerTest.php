@@ -171,7 +171,7 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make())->checkin('1234');
 
-        $request = $client->request();
+        $request = $client->request()[0]['request'];
 
         $this->assertEquals('check_in/1234', $request->getUri()->getPath());
     }
