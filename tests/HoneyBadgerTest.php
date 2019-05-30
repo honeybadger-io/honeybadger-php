@@ -171,7 +171,7 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make())->checkin('1234');
 
-        $request = $client->request();
+        $request = $client->request()[0]['request'];
 
         $this->assertEquals('check_in/1234', $request->getUri()->getPath());
     }
@@ -546,5 +546,35 @@ class HoneyBadgerTest extends TestCase
         $badger->resetContext();
 
         $this->assertEmpty($badger->getContext()->all());
+    }
+
+    /** @test */
+    public function no_data_is_sent_if_reporting_is_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'report_data' => false,
+        ], $client->make());
+
+        $badger->rawNotification(function ($config, $context) {
+            return [
+                'error' => [
+                    'class' => 'Foo',
+                ],
+            ];
+        });
+
+        $badger->customNotification([]);
+        $badger->notify(new \Exception('Whoops!'));
+
+        $this->assertEmpty($client->request());
     }
 }

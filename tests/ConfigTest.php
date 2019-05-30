@@ -40,6 +40,7 @@ class ConfigTest extends TestCase
                 'proxy' => [],
             ],
             'excluded_exceptions' => [],
+            'report_data' => true,
         ], $config);
     }
 }

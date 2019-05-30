@@ -75,7 +75,7 @@ class Honeybadger implements Reporter
      */
     public function customNotification(array $payload) : array
     {
-        if (empty($this->config['api_key'])) {
+        if (empty($this->config['api_key']) || ! $this->config['report_data']) {
             return [];
         }
 
@@ -90,7 +90,7 @@ class Honeybadger implements Reporter
      */
     public function rawNotification(callable $callable) : array
     {
-        if (empty($this->config['api_key'])) {
+        if (empty($this->config['api_key']) || ! $this->config['report_data']) {
             return [];
         }
 
@@ -167,6 +167,8 @@ class Honeybadger implements Reporter
      */
     private function shouldReport(Throwable $throwable) : bool
     {
-        return ! $this->excludedException($throwable) && ! empty($this->config['api_key']);
+        return ! $this->excludedException($throwable)
+            && ! empty($this->config['api_key'])
+            && $this->config['report_data'];
     }
 }

@@ -72,7 +72,7 @@ class LogHandlerTest extends TestCase
 
         // [2019-01-20 14:56:20] test-logger.INFO: Test log message
         $this->assertRegExp(
-           '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
+            '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
             $reporter->notification['error']['message']
         );
 
