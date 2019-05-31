@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.5.0] 2019-05-30
+
+### Added
+* New option for whether the library should send notifications back to the Honeybadger API ([#82](https://github.com/honeybadger-io/honeybadger-php/pull/82))
+
 ## [1.4.0] 2019-04-17
 
 ### Added
