@@ -4,8 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.5.1] - 2019-06-10
 ### Fixed
-* Error handler reporting supressed errors
+* Error handler reporting supressed errors ([#83](https://github.com/honeybadger-io/honeybadger-php/pull/83))
 
 ## [1.5.0] 2019-05-30
 
