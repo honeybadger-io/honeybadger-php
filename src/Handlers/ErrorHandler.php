@@ -25,12 +25,16 @@ class ErrorHandler extends Handler implements HandlerContract
      * @param  string  $error
      * @param  string  $file
      * @param  int  $line
-     * @return void
+     * @return mixed
      *
      * @throws \Honeyhadger\Exceptions\ServiceException
      */
-    public function handle($code, $error, $file = null, $line = null) : void
+    public function handle($code, $error, $file = null, $line = null)
     {
+        if (error_reporting() === 0) {
+            return false;
+        }
+
         $this->honeybadger->notify(
             new ErrorException($error, $code, 0, $file, $line)
         );
