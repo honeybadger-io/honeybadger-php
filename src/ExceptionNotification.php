@@ -3,6 +3,7 @@
 namespace Honeybadger;
 
 use Throwable;
+use Honeybadger\Support\Arr;
 use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 
@@ -39,6 +40,11 @@ class ExceptionNotification
     protected $environment;
 
     /**
+     * @var array
+     */
+    protected $additionalParams;
+
+    /**
      * @param  \Honeybadger\Config  $config
      * @param  \Honeybadger\Support\Repository  $context
      */
@@ -51,13 +57,15 @@ class ExceptionNotification
     /**
      * @param  \Throwable  $e
      * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  array  $additionalParams
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null) : array
+    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []) : array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
         $this->request = $this->makeRequest($request);
+        $this->additionalParams = $additionalParams;
         $this->environment = $this->makeEnvironment();
 
         return $this->format();
@@ -82,6 +90,8 @@ class ExceptionNotification
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
                 'context' => $this->context->all(),
+                'component' => Arr::get($this->additionalParams, 'component', null),
+                'action' => Arr::get($this->additionalParams, 'action', null),
             ],
             'server' => [
                 'pid' => getmypid(),
