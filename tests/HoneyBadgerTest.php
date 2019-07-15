@@ -592,6 +592,8 @@ class HoneyBadgerTest extends TestCase
         $options = [
             'component' => 'sample',
             'action' => 'index',
+            'fingerprint' => '97sdff976',
+            'tags' => ['user', 'core'],
         ];
         $badger->notify(new Exception('Test exception'), null, $options);
 
@@ -599,5 +601,7 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEquals($options['component'], $notification['request']['component']);
         $this->assertEquals($options['action'], $notification['request']['action']);
+        $this->assertEquals($options['fingerprint'], $notification['error']['fingerprint']);
+        $this->assertEquals($options['tags'], $notification['error']['tags']);
     }
 }
