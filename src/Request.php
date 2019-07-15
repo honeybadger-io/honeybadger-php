@@ -16,6 +16,7 @@ class Request
 
     /**
      * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  array  $options
      */
     public function __construct(FoundationRequest $request = null)
     {
