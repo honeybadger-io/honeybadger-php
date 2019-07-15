@@ -33,16 +33,14 @@ class HoneyBadgerTest extends TestCase
 
         $notification = $client->requestBody();
 
-        $this->assertArraySubset([
-            'notifier' => [
-                'name' => 'Honeybadger PHP',
-                'version' => Honeybadger::VERSION,
-            ],
-            'error' => [
-                'message' => 'Test exception',
-                'class' => Exception::class,
-            ],
-        ], $notification);
+        $this->assertEquals([
+            'name' => 'Honeybadger PHP',
+            'version' => Honeybadger::VERSION,
+            'url' => 'https://github.com/honeybadger-io/honeybadger-php',
+        ], $notification['notifier']);
+
+        $this->assertEquals('Test exception', $notification['error']['message']);
+        $this->assertEquals(Exception::class, $notification['error']['class']);
 
         $this->assertArrayHasKey('backtrace', $notification['error']);
         $this->assertArrayHasKey('server', $notification);
@@ -74,13 +72,11 @@ class HoneyBadgerTest extends TestCase
 
         $notification = $client->requestBody();
 
-        $this->assertArraySubset([
-            'notifier' => [
-                'name' => 'Honeybadger FUTURE',
-                'url' => 'https://honeybadger.io/awesome-notifier',
-                'version' => 66,
-            ],
-       ], $notification);
+        $this->assertEquals([
+            'name' => 'Honeybadger FUTURE',
+            'url' => 'https://honeybadger.io/awesome-notifier',
+            'version' => 66,
+       ], $notification['notifier']);
     }
 
     /** @test */
@@ -175,7 +171,7 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make())->checkin('1234');
 
-        $request = $client->request();
+        $request = $client->request()[0]['request'];
 
         $this->assertEquals('check_in/1234', $request->getUri()->getPath());
     }
@@ -323,7 +319,7 @@ class HoneyBadgerTest extends TestCase
 
         $request = $client->requestBody();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
@@ -333,7 +329,7 @@ class HoneyBadgerTest extends TestCase
                     'foo'  => 'bar',
                 ],
             ],
-        ], $request);
+        ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
     }
@@ -386,14 +382,14 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function exceptions_do_not_get_reported_when_config_key_is_null()
+    public function exceptions_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
              new Response(201),
          ]);
 
         $badger = Honeybadger::new([
-             'api_key' => null,
+             'api_key' => '',
              'handlers' => [
                  'exception' => false,
                  'error' => false,
@@ -406,14 +402,14 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function custom_notifications_do_not_get_reported_when_config_key_is_null()
+    public function custom_notifications_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
              new Response(201),
          ]);
 
         $badger = Honeybadger::new([
-             'api_key' => null,
+             'api_key' => '',
              'handlers' => [
                  'exception' => false,
                  'error' => false,
@@ -463,7 +459,7 @@ class HoneyBadgerTest extends TestCase
 
         $request = $client->requestBody();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
@@ -474,7 +470,7 @@ class HoneyBadgerTest extends TestCase
                     'baz' => 'qux',
                 ],
             ],
-        ], $request);
+        ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
     }
@@ -550,6 +546,32 @@ class HoneyBadgerTest extends TestCase
         $badger->resetContext();
 
         $this->assertEmpty($badger->getContext()->all());
+    }
+
+    /** @test */
+    public function no_data_is_sent_if_reporting_is_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'report_data' => false,
+        ], $client->make());
+        $badger->rawNotification(function ($config, $context) {
+            return [
+                'error' => [
+                    'class' => 'Foo',
+                ],
+            ];
+        });
+        $badger->customNotification([]);
+        $badger->notify(new \Exception('Whoops!'));
+        $this->assertEmpty($client->request());
     }
 
     /** @test */

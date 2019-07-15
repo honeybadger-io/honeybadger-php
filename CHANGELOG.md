@@ -4,9 +4,28 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## Added
+- Added the ability to pass additional API parameters to exception captures specifically component and action ([#85](https://github.com/honeybadger-io/honeybadger-php/pull/85))
+
+## [1.5.1] - 2019-06-10
+### Fixed
+* Error handler reporting supressed errors ([#83](https://github.com/honeybadger-io/honeybadger-php/pull/83))
+
+## [1.5.0] 2019-05-30
+
 ### Added
-* Fully customizable notification method.
-* Ability to reset context
+* New option for whether the library should send notifications back to the Honeybadger API ([#82](https://github.com/honeybadger-io/honeybadger-php/pull/82))
+
+## [1.4.0] 2019-04-17
+
+### Added
+* Fully customizable notification method ([#70](https://github.com/honeybadger-io/honeybadger-php/pull/70))
+* Ability to reset context ([#71](https://github.com/honeybadger-io/honeybadger-php/pull/71))
+* Monolog Handler ([#70](https://github.com/honeybadger-io/honeybadger-php/pull/70))
+* PHPUnit 8 support ([#79](https://github.com/honeybadger-io/honeybadger-php/pull/79))
+
+## Fixed
+* Empty `api_key` value ([#80](https://github.com/honeybadger-io/honeybadger-php/pull/80))
 
 ## [1.3.0] 2018-12-17
 ### Added

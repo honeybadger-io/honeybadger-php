@@ -46,18 +46,11 @@ class LogHandlerTest extends TestCase
 
         $logger->info('Test log message');
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'notifier' => [
                 'name' => 'Honeybadger Log Handler',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
                 'version' => Honeybadger::VERSION,
-            ],
-            'error' => [
-                'class' => 'Test log message',
-                'tags' => [
-                    'log',
-                    'test-logger.INFO',
-                ],
             ],
             'request' => [
                 'context' => [
@@ -67,11 +60,19 @@ class LogHandlerTest extends TestCase
                     'message' => 'Test log message',
                 ],
             ],
-          ], $reporter->notification);
+          ], array_only($reporter->notification, ['notifier', 'request']));
+
+        $this->assertEquals([
+            'class' => 'Test log message',
+            'tags' => [
+                'log',
+                'test-logger.INFO',
+            ],
+        ], array_only($reporter->notification['error'], ['class', 'tags']));
 
         // [2019-01-20 14:56:20] test-logger.INFO: Test log message
         $this->assertRegExp(
-           '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
+            '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
             $reporter->notification['error']['message']
         );
 

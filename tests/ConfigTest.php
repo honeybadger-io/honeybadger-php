@@ -13,7 +13,7 @@ class ConfigTest extends TestCase
     {
         $config = (new Config(['api_key' => '1234']))->all();
 
-        $this->assertArraySubset([
+        $this->assertEquals([
             'api_key' => '1234',
             'notifier' => [
                 'name' => 'Honeybadger PHP',
@@ -39,6 +39,8 @@ class ConfigTest extends TestCase
                 'timeout' => 0,
                 'proxy' => [],
             ],
+            'excluded_exceptions' => [],
+            'report_data' => true,
         ], $config);
     }
 }
