@@ -30,17 +30,18 @@ class BacktraceFactoryTest extends TestCase
     /** @test */
     public function it_correctly_formats_annonymous_functions()
     {
-        $throwTestException = function () {
+        $throwTestException = function ($foo) {
             throw new Exception('test');
         };
 
         try {
-            $throwTestException();
+            $throwTestException('bar');
         } catch (Throwable $e) {
             $backtrace = (new BacktraceFactory($e))->trace();
         }
 
         $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        $this->assertEquals(['bar'], $backtrace[0]['args']);
     }
 
     /** @test */
