@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ## Added
-- Added the ability to pass additional API parameters to exception captures ([#85](https://github.com/honeybadger-io/honeybadger-php/pull/85))
+- Added the ability to pass additional API parameters to exception captures specifically component and action ([#85](https://github.com/honeybadger-io/honeybadger-php/pull/85))
 
 ## [1.5.1] - 2019-06-10
 ### Fixed
