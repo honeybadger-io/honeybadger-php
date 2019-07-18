@@ -626,6 +626,8 @@ class HoneyBadgerTest extends TestCase
 
         $notification = $client->requestBody();
 
+        // dd($notification['error']['causes'][0]['backtrace'][0]);
+
         (new SchemaAssertion)
             ->schema(__DIR__.'/Fixtures/Schemas/notice.json')
             ->assert(json_encode($notification));

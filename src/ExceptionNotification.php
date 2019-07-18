@@ -88,10 +88,10 @@ class ExceptionNotification
             ],
             'request' => [
                 'cgi_data' => $this->environment->values(),
-                'params' => $this->request->params(),
-                'session' => $this->request->session(),
+                'params' => ! empty($this->request->params()) ? $this->request()->params() : null,
+                'session' => ! empty($this->request->session()) ? $this->request->session() : null,
                 'url' => $this->request->url(),
-                'context' => $this->context->all(),
+                'context' => ! empty($this->context->all()) ? $this->context->all() : null,
                 'component' => Arr::get($this->additionalParams, 'component', null),
                 'action' => Arr::get($this->additionalParams, 'action', null),
             ],

@@ -1,361 +1,434 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "id": "https://api.honeybadger.io/v1/notices",
-  "type": "object",
-  "properties": {
-    "notifier": {
-      "id": "https://api.honeybadger.io/v1/notices/notifier",
-      "type": "object",
-      "properties": {
-        "name": {
-          "id": "https://api.honeybadger.io/v1/notices/notifier/name",
-          "type": "string"
-        },
-        "url": {
-          "id": "https://api.honeybadger.io/v1/notices/notifier/url",
-          "type": "string"
-        },
-        "version": {
-          "id": "https://api.honeybadger.io/v1/notices/notifier/version",
-          "type": "string"
-        }
-      },
-      "required": [
-        "name",
-        "url",
-        "version"
-      ],
-      "additionalProperties": false
-    },
-    "error": {
-      "id": "https://api.honeybadger.io/v1/notices/error",
-      "type": "object",
-      "properties": {
-        "class": {
-          "id": "https://api.honeybadger.io/v1/notices/error/class",
-          "type": "string"
-        },
-        "message": {
-          "id": "https://api.honeybadger.io/v1/notices/error/message",
-          "type": "string"
-        },
-        "fingerprint": {
-          "id": "https://api.honeybadger.io/v1/notices/error/fingerprint",
-          "type": "string"
-        },
-        "tags": {
-          "id": "https://api.honeybadger.io/v1/notices/error/tags",
-          "type": "array",
-          "items": {
-            "id": "https://api.honeybadger.io/v1/notices/error/tags/0",
-            "type": "string"
-          }
-        },
-        "source": {
-          "id": "https://api.honeybadger.io/v1/notices/error/source",
-          "type": "object",
-          "properties": {
-            "1": {
-              "id": "https://api.honeybadger.io/v1/notices/error/source/1",
-              "type": "string"
-            }
-          }
-        },
-        "backtrace": {
-          "id": "https://api.honeybadger.io/v1/notices/error/backtrace",
-          "type": "array",
-          "items": {
-            "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "id": "exceptions/v1/notices.json",
+    "type": "object",
+    "properties": {
+        "notifier": {
+            "id": "#/properties/notifier",
             "type": "object",
             "properties": {
-              "number": {
-                "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/number",
-                "anyOf": [
-                  { "type": "string" },
-                  { "type": "integer" }
-                ]
-              },
-              "file": {
-                "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/file",
-                "type": "string"
-              },
-              "method": {
-                "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/method",
-                "type": "string"
-              },
-              "context": {
-                "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/context",
-                "enum": [ "app", "all" ]
-              },
-              "source": {
-                "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/source",
-                "type": "object",
-                "properties": {
-                  "1": {
-                    "id": "https://api.honeybadger.io/v1/notices/error/backtrace/0/source/1",
+                "name": {
+                    "id": "#/properties/notifier/name",
                     "type": "string"
-                  }
+                },
+                "url": {
+                    "id": "#/properties/notifier/notifier/url",
+                    "type": "string"
+                },
+                "version": {
+                    "id": "#/properties/notifier/notifier/version",
+                    "type": "string"
                 }
-              }
             },
             "required": [
-              "number",
-              "file",
-              "method"
+                "name",
+                "url",
+                "version"
             ],
             "additionalProperties": false
-          }
         },
-        "causes": {
-          "id": "https://api.honeybadger.io/v1/notices/error/causes",
-          "type": "array",
-          "items": {
-            "id": "https://api.honeybadger.io/v1/notices/error/causes/0",
+        "error": {
+            "id": "#/properties/notifier/error",
             "type": "object",
             "properties": {
-              "class": {
-                "id": "https://api.honeybadger.io/v1/notices/error/causes/0/class",
-                "type": "string"
-              },
-              "message": {
-                "id": "https://api.honeybadger.io/v1/notices/error/causes/0/message",
-                "type": "string"
-              },
-              "backtrace": {
-                "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace",
-                "type": "array",
-                "items": {
-                  "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace/0",
-                  "type": "object",
-                  "properties": {
-                    "number": {
-                      "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace/0/number",
-                      "anyOf": [
-                        { "type": "string" },
-                        { "type": "integer" }
-                      ]
-                    },
-                    "file": {
-                      "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace/0/file",
-                      "type": "string"
-                    },
-                    "method": {
-                      "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace/0/method",
-                      "type": "string"
-                    },
-                    "context": {
-                      "id": "https://api.honeybadger.io/v1/notices/error/causes/0/backtrace/0/context",
-                      "enum": [ "app", "all" ]
+                "class": {
+                    "id": "#/properties/notifier/error/class",
+                    "type": "string"
+                },
+                "message": {
+                    "id": "#/properties/notifier/error/message",
+                    "type": "string"
+                },
+                "fingerprint": {
+                    "id": "#/properties/notifier/error/fingerprint",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
+                },
+                "tags": {
+                    "id": "#/properties/notifier/error/tags",
+                    "type": "array",
+                    "items": {
+                        "id": "#/properties/notifier/error/tags/0",
+                        "type": "string"
                     }
-                  },
-                  "required": [
-                    "number",
-                    "file",
-                    "method"
-                  ],
-                  "additionalProperties": false
+                },
+                "source": {
+                    "id": "#/properties/notifier/error/source",
+                    "type": "object",
+                    "properties": {
+                        "1": {
+                            "id": "#/properties/notifier/error/source/1",
+                            "type": "string"
+                        }
+                    }
+                },
+                "backtrace": {
+                    "id": "#/properties/notifier/error/backtrace",
+                    "type": "array",
+                    "items": {
+                        "id": "#/properties/notifier/error/backtrace/0",
+                        "type": "object",
+                        "properties": {
+                            "number": {
+                                "id": "#/properties/notifier/error/backtrace/0/number",
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "integer"
+                                    }
+                                ]
+                            },
+                            "file": {
+                                "id": "#/properties/notifier/error/backtrace/0/file",
+                                "type": "string"
+                            },
+                            "method": {
+                                "id": "#/properties/notifier/error/backtrace/0/method",
+                                "type": "string"
+                            },
+                            "args": {
+                                "id": "#/properties/notifier/error/backtrace/0/args",
+                                "type": "array",
+                                "items": {
+                                    "id": "#/properties/notifier/error/backtrace/0/args/0",
+                                    "type": [
+                                        "null",
+                                        "boolean",
+                                        "object",
+                                        "array",
+                                        "number",
+                                        "string"
+                                    ]
+                                }
+                            },
+                            "context": {
+                                "id": "#/properties/notifier/error/backtrace/0/context",
+                                "enum": [
+                                    "app",
+                                    "all"
+                                ]
+                            },
+                            "source": {
+                                "id": "#/properties/notifier/error/backtrace/0/source",
+                                "type": "object",
+                                "properties": {
+                                    "1": {
+                                        "id": "#/properties/notifier/error/backtrace/0/source/1",
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "required": [
+                            "number",
+                            "file",
+                            "method"
+                        ],
+                        "additionalProperties": false
+                    }
+                },
+                "causes": {
+                    "id": "#/properties/notifier/error/causes",
+                    "type": "array",
+                    "items": {
+                        "id": "#/properties/notifier/error/causes/0",
+                        "type": "object",
+                        "properties": {
+                            "class": {
+                                "id": "#/properties/notifier/error/causes/0/class",
+                                "type": "string"
+                            },
+                            "message": {
+                                "id": "#/properties/notifier/error/causes/0/message",
+                                "type": "string"
+                            },
+                            "backtrace": {
+                                "id": "#/properties/notifier/error/causes/0/backtrace",
+                                "type": "array",
+                                "items": {
+                                    "id": "#/properties/notifier/error/causes/0/backtrace/0",
+                                    "type": "object",
+                                    "properties": {
+                                        "number": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/number",
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "integer"
+                                                }
+                                            ]
+                                        },
+                                        "file": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/file",
+                                            "type": "string"
+                                        },
+                                        "method": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/method",
+                                            "type": "string"
+                                        },
+                                        "source": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/source",
+                                            "type": "object",
+                                            "properties": {
+                                                "1": {
+                                                    "id": "#/properties/notifier/error/source/1",
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "args": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/args",
+                                            "type": "array",
+                                            "items": {
+                                                "id": "#/properties/notifier/error/backtrace/0/args/0",
+                                                "type": [
+                                                    "null",
+                                                    "boolean",
+                                                    "object",
+                                                    "array",
+                                                    "number",
+                                                    "string"
+                                                ]
+                                            }
+                                        },
+                                        "context": {
+                                            "id": "#/properties/notifier/error/causes/0/backtrace/0/context",
+                                            "enum": [
+                                                "app",
+                                                "all"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "number",
+                                        "file",
+                                        "method"
+                                    ],
+                                    "additionalProperties": false
+                                }
+                            }
+                        },
+                        "required": [
+                            "class",
+                            "message",
+                            "backtrace"
+                        ],
+                        "additionalProperties": false
+                    }
                 }
-              }
             },
             "required": [
-              "class",
-              "message",
-              "backtrace"
+                "class",
+                "message",
+                "backtrace"
             ],
             "additionalProperties": false
-          }
-        }
-      },
-      "required": [
-        "class",
-        "message",
-        "backtrace"
-      ],
-      "additionalProperties": false
-    },
-    "request": {
-      "id": "https://api.honeybadger.io/v1/notices/request",
-      "type": "object",
-      "properties": {
-        "url": {
-          "id": "https://api.honeybadger.io/v1/notices/request/url",
-          "type": "string"
         },
-        "component": {
-          "id": "https://api.honeybadger.io/v1/notices/request/component",
-          "type": "string"
-        },
-        "action": {
-          "id": "https://api.honeybadger.io/v1/notices/request/action",
-          "type": "string"
-        },
-        "context": {
-          "id": "https://api.honeybadger.io/v1/notices/request/context",
-          "type": "object"
-        },
-        "params": {
-          "id": "https://api.honeybadger.io/v1/notices/request/params",
-          "type": "object"
-        },
-        "session": {
-          "id": "https://api.honeybadger.io/v1/notices/request/session",
-          "type": "object"
-        },
-        "cgi_data": {
-          "id": "https://api.honeybadger.io/v1/notices/request/cgi_data",
-          "type": "object",
-          "properties": {
-            "REQUEST_METHOD": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/REQUEST_METHOD",
-              "type": "string"
-            },
-            "REMOTE_ADDR": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/REMOTE_ADDR",
-              "type": "string"
-            },
-            "HTTP_X_FORWARDED_FOR": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/QUERY_STRING",
-              "type": "string"
-            },
-            "HTTP_HOST": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/REMOTE_ADDR",
-              "type": "string"
-            },
-            "HTTP_USER_AGENT": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/HTTP_USER_AGENT",
-              "type": "string"
-            },
-            "HTTP_COOKIE": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/CONTENT_TYPE",
-              "type": "string"
-            },
-            "HTTP_REFERER": {
-              "id": "https://api.honeybadger.io/v1/notices/request/cgi_data/HTTP_REFERER",
-              "type": "string"
-            }
-          }
-        }
-      },
-      "required": [
-        "url",
-        "params",
-        "session",
-        "cgi_data",
-        "context"
-      ],
-      "additionalProperties": false
-    },
-    "server": {
-      "id": "https://api.honeybadger.io/v1/notices/server",
-      "type": "object",
-      "properties": {
-        "project_root": {
-          "id": "https://api.honeybadger.io/v1/notices/server/project_root",
-          "type": "string"
-        },
-        "environment_name": {
-          "id": "https://api.honeybadger.io/v1/notices/server/environment_name",
-          "type": "string"
-        },
-        "hostname": {
-          "id": "https://api.honeybadger.io/v1/notices/server/hostname",
-          "type": "string"
-        },
-        "time": {
-          "id": "https://api.honeybadger.io/v1/notices/server/time",
-          "type": "string"
-        },
-        "pid": {
-          "id": "https://api.honeybadger.io/v1/notices/server/pid",
-          "type": "integer"
-        },
-        "revision": {
-          "id": "https://api.honeybadger.io/v1/notices/server/project_root",
-          "type": "string"
-        },
-        "stats": {
-          "id": "https://api.honeybadger.io/v1/notices/server/stats",
-          "type": "object",
-          "properties": {
-            "mem": {
-              "id": "https://api.honeybadger.io/v1/notices/server/stats/mem",
-              "type": "object",
-              "properties": {
-                "total": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/mem/total",
-                  "type": "number"
+        "request": {
+            "id": "#/properties/notifier/request",
+            "type": "object",
+            "properties": {
+                "url": {
+                    "id": "#/properties/notifier/request/url",
+                    "type": "string"
                 },
-                "free": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/mem/free",
-                  "type": "number"
+                "component": {
+                    "id": "#/properties/notifier/request/component",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
-                "buffers": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/mem/buffers",
-                  "type": "number"
+                "action": {
+                    "id": "#/properties/notifier/request/action",
+                    "type": [
+                        "string",
+                        "null"
+                    ]
                 },
-                "cached": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/mem/cached",
-                  "type": "number"
+                "context": {
+                    "id": "#/properties/notifier/request/context",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
                 },
-                "free_total": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/mem/free_total",
-                  "type": "number"
+                "params": {
+                    "id": "#/properties/notifier/request/params",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "session": {
+                    "id": "#/properties/notifier/request/session",
+                    "type": [
+                        "object",
+                        "null"
+                    ]
+                },
+                "cgi_data": {
+                    "id": "#/properties/notifier/request/cgi_data",
+                    "type": "object",
+                    "properties": {
+                        "REQUEST_METHOD": {
+                            "id": "#/properties/notifier/request/cgi_data/REQUEST_METHOD",
+                            "type": "string"
+                        },
+                        "REMOTE_ADDR": {
+                            "id": "#/properties/notifier/request/cgi_data/REMOTE_ADDR",
+                            "type": "string"
+                        },
+                        "HTTP_X_FORWARDED_FOR": {
+                            "id": "#/properties/notifier/request/cgi_data/QUERY_STRING",
+                            "type": "string"
+                        },
+                        "HTTP_HOST": {
+                            "id": "#/properties/notifier/request/cgi_data/REMOTE_ADDR",
+                            "type": "string"
+                        },
+                        "HTTP_USER_AGENT": {
+                            "id": "#/properties/notifier/request/cgi_data/HTTP_USER_AGENT",
+                            "type": "string"
+                        },
+                        "HTTP_COOKIE": {
+                            "id": "#/properties/notifier/request/cgi_data/CONTENT_TYPE",
+                            "type": "string"
+                        },
+                        "HTTP_REFERER": {
+                            "id": "#/properties/notifier/request/cgi_data/HTTP_REFERER",
+                            "type": "string"
+                        }
+                    }
                 }
-              },
-              "required": [
-                "total",
-                "free",
-                "buffers",
-                "cached",
-                "free_total"
-              ],
-              "additionalProperties": false
             },
-            "load": {
-              "id": "https://api.honeybadger.io/v1/notices/server/stats/load",
-              "type": "object",
-              "properties": {
-                "one": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/load/one",
-                  "type": "number"
+            "required": [
+                "url",
+                "params",
+                "session",
+                "cgi_data",
+                "context"
+            ],
+            "additionalProperties": false
+        },
+        "server": {
+            "id": "#/properties/notifier/server",
+            "type": "object",
+            "properties": {
+                "project_root": {
+                    "id": "#/properties/notifier/server/project_root",
+                    "type": "string"
                 },
-                "five": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/load/five",
-                  "type": "number"
+                "environment_name": {
+                    "id": "#/properties/notifier/server/environment_name",
+                    "type": "string"
                 },
-                "fifteen": {
-                  "id": "https://api.honeybadger.io/v1/notices/server/stats/load/fifteen",
-                  "type": "number"
+                "hostname": {
+                    "id": "#/properties/notifier/server/hostname",
+                    "type": "string"
+                },
+                "time": {
+                    "id": "#/properties/notifier/server/time",
+                    "type": "string"
+                },
+                "pid": {
+                    "id": "#/properties/notifier/server/pid",
+                    "type": "integer"
+                },
+                "revision": {
+                    "id": "#/properties/notifier/server/project_root",
+                    "type": "string"
+                },
+                "stats": {
+                    "id": "#/properties/notifier/server/stats",
+                    "type": "object",
+                    "properties": {
+                        "mem": {
+                            "id": "#/properties/notifier/server/stats/mem",
+                            "type": "object",
+                            "properties": {
+                                "total": {
+                                    "id": "#/properties/notifier/server/stats/mem/total",
+                                    "type": "number"
+                                },
+                                "free": {
+                                    "id": "#/properties/notifier/server/stats/mem/free",
+                                    "type": "number"
+                                },
+                                "buffers": {
+                                    "id": "#/properties/notifier/server/stats/mem/buffers",
+                                    "type": "number"
+                                },
+                                "cached": {
+                                    "id": "#/properties/notifier/server/stats/mem/cached",
+                                    "type": "number"
+                                },
+                                "free_total": {
+                                    "id": "#/properties/notifier/server/stats/mem/free_total",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "total",
+                                "free",
+                                "buffers",
+                                "cached",
+                                "free_total"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "load": {
+                            "id": "#/properties/notifier/server/stats/load",
+                            "type": "object",
+                            "properties": {
+                                "one": {
+                                    "id": "#/properties/notifier/server/stats/load/one",
+                                    "type": "number"
+                                },
+                                "five": {
+                                    "id": "#/properties/notifier/server/stats/load/five",
+                                    "type": "number"
+                                },
+                                "fifteen": {
+                                    "id": "#/properties/notifier/server/stats/load/fifteen",
+                                    "type": "number"
+                                }
+                            },
+                            "required": [
+                                "one",
+                                "five",
+                                "fifteen"
+                            ],
+                            "additionalProperties": false
+                        }
+                    },
+                    "required": [
+                        "mem",
+                        "load"
+                    ],
+                    "additionalProperties": false
                 }
-              },
-              "required": [
-                "one",
-                "five",
-                "fifteen"
-              ],
-              "additionalProperties": false
+            },
+            "additionalProperties": false
+        },
+        "details": {
+            "id": "#/properties/notifier/details",
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
             }
-          },
-          "required": [
-            "mem",
-            "load"
-          ],
-          "additionalProperties": false
         }
-      },
-      "additionalProperties": false
     },
-    "details": {
-      "id": "https://api.honeybadger.io/v1/notices/details",
-      "type": "object",
-      "additionalProperties": {
-        "type": "object"
-      }
-    }
-  },
-  "required": [
-    "notifier",
-    "error",
-    "server"
-  ]
+    "required": [
+        "notifier",
+        "error",
+        "server"
+    ],
+    "additionalProperties": false
 }
