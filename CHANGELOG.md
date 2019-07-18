@@ -4,7 +4,9 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-## Added
+
+## [1.6.0] - 2019-07-18
+### Added
 - Added the ability to pass additional API parameters to exception captures specifically component and action ([#85](https://github.com/honeybadger-io/honeybadger-php/pull/85))
 - Adds fingerprint and tags to the additional paramaters ([#76](https://github.com/honeybadger-io/honeybadger-php/pull/76))
 - Adds method arguments to backtrace where possible ([#86](https://github.com/honeybadger-io/honeybadger-php/pull/86))
