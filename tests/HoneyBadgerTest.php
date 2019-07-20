@@ -604,4 +604,30 @@ class HoneyBadgerTest extends TestCase
         $this->assertEquals($options['fingerprint'], $notification['error']['fingerprint']);
         $this->assertEquals($options['tags'], $notification['error']['tags']);
     }
+
+    /** @test */
+    public function context_and_action_can_be_set_with_context()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->context('component', 'HomeController');
+        $badger->context('action', 'index');
+
+        $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals('HomeController', $notification['request']['component']);
+        $this->assertEquals('index', $notification['request']['action']);
+    }
 }
