@@ -92,8 +92,8 @@ class ExceptionNotification
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
                 'context' => $this->context->all(),
-                'component' => Arr::get($this->additionalParams, 'component', null),
-                'action' => Arr::get($this->additionalParams, 'action', null),
+                'component' => Arr::get($this->additionalParams, 'component', null) ?? Arr::get($this->context, 'component', null),
+                'action' => Arr::get($this->additionalParams, 'action', null) ?? Arr::get($this->context, 'action', null),
             ],
             'server' => [
                 'pid' => getmypid(),
