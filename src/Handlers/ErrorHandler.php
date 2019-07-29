@@ -39,6 +39,8 @@ class ErrorHandler extends Handler implements HandlerContract
             new ErrorException($error, $code, 0, $file, $line)
         );
 
-        call_user_func($this->previousHandler, $code, $error, $file, $line);
+        if (is_callable($this->previousHandler)) {
+            call_user_func($this->previousHandler, $code, $error, $file, $line);
+        }
     }
 }
