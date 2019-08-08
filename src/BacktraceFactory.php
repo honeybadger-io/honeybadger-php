@@ -95,6 +95,12 @@ class BacktraceFactory
         }, $backtrace);
     }
 
+    /**
+     * Parse method arguments and make any transformations
+     *
+     * @param array $args
+     * @return array
+     */
     private function parseArgs(array $args) : array
     {
         return array_map(function ($arg) {
