@@ -96,7 +96,7 @@ class BacktraceFactory
     }
 
     /**
-     * Parse method arguments and make any transformations
+     * Parse method arguments and make any transformations.
      *
      * @param array $args
      * @return array
