@@ -203,14 +203,20 @@ class HoneyBadgerTest extends TestCase
             ],
         ]);
 
+        $errorHandler = set_error_handler(null);
+
+        $errorHandler = is_array($errorHandler)
+            ? $errorHandler[0]
+            : $errorHandler;
+
         $this->assertNotInstanceOf(
             ExceptionHandler::class,
-            set_exception_handler(null)[0]
+            $errorHandler
         );
 
         $this->assertNotInstanceOf(
             ErrorHandler::class,
-            set_error_handler(null)[0]
+            $errorHandler
         );
     }
 
