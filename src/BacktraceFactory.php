@@ -90,9 +90,20 @@ class BacktraceFactory
 
             return array_merge($context, [
                 'method' => $frame['function'] ?? null,
-                'args' => $frame['args'] ?? null,
+                'args' => $this->parseArgs($frame['args']),
             ]);
         }, $backtrace);
+    }
+
+    private function parseArgs(array $args) : array
+    {
+        return array_map(function ($arg) {
+            if (is_object($arg)) {
+                return get_class($arg);
+            }
+
+            return $arg;
+        }, $args);
     }
 
     /**
