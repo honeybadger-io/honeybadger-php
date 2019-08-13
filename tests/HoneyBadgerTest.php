@@ -11,7 +11,6 @@ use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Tests\Mocks\HoneybadgerClient;
-use sixlive\JsonSchemaAssertions\SchemaAssertion;
 
 class HoneyBadgerTest extends TestCase
 {
@@ -605,31 +604,5 @@ class HoneyBadgerTest extends TestCase
         $this->assertEquals($options['action'], $notification['request']['action']);
         $this->assertEquals($options['fingerprint'], $notification['error']['fingerprint']);
         $this->assertEquals($options['tags'], $notification['error']['tags']);
-    }
-
-    /** @test */
-    public function notifications_match_the_notice_schema()
-    {
-        $client = HoneybadgerClient::new([
-            new Response(201),
-        ]);
-
-        $badger = Honeybadger::new([
-            'api_key' => 'asdf',
-            'handlers' => [
-                'exception' => false,
-                'error' => false,
-            ],
-        ], $client->make());
-
-        $response = $badger->notify(new Exception('Test exception', 0, new Exception('Nested Exception')));
-
-        $notification = $client->requestBody();
-
-        // dd($notification['error']['causes'][0]['backtrace'][0]);
-
-        (new SchemaAssertion)
-            ->schema(__DIR__.'/Fixtures/Schemas/notice.json')
-            ->assert(json_encode($notification));
     }
 }

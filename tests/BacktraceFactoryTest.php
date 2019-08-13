@@ -61,6 +61,48 @@ class BacktraceFactoryTest extends TestCase
         $this->assertEquals('Honeybadger\Tests\throwTestException', $backtrace[0]['method']);
     }
 
+    /** @test */
+    public function bactraces_send_class()
+    {
+        try {
+            throw new Exception('test');
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e))->trace();
+        }
+
+        $this->assertEquals(self::class, $backtrace[0]['class']);
+    }
+
+    /** @test */
+    public function bactraces_send_type()
+    {
+        try {
+            throw new Exception('test');
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e))->trace();
+        }
+
+        $this->assertEquals('->', $backtrace[0]['type']);
+    }
+
+
+    /** @test */
+    public function bactraces_send_type_for_static()
+    {
+        try {
+            self::throwStaticException();
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e))->trace();
+        }
+
+        $this->assertEquals('::', $backtrace[0]['type']);
+    }
+
+    protected static function throwStaticException()
+    {
+        throw new Exception('test');
+    }
+
     private function throwNestedExceptions()
     {
         try {

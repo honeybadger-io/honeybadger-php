@@ -91,6 +91,8 @@ class BacktraceFactory
             return array_merge($context, [
                 'method' => $frame['function'] ?? null,
                 'args' => $frame['args'] ?? null,
+                'class' => $frame['class'] ?? null,
+                'type' => $frame['type'] ?? null,
             ]);
         }, $backtrace);
     }
