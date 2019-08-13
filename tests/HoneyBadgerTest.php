@@ -203,14 +203,20 @@ class HoneyBadgerTest extends TestCase
             ],
         ]);
 
+        $errorHandler = set_error_handler(null);
+
+        $errorHandler = is_array($errorHandler)
+            ? $errorHandler[0]
+            : $errorHandler;
+
         $this->assertNotInstanceOf(
             ExceptionHandler::class,
-            set_exception_handler(null)[0]
+            $errorHandler
         );
 
         $this->assertNotInstanceOf(
             ErrorHandler::class,
-            set_error_handler(null)[0]
+            $errorHandler
         );
     }
 
@@ -620,8 +626,8 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make());
 
-        $badger->context('component', 'HomeController');
-        $badger->context('action', 'index');
+        $badger->setComponent('HomeController');
+        $badger->setAction('index');
 
         $badger->notify(new Exception('Test exception'));
 
@@ -629,5 +635,7 @@ class HoneyBadgerTest extends TestCase
 
         $this->assertEquals('HomeController', $notification['request']['component']);
         $this->assertEquals('index', $notification['request']['action']);
+        $this->assertArrayNotHasKey('component', $notification['request']['context']);
+        $this->assertArrayNotHasKey('action', $notification['request']['context']);
     }
 }
