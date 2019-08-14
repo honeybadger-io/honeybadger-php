@@ -14,7 +14,6 @@ use Honeybadger\Tests\Mocks\HoneybadgerClient;
 
 class HoneyBadgerTest extends TestCase
 {
-
     /** @test */
     public function it_builds_a_backtrace()
     {

@@ -85,7 +85,6 @@ class BacktraceFactoryTest extends TestCase
         $this->assertEquals('->', $backtrace[0]['type']);
     }
 
-
     /** @test */
     public function bactraces_send_type_for_static()
     {
