@@ -82,7 +82,7 @@ class Repository implements \ArrayAccess
     }
 
     /**
-     * Retuen all values except those passed.
+     * Return all values except those specified.
      *
      * @param string|array $keys
      * @return array
