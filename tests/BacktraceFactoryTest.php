@@ -69,4 +69,31 @@ class BacktraceFactoryTest extends TestCase
             throw new RuntimeException('Exception Two', null, $e);
         }
     }
+
+    /** @test */
+    public function args_with_object_should_be_class_names()
+    {
+        $throwTestException = function ($foo, $bar) {
+            throw new Exception('test');
+        };
+
+        try {
+            $throwTestException('bar', new TestClass);
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e))->trace();
+        }
+
+        $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        $this->assertEquals(['bar', TestClass::class], $backtrace[0]['args']);
+    }
+}
+
+class TestClass
+{
+    protected $foo = 'bar';
+
+    public function __construct()
+    {
+        //
+    }
 }
