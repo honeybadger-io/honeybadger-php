@@ -6,6 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - Methods to set the component and action ([#87](https://github.com/honeybadger-io/honeybadger-php/pull/87))
+- Class and type to backtrace frames ([#72](https://github.com/honeybadger-io/honeybadger-php/pull/72/))
 
 ### Changed
 - Backtrace args with objects now send only the class name ([#89](https://github.com/honeybadger-io/honeybadger-php/pull/89))
