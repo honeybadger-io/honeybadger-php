@@ -4,6 +4,11 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Methods to set the component and action ([#87](https://github.com/honeybadger-io/honeybadger-php/pull/87))
+
+### Changed
+- Backtrace args with objects now send only the class name ([#89](https://github.com/honeybadger-io/honeybadger-php/pull/89))
 
 ## [1.6.0] - 2019-07-18
 ### Added

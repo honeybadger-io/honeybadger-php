@@ -91,9 +91,9 @@ class ExceptionNotification
                 'params' => $this->request->params(),
                 'session' => $this->request->session(),
                 'url' => $this->request->url(),
-                'context' => $this->context->all(),
-                'component' => Arr::get($this->additionalParams, 'component', null),
-                'action' => Arr::get($this->additionalParams, 'action', null),
+                'context' => $this->context->except(['honeybadger_component', 'honeybadger_action']),
+                'component' => Arr::get($this->additionalParams, 'component', null) ?? Arr::get($this->context, 'honeybadger_component', null),
+                'action' => Arr::get($this->additionalParams, 'action', null) ?? Arr::get($this->context, 'honeybadger_action', null),
             ],
             'server' => [
                 'pid' => getmypid(),

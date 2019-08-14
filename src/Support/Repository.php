@@ -80,4 +80,27 @@ class Repository implements \ArrayAccess
     {
         unset($this->items[$offset]);
     }
+
+    /**
+     * Return all values except those specified.
+     *
+     * @param string|array $keys
+     * @return array
+     */
+    public function except($keys) : array
+    {
+        $items = $this->items;
+
+        if (is_array($keys)) {
+            foreach ($keys as $key) {
+                unset($items[$key]);
+            }
+
+            return $items;
+        }
+
+        unset($items[$keys]);
+
+        return $items;
+    }
 }

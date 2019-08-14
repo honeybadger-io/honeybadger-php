@@ -204,14 +204,20 @@ class HoneyBadgerTest extends TestCase
             ],
         ]);
 
+        $errorHandler = set_error_handler(null);
+
+        $errorHandler = is_array($errorHandler)
+            ? $errorHandler[0]
+            : $errorHandler;
+
         $this->assertNotInstanceOf(
             ExceptionHandler::class,
-            set_exception_handler(null)[0]
+            $errorHandler
         );
 
         $this->assertNotInstanceOf(
             ErrorHandler::class,
-            set_error_handler(null)[0]
+            $errorHandler
         );
     }
 
@@ -604,5 +610,33 @@ class HoneyBadgerTest extends TestCase
         $this->assertEquals($options['action'], $notification['request']['action']);
         $this->assertEquals($options['fingerprint'], $notification['error']['fingerprint']);
         $this->assertEquals($options['tags'], $notification['error']['tags']);
+    }
+
+    /** @test */
+    public function context_and_action_can_be_set()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->setComponent('HomeController');
+        $badger->setAction('index');
+
+        $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals('HomeController', $notification['request']['component']);
+        $this->assertEquals('index', $notification['request']['action']);
+        $this->assertArrayNotHasKey('component', $notification['request']['context']);
+        $this->assertArrayNotHasKey('action', $notification['request']['context']);
     }
 }
