@@ -612,7 +612,7 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function context_and_action_can_be_set_with_context()
+    public function context_and_action_can_be_set()
     {
         $client = HoneybadgerClient::new([
             new Response(201),
