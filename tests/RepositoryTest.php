@@ -53,4 +53,23 @@ class RepositoryTest extends TestCase
 
         $this->assertEquals(['foo' => 'bar'], $repository->all());
     }
+
+    /** @test */
+    public function it_will_exclude_multiple_keys()
+    {
+        $repository = new Repository(['foo' => 'bar', 'baz' => 'bar', 'qux' => 'bar']);
+        $items = $repository->except(['foo', 'baz']);
+
+        $this->assertArrayNotHasKey('foo', $items);
+        $this->assertArrayNotHasKey('baz', $items);
+    }
+
+    /** @test */
+    public function it_will_exclude_a_signel_key()
+    {
+        $repository = new Repository(['foo' => 'bar', 'baz' => 'bar', 'qux' => 'bar']);
+        $items = $repository->except('foo');
+
+        $this->assertArrayNotHasKey('foo', $items);
+    }
 }

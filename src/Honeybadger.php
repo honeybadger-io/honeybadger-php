@@ -171,4 +171,26 @@ class Honeybadger implements Reporter
             && ! empty($this->config['api_key'])
             && $this->config['report_data'];
     }
+
+    /**
+     * @param string $component
+     * @return self
+     */
+    public function setComponent(string $component) : self
+    {
+        $this->context('honeybadger_component', $component);
+
+        return $this;
+    }
+
+    /**
+     * @param string $action
+     * @return self
+     */
+    public function setAction(string $action) : self
+    {
+        $this->context('honeybadger_action', $action);
+
+        return $this;
+    }
 }
