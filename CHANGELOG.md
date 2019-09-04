@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [1.7.0] - 2019-09-04
 ### Added
 - Methods to set the component and action ([#87](https://github.com/honeybadger-io/honeybadger-php/pull/87))
 - Class and type to backtrace frames ([#72](https://github.com/honeybadger-io/honeybadger-php/pull/72/))
