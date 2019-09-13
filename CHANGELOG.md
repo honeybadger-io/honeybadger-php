@@ -7,7 +7,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.7.1] - 2019-09-13
 ### Fixed
-- Default args for for backtrace functions ((#92)[https://github.com/honeybadger-io/honeybadger-php/pull/92])
+- Default args for backtrace functions ([#92](https://github.com/honeybadger-io/honeybadger-php/pull/92))
 
 ## [1.7.0] - 2019-09-04
 ### Added
