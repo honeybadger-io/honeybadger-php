@@ -6,6 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Changed
 - Updated Monolog dependency to 2.0
+- Remove support for PHP 7.1
 
 ## [1.7.0] - 2019-09-04
 ### Added
