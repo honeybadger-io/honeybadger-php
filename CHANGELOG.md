@@ -4,6 +4,9 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Changed
+- Updated Monolog dependency to 2.0
+- Remove support for PHP 7.1
 
 ## [1.7.1] - 2019-09-13
 ### Fixed

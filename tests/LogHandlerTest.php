@@ -70,9 +70,9 @@ class LogHandlerTest extends TestCase
             ],
         ], array_only($reporter->notification['error'], ['class', 'tags']));
 
-        // [2019-01-20 14:56:20] test-logger.INFO: Test log message
+        // [2019-09-10T18:49:15.681206+00:00] test-logger.INFO: Test log message
         $this->assertRegExp(
-            '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
+            '/\[[0-9-:+T.\s]+\] test-logger\.INFO\: Test log message/',
             $reporter->notification['error']['message']
         );
 
