@@ -52,7 +52,7 @@ class HoneybadgerClientTest extends TestCase
         $responseMock = Mockery::mock(Response::class)
             ->shouldReceive([
                 'getStatusCode' => Response::HTTP_CREATED,
-                'getBody' => ''
+                'getBody' => '',ˆ
             ])
             ->getMock();
 
