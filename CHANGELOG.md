@@ -7,6 +7,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - 2019-09-21
 ### Changed
+- Fixed an issue where a payload containing recursive data couldn't be posted to the backend ([#96](https://github.com/honeybadger-io/honeybadger-php/pull/96))
+
+## [2.0.0] - 2019-09-21
+### Changed
 - Updated Monolog dependency to 2.0
 - Remove support for PHP 7.1
 
