@@ -41,7 +41,7 @@ class HoneybadgerClient
         try {
             $response = $this->client->post(
                 'notices',
-                ['body' => json_encode($notification)]
+                ['body' => json_encode($notification, JSON_PARTIAL_OUTPUT_ON_ERROR)]
             );
         } catch (Exception $e) {
             throw ServiceException::generic();

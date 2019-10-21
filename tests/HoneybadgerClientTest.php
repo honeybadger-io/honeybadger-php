@@ -6,10 +6,10 @@ use Mockery;
 use Exception;
 use GuzzleHttp\Client;
 use Honeybadger\Config;
-use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
 use Honeybadger\HoneybadgerClient;
 use Honeybadger\Exceptions\ServiceException;
+use Symfony\Component\HttpFoundation\Response;
 
 class HoneybadgerClientTest extends TestCase
 {
@@ -39,5 +39,36 @@ class HoneybadgerClientTest extends TestCase
 
         $client = new HoneybadgerClient($config, $mock);
         $client->checkin('1234');
+    }
+
+    /** @test */
+    public function doesnt_throw_when_passing_recursive_data()
+    {
+        $data = [];
+        $data['data'] = &$data;
+
+        $config = new Config(['api_key' => '1234']);
+
+        $responseMock = Mockery::mock(Response::class)
+            ->shouldReceive([
+                'getStatusCode' => Response::HTTP_CREATED,
+                'getBody' => ''
+            ])
+            ->getMock();
+
+        $clientMock = Mockery::mock(Client::class);
+        $clientMock->shouldReceive('post')
+            ->with('notices', ['body' => '{"data":null}'])
+            ->andReturn($responseMock);
+
+        $client = new HoneybadgerClient($config, $clientMock);
+
+        $assertionMessage = 'Unexpected result when passing recursive payload to `notification`';
+        try {
+            $result = $client->notification($data);
+            $this->assertEquals([], $result, $assertionMessage);
+        } catch (ServiceException $e) {
+            $this->assertTrue(false, $assertionMessage);
+        }
     }
 }
