@@ -4,9 +4,7 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-
-## [2.0.1] - 2019-09-21
-### Changed
+### Fixed
 - Fixed an issue where a payload containing recursive data couldn't be posted to the backend ([#96](https://github.com/honeybadger-io/honeybadger-php/pull/96))
 
 ## [2.0.0] - 2019-09-21
