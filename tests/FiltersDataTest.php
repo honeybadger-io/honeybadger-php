@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Honeybadger\Tests\Fixtures\FiltersDataFixture;
+use PHPUnit\Framework\TestCase;
 
 class FiltersDataTest extends TestCase
 {

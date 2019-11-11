@@ -2,15 +2,15 @@
 
 namespace Honeybadger;
 
-use Throwable;
 use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
 use Honeybadger\Contracts\Reporter;
-use Honeybadger\Support\Repository;
+use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
-use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use Throwable;
 
 class Honeybadger implements Reporter
 {

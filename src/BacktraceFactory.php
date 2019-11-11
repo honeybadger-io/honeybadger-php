@@ -2,9 +2,9 @@
 
 namespace Honeybadger;
 
-use Throwable;
 use ReflectionClass;
 use ReflectionException;
+use Throwable;
 
 class BacktraceFactory
 {

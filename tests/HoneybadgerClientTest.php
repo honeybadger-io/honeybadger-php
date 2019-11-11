@@ -2,13 +2,13 @@
 
 namespace Honeybadger\Tests;
 
-use Mockery;
 use Exception;
 use GuzzleHttp\Client;
 use Honeybadger\Config;
-use PHPUnit\Framework\TestCase;
-use Honeybadger\HoneybadgerClient;
 use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\HoneybadgerClient;
+use Mockery;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class HoneybadgerClientTest extends TestCase

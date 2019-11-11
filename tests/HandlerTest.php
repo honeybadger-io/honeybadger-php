@@ -3,11 +3,11 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use Honeybadger\Honeybadger;
-use PHPUnit\Framework\TestCase;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
+use Honeybadger\Honeybadger;
 use Honeybadger\Tests\Fixtures\HandlerFixture;
+use PHPUnit\Framework\TestCase;
 
 class HandlerTest extends TestCase
 {

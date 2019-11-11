@@ -2,8 +2,8 @@
 
 namespace Honeybadger;
 
-use InvalidArgumentException;
 use Honeybadger\Support\Repository;
+use InvalidArgumentException;
 
 class RawNotification
 {
