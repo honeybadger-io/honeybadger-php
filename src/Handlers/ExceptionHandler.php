@@ -30,6 +30,8 @@ class ExceptionHandler extends Handler implements HandlerContract
     {
         $this->honeybadger->notify($e);
 
-        call_user_func($this->previousHandler, $e);
+        if (is_callable($this->previousHandler)) {
+            call_user_func($this->previousHandler, $e);
+        }
     }
 }
