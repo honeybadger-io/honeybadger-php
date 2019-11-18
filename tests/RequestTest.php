@@ -4,8 +4,8 @@ namespace Honeybadger\Tests;
 
 use Honeybadger\Request;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class RequestTest extends TestCase
