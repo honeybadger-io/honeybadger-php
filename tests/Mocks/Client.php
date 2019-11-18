@@ -2,12 +2,12 @@
 
 namespace Honeybadger\Tests\Mocks;
 
-use GuzzleHttp\Middleware;
+use GuzzleHttp\Client as GuzzleClient;
+use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 use Honeybadger\Concerns\Newable;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\Client as GuzzleClient;
 
 class Client
 {

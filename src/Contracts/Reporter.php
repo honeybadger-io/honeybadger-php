@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Contracts;
 
-use Throwable;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use Throwable;
 
 interface Reporter
 {

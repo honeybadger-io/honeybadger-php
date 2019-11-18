@@ -3,12 +3,11 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use Throwable;
-use RuntimeException;
-use Honeybadger\Honeybadger;
+use Honeybadger\BacktraceFactory;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Honeybadger\BacktraceFactory;
+use RuntimeException;
+use Throwable;
 
 class BacktraceFactoryTest extends TestCase
 {

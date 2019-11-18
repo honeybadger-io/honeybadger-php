@@ -2,10 +2,10 @@
 
 namespace Honeybadger;
 
-use Throwable;
 use Honeybadger\Support\Arr;
 use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use Throwable;
 
 class ExceptionNotification
 {
