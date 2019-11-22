@@ -2,11 +2,11 @@
 
 namespace Honeybadger;
 
-use Monolog\Logger;
 use Honeybadger\Contracts\Reporter;
-use Monolog\Formatter\LineFormatter;
 use Monolog\Formatter\FormatterInterface;
+use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
 
 class LogHandler extends AbstractProcessingHandler
 {

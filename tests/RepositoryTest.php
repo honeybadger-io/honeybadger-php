@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Honeybadger\Support\Repository;
+use PHPUnit\Framework\TestCase;
 
 class RepositoryTest extends TestCase
 {

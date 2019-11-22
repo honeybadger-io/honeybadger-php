@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Tests\Fixtures;
 
-use Honeybadger\Concerns\Newable;
 use Honeybadger\Concerns\FiltersData;
+use Honeybadger\Concerns\Newable;
 
 class FiltersDataFixture
 {
