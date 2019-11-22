@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.7.2] - 2019-11-22
+### Fixed
+- Fixed an issue where the previous exception handler is not callable but called ([#97](https://github.com/honeybadger-io/honeybadger-php/pull/97))
+
 ## [1.7.1] - 2019-09-13
 ### Fixed
 - Default args for backtrace functions ([#92](https://github.com/honeybadger-io/honeybadger-php/pull/92))
