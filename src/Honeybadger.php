@@ -110,7 +110,7 @@ class Honeybadger implements Reporter
 
     /**
      * @param  int|string  $key
-     * @param  int|string  $value
+     * @param  int|string|array  $value
      * @return void
      */
     public function context($key, $value) : void
