@@ -36,7 +36,7 @@ class ErrorHandler extends Handler implements HandlerContract
         }
 
         $this->honeybadger->notify(
-            new ErrorException($error, $code, 0, $file, $line)
+            new ErrorException($error, 0, $code, $file, $line)
         );
 
         if (is_callable($this->previousHandler)) {
