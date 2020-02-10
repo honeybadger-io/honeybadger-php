@@ -15,7 +15,7 @@ class ErrorHandler extends Handler implements HandlerContract
     /**
      * @return void
      */
-    public function register() : void
+    public function register(): void
     {
         $this->previousHandler = set_error_handler([$this, 'handle']);
     }
