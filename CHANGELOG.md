@@ -4,6 +4,12 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.0.2] - 2020-02-10
+### Fixed
+- Fixed an issue with error reporting ([#104](https://github.com/honeybadger-io/honeybadger-php/pull/104))
+
+### Changed
+- Added array to doc block for context ([#103](https://github.com/honeybadger-io/honeybadger-php/pull/103))
 
 ## [2.0.1] - 2019-11-18
 ### Fixed
