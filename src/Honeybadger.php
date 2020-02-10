@@ -58,7 +58,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []) : array
+    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []): array
     {
         if (! $this->shouldReport($throwable)) {
             return [];
@@ -73,7 +73,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function customNotification(array $payload) : array
+    public function customNotification(array $payload): array
     {
         if (empty($this->config['api_key']) || ! $this->config['report_data']) {
             return [];
@@ -88,7 +88,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function rawNotification(callable $callable) : array
+    public function rawNotification(callable $callable): array
     {
         if (empty($this->config['api_key']) || ! $this->config['report_data']) {
             return [];
@@ -103,7 +103,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function checkin(string $key) : void
+    public function checkin(string $key): void
     {
         $this->client->checkin($key);
     }
@@ -113,7 +113,7 @@ class Honeybadger implements Reporter
      * @param  int|string|array  $value
      * @return void
      */
-    public function context($key, $value) : void
+    public function context($key, $value): void
     {
         $this->context->set($key, $value);
     }
@@ -121,7 +121,7 @@ class Honeybadger implements Reporter
     /**
      * @return void
      */
-    public function resetContext() : void
+    public function resetContext(): void
     {
         $this->context = new Repository;
     }
@@ -129,7 +129,7 @@ class Honeybadger implements Reporter
     /**
      * @return \Honeybadger\Support\Repository
      */
-    public function getContext() : Repository
+    public function getContext(): Repository
     {
         return $this->context;
     }
@@ -137,7 +137,7 @@ class Honeybadger implements Reporter
     /**
      * @return void
      */
-    private function setHandlers() : void
+    private function setHandlers(): void
     {
         if ($this->config['handlers']['exception']) {
             (new ExceptionHandler($this))->register();
@@ -152,7 +152,7 @@ class Honeybadger implements Reporter
      * @param  \Throwable  $throwable
      * @return bool
      */
-    private function excludedException(Throwable $throwable) : bool
+    private function excludedException(Throwable $throwable): bool
     {
         return $throwable instanceof ServiceException
             || in_array(
@@ -165,7 +165,7 @@ class Honeybadger implements Reporter
      * @param  \Throwable  $throwable
      * @return bool
      */
-    private function shouldReport(Throwable $throwable) : bool
+    private function shouldReport(Throwable $throwable): bool
     {
         return ! $this->excludedException($throwable)
             && ! empty($this->config['api_key'])
@@ -176,7 +176,7 @@ class Honeybadger implements Reporter
      * @param string $component
      * @return self
      */
-    public function setComponent(string $component) : self
+    public function setComponent(string $component): self
     {
         $this->context('honeybadger_component', $component);
 
@@ -187,7 +187,7 @@ class Honeybadger implements Reporter
      * @param string $action
      * @return self
      */
-    public function setAction(string $action) : self
+    public function setAction(string $action): self
     {
         $this->context('honeybadger_action', $action);
 

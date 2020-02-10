@@ -60,7 +60,7 @@ class ExceptionNotification
      * @param  array  $additionalParams
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []) : array
+    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []): array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
@@ -74,7 +74,7 @@ class ExceptionNotification
     /**
      * @return array
      */
-    private function format() : array
+    private function format(): array
     {
         return [
             'notifier' => $this->config['notifier'],
@@ -108,7 +108,7 @@ class ExceptionNotification
     /**
      * @return \Honeybadger\Environment
      */
-    private function makeEnvironment() : Environment
+    private function makeEnvironment(): Environment
     {
         return (new Environment)
             ->filterKeys($this->config['environment']['filter'])
@@ -118,7 +118,7 @@ class ExceptionNotification
     /**
      * @return \Honeybadger\BacktraceFactory
      */
-    private function makeBacktrace() : BacktraceFactory
+    private function makeBacktrace(): BacktraceFactory
     {
         return new BacktraceFactory($this->throwable);
     }
@@ -127,7 +127,7 @@ class ExceptionNotification
      * @param  \Symfony\Component\HttpFoundation\Request  $request
      * @return \Honeybadger\Request
      */
-    private function makeRequest(FoundationRequest $request = null) : Request
+    private function makeRequest(FoundationRequest $request = null): Request
     {
         return (new Request($request))
             ->filterKeys($this->config['request']['filter']);

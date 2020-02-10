@@ -36,7 +36,7 @@ class FileSource
     /**
      * @return array
      */
-    public function getSource() : array
+    public function getSource(): array
     {
         if (! $this->canReadFile()) {
             return [];
@@ -54,7 +54,7 @@ class FileSource
      * @param  string  $line
      * @return string
      */
-    private function trimLine(string $line) : string
+    private function trimLine(string $line): string
     {
         $trimmed = trim($line, "\n\r\0\x0B");
 
@@ -64,7 +64,7 @@ class FileSource
     /**
      * @return bool
      */
-    private function canReadFile() : bool
+    private function canReadFile(): bool
     {
         return is_file($this->filename) && is_readable($this->filename);
     }
@@ -72,7 +72,7 @@ class FileSource
     /**
      * @return \SplFileObject
      */
-    private function readFile() : SplFileObject
+    private function readFile(): SplFileObject
     {
         return new SplFileObject($this->filename, 'r');
     }
@@ -81,7 +81,7 @@ class FileSource
      * @param  \SplFileObject  $file
      * @return array
      */
-    private function fileLines(SplFileObject $file) : array
+    private function fileLines(SplFileObject $file): array
     {
         $lines = [];
         while (! $file->eof()) {
@@ -98,7 +98,7 @@ class FileSource
     /**
      * @return int
      */
-    private function startingLineNumber() : int
+    private function startingLineNumber(): int
     {
         $start = $this->lineNumber - ($this->radius + 1);
 

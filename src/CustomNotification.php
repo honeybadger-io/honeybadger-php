@@ -30,7 +30,7 @@ class CustomNotification
      * @param  array  $payload
      * @return array
      */
-    public function make(array $payload) : array
+    public function make(array $payload): array
     {
         return array_merge(
             [],

@@ -24,7 +24,7 @@ class BacktraceFactory
     /**
      * @return array
      */
-    public function trace() : array
+    public function trace(): array
     {
         $backtrace = $this->offsetForThrownException(
             $this->exception->getTrace()
@@ -36,7 +36,7 @@ class BacktraceFactory
     /**
      * @return array
      */
-    public function previous() : array
+    public function previous(): array
     {
         return $this->formatPrevious($this->exception);
     }
@@ -46,7 +46,7 @@ class BacktraceFactory
      * @param  array  $previousCauses
      * @return array
      */
-    private function formatPrevious(Throwable $e, array $previousCauses = []) : array
+    private function formatPrevious(Throwable $e, array $previousCauses = []): array
     {
         if ($e = $e->getPrevious()) {
             $previousCauses[] = [
@@ -65,7 +65,7 @@ class BacktraceFactory
      * @param  array  $backtrace
      * @return array
      */
-    private function offsetForThrownException(array $backtrace) : array
+    private function offsetForThrownException(array $backtrace): array
     {
         $backtrace[0] = array_merge($backtrace[0] ?? [], [
             'line' => $this->exception->getLine(),
@@ -79,7 +79,7 @@ class BacktraceFactory
      * @param  array  $backtrace
      * @return array
      */
-    private function formatBacktrace(array $backtrace) : array
+    private function formatBacktrace(array $backtrace): array
     {
         return array_map(function ($frame) {
             if (! array_key_exists('file', $frame)) {
@@ -103,7 +103,7 @@ class BacktraceFactory
      * @param array $args
      * @return array
      */
-    private function parseArgs(array $args) : array
+    private function parseArgs(array $args): array
     {
         return array_map(function ($arg) {
             if (is_object($arg)) {
@@ -118,7 +118,7 @@ class BacktraceFactory
      * @param  array  $frame
      * @return array
      */
-    private function contextWithoutFile(array $frame) : array
+    private function contextWithoutFile(array $frame): array
     {
         if (! empty($frame['class'])) {
             $filename = sprintf('%s%s%s', $frame['class'], $frame['type'], $frame['function']);
@@ -150,7 +150,7 @@ class BacktraceFactory
      * @param  array  $frame
      * @return array
      */
-    private function contextWithFile(array $frame) : array
+    private function contextWithFile(array $frame): array
     {
         return [
             'source' => (new FileSource($frame['file'], $frame['line']))->getSource(),

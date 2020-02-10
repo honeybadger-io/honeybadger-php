@@ -19,7 +19,7 @@ class Repository implements \ArrayAccess
      * @param  mixed  $value
      * @return array
      */
-    public function set(string $key, $value) : array
+    public function set(string $key, $value): array
     {
         $this->items[$key] = $value;
 
@@ -31,7 +31,7 @@ class Repository implements \ArrayAccess
      * @param  mixed  $value
      * @return array
      */
-    public function __set(string $key, $value) : array
+    public function __set(string $key, $value): array
     {
         return $this->set($key, $value);
     }
@@ -39,7 +39,7 @@ class Repository implements \ArrayAccess
     /**
      * @return array
      */
-    public function all() : array
+    public function all(): array
     {
         return $this->items;
     }
@@ -48,7 +48,7 @@ class Repository implements \ArrayAccess
      * @param  string|int $offset
      * @return bool
      */
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         return isset($this->items[$offset]);
     }
@@ -67,7 +67,7 @@ class Repository implements \ArrayAccess
      * @param  mixed  $value
      * @return void
      */
-    public function offsetSet($offset, $value) : void
+    public function offsetSet($offset, $value): void
     {
         $this->items[$offset] = $value;
     }
@@ -76,7 +76,7 @@ class Repository implements \ArrayAccess
      * @param  int|string  $offset
      * @return void
      */
-    public function offsetUnset($offset) : void
+    public function offsetUnset($offset): void
     {
         unset($this->items[$offset]);
     }
@@ -87,7 +87,7 @@ class Repository implements \ArrayAccess
      * @param string|array $keys
      * @return array
      */
-    public function except($keys) : array
+    public function except($keys): array
     {
         $items = $this->items;
 

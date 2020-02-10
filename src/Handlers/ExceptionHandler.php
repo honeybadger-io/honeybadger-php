@@ -15,7 +15,7 @@ class ExceptionHandler extends Handler implements HandlerContract
     /**
      * @return void
      */
-    public function register() : void
+    public function register(): void
     {
         $this->previousHandler = set_exception_handler([$this, 'handle']);
     }
@@ -26,7 +26,7 @@ class ExceptionHandler extends Handler implements HandlerContract
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function handle(Throwable $e) : void
+    public function handle(Throwable $e): void
     {
         $this->honeybadger->notify($e);
 

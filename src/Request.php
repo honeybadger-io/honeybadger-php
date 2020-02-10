@@ -31,7 +31,7 @@ class Request
     /**
      * @return string
      */
-    public function url() : string
+    public function url(): string
     {
         return $this->httpRequest()
             ? $this->request->getUri()
@@ -41,7 +41,7 @@ class Request
     /**
      * @return array
      */
-    public function params() : array
+    public function params(): array
     {
         if (! $this->httpRequest()) {
             return [];
@@ -57,7 +57,7 @@ class Request
     /**
      * @return array
      */
-    public function session() : array
+    public function session(): array
     {
         return $this->request->hasSession() && $this->request->getSession()
             ? $this->filter($this->request->getSession()->all())
@@ -67,7 +67,7 @@ class Request
     /**
      * @return bool
      */
-    private function httpRequest() : bool
+    private function httpRequest(): bool
     {
         return isset($_SERVER['REQUEST_METHOD']);
     }
@@ -75,7 +75,7 @@ class Request
     /**
      * @return array
      */
-    private function data() : array
+    private function data(): array
     {
         if ($this->request->getContentType() === 'json') {
             return json_decode($this->request->getContent(), true) ?: [];

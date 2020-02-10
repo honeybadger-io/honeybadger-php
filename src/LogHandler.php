@@ -30,7 +30,7 @@ class LogHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->honeybadger->rawNotification(function ($config) use ($record) {
             return [
@@ -59,7 +59,7 @@ class LogHandler extends AbstractProcessingHandler
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         return new LineFormatter('[%datetime%] %channel%.%level_name%: %message%');
     }
