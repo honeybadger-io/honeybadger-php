@@ -18,7 +18,7 @@ class Config extends Repository
      * @param  array  $config
      * @return array
      */
-    private function mergeConfig($config = []) : array
+    private function mergeConfig($config = []): array
     {
         return array_merge([
             'api_key' => null,

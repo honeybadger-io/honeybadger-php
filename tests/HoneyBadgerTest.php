@@ -76,7 +76,7 @@ class HoneyBadgerTest extends TestCase
             'name' => 'Honeybadger FUTURE',
             'url' => 'https://honeybadger.io/awesome-notifier',
             'version' => 66,
-       ], $notification['notifier']);
+        ], $notification['notifier']);
     }
 
     /** @test */
@@ -391,16 +391,16 @@ class HoneyBadgerTest extends TestCase
     public function exceptions_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
-             new Response(201),
-         ]);
+            new Response(201),
+        ]);
 
         $badger = Honeybadger::new([
-             'api_key' => '',
-             'handlers' => [
-                 'exception' => false,
-                 'error' => false,
-             ],
-         ], $client->make());
+            'api_key' => '',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
 
         $response = $badger->notify(new InvalidArgumentException('Test exception'));
 
@@ -411,16 +411,16 @@ class HoneyBadgerTest extends TestCase
     public function custom_notifications_do_not_get_reported_when_config_key_is_empty()
     {
         $client = HoneybadgerClient::new([
-             new Response(201),
-         ]);
+            new Response(201),
+        ]);
 
         $badger = Honeybadger::new([
-             'api_key' => '',
-             'handlers' => [
-                 'exception' => false,
-                 'error' => false,
-             ],
-         ], $client->make());
+            'api_key' => '',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
 
         $response = $badger->customNotification([
             'title' => 'Test Notification',

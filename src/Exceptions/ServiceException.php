@@ -9,7 +9,7 @@ class ServiceException extends Exception
     /**
      * @return \Honeybadger\Exceptions\ServiceException
      */
-    public static function invalidApiKey() : self
+    public static function invalidApiKey(): self
     {
         return new static('The API key provided is invalid.');
     }
@@ -17,7 +17,7 @@ class ServiceException extends Exception
     /**
      * @return \Honeybadger\Exceptions\ServiceException
      */
-    public static function invalidPayload() : self
+    public static function invalidPayload(): self
     {
         return new static('The payload sent to Honeybadger was invalid.');
     }
@@ -25,7 +25,7 @@ class ServiceException extends Exception
     /**
      * @return \Honeybadger\Exceptions\ServiceException
      */
-    public static function rateLimit() : self
+    public static function rateLimit(): self
     {
         return new static('You have hit your exception rate limit.');
     }
@@ -33,7 +33,7 @@ class ServiceException extends Exception
     /**
      * @return \Honeybadger\Exceptions\ServiceException
      */
-    public static function serverError() : self
+    public static function serverError(): self
     {
         return new static('There was an error on our end.');
     }
@@ -41,7 +41,7 @@ class ServiceException extends Exception
     /**
      * @return \Honeybadger\Exceptions\ServiceException
      */
-    public static function generic() : self
+    public static function generic(): self
     {
         return new static('There was an error sending the payload to Honeybadger.');
     }

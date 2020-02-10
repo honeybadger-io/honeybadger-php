@@ -15,7 +15,7 @@ trait FiltersData
      * @param  array  $keysToFilter
      * @return mixed
      */
-    public function filterKeys(array $keysToFilter) : self
+    public function filterKeys(array $keysToFilter): self
     {
         $this->keysToFilter = array_merge($this->keysToFilter, $keysToFilter);
 
@@ -26,7 +26,7 @@ trait FiltersData
      * @param  array  $values
      * @return array
      */
-    private function filter(array $values) : array
+    private function filter(array $values): array
     {
         return Arr::mapWithKeys($values, function ($value, $key) {
             if (is_array($value)) {

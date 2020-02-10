@@ -69,7 +69,7 @@ class Arr
      * @param  callable  $callback
      * @return array
      */
-    public static function mapWithKeys(array $array, callable $callback) : array
+    public static function mapWithKeys(array $array, callable $callback): array
     {
         $newArray = [];
 

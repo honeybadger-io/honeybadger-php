@@ -7,5 +7,5 @@ interface Handler
     /**
      * @return void
      */
-    public function register() : void;
+    public function register(): void;
 }

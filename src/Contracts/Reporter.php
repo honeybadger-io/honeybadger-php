@@ -15,7 +15,7 @@ interface Reporter
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []) : array;
+    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []): array;
 
     /**
      * @param  array  $payload
@@ -23,7 +23,7 @@ interface Reporter
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function customNotification(array $payload) : array;
+    public function customNotification(array $payload): array;
 
     /**
      * @param  callable  $callable
@@ -32,7 +32,7 @@ interface Reporter
      * @throws \Honeybadger\Exceptions\ServiceException
      * @throws \InvalidArgumentException
      */
-    public function rawNotification(callable $callable) : array;
+    public function rawNotification(callable $callable): array;
 
     /**
      * @param  string  $key
@@ -40,12 +40,12 @@ interface Reporter
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function checkin(string $key) : void;
+    public function checkin(string $key): void;
 
     /**
      * @param  int|string  $key
      * @param  int|string  $value
      * @return void
      */
-    public function context($key, $value) : void;
+    public function context($key, $value): void;
 }

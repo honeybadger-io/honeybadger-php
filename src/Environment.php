@@ -71,7 +71,7 @@ class Environment
     /**
      * @return array
      */
-    public function values() : array
+    public function values(): array
     {
         return $this->filter($this->data());
     }
@@ -80,7 +80,7 @@ class Environment
      * @param  array  $keysToInclude
      * @return \Honeybadger\Environment
      */
-    public function include(array $keysToInclude) : self
+    public function include(array $keysToInclude): self
     {
         $this->includeKeys = array_merge($this->includeKeys, $keysToInclude);
 
@@ -90,7 +90,7 @@ class Environment
     /**
      * @return array
      */
-    private function data() : array
+    private function data(): array
     {
         return array_filter($this->server, function ($key) {
             return $this->autoIncludeKey($key) || in_array($key, $this->includeKeys);
@@ -101,7 +101,7 @@ class Environment
      * @param  string  $key
      * @return bool
      */
-    private function whitelistKey(string $key) : bool
+    private function whitelistKey(string $key): bool
     {
         return in_array($key, self::KEY_WHITELIST);
     }
@@ -110,7 +110,7 @@ class Environment
      * @param  string  $key
      * @return bool
      */
-    private function httpKey(string $key) : bool
+    private function httpKey(string $key): bool
     {
         return strpos($key, 'HTTP_') === 0;
     }
@@ -119,7 +119,7 @@ class Environment
      * @param  string  $key
      * @return bool
      */
-    private function autoIncludeKey(string $key) : bool
+    private function autoIncludeKey(string $key): bool
     {
         return $this->whitelistKey($key) || $this->httpKey($key);
     }

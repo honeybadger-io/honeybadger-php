@@ -36,7 +36,7 @@ class HoneybadgerClient
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notification(array $notification) : array
+    public function notification(array $notification): array
     {
         try {
             $response = $this->client->post(
@@ -62,7 +62,7 @@ class HoneybadgerClient
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function checkin(string $key) : void
+    public function checkin(string $key): void
     {
         try {
             $response = $this->client->head(sprintf('check_in/%s', $key));
@@ -78,7 +78,7 @@ class HoneybadgerClient
     /**
      * @return \GuzzleHttp\Client
      */
-    private function makeClient() : Client
+    private function makeClient(): Client
     {
         return new Client([
             'base_uri' => Honeybadger::API_URL,

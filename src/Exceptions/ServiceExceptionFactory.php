@@ -21,7 +21,7 @@ class ServiceExceptionFactory
         $this->response = $response;
     }
 
-    public function make() : Exception
+    public function make(): Exception
     {
         return $this->exception();
     }
@@ -31,7 +31,7 @@ class ServiceExceptionFactory
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    private function exception() : void
+    private function exception(): void
     {
         if ($this->response->getStatusCode() === Response::HTTP_FORBIDDEN) {
             throw ServiceException::invalidApiKey();

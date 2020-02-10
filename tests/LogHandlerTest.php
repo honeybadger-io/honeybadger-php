@@ -33,7 +33,7 @@ class LogHandlerTest extends TestCase
                 parent::__construct();
             }
 
-            public function rawNotification(callable $fn) : array
+            public function rawNotification(callable $fn): array
             {
                 $this->notification = $fn($this->config);
 
@@ -60,7 +60,7 @@ class LogHandlerTest extends TestCase
                     'message' => 'Test log message',
                 ],
             ],
-          ], array_only($reporter->notification, ['notifier', 'request']));
+        ], array_only($reporter->notification, ['notifier', 'request']));
 
         $this->assertEquals([
             'class' => 'Test log message',

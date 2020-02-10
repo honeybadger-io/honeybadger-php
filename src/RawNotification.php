@@ -33,7 +33,7 @@ class RawNotification
      *
      * @throws \InvalidArgumentException
      */
-    public function make(array $payload) : array
+    public function make(array $payload): array
     {
         $payload = array_merge(
             [],
@@ -56,7 +56,7 @@ class RawNotification
      *
      * @throws \InvalidArgumentException
      */
-    private function validatePayload(array $payload) : void
+    private function validatePayload(array $payload): void
     {
         if (empty($payload['error']['class'])) {
             throw new InvalidArgumentException('The notification error.class field is required');
