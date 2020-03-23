@@ -41,9 +41,7 @@ class RawNotification
             ['error' => []],
             ['request' => ['context' => (object) $this->context->all()],
             ],
-            ['server' => (object) [
-                'environment' => $this->config['environment_name'],
-            ]],
+            ['server' => (object) []],
             $payload
         );
 
