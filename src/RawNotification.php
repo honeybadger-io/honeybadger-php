@@ -2,8 +2,8 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Support\Repository;
 use InvalidArgumentException;
+use Honeybadger\Support\Repository;
 
 class RawNotification
 {
@@ -41,7 +41,9 @@ class RawNotification
             ['error' => []],
             ['request' => ['context' => (object) $this->context->all()],
             ],
-            ['server' => (object) []],
+            ['server' => (object) [
+                'environment' => $this->config['environment_name'],
+            ]],
             $payload
         );
 
