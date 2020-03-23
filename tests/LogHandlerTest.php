@@ -3,12 +3,12 @@
 namespace Honeybadger\Tests;
 
 use DateTime;
-use Monolog\Logger;
-use Honeybadger\LogHandler;
-use Honeybadger\Honeybadger;
-use PHPUnit\Framework\TestCase;
 use Honeybadger\Contracts\Reporter;
+use Honeybadger\Honeybadger;
+use Honeybadger\LogHandler;
 use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
+use PHPUnit\Framework\TestCase;
 
 class LogHandlerTest extends TestCase
 {

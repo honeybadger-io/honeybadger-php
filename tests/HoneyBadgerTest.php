@@ -3,14 +3,14 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use Honeybadger\Honeybadger;
 use GuzzleHttp\Psr7\Response;
-use InvalidArgumentException;
-use PHPUnit\Framework\TestCase;
+use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
-use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\Honeybadger;
 use Honeybadger\Tests\Mocks\HoneybadgerClient;
+use InvalidArgumentException;
+use PHPUnit\Framework\TestCase;
 
 class HoneyBadgerTest extends TestCase
 {
