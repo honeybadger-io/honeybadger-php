@@ -2,12 +2,13 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\Contracts\Reporter;
-use Honeybadger\Honeybadger;
-use Honeybadger\LogHandler;
-use Monolog\Handler\AbstractProcessingHandler;
+use DateTime;
 use Monolog\Logger;
+use Honeybadger\LogHandler;
+use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Contracts\Reporter;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LogHandlerTest extends TestCase
 {
@@ -60,21 +61,20 @@ class LogHandlerTest extends TestCase
                     'message' => 'Test log message',
                 ],
             ],
-        ], array_only($reporter->notification, ['notifier', 'request']));
+            'server' => [
+                'time' => (new DateTime)->format(DateTime::ISO8601),
+                'environment_name' => 'production',
+            ],
+        ], array_only($reporter->notification, ['notifier', 'request', 'server']));
 
         $this->assertEquals([
-            'class' => 'Test log message',
+            'class' => 'INFO Log',
+            'message' => 'Test log message',
             'tags' => [
                 'log',
                 'test-logger.INFO',
             ],
-        ], array_only($reporter->notification['error'], ['class', 'tags']));
-
-        // [2019-09-10T18:49:15.681206+00:00] test-logger.INFO: Test log message
-        $this->assertRegExp(
-            '/\[[0-9-:+T.\s]+\] test-logger\.INFO\: Test log message/',
-            $reporter->notification['error']['message']
-        );
+        ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
 
         $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
     }
