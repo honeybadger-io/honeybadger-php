@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.9.0] - 2020-04-02
+### Changed
+- Improved log reporter payload ([#108](https://github.com/honeybadger-io/honeybadger-php/pull/108))
+
 ## [1.8.0] - 2019-12-04
 ### Fixed
 - Fixed an issue where a payload containing recursive data couldn't be posted to the backend ([#96](https://github.com/honeybadger-io/honeybadger-php/pull/96))
