@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use DateTime;
 use Honeybadger\Contracts\Reporter;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
@@ -36,13 +37,13 @@ class LogHandler extends AbstractProcessingHandler
             return [
                 'notifier' => array_merge($config['notifier'], ['name' => 'Honeybadger Log Handler']),
                 'error' => [
-                    'class' => $record['message'],
-                    'message' => $record['formatted'],
+                    'class' => sprintf('%s Log', $record['level_name']),
+                    'message' => $record['message'],
                     'tags' => [
                         'log',
                         sprintf('%s.%s', $record['channel'], $record['level_name']),
                     ],
-                    'fingerprint' => md5($record['formatted']),
+                    'fingerprint' => md5($record['message']),
                 ],
                 'request' => [
                     'context' => [
@@ -51,6 +52,10 @@ class LogHandler extends AbstractProcessingHandler
                         'log_channel' => $record['channel'],
                         'message' => $record['message'],
                     ],
+                ],
+                'server' => [
+                    'environment_name' => $config['environment_name'],
+                    'time' => $record['datetime']->format(DateTime::ISO8601),
                 ],
             ];
         });

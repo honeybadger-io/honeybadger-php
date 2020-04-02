@@ -2,6 +2,7 @@
 
 namespace Honeybadger\Tests;
 
+use DateTime;
 use Honeybadger\Contracts\Reporter;
 use Honeybadger\Honeybadger;
 use Honeybadger\LogHandler;
@@ -33,7 +34,7 @@ class LogHandlerTest extends TestCase
                 parent::__construct();
             }
 
-            public function rawNotification(callable $fn) : array
+            public function rawNotification(callable $fn): array
             {
                 $this->notification = $fn($this->config);
 
@@ -60,21 +61,20 @@ class LogHandlerTest extends TestCase
                     'message' => 'Test log message',
                 ],
             ],
-          ], array_only($reporter->notification, ['notifier', 'request']));
+            'server' => [
+                'time' => (new DateTime)->format(DateTime::ISO8601),
+                'environment_name' => 'production',
+            ],
+        ], array_only($reporter->notification, ['notifier', 'request', 'server']));
 
         $this->assertEquals([
-            'class' => 'Test log message',
+            'class' => 'INFO Log',
+            'message' => 'Test log message',
             'tags' => [
                 'log',
                 'test-logger.INFO',
             ],
-        ], array_only($reporter->notification['error'], ['class', 'tags']));
-
-        // [2019-01-20 14:56:20] test-logger.INFO: Test log message
-        $this->assertRegExp(
-            '/\[[0-9-:\s]+\] test-logger\.INFO\: Test log message/',
-            $reporter->notification['error']['message']
-        );
+        ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
 
         $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
     }
