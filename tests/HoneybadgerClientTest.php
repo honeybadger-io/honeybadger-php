@@ -10,6 +10,7 @@ use Honeybadger\HoneybadgerClient;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class HoneybadgerClientTest extends TestCase
 {
@@ -49,7 +50,7 @@ class HoneybadgerClientTest extends TestCase
 
         $config = new Config(['api_key' => '1234']);
 
-        $responseMock = Mockery::mock(Response::class)
+        $responseMock = Mockery::mock(GuzzleResponse::class)
             ->shouldReceive([
                 'getStatusCode' => Response::HTTP_CREATED,
                 'getBody' => '',
