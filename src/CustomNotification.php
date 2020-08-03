@@ -45,7 +45,7 @@ class CustomNotification
                 'context' => (object) $this->context->all(), ],
             ],
             ['server' => (object) [
-              'environment_name' => $this->config['environment_name'],
+                'environment_name' => $this->config['environment_name'],
             ]]
         );
     }
