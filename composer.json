@@ -24,6 +24,7 @@
         "php": "^7.2",
         "guzzlehttp/guzzle": "^6.3 || ^7.0",
         "monolog/monolog": "^2.0",
+        "spatie/regex": "^1.4",
         "symfony/http-foundation": ">=3.3 || ^4.1"
     },
     "require-dev": {
