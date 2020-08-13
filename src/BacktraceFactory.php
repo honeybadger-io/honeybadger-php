@@ -166,7 +166,7 @@ class BacktraceFactory
             'file' => $frame['file'],
             'number' => (string) $frame['line'],
             'context' => $this->fileFromApplication($frame['file'], $this->config['vendor_paths'])
-                ? 'app' : 'vendor', 
+                ? 'app' : 'all', 
         ];
     }
 

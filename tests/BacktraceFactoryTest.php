@@ -123,7 +123,7 @@ class BacktraceFactoryTest extends TestCase
             $backtrace = (new BacktraceFactory($e, $config))->trace();
         }
 
-        $this->assertEquals('vendor', $backtrace[0]['context']);
+        $this->assertEquals('all', $backtrace[0]['context']);
     }
 
     protected static function throwStaticException()
