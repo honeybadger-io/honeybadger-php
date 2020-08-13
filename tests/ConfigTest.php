@@ -42,7 +42,7 @@ class ConfigTest extends TestCase
             'excluded_exceptions' => [],
             'report_data' => true,
             'vendor_paths' => [
-                'vendor',
+                'vendor\/.*',
             ],
         ], $config);
     }

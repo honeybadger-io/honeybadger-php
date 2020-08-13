@@ -61,7 +61,7 @@ class BacktraceFactory
             $previousCauses[] = [
                 'class' => get_class($e),
                 'message' => $e->getMessage(),
-                'backtrace' => (new self($e))->trace(),
+                'backtrace' => (new self($e, $this->config))->trace(),
             ];
 
             return $this->formatPrevious($e, $previousCauses);
