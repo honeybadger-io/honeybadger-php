@@ -172,10 +172,7 @@ class BacktraceFactory
 
     private function fileFromApplication(string $filePath, array $vendorPaths): bool
     {
-        $path = $this->config['project_root'] 
-            ? Regex::replace('/'.preg_quote($this->config['project_root'].'/', '/').'/', '', $filePath)->result()
-            : '';
-
+        $path = $this->appendProjectRootToFilePath($filePath);
 
         if (Regex::match('/'.array_shift($vendorPaths).'/', $path)->hasMatch()) {
             return false;
@@ -186,5 +183,14 @@ class BacktraceFactory
         }
 
         return true;
+    }
+
+    private function appendProjectRootToFilePath(string $filePath): string
+    {
+        $pregProjectRoot = preg_quote($this->config['project_root'].'/', '/');
+
+        return $this->config['project_root'] 
+            ? Regex::replace('/'.$pregProjectRoot.'/', '', $filePath)->result()
+            : '';
     }
 }
