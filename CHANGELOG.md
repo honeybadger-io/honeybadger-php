@@ -4,6 +4,11 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.2.0] - 2020-09-08
+## Added
+- Backtrace context for app/vendor files for filtering in HB UI ([#114](https://github.com/honeybadger-io/honeybadger-php/pull/114))
+- Environment context for raw and custom notifications ([#113](https://github.com/honeybadger-io/honeybadger-php/pull/113))
+
 ## [2.1.0] - 2020-02-10
 ### Changed
 - Improved log reporter payload ([#106](https://github.com/honeybadger-io/honeybadger-php/pull/106))
