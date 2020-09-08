@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Throwable;
+use Honeybadger\Config;
 
 class BacktraceFactoryTest extends TestCase
 {
@@ -17,7 +18,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             $this->throwNestedExceptions();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace()[0];
+            $backtrace = (new BacktraceFactory($e, new Config))->trace()[0];
         }
 
         $this->assertEquals('throwNestedExceptions', $backtrace['method']);
@@ -36,7 +37,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             $throwTestException('bar');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
@@ -54,7 +55,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throwTestException();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals('Honeybadger\Tests\throwTestException', $backtrace[0]['method']);
@@ -66,7 +67,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new Exception('test');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals(self::class, $backtrace[0]['class']);
@@ -78,7 +79,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new Exception('test');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals('->', $backtrace[0]['type']);
@@ -90,10 +91,39 @@ class BacktraceFactoryTest extends TestCase
         try {
             self::throwStaticException();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals('::', $backtrace[0]['type']);
+    }
+
+    /** @test */
+    public function context_is_sent_for_frames()
+    {
+        try {
+            throw new Exception('test');
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+        }
+
+        $this->assertEquals('app', $backtrace[0]['context']);
+    }
+
+    /** @test */
+    public function context_is_sent_as_vendor()
+    {
+        $config = new Config([
+            'project_root' => dirname(getcwd().'/..'),
+            'vendor_paths' => ['tests\/.*'],
+        ]);
+
+        try {
+            throw new Exception('test');
+        } catch (Throwable $e) {
+            $backtrace = (new BacktraceFactory($e, $config))->trace();
+        }
+
+        $this->assertEquals('all', $backtrace[0]['context']);
     }
 
     protected static function throwStaticException()
@@ -120,7 +150,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             $throwTestException('bar', new TestClass);
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
         $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);

@@ -120,7 +120,7 @@ class ExceptionNotification
      */
     private function makeBacktrace(): BacktraceFactory
     {
-        return new BacktraceFactory($this->throwable);
+        return new BacktraceFactory($this->throwable, $this->config);
     }
 
     /**

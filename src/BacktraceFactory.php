@@ -5,6 +5,8 @@ namespace Honeybadger;
 use ReflectionClass;
 use ReflectionException;
 use Throwable;
+use Honeybadger\Config;
+use Spatie\Regex\Regex;
 
 class BacktraceFactory
 {
@@ -12,13 +14,20 @@ class BacktraceFactory
      * @var \Throwable
      */
     protected $exception;
+    
+    /**
+     * @var \Honeybadger\Config
+     */
+    protected $config;
 
     /**
-     * @param   \Throwable  $exception
+     * @param  \Throwable  $exception
+     * @param  \Honeybadger\Config  $config
      */
-    public function __construct(Throwable $exception)
+    public function __construct(Throwable $exception, Config $config)
     {
         $this->exception = $exception;
+        $this->config = $config;
     }
 
     /**
@@ -52,7 +61,7 @@ class BacktraceFactory
             $previousCauses[] = [
                 'class' => get_class($e),
                 'message' => $e->getMessage(),
-                'backtrace' => (new self($e))->trace(),
+                'backtrace' => (new self($e, $this->config))->trace(),
             ];
 
             return $this->formatPrevious($e, $previousCauses);
@@ -156,6 +165,32 @@ class BacktraceFactory
             'source' => (new FileSource($frame['file'], $frame['line']))->getSource(),
             'file' => $frame['file'],
             'number' => (string) $frame['line'],
+            'context' => $this->fileFromApplication($frame['file'], $this->config['vendor_paths'])
+                ? 'app' : 'all', 
         ];
+    }
+
+    private function fileFromApplication(string $filePath, array $vendorPaths): bool
+    {
+        $path = $this->appendProjectRootToFilePath($filePath);
+
+        if (Regex::match('/'.array_shift($vendorPaths).'/', $path)->hasMatch()) {
+            return false;
+        }
+
+        if (!empty($vendorPaths)) {
+            return $this->fileFromApplication($filePath, $vendorPaths);
+        }
+
+        return true;
+    }
+
+    private function appendProjectRootToFilePath(string $filePath): string
+    {
+        $pregProjectRoot = preg_quote($this->config['project_root'].'/', '/');
+
+        return $this->config['project_root'] 
+            ? Regex::replace('/'.$pregProjectRoot.'/', '', $filePath)->result()
+            : '';
     }
 }
