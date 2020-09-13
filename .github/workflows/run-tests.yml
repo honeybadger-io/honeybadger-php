@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
     matrix:
-        composer-flags: ["", "--prefer-lowest"]
+        composer-flags: [" ", "--prefer-lowest"]
         php-versions: ['7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
