@@ -6,8 +6,8 @@ jobs:
   run:
     runs-on: ubuntu-latest
     strategy:
-    matrix:
-        composer-flags: ["--prefer-dist", "--prefer-lowest"]
+      matrix:
+        composer-flags: ["--prefer-stable", "--prefer-lowest"]
         php-versions: ['7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
@@ -18,11 +18,11 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        coverage: xdebug        
+        coverage: none
         tools: phpunit
 
     - name: Install dependencies
-      run: composer install ${{ matrix.composer-flags }}
+      run: composer install ${{ matrix.composer-flags }} --no-interaction
   
     - name: Run Tests
       run: phpunit
