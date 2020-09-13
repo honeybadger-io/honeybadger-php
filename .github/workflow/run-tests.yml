@@ -1,0 +1,28 @@
+name: Run Tests
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+    matrix:
+        composer-flags: ["", "--prefer-lowest"]
+        php-versions: ['7.3', '7.4']
+    name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php-versions }}
+        coverage: xdebug        
+        tools: phpunit
+
+    - name: Install dependencies
+      run: composer install --prefer-dist ${{ matrix.composer-flags }}
+  
+    - name: Run Tests
+      run: phpunit
