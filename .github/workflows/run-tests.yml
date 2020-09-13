@@ -21,7 +21,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        ini-values: error_reporting=E_ALL display_errors=On
+        ini-values: error_reporting=E_ALL display_errors=On zend.exception_ignore_args=Off
         extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv, xdebug
         coverage: xdebug        
 
