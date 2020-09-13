@@ -16,6 +16,7 @@ class HandlerTest extends TestCase
     {
         $handlerFixture = new HandlerFixture;
         set_exception_handler([$handlerFixture, 'exceptionHandler']);
+
         $mock = $this->createMock(Honeybadger::class);
         $mock->expects($this->once())->method('notify');
 
