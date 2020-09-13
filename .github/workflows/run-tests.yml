@@ -19,7 +19,7 @@ jobs:
       with:
         php-version: ${{ matrix.php-versions }}
         coverage: none
-        tools: phpunit
+        extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
 
     - name: Install dependencies
       run: composer update ${{ matrix.composer-flags }} --no-interaction --prefer-dist
