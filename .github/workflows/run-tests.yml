@@ -22,7 +22,7 @@ jobs:
         extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
 
     - name: Install dependencies
-      run: composer update ${{ matrix.composer-flags }} --no-interaction --prefer-dist
+      run: composer update ${{ matrix.composer-flags }} --prefer-dist --no-interaction --no-suggest
   
     - name: Run Tests
       run: vendor/bin/phpunit
