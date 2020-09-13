@@ -18,8 +18,8 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php-versions }}
-        coverage: none
         extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
+        coverage: xdebug        
 
     - name: Install dependencies
       run: composer update ${{ matrix.composer-flags }} --prefer-dist --no-interaction --no-suggest
