@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        composer-flags: ["--prefer-stable", "--prefer-lowest"]
+        composer-flags: ["--prefer-dist", "--prefer-lowest"]
         php-versions: ['7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
@@ -25,4 +25,4 @@ jobs:
       run: composer install ${{ matrix.composer-flags }} --no-interaction
   
     - name: Run Tests
-      run: phpunit
+      run: vendor/bin/phpunit
