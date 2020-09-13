@@ -41,7 +41,7 @@ class BacktraceFactoryTest extends TestCase
         }
 
         $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
-        $this->assertEquals('bar', $backtrace[0]['args'][0]);
+        $this->assertEquals(['bar'], $backtrace[0]['args']);
     }
 
     /** @test */
