@@ -22,7 +22,7 @@ jobs:
       with:
         php-version: ${{ matrix.php-versions }}
         ini-values: error_reporting=E_ALL display_errors=On
-        extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv
+        extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv, xdebug
         coverage: xdebug        
 
     - name: Install dependencies
