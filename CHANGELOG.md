@@ -4,6 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.2.1] - 2020-09-14
+- Changed the seprator for flex version dependencies in the composer file. Might be causing an issue ([#115](https://github.com/honeybadger-io/honeybadger-php/pull/115))
+- Updated the mimimum version of Guzzle to `7.0.1` ([#115](https://github.com/honeybadger-io/honeybadger-php/pull/115))
+
 ## [2.2.0] - 2020-09-08
 ## Added
 - Backtrace context for app/vendor files for filtering in HB UI ([#114](https://github.com/honeybadger-io/honeybadger-php/pull/114))
