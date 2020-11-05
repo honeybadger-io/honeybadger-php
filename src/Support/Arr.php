@@ -94,4 +94,15 @@ class Arr
 
         return is_array($value) ? $value : [$value];
     }
+
+    /**
+     * If the array is associative
+     *
+     * @param  array  $data
+     * @return bool
+     */
+    public static function isAssociative(array $data): bool
+    {
+        return array_keys($data) !== range(0, count($data) - 1);
+    }
 }

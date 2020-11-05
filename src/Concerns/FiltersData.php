@@ -29,7 +29,7 @@ trait FiltersData
     private function filter(array $values): array
     {
         return Arr::mapWithKeys($values, function ($value, $key) {
-            if (is_array($value) && !$this->arrayHasKeys($value)) {
+            if (is_array($value) && !Arr::isAssociative($value)) {
                 return $value;
             }
 
@@ -43,10 +43,5 @@ trait FiltersData
 
             return $value;
         });
-    }
-
-    private function arrayHasKeys(array $data): bool
-    {
-        return array_keys($data) !== range(0, count($data) - 1);
     }
 }
