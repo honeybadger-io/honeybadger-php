@@ -4,6 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.2.2] - 2020-11-6
+### Fixed
+- Fixed an issue filtering keyed arrays ([#117](https://github.com/honeybadger-io/honeybadger-php/pull/117))
+
 ## [2.2.1] - 2020-09-14
 - Changed the seprator for flex version dependencies in the composer file. Might be causing an issue ([#115](https://github.com/honeybadger-io/honeybadger-php/pull/115))
 - Updated the mimimum version of Guzzle to `7.0.1` ([#115](https://github.com/honeybadger-io/honeybadger-php/pull/115))
