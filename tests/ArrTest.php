@@ -36,4 +36,11 @@ class ArrTest extends TestCase
     {
         $this->assertEquals('bar', Arr::get(['foo' => 'baz'], 'baz', 'bar'));
     }
+
+    /** @test */
+    public function array_is_associative()
+    {
+        $this->assertTrue(Arr::isAssociative(['foo' => 'bar']));
+        $this->assertFalse(Arr::isAssociative(['foo']));
+    }
 }

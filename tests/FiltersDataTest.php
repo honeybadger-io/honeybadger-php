@@ -19,6 +19,17 @@ class FiltersDataTest extends TestCase
     }
 
     /** @test */
+    public function it_will_not_filter_index_arrays()
+    {
+        $this->assertEquals(
+            ['bar' => ['baz']],
+            (new FiltersDataFixture(['bar' => ['baz']]))
+                ->filterKeys(['foo'])
+                ->data()
+        );
+    }
+
+    /** @test */
     public function it_will_filter_data_recursivly()
     {
         $filteredData = (new FiltersDataFixture(['foo' => ['bar' => 'baz']]))
