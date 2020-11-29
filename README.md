@@ -2,10 +2,7 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/honeybadger-io/honeybadger-php.svg?style=flat-square)](https://packagist.org/packages/honeybadger-io/honeybadger-php)
 [![Total Downloads](https://img.shields.io/packagist/dt/honeybadger-io/honeybadger-php.svg?style=flat-square)](https://packagist.org/packages/honeybadger-io/honeybadger-php)
-[![Build Status](https://img.shields.io/travis/honeybadger-io/honeybadger-php/master.svg?style=flat-square)](https://travis-ci.org/honeybadger-io/honeybadger-php)
-[![Quality Score](https://img.shields.io/scrutinizer/g/honeybadger-io/honeybadger-php.svg?style=flat-square)](https://scrutinizer-ci.com/g/honeybadger-io/honeybadger-php)
-[![Maintainability](https://api.codeclimate.com/v1/badges/5dfccab91329acaa9444/maintainability)](https://codeclimate.com/github/honeybadger-io/honeybadger-php/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/5dfccab91329acaa9444/test_coverage)](https://codeclimate.com/github/honeybadger-io/honeybadger-php/test_coverage)
+![Run Tests](https://github.com/honeybadger-io/honeybadger-php/workflows/Run%20Tests/badge.svg)
 [![StyleCI](https://styleci.io/repos/9077424/shield)](https://github.styleci.io/repos/9077424)
 
 This is the client library for integrating apps with the :zap: [Honeybadger Exception Notifier for PHP](https://www.honeybadger.io/for/php/?utm_source=github&utm_medium=readme&utm_campaign=php&utm_content=Honeybadger+Exception+Notifier+for+PHP).
