@@ -4,6 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.3.0] - 2020-11-29
+### Changed
+- Added PHP8 Support ([#118](https://github.com/honeybadger-io/honeybadger-php/pull/118))
+
 ## [2.2.2] - 2020-11-6
 ### Fixed
 - Fixed an issue filtering keyed arrays ([#117](https://github.com/honeybadger-io/honeybadger-php/pull/117))
