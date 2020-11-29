@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         composer-flags: ["--prefer-stable", "--prefer-lowest"]
-        php-versions: ['7.3', '7.4']
+        php-versions: ['7.3', '7.4', '8.0']
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
     - name: Checkout
