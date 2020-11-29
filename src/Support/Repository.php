@@ -29,11 +29,11 @@ class Repository implements \ArrayAccess
     /**
      * @param  string   $key
      * @param  mixed  $value
-     * @return array
+     * @return void
      */
-    public function __set(string $key, $value): array
+    public function __set(string $key, $value): void
     {
-        return $this->set($key, $value);
+        $this->set($key, $value);
     }
 
     /**
