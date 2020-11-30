@@ -29,7 +29,7 @@ trait FiltersData
     private function filter(array $values): array
     {
         return Arr::mapWithKeys($values, function ($value, $key) {
-            if (is_array($value) && !Arr::isAssociative($value)) {
+            if (is_array($value) && ! Arr::isAssociative($value)) {
                 return $value;
             }
 

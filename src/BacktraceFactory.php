@@ -4,9 +4,8 @@ namespace Honeybadger;
 
 use ReflectionClass;
 use ReflectionException;
-use Throwable;
-use Honeybadger\Config;
 use Spatie\Regex\Regex;
+use Throwable;
 
 class BacktraceFactory
 {
@@ -14,7 +13,7 @@ class BacktraceFactory
      * @var \Throwable
      */
     protected $exception;
-    
+
     /**
      * @var \Honeybadger\Config
      */
@@ -166,7 +165,7 @@ class BacktraceFactory
             'file' => $frame['file'],
             'number' => (string) $frame['line'],
             'context' => $this->fileFromApplication($frame['file'], $this->config['vendor_paths'])
-                ? 'app' : 'all', 
+                ? 'app' : 'all',
         ];
     }
 
@@ -178,7 +177,7 @@ class BacktraceFactory
             return false;
         }
 
-        if (!empty($vendorPaths)) {
+        if (! empty($vendorPaths)) {
             return $this->fileFromApplication($filePath, $vendorPaths);
         }
 
@@ -189,7 +188,7 @@ class BacktraceFactory
     {
         $pregProjectRoot = preg_quote($this->config['project_root'].'/', '/');
 
-        return $this->config['project_root'] 
+        return $this->config['project_root']
             ? Regex::replace('/'.$pregProjectRoot.'/', '', $filePath)->result()
             : '';
     }
