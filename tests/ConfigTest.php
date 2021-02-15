@@ -38,6 +38,7 @@ class ConfigTest extends TestCase
             'client' => [
                 'timeout' => 0,
                 'proxy' => [],
+                'verify' => true,
             ],
             'excluded_exceptions' => [],
             'report_data' => true,
