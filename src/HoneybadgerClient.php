@@ -90,6 +90,7 @@ class HoneybadgerClient
             ],
             'timeout' => $this->config['client']['timeout'],
             'proxy' => $this->config['client']['proxy'],
+            'verify' => $this->config['client']['verify'],
         ]);
     }
 }
