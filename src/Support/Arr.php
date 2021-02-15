@@ -96,7 +96,7 @@ class Arr
     }
 
     /**
-     * If the array is associative
+     * If the array is associative.
      *
      * @param  array  $data
      * @return bool
