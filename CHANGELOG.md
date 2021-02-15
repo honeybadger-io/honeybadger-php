@@ -4,6 +4,10 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+## [2.4.0] - 2021-02-15
+### Added
+- Added config for Guzzle SSL verification ([#124](https://github.com/honeybadger-io/honeybadger-php/pull/124)) ([#123](https://github.com/honeybadger-io/honeybadger-php/pull/123))
+
 ## [2.3.0] - 2020-11-29
 ### Changed
 - Added PHP8 Support ([#118](https://github.com/honeybadger-io/honeybadger-php/pull/118))
