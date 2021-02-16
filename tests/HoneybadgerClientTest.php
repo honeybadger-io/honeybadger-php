@@ -61,7 +61,6 @@ class HoneybadgerClientTest extends TestCase
         $this->assertEquals('There was an error sending the payload to Honeybadger.', $message);
     }
 
-
     /** @test */
     public function doesnt_throw_when_passing_recursive_data()
     {
