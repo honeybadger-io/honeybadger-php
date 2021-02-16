@@ -45,7 +45,7 @@ class HoneybadgerClientTest extends TestCase
     /** @test */
     public function allows_service_exceptions_to_be_handled()
     {
-        $message= null;
+        $message = null;
         $config = new Config([
             'api_key' => '1234',
             'service_exception_handler' => function (ServiceException $e) use (&$message) {
@@ -58,7 +58,7 @@ class HoneybadgerClientTest extends TestCase
         $client = new HoneybadgerClient($config, $mock);
         $client->notification([]);
 
-        $this->assertEquals("There was an error sending the payload to Honeybadger.", $message);
+        $this->assertEquals('There was an error sending the payload to Honeybadger.', $message);
     }
 
 

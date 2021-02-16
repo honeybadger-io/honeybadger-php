@@ -2,11 +2,11 @@
 
 namespace Honeybadger;
 
-use Throwable;
 use GuzzleHttp\Client;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 class HoneybadgerClient
 {
@@ -43,11 +43,13 @@ class HoneybadgerClient
             );
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic());
+
             return [];
         }
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
             $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+
             return [];
         }
 
@@ -66,11 +68,13 @@ class HoneybadgerClient
             $response = $this->client->head(sprintf('check_in/%s', $key));
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic());
+
             return;
         }
 
         if ($response->getStatusCode() !== Response::HTTP_OK) {
             $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+
             return;
         }
     }

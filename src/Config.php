@@ -2,8 +2,8 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Support\Repository;
 use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\Support\Repository;
 
 class Config extends Repository
 {
