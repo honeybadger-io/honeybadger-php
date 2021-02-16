@@ -4,6 +4,11 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.4.1] - 2021-02-15
+### Fixed
+- Fixed default value for upgrading older installations ([#126](https://github.com/honeybadger-io/honeybadger-php/pull/126))
+
 ## [2.4.0] - 2021-02-15
 ### Added
 - Added config for Guzzle SSL verification ([#124](https://github.com/honeybadger-io/honeybadger-php/pull/124)) ([#123](https://github.com/honeybadger-io/honeybadger-php/pull/123))
