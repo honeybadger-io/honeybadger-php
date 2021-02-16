@@ -3,6 +3,7 @@
 namespace Honeybadger;
 
 use Honeybadger\Support\Repository;
+use Honeybadger\Exceptions\ServiceException;
 
 class Config extends Repository
 {
@@ -15,7 +16,8 @@ class Config extends Repository
     }
 
     /**
-     * @param  array  $config
+     * @param array $config
+     *
      * @return array
      */
     private function mergeConfig($config = []): array
@@ -27,6 +29,9 @@ class Config extends Repository
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
                 'version' => Honeybadger::VERSION,
             ],
+            'service_exception_handler' => function (ServiceException $e) {
+                throw $e;
+            },
             'environment' => [
                 'filter' => [],
                 'include' => [],

@@ -2,7 +2,7 @@
 
 namespace Honeybadger;
 
-use Exception;
+use Throwable;
 use GuzzleHttp\Client;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
@@ -22,7 +22,7 @@ class HoneybadgerClient
 
     /**
      * @param  \Honeybadger\Config  $config
-     * @param  \GuzzleHttp\Client  $client
+     * @param  \GuzzleHttp\Client|null  $client
      */
     public function __construct(Config $config, Client $client = null)
     {
@@ -33,8 +33,6 @@ class HoneybadgerClient
     /**
      * @param  array  $notification
      * @return array
-     *
-     * @throws \Honeybadger\Exceptions\ServiceException
      */
     public function notification(array $notification): array
     {
@@ -43,12 +41,14 @@ class HoneybadgerClient
                 'notices',
                 ['body' => json_encode($notification, JSON_PARTIAL_OUTPUT_ON_ERROR)]
             );
-        } catch (Exception $e) {
-            throw ServiceException::generic();
+        } catch (Throwable $e) {
+            $this->handleServiceException(ServiceException::generic());
+            return [];
         }
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-            throw (new ServiceExceptionFactory($response))->make();
+            $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            return [];
         }
 
         return (string) $response->getBody()
@@ -59,20 +59,26 @@ class HoneybadgerClient
     /**
      * @param  string  $key
      * @return void
-     *
-     * @throws \Honeybadger\Exceptions\ServiceException
      */
     public function checkin(string $key): void
     {
         try {
             $response = $this->client->head(sprintf('check_in/%s', $key));
-        } catch (Exception $e) {
-            throw ServiceException::generic();
+        } catch (Throwable $e) {
+            $this->handleServiceException(ServiceException::generic());
+            return;
         }
 
         if ($response->getStatusCode() !== Response::HTTP_OK) {
-            throw (new ServiceExceptionFactory($response))->make();
+            $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            return;
         }
+    }
+
+    private function handleServiceException(ServiceException $e): void
+    {
+        $serviceExceptionHandler = $this->config['service_exception_handler'];
+        call_user_func_array($serviceExceptionHandler, [$e]);
     }
 
     /**

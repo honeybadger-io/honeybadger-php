@@ -51,7 +51,7 @@ class ServiceExceptionTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_an_generic_exception_if_all_else_fails()
+    public function it_throws_a_generic_exception_if_all_else_fails()
     {
         $this->expectExceptionObject(ServiceException::generic());
 

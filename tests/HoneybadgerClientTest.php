@@ -43,6 +43,26 @@ class HoneybadgerClientTest extends TestCase
     }
 
     /** @test */
+    public function allows_service_exceptions_to_be_handled()
+    {
+        $message= null;
+        $config = new Config([
+            'api_key' => '1234',
+            'service_exception_handler' => function (ServiceException $e) use (&$message) {
+                $message = $e->getMessage();
+            },
+        ]);
+        $mock = Mockery::mock(Client::class)->makePartial();
+        $mock->shouldReceive('post')->andThrow(new Exception);
+
+        $client = new HoneybadgerClient($config, $mock);
+        $client->notification([]);
+
+        $this->assertEquals("There was an error sending the payload to Honeybadger.", $message);
+    }
+
+
+    /** @test */
     public function doesnt_throw_when_passing_recursive_data()
     {
         $data = [];
