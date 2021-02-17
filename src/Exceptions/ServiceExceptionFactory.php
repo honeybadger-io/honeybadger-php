@@ -21,34 +21,29 @@ class ServiceExceptionFactory
         $this->response = $response;
     }
 
-    public function make(): Exception
+    public function make(): ServiceException
     {
         return $this->exception();
     }
 
-    /**
-     * @return void
-     *
-     * @throws \Honeybadger\Exceptions\ServiceException
-     */
-    private function exception(): void
+    private function exception(): ServiceException
     {
         if ($this->response->getStatusCode() === Response::HTTP_FORBIDDEN) {
-            throw ServiceException::invalidApiKey();
+            return ServiceException::invalidApiKey();
         }
 
         if ($this->response->getStatusCode() === Response::HTTP_UNPROCESSABLE_ENTITY) {
-            throw ServiceException::invalidPayload();
+            return ServiceException::invalidPayload();
         }
 
         if ($this->response->getStatusCode() === Response::HTTP_TOO_MANY_REQUESTS) {
-            throw ServiceException::rateLimit();
+            return ServiceException::rateLimit();
         }
 
         if ($this->response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR) {
-            throw ServiceException::serverError();
+            return ServiceException::serverError();
         }
 
-        throw ServiceException::generic();
+        return ServiceException::generic();
     }
 }

@@ -13,6 +13,9 @@ class ConfigTest extends TestCase
     {
         $config = (new Config(['api_key' => '1234']))->all();
 
+        $this->assertArrayHasKey('service_exception_handler', $config);
+        unset($config['service_exception_handler']);
+
         $this->assertEquals([
             'api_key' => '1234',
             'notifier' => [
