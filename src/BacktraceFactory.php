@@ -173,6 +173,9 @@ class BacktraceFactory
     {
         $path = $this->appendProjectRootToFilePath($filePath);
 
+        // On Windows, file paths use backslashes, so we have to normalise them
+        $path = str_replace('\\', '/', $path);
+
         if (Regex::match('/'.array_shift($vendorPaths).'/', $path)->hasMatch()) {
             return false;
         }
