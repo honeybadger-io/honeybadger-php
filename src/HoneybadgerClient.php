@@ -4,6 +4,7 @@ namespace Honeybadger;
 
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
@@ -82,15 +83,15 @@ class HoneybadgerClient
     {
         return new Client([
             'base_uri' => Honeybadger::API_URL,
-            'http_errors' => false,
-            'headers' => [
+            RequestOptions::HTTP_ERRORS => false,
+            RequestOptions::HEADERS => [
                 'X-API-Key' => $this->config['api_key'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
             ],
-            'timeout' => $this->config['client']['timeout'],
-            'proxy' => $this->config['client']['proxy'],
-            'verify' => $this->config['client']['verify'] ?? true,
+            RequestOptions::TIMEOUT => $this->config['client']['timeout'],
+            RequestOptions::PROXY => $this->config['client']['proxy'],
+            RequestOptions::VERIFY => $this->config['client']['verify'] ?? true,
         ]);
     }
 }
