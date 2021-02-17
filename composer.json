@@ -32,6 +32,11 @@
         "mockery/mockery": "^1.4",
         "phpunit/phpunit": "^8.5|^9.4"
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.x-dev"
+        }
+    },
     "autoload": {
         "psr-4": {
             "Honeybadger\\": "src"
