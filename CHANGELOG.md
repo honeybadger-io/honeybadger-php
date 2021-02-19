@@ -9,6 +9,9 @@ adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Added `service_exception_handler` config item to allow users configure how ServiceExceptions should be handled ([#129](https://github.com/honeybadger-io/honeybadger-php/pull/129))
 
+### Fixed
+- `vendor_paths` on Windows are now matched correctly. ([128](https://github.com/honeybadger-io/honeybadger-php/pull/128))
+
 ## [2.4.1] - 2021-02-15
 ### Fixed
 - Fixed default value for upgrading older installations ([#126](https://github.com/honeybadger-io/honeybadger-php/pull/126))
