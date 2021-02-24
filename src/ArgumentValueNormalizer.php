@@ -55,7 +55,7 @@ class ArgumentValueNormalizer
     {
         $class = get_class($object);
 
-        // The [LITERAL] token indicates to the Honeybadger UI that this value should be rendered as-is, without any surrounding quotes. See GH#133.
+        // The [LITERAL] token indicates to the Honeybadger UI that this value should be rendered as-is, without any surrounding quotes. See issue #133.
         return "[LITERAL]Object($class)";
     }
 }

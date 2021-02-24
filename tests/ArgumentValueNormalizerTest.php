@@ -30,7 +30,7 @@ class ArgumentValueNormalizerTest extends TestCase
     }
 
     /** @test */
-    public function it_normalizes_objects_to_literal()
+    public function it_normalizes_objects_to_literals()
     {
         $obj = new stdClass();
         $honeybadger = new Honeybadger([]);
@@ -39,7 +39,7 @@ class ArgumentValueNormalizerTest extends TestCase
     }
 
     /** @test */
-    public function it_normalizes_closures_to_classname()
+    public function it_normalizes_closures_to_literals()
     {
         $closure = function ($something) {
         };
@@ -94,7 +94,7 @@ class ArgumentValueNormalizerTest extends TestCase
         $expected = [
             'a' => [
                 'b' => [
-                    'c' => "[LITERAL]Object(stdClass)",
+                    'c' => '[LITERAL]Object(stdClass)',
                     'd' => 1,
                     'e' => 'Array(1 item)',
                 ],
