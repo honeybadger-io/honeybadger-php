@@ -127,5 +127,4 @@ class ArgumentValueNormalizerTest extends TestCase
         ];
         $this->assertEquals($expected, $normalized);
     }
-
 }
