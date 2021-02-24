@@ -114,11 +114,7 @@ class BacktraceFactory
     private function parseArgs(array $args): array
     {
         return array_map(function ($arg) {
-            if (is_object($arg)) {
-                return get_class($arg);
-            }
-
-            return $arg;
+            return ArgumentValueNormalizer::normalize($arg);
         }, $args);
     }
 
