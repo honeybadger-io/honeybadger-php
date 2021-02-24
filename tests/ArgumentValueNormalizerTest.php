@@ -49,11 +49,11 @@ class ArgumentValueNormalizerTest extends TestCase
     /** @test */
     public function it_limits_number_of_keys_in_array()
     {
+        $array = ['a' => 18567, 'b' => '97ndfs', 'c' => 97874, 'd' => 'hehehe'];
+
         $normalizer = new class extends ArgumentValueNormalizer {
             protected const MAX_KEYS_IN_ARRAY = 2;
         };
-
-        $array = ['a' => 18567, 'b' => '97ndfs', 'c' => 97874, 'd' => 'hehehe'];
         $keys = array_keys($normalizer::normalize($array));
         $this->assertCount(2, $keys);
         $this->assertContains('a', $keys);
@@ -64,8 +64,6 @@ class ArgumentValueNormalizerTest extends TestCase
         $normalizer = new class extends ArgumentValueNormalizer {
             protected const MAX_KEYS_IN_ARRAY = 1;
         };
-
-        $array = ['a' => 18567, 'b' => '97ndfs', 'c' => 97874, 'd' => 'hehehe'];
         $keys = array_keys($normalizer::normalize($array));
         $this->assertCount(1, $keys);
         $this->assertContains('a', $keys);
@@ -77,10 +75,6 @@ class ArgumentValueNormalizerTest extends TestCase
     /** @test */
     public function it_limits_array_depth()
     {
-        $normalizer = new class extends ArgumentValueNormalizer {
-            protected const MAX_DEPTH = 2;
-        };
-
         $array = [
             'a' => [
                 'b' => [
@@ -92,6 +86,10 @@ class ArgumentValueNormalizerTest extends TestCase
                 ],
             ],
         ];
+
+        $normalizer = new class extends ArgumentValueNormalizer {
+            protected const MAX_DEPTH = 2;
+        };
         $normalized = $normalizer::normalize($array);
         $expected = [
             'a' => [
@@ -107,18 +105,6 @@ class ArgumentValueNormalizerTest extends TestCase
         $normalizer = new class extends ArgumentValueNormalizer {
             protected const MAX_DEPTH = 1;
         };
-
-        $array = [
-            'a' => [
-                'b' => [
-                    'c' => new stdClass(),
-                    'd' => 1,
-                    'e' => [
-                        'f' => 3,
-                    ],
-                ],
-            ],
-        ];
         $normalized = $normalizer::normalize($array);
         $expected = [
             'a' => [

@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.6.0] - 2021-02-24
+### Modified
+- The size of each backtrace argument is now limited to nesting depth of 10 and 50 array keys ([#134](https://github.com/honeybadger-io/honeybadger-php/pull/134)).
+
 ## [2.5.0] - 2021-02-19
 ### Added
 - Added `service_exception_handler` config item to allow users configure how ServiceExceptions should be handled ([#129](https://github.com/honeybadger-io/honeybadger-php/pull/129))
