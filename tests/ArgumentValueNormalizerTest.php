@@ -41,7 +41,8 @@ class ArgumentValueNormalizerTest extends TestCase
     /** @test */
     public function it_normalizes_closures_to_classname()
     {
-        $closure = function ($something) {};
+        $closure = function ($something) {
+        };
         $this->assertEquals(Closure::class, ArgumentValueNormalizer::normalize($closure));
     }
 
@@ -59,7 +60,6 @@ class ArgumentValueNormalizerTest extends TestCase
         $this->assertContains('b', $keys);
         $this->assertNotContains('c', $keys);
         $this->assertNotContains('d', $keys);
-
 
         $normalizer = new class extends ArgumentValueNormalizer {
             protected const MAX_KEYS_IN_ARRAY = 1;
@@ -87,10 +87,10 @@ class ArgumentValueNormalizerTest extends TestCase
                     'c' => new stdClass(),
                     'd' => 1,
                     'e' => [
-                        'f' => 3
-                    ]
+                        'f' => 3,
+                    ],
                 ]
-            ]
+            ],
         ];
         $normalized = $normalizer::normalize($array);
         $expected = [
@@ -99,8 +99,8 @@ class ArgumentValueNormalizerTest extends TestCase
                     'c' => stdClass::class,
                     'd' => 1,
                     'e' => 'Array(1 item)',
-                ]
-            ]
+                ],
+            ],
         ];
         $this->assertEquals($expected, $normalized);
 
@@ -115,16 +115,16 @@ class ArgumentValueNormalizerTest extends TestCase
                     'c' => new stdClass(),
                     'd' => 1,
                     'e' => [
-                        'f' => 3
-                    ]
-                ]
-            ]
+                        'f' => 3,
+                    ],
+                ],
+            ],
         ];
         $normalized = $normalizer::normalize($array);
         $expected = [
             'a' => [
                 'b' => 'Array(3 items)',
-            ]
+            ],
         ];
         $this->assertEquals($expected, $normalized);
     }

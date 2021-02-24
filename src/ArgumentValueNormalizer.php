@@ -22,6 +22,7 @@ class ArgumentValueNormalizer
                 if ($currentDepth > static::MAX_DEPTH) {
                     $n = count($value);
                     $items = $n > 1 ? 'items' : 'item';
+
                     return "Array($n $items)";
                 }
 
@@ -46,6 +47,7 @@ class ArgumentValueNormalizer
             }
             $normalized[$key] = static::normalize($item, $currentDepth + 1);
         }
+
         return $normalized;
     }
 
