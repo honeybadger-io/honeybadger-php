@@ -89,7 +89,7 @@ class ArgumentValueNormalizerTest extends TestCase
                     'e' => [
                         'f' => 3,
                     ],
-                ]
+                ],
             ],
         ];
         $normalized = $normalizer::normalize($array);
@@ -103,7 +103,6 @@ class ArgumentValueNormalizerTest extends TestCase
             ],
         ];
         $this->assertEquals($expected, $normalized);
-
 
         $normalizer = new class extends ArgumentValueNormalizer {
             protected const MAX_DEPTH = 1;
