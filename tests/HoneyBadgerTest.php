@@ -104,6 +104,57 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_and_sends_multiple_pieces_of_context()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->withContext([
+            'foo' => 'bar',
+            'another' => 'context',
+        ]);
+
+        $response = $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'another' => 'context',
+        ], $notification['request']['context']);
+    }
+
+    /** @test */
+    public function with_context_method_returns_honeybadger_instance()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $this->assertEquals($badger, $badger->withContext([
+            'foo' => 'bar',
+            'another' => 'context',
+        ]));
+    }
+
+    /** @test */
     public function it_filters_and_includes_environment_keys_by_config()
     {
         $client = HoneybadgerClient::new([
