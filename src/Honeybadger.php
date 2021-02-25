@@ -109,12 +109,12 @@ class Honeybadger implements Reporter
     }
 
     /**
-     * Adds multiple pieces of context
+     * Adds multiple pieces of context.
      *
      * @param  array  $context
      * @return self
      */
-    public function withContext(array $context) : self
+    public function withContext(array $context): self
     {
         foreach ($context as $key => $value) {
             $this->context($key, $value);
