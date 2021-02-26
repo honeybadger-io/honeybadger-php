@@ -13,6 +13,7 @@ class HoneybadgerClient extends Client
     {
         if ($calls = $this->calls()) {
             $lastCall = $calls[count($calls) - 1];
+
             return json_decode($lastCall['request']->getBody(), true);
         }
 
