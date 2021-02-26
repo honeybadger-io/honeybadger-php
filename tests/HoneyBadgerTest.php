@@ -84,6 +84,7 @@ class HoneyBadgerTest extends TestCase
     {
         $client = HoneybadgerClient::new([
             new Response(201),
+            new Response(201),
         ]);
 
         $badger = Honeybadger::new([
@@ -96,11 +97,32 @@ class HoneyBadgerTest extends TestCase
 
         $badger->context('foo', 'bar');
 
-        $response = $badger->notify(new Exception('Test exception'));
-
+        $badger->notify(new Exception('Test exception'));
         $notification = $client->requestBody();
-
         $this->assertEquals(['foo' => 'bar'], $notification['request']['context']);
+    }
+
+    /** @test */
+    public function it_json_encodes_empty_request_data_properly()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->notify(new Exception('Test exception'));
+        $requestBody = $client->calls()[0]['request']->getBody()->getContents();
+        $this->assertStringContainsString('"context":{}', $requestBody);
+        $this->assertStringContainsString('"params":{}', $requestBody);
+        $this->assertStringContainsString('"session":{}', $requestBody);
     }
 
     /** @test */

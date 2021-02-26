@@ -4,6 +4,7 @@ namespace Honeybadger;
 
 use Honeybadger\Support\Arr;
 use Honeybadger\Support\Repository;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 use Throwable;
 
@@ -87,11 +88,12 @@ class ExceptionNotification
                 'tags' => Arr::wrap(Arr::get($this->additionalParams, 'tags', null)),
             ],
             'request' => [
-                'cgi_data' => $this->environment->values(),
-                'params' => $this->request->params(),
-                'session' => $this->request->session(),
+                // Important to set empty maps to stdClass so they don't get JSON-encoded as arrays
+                'cgi_data' => $this->environment->values() ?: new stdClass,
+                'params' => $this->request->params() ?: new stdClass,
+                'session' => $this->request->session() ?: new stdClass,
                 'url' => $this->request->url(),
-                'context' => $this->context->except(['honeybadger_component', 'honeybadger_action']),
+                'context' => $this->context->except(['honeybadger_component', 'honeybadger_action']) ?: new stdClass,
                 'component' => Arr::get($this->additionalParams, 'component', null) ?? Arr::get($this->context, 'honeybadger_component', null),
                 'action' => Arr::get($this->additionalParams, 'action', null) ?? Arr::get($this->context, 'honeybadger_action', null),
             ],
