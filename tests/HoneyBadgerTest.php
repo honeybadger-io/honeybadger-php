@@ -84,7 +84,6 @@ class HoneyBadgerTest extends TestCase
     {
         $client = HoneybadgerClient::new([
             new Response(201),
-            new Response(201),
         ]);
 
         $badger = Honeybadger::new([
@@ -106,7 +105,6 @@ class HoneyBadgerTest extends TestCase
     public function it_json_encodes_empty_request_data_properly()
     {
         $client = HoneybadgerClient::new([
-            new Response(201),
             new Response(201),
         ]);
 
