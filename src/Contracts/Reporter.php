@@ -43,7 +43,7 @@ interface Reporter
     public function checkin(string $key): void;
 
     /**
-     * Accepts a $key and $value argument or alternatively a key-value array as sole $key argument.
+     * Attach some additional context to an error report. Context can be specified as a $key and $value, or as an array with key-value pairs.
      *
      * @param  int|string|array  $key
      * @param  mixed  $value
