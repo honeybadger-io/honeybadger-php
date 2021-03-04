@@ -132,7 +132,7 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function context_method_returns_honeybadger_instance()
+    public function it_accepts_and_sends_chained_contexts()
     {
         $client = HoneybadgerClient::new([
             new Response(201),
@@ -146,10 +146,24 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make());
 
-        $this->assertEquals($badger, $badger->context([
+        $badger->context([
             'foo' => 'bar',
             'another' => 'context',
-        ]));
+        ])->context([
+            'chained-foo' => 'chained-bar',
+            'chained-another' => 'chained-context',
+        ]);
+
+        $response = $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'another' => 'context',
+            'chained-foo' => 'chained-bar',
+            'chained-another' => 'chained-context',
+        ], $notification['request']['context']);
     }
 
     /** @test */
