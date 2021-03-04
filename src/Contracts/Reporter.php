@@ -47,5 +47,5 @@ interface Reporter
      * @param  int|string|array|null  $value
      * @return self
      */
-    public function context($key, $value): self;
+    public function context($key, $value = null): self;
 }
