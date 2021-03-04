@@ -109,11 +109,7 @@ class Honeybadger implements Reporter
     }
 
     /**
-     * Accepts a key and value argument or alternatively a key-value array as sole argument.
-     *
-     * @param  int|string|array  $key
-     * @param  int|string|array|null  $value
-     * @return self
+     * {@inheritdoc}
      */
     public function context($key, $value = null)
     {

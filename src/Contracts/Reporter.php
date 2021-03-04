@@ -43,8 +43,10 @@ interface Reporter
     public function checkin(string $key): void;
 
     /**
+     * Accepts a $key and $value argument or alternatively a key-value array as sole $key argument.
+     *
      * @param  int|string|array  $key
-     * @param  int|string|array|null  $value
+     * @param  mixed  $value
      * @return self
      */
     public function context($key, $value = null);
