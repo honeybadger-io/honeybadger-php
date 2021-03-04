@@ -102,6 +102,71 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
+    public function it_accepts_and_sends_multiple_pieces_of_context()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->context([
+            'foo' => 'bar',
+            'another' => 'context',
+        ]);
+
+        $response = $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'another' => 'context',
+        ], $notification['request']['context']);
+    }
+
+    /** @test */
+    public function it_accepts_and_sends_chained_contexts()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->context([
+            'foo' => 'bar',
+            'another' => 'context',
+        ])->context([
+            'chained-foo' => 'chained-bar',
+            'chained-another' => 'chained-context',
+        ]);
+
+        $response = $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'another' => 'context',
+            'chained-foo' => 'chained-bar',
+            'chained-another' => 'chained-context',
+        ], $notification['request']['context']);
+    }
+
+    /** @test */
     public function it_json_encodes_empty_request_data_properly()
     {
         $client = HoneybadgerClient::new([

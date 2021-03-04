@@ -43,9 +43,11 @@ interface Reporter
     public function checkin(string $key): void;
 
     /**
-     * @param  int|string  $key
-     * @param  int|string  $value
-     * @return void
+     * Attach some additional context to an error report. Context can be specified as a $key and $value, or as an array with key-value pairs.
+     *
+     * @param  int|string|array  $key
+     * @param  mixed  $value
+     * @return self
      */
-    public function context($key, $value): void;
+    public function context($key, $value = null);
 }

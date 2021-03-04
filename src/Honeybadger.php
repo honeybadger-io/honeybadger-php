@@ -109,13 +109,19 @@ class Honeybadger implements Reporter
     }
 
     /**
-     * @param  int|string  $key
-     * @param  int|string|array  $value
-     * @return void
+     * {@inheritdoc}
      */
-    public function context($key, $value): void
+    public function context($key, $value = null)
     {
-        $this->context->set($key, $value);
+        if (is_array($key)) {
+            foreach ($key as $contextKey => $contextValue) {
+                $this->context->set($contextKey, $contextValue);
+            }
+        } else {
+            $this->context->set($key, $value);
+        }
+
+        return $this;
     }
 
     /**
