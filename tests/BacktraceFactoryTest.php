@@ -141,7 +141,7 @@ class BacktraceFactoryTest extends TestCase
     }
 
     /** @test */
-    public function args_with_object_should_be_class_names()
+    public function args_with_object_should_be_literals()
     {
         $throwTestException = function ($foo, $bar) {
             throw new Exception('test');
@@ -154,7 +154,7 @@ class BacktraceFactoryTest extends TestCase
         }
 
         $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
-        $this->assertEquals(['bar', TestClass::class], $backtrace[0]['args']);
+        $this->assertEquals(['bar', '[LITERAL]Object('.TestClass::class.')'], $backtrace[0]['args']);
     }
 }
 
