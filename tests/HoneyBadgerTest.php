@@ -116,7 +116,7 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make());
 
-        $badger->withContext([
+        $badger->context([
             'foo' => 'bar',
             'another' => 'context',
         ]);
@@ -132,7 +132,7 @@ class HoneyBadgerTest extends TestCase
     }
 
     /** @test */
-    public function with_context_method_returns_honeybadger_instance()
+    public function context_method_returns_honeybadger_instance()
     {
         $client = HoneybadgerClient::new([
             new Response(201),
@@ -146,7 +146,7 @@ class HoneyBadgerTest extends TestCase
             ],
         ], $client->make());
 
-        $this->assertEquals($badger, $badger->withContext([
+        $this->assertEquals($badger, $badger->context([
             'foo' => 'bar',
             'another' => 'context',
         ]));

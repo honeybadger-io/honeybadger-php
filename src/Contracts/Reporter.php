@@ -43,9 +43,9 @@ interface Reporter
     public function checkin(string $key): void;
 
     /**
-     * @param  int|string  $key
-     * @param  int|string  $value
-     * @return void
+     * @param  int|string|array  $key
+     * @param  int|string|array|null  $value
+     * @return self
      */
-    public function context($key, $value): void;
+    public function context($key, $value): self;
 }
