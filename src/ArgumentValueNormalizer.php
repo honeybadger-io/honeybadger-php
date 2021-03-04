@@ -51,12 +51,11 @@ class ArgumentValueNormalizer
         return $normalized;
     }
 
-    /**
-     * Currently, objects are normalized to the class name. This isn't ideal (see GH issue 133),
-     * but we can change it at any time.
-     */
-    protected static function normalizeObject(object $object)
+    protected static function normalizeObject(object $object): string
     {
-        return get_class($object);
+        $class = get_class($object);
+
+        // The [LITERAL] token indicates to the Honeybadger UI that this value should be rendered as-is, without any surrounding quotes. See issue #133.
+        return "[LITERAL]Object($class)";
     }
 }

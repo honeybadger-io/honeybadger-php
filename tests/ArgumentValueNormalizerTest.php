@@ -30,20 +30,20 @@ class ArgumentValueNormalizerTest extends TestCase
     }
 
     /** @test */
-    public function it_normalizes_objects_to_classname()
+    public function it_normalizes_objects_to_literals()
     {
         $obj = new stdClass();
         $honeybadger = new Honeybadger([]);
-        $this->assertEquals(stdClass::class, ArgumentValueNormalizer::normalize($obj));
-        $this->assertEquals(Honeybadger::class, ArgumentValueNormalizer::normalize($honeybadger));
+        $this->assertEquals('[LITERAL]Object('.stdClass::class.')', ArgumentValueNormalizer::normalize($obj));
+        $this->assertEquals('[LITERAL]Object('.Honeybadger::class.')', ArgumentValueNormalizer::normalize($honeybadger));
     }
 
     /** @test */
-    public function it_normalizes_closures_to_classname()
+    public function it_normalizes_closures_to_literals()
     {
         $closure = function ($something) {
         };
-        $this->assertEquals(Closure::class, ArgumentValueNormalizer::normalize($closure));
+        $this->assertEquals('[LITERAL]Object('.Closure::class.')', ArgumentValueNormalizer::normalize($closure));
     }
 
     /** @test */
@@ -94,7 +94,7 @@ class ArgumentValueNormalizerTest extends TestCase
         $expected = [
             'a' => [
                 'b' => [
-                    'c' => stdClass::class,
+                    'c' => '[LITERAL]Object(stdClass)',
                     'd' => 1,
                     'e' => 'Array(1 item)',
                 ],
