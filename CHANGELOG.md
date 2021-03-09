@@ -5,6 +5,14 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.7.0] - 2021-08-09
+### Added
+- Added support for array parameters and chaining in `context()` method ([#136](https://github.com/honeybadger-io/honeybadger-php/pull/136))
+
+### Fixed
+- Send empty context as JSON object, not array ([#138](https://github.com/honeybadger-io/honeybadger-php/pull/138))
+- Serialise objects in backtrace arguments as literals, not strings ([#133](https://github.com/honeybadger-io/honeybadger-php/pull/133))
+
 ## [2.6.0] - 2021-02-24
 ### Fixed
 - The size of each backtrace argument is now limited to nesting depth of 10 and 50 array keys ([#134](https://github.com/honeybadger-io/honeybadger-php/pull/134)).
