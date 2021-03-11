@@ -12,7 +12,7 @@ use Honeybadger\Tests\Mocks\HoneybadgerClient;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class HoneyBadgerTest extends TestCase
+class HoneybadgerTest extends TestCase
 {
     /** @test */
     public function it_builds_a_backtrace()
@@ -724,5 +724,104 @@ class HoneyBadgerTest extends TestCase
         $this->assertEquals('index', $notification['request']['action']);
         $this->assertArrayNotHasKey('component', $notification['request']['context']);
         $this->assertArrayNotHasKey('action', $notification['request']['context']);
+    }
+
+    /** @test */
+    public function auto_adds_breadcrumb_for_notice_if_enabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+        $badger->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertCount(1, $notification['breadcrumbs']);
+        $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs'][0]['message']);
+        $this->assertEquals('notice', $notification['breadcrumbs'][0]['category']);
+        $this->assertIsInt($notification['breadcrumbs'][0]['timestamp']);
+        $this->assertEquals([
+            'message' => 'Test exception',
+            'name' => Exception::class,
+        ], $notification['breadcrumbs'][0]['metadata']);
+    }
+
+    /** @test */
+    public function can_add_custom_breadcrumbs_if_enabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        sleep(1);
+        $eventTime = time();
+        $badger->addBreadcrumb('A thing', ['some' => 'data'], 'render')
+            ->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertCount(2, $notification['breadcrumbs']);
+
+        $this->assertEquals('A thing', $notification['breadcrumbs'][0]['message']);
+        $this->assertEquals('render', $notification['breadcrumbs'][0]['category']);
+        $this->assertEquals($eventTime, $notification['breadcrumbs'][0]['timestamp']);
+        $this->assertEquals(['some' => 'data'], $notification['breadcrumbs'][0]['metadata']);
+
+        $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs'][1]['message']);
+        $this->assertEquals('notice', $notification['breadcrumbs'][1]['category']);
+        $this->assertIsInt($notification['breadcrumbs'][1]['timestamp']);
+        $this->assertEquals([
+            'message' => 'Test exception',
+            'name' => Exception::class,
+        ], $notification['breadcrumbs'][1]['metadata']);
+    }
+
+    /** @test */
+    public function wont_send_breadcrumbs_if_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'breadcrumbs_enabled' => false,
+        ], $client->make());
+        $badger->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertEquals('HomeController', $notification['request']['component']);
+        $this->assertEquals('index', $notification['request']['action']);
+        $this->assertArrayNotHasKey('component', $notification['request']['context']);
+        $this->assertArrayNotHasKey('action', $notification['request']['context']);
+        $this->assertIsArray($notification['breadcrumbs']);
+        $this->assertCount(0, $notification['breadcrumbs']);
     }
 }
