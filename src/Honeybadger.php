@@ -152,7 +152,7 @@ class Honeybadger implements Reporter
             $this->breadcrumbs->add([
                 'message' => $message,
                 'metadata' => $metadata,
-                'category' => $category
+                'category' => $category,
             ]);
         }
 

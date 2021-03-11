@@ -8,7 +8,6 @@ use stdClass;
 
 class BreadcrumbsTest extends TestCase
 {
-
     /** @test */
     public function can_add_breadcrumbs()
     {
