@@ -17,7 +17,7 @@ class Breadcrumbs extends EvictingQueue
             'message' => (string) $item['message'],
             'category' => (string) ($item['category'] ?? 'custom'),
             'metadata' => $this->sanitize($item['metadata'] ?? []),
-            'timestamp' => $item['timestamp'] ?? time(),
+            'timestamp' => (int) ($item['timestamp'] ?? time()),
         ];
 
         return parent::add($item);

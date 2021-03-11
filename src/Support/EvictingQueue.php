@@ -3,7 +3,7 @@
 namespace Honeybadger\Support;
 
 /**
- * A container to hold an ordered list of items, automatically evicting older items to maintain a specified maximum size.
+ * A container to hold an ordered list of items, automatically evicting older items to maintain a specified maximum capacity.
  */
 class EvictingQueue
 {
@@ -15,11 +15,11 @@ class EvictingQueue
     /**
      * @var int
      */
-    protected $size;
+    protected $capacity;
 
-    public function __construct(int $size, array $items = [])
+    public function __construct(int $capacity, array $items = [])
     {
-        $this->size = $size;
+        $this->capacity = $capacity;
         $this->items = $items;
     }
 
@@ -32,7 +32,7 @@ class EvictingQueue
     {
         $this->items[] = $item;
 
-        if (count($this->items) > $this->size) {
+        if (count($this->items) > $this->capacity) {
             array_shift($this->items);
         }
 
