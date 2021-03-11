@@ -85,7 +85,10 @@ class ExceptionNotification
     private function format(): array
     {
         return [
-            'breadcrumbs' => $this->breadcrumbs->toArray(),
+            'breadcrumbs' => [
+                'enabled' => $this->config['breadcrumbs_enabled'],
+                'trail' => $this->breadcrumbs->toArray(),
+            ],
             'notifier' => $this->config['notifier'],
             'error' => [
                 'class' => get_class($this->throwable),
