@@ -57,6 +57,10 @@ class Config extends Repository
             'vendor_paths' => [
                 'vendor\/.*',
             ],
+            'breadcrumbs' => [
+                'enabled' => true,
+                'keep' => 40,
+            ],
         ], $config);
     }
 }

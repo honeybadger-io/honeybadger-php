@@ -12,7 +12,7 @@ use Honeybadger\Tests\Mocks\HoneybadgerClient;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class HoneyBadgerTest extends TestCase
+class HoneybadgerTest extends TestCase
 {
     /** @test */
     public function it_builds_a_backtrace()
@@ -724,5 +724,105 @@ class HoneyBadgerTest extends TestCase
         $this->assertEquals('index', $notification['request']['action']);
         $this->assertArrayNotHasKey('component', $notification['request']['context']);
         $this->assertArrayNotHasKey('action', $notification['request']['context']);
+    }
+
+    /** @test */
+    public function auto_adds_breadcrumb_for_notice_if_enabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+        $badger->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertTrue($notification['breadcrumbs']['enabled']);
+        $this->assertCount(1, $notification['breadcrumbs']['trail']);
+        $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs']['trail'][0]['message']);
+        $this->assertEquals('notice', $notification['breadcrumbs']['trail'][0]['category']);
+        $this->assertInstanceOf(\DateTime::class, date_create($notification['breadcrumbs']['trail'][0]['timestamp']));
+        $this->assertEquals([
+            'message' => 'Test exception',
+            'name' => Exception::class,
+        ], $notification['breadcrumbs']['trail'][0]['metadata']);
+    }
+
+    /** @test */
+    public function can_add_custom_breadcrumbs_if_enabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        sleep(1);
+        $eventTime = date('c');
+        $badger->addBreadcrumb('A thing', ['some' => 'data'], 'render')
+            ->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertTrue($notification['breadcrumbs']['enabled']);
+        $this->assertCount(2, $notification['breadcrumbs']['trail']);
+
+        $this->assertEquals('A thing', $notification['breadcrumbs']['trail'][0]['message']);
+        $this->assertEquals('render', $notification['breadcrumbs']['trail'][0]['category']);
+        $this->assertEquals($eventTime, $notification['breadcrumbs']['trail'][0]['timestamp']);
+        $this->assertEquals(['some' => 'data'], $notification['breadcrumbs']['trail'][0]['metadata']);
+
+        $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs']['trail'][1]['message']);
+        $this->assertEquals('notice', $notification['breadcrumbs']['trail'][1]['category']);
+        $this->assertInstanceOf(\DateTime::class, date_create($notification['breadcrumbs']['trail'][1]['timestamp']));
+        $this->assertEquals([
+            'message' => 'Test exception',
+            'name' => Exception::class,
+        ], $notification['breadcrumbs']['trail'][1]['metadata']);
+    }
+
+    /** @test */
+    public function wont_send_breadcrumbs_if_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'breadcrumbs' => [
+                'enabled' => false,
+            ],
+        ], $client->make());
+        $badger->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertIsArray($notification['breadcrumbs']);
+        $this->assertFalse($notification['breadcrumbs']['enabled']);
+        $this->assertCount(0, $notification['breadcrumbs']['trail']);
     }
 }

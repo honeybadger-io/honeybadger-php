@@ -21,8 +21,8 @@
         }
     ],
     "require": {
-        "ext-json": "*",
         "php": "^7.2|^8.0",
+        "ext-json": "*",
         "guzzlehttp/guzzle": "^6.3|^7.0.1",
         "monolog/monolog": "^2.0",
         "spatie/regex": "^1.4",

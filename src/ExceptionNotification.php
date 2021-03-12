@@ -21,6 +21,11 @@ class ExceptionNotification
     protected $context;
 
     /**
+     * @var \Honeybadger\Breadcrumbs
+     */
+    protected $breadcrumbs;
+
+    /**
      * @var \Throwable
      */
     protected $throwable;
@@ -46,13 +51,15 @@ class ExceptionNotification
     protected $additionalParams;
 
     /**
-     * @param  \Honeybadger\Config  $config
-     * @param  \Honeybadger\Support\Repository  $context
+     * @param \Honeybadger\Config $config
+     * @param \Honeybadger\Support\Repository $context
+     * @param \Honeybadger\Breadcrumbs $breadcrumbs
      */
-    public function __construct(Config $config, Repository $context)
+    public function __construct(Config $config, Repository $context, Breadcrumbs $breadcrumbs)
     {
         $this->config = $config;
         $this->context = $context;
+        $this->breadcrumbs = $breadcrumbs;
     }
 
     /**
@@ -78,6 +85,10 @@ class ExceptionNotification
     private function format(): array
     {
         return [
+            'breadcrumbs' => [
+                'enabled' => $this->config['breadcrumbs']['enabled'],
+                'trail' => $this->breadcrumbs->toArray(),
+            ],
             'notifier' => $this->config['notifier'],
             'error' => [
                 'class' => get_class($this->throwable),

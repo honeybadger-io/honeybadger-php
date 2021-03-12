@@ -42,6 +42,11 @@ class Honeybadger implements Reporter
     protected $context;
 
     /**
+     * @var \Honeybadger\Breadcrumbs
+     */
+    protected $breadcrumbs;
+
+    /**
      * @param  array  $config
      * @param  \GuzzleHttp\Client  $client
      */
@@ -51,6 +56,7 @@ class Honeybadger implements Reporter
 
         $this->client = new HoneybadgerClient($this->config, $client);
         $this->context = new Repository;
+        $this->breadcrumbs = new Breadcrumbs($this->config['breadcrumbs']['keep'] ?? 40);
 
         $this->setHandlers();
     }
@@ -64,10 +70,18 @@ class Honeybadger implements Reporter
             return [];
         }
 
-        $notification = (new ExceptionNotification($this->config, $this->context))
-            ->make($throwable, $request, $additionalParams);
+        $notification = new ExceptionNotification($this->config, $this->context, $this->breadcrumbs);
 
-        return $this->client->notification($notification);
+        if ($this->config['breadcrumbs']['enabled']) {
+            $this->addBreadcrumb('Honeybadger Notice', [
+                'message' => $throwable->getMessage(),
+                'name' => get_class($throwable),
+            ], 'notice');
+        }
+
+        return $this->client->notification(
+            $notification->make($throwable, $request, $additionalParams)
+        );
     }
 
     /**
@@ -130,6 +144,27 @@ class Honeybadger implements Reporter
     public function resetContext(): void
     {
         $this->context = new Repository;
+    }
+
+    public function addBreadcrumb(string $message, array $metadata = [], string $category = 'custom'): Reporter
+    {
+        if ($this->config['breadcrumbs']['enabled']) {
+            $this->breadcrumbs->add([
+                'message' => $message,
+                'metadata' => $metadata,
+                'category' => $category,
+            ]);
+        }
+
+        return $this;
+    }
+
+    public function clear(): Reporter
+    {
+        $this->context = new Repository;
+        $this->breadcrumbs->clear();
+
+        return $this;
     }
 
     /**

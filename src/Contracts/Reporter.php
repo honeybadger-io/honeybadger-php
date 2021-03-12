@@ -50,4 +50,25 @@ interface Reporter
      * @return self
      */
     public function context($key, $value = null);
+
+    /**
+     * Add a breadcrumb item.
+     *
+     * Breadcrumbs are records of events that happen within your app.
+     * A breadcrumb might be anything, such as a database query, log entry or external API call.
+     * Breadcrumbs can be useful when debugging, as they help you understand what events led up to an error.
+     * Our framework integrations will automatically add some breadcrumbs, but you can add yours manually with this method.
+     *
+     * @param string $message A brief description of the event represented by this breadcrumb, for example "Email Sent".
+     * @param array $metadata A map of contextual data about the event. This must be a simple key-value array at one level (no nesting allowed).
+     * @param string $category A key for grouping related events. You can use anything here, but we recommend following the list at https://docs.honeybadger.io/lib/php/guides/breadcrumbs.html#categories.
+     *
+     * @return $this
+     */
+    public function addBreadcrumb(string $message, array $metadata = [], string $category = 'custom'): self;
+
+    /**
+     * Clear all breadcrumbs and context.
+     */
+    public function clear(): self;
 }
