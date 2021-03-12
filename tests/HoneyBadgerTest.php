@@ -34,7 +34,7 @@ class HoneyBadgerTest extends TestCase
         $notification = $client->requestBody();
 
         $this->assertEquals([
-            'name' => 'Honeybadger PHP',
+            'name' => 'honeybadger-php',
             'version' => Honeybadger::VERSION,
             'url' => 'https://github.com/honeybadger-io/honeybadger-php',
         ], $notification['notifier']);
