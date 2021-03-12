@@ -750,7 +750,7 @@ class HoneybadgerTest extends TestCase
         $this->assertCount(1, $notification['breadcrumbs']['trail']);
         $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs']['trail'][0]['message']);
         $this->assertEquals('notice', $notification['breadcrumbs']['trail'][0]['category']);
-        $this->assertIsInt($notification['breadcrumbs']['trail'][0]['timestamp']);
+        $this->assertStringStartsWith(substr(date('c'), 0, 17), $notification['breadcrumbs']['trail'][0]['timestamp']);
         $this->assertEquals([
             'message' => 'Test exception',
             'name' => Exception::class,
@@ -773,7 +773,7 @@ class HoneybadgerTest extends TestCase
         ], $client->make());
 
         sleep(1);
-        $eventTime = time();
+        $eventTime = date('c');
         $badger->addBreadcrumb('A thing', ['some' => 'data'], 'render')
             ->setComponent('HomeController')
             ->setAction('index')
@@ -791,7 +791,7 @@ class HoneybadgerTest extends TestCase
 
         $this->assertEquals('Honeybadger Notice', $notification['breadcrumbs']['trail'][1]['message']);
         $this->assertEquals('notice', $notification['breadcrumbs']['trail'][1]['category']);
-        $this->assertIsInt($notification['breadcrumbs']['trail'][1]['timestamp']);
+        $this->assertStringStartsWith(substr(date('c'), 0, 17), $notification['breadcrumbs']['trail'][1]['timestamp']);
         $this->assertEquals([
             'message' => 'Test exception',
             'name' => Exception::class,
