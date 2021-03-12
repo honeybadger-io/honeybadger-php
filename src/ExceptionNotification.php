@@ -86,7 +86,7 @@ class ExceptionNotification
     {
         return [
             'breadcrumbs' => [
-                'enabled' => $this->config['breadcrumbs_enabled'],
+                'enabled' => $this->config['breadcrumbs']['enabled'],
                 'trail' => $this->breadcrumbs->toArray(),
             ],
             'notifier' => $this->config['notifier'],

@@ -811,7 +811,9 @@ class HoneybadgerTest extends TestCase
                 'exception' => false,
                 'error' => false,
             ],
-            'breadcrumbs_enabled' => false,
+            'breadcrumbs' => [
+                'enabled' => false,
+            ],
         ], $client->make());
         $badger->setComponent('HomeController')
             ->setAction('index')
