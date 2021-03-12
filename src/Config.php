@@ -25,7 +25,7 @@ class Config extends Repository
         return array_merge([
             'api_key' => null,
             'notifier' => [
-                'name' => 'Honeybadger PHP',
+                'name' => 'honeybadger-php',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
                 'version' => Honeybadger::VERSION,
             ],
