@@ -31,7 +31,7 @@ class Breadcrumbs extends EvictingQueue
         $sanitized = [];
         foreach ($data as $key => $value) {
             if (is_array($value) || is_object($value) || is_resource($value)) {
-                continue;
+                $value = "[DEPTH]";
             }
 
             if (is_string($value)) {

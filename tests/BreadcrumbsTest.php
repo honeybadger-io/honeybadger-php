@@ -78,6 +78,8 @@ class BreadcrumbsTest extends TestCase
                     'string' => 'hello',
                     'integer' => 3,
                     'float' => 3.5,
+                    'object' => '[DEPTH]',
+                    'array' => '[DEPTH]',
                 ],
                 'category' => 'custom',
                 'timestamp' => 123538954,
