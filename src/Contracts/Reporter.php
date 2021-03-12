@@ -61,7 +61,7 @@ interface Reporter
      *
      * @param string $message A brief description of the event represented by this breadcrumb, for example "Email Sent".
      * @param array $metadata A map of contextual data about the event. This must be a simple key-value array at one level (no nesting allowed).
-     * @param string $category A key for grouping related events. You can use anything here, but we recommend following the list at https://docs.honeybadger.io/lib/ruby/getting-started/breadcrumbs.html#categories.
+     * @param string $category A key for grouping related events. You can use anything here, but we recommend following the list at https://docs.honeybadger.io/lib/php/guides/breadcrumbs.html#categories.
      *
      * @return $this
      */
