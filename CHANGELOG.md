@@ -5,7 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.7.0] - 2021-08-09
+## [2.8.0] - 2021-03-16
+### Added
+- Added support for collecting breadcrumbs ([#141](https://github.com/honeybadger-io/honeybadger-php/pull/141))
+
+## [2.7.0] - 2021-03-09
 ### Added
 - Added support for array parameters and chaining in `context()` method ([#136](https://github.com/honeybadger-io/honeybadger-php/pull/136))
 

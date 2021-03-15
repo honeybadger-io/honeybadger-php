@@ -59,7 +59,6 @@ class Config extends Repository
             ],
             'breadcrumbs' => [
                 'enabled' => true,
-                'keep' => 40,
             ],
         ], $config);
     }

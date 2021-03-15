@@ -56,7 +56,7 @@ class Honeybadger implements Reporter
 
         $this->client = new HoneybadgerClient($this->config, $client);
         $this->context = new Repository;
-        $this->breadcrumbs = new Breadcrumbs($this->config['breadcrumbs']['keep'] ?? 40);
+        $this->breadcrumbs = new Breadcrumbs(40);
 
         $this->setHandlers();
     }

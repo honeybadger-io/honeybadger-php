@@ -50,7 +50,6 @@ class ConfigTest extends TestCase
             ],
             'breadcrumbs' => [
                 'enabled' => true,
-                'keep' => 40,
             ],
         ], $config);
     }
