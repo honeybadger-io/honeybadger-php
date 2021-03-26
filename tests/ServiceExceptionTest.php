@@ -51,9 +51,9 @@ class ServiceExceptionTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_a_generic_exception_if_all_else_fails()
+    public function it_throws_an_unexpected_response_code_exception_if_all_else_fails()
     {
-        $this->expectExceptionObject(ServiceException::generic());
+        $this->expectExceptionObject(ServiceException::unexpectedResponseCode(Response::HTTP_I_AM_A_TEAPOT));
 
         $response = new GuzzleResponse(Response::HTTP_I_AM_A_TEAPOT);
 

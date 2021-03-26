@@ -44,6 +44,6 @@ class ServiceExceptionFactory
             return ServiceException::serverError();
         }
 
-        return ServiceException::generic();
+        return ServiceException::unexpectedResponseCode($this->response->getStatusCode());
     }
 }

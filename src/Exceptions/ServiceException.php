@@ -38,8 +38,16 @@ class ServiceException extends Exception
         return new static('There was an error on our end.');
     }
 
+    public static function unexpectedResponseCode(int $code): self
+    {
+        return new static("Unexpected HTTP response code: $code");
+    }
+
     public static function generic(\Throwable $e = null): self
     {
-        return new static('There was an error sending the payload to Honeybadger: '.$e->getMessage(), 0, $e);
+        $message = $e
+            ? 'There was an error sending the payload to Honeybadger: '.$e->getMessage()
+            : 'There was an error sending the payload to Honeybadger.';
+        return new static($message, 0, $e);
     }
 }
