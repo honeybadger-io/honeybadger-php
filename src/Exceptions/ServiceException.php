@@ -48,6 +48,7 @@ class ServiceException extends Exception
         $message = $e
             ? 'There was an error sending the payload to Honeybadger: '.$e->getMessage()
             : 'There was an error sending the payload to Honeybadger.';
+
         return new static($message, 0, $e);
     }
 }
