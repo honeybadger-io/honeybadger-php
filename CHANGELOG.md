@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.8.1] - 2021-03-25
+### Fixed
+- Capture the previous exception when throwing generic ServiceException ([#143](https://github.com/honeybadger-io/honeybadger-php/pull/143))
+
+
 ## [2.8.0] - 2021-03-16
 ### Added
 - Added support for collecting breadcrumbs ([#141](https://github.com/honeybadger-io/honeybadger-php/pull/141))
