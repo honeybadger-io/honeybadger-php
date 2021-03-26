@@ -38,11 +38,8 @@ class ServiceException extends Exception
         return new static('There was an error on our end.');
     }
 
-    /**
-     * @return \Honeybadger\Exceptions\ServiceException
-     */
-    public static function generic(): self
+    public static function generic(\Throwable $e = null): self
     {
-        return new static('There was an error sending the payload to Honeybadger.');
+        return new static('There was an error sending the payload to Honeybadger: '.$e->getMessage(), 0, $e);
     }
 }
