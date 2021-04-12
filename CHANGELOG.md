@@ -7,12 +7,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.8.2] - 2021-04-12
 ### Added
-- Added `get()` method to config repository ([#141](https://github.com/honeybadger-io/honeybadger-php/commit/3800e78518618779279742cc375b1f61943f1dcc))
+- Added `get()` method to config repository ([#3800e78518618779279742cc375b1f61943f1dcc](https://github.com/honeybadger-io/honeybadger-php/commit/3800e78518618779279742cc375b1f61943f1dcc))
 
 ## [2.8.1] - 2021-03-25
 ### Fixed
 - Capture the previous exception when throwing generic ServiceException ([#143](https://github.com/honeybadger-io/honeybadger-php/pull/143))
-
 
 ## [2.8.0] - 2021-03-16
 ### Added
