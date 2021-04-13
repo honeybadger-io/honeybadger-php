@@ -23,7 +23,17 @@ class RepositoryTest extends TestCase
     }
 
     /** @test */
-    public function it_will_get_items()
+    public function it_can_get_an_item()
+    {
+        $repository = new Repository(['stringy' => 'haha', 'inty' => 2, 'arrayey' => ['qux']]);
+
+        $this->assertEquals('haha', $repository->get('stringy'));
+        $this->assertEquals(2, $repository->get('inty'));
+        $this->assertEquals(['qux'], $repository->get('arrayey'));
+    }
+
+    /** @test */
+    public function it_can_get_all_items()
     {
         $repository = new Repository(['foo' => 'bar', 'baz' => 'bax', 'qaz' => 'qux']);
 

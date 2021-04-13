@@ -26,7 +26,11 @@ class Repository implements \ArrayAccess
         return $this->items;
     }
 
-    public function get(string $key): ?array
+    /**
+     * @param  string  $key
+     * @return mixed
+     */
+    public function get(string $key)
     {
         return $this->items[$key] ?? null;
     }
