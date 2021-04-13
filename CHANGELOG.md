@@ -6,7 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ## [2.8.3] - 2021-04-13
-### Added
+### Fixed
 - Fix return type signature of `get()` method ([e340a6e7a16fa9f452bd2eb6731f7d488e85ef11](https://github.com/honeybadger-io/honeybadger-php/commit/e340a6e7a16fa9f452bd2eb6731f7d488e85ef11))
 
 ## [2.8.2] - 2021-04-12
