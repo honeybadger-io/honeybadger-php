@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.9.0] - 2021-05-09
+### Fixed
+- Make internal methods of client `protected` ([953c7b258bc75d33a7045c6005ed0a5eda3f9a11](https://github.com/honeybadger-io/honeybadger-php/commit/953c7b258bc75d33a7045c6005ed0a5eda3f9a11))
+
 ## [2.8.3] - 2021-04-13
 ### Fixed
 - Fix return type signature of `get()` method ([e340a6e7a16fa9f452bd2eb6731f7d488e85ef11](https://github.com/honeybadger-io/honeybadger-php/commit/e340a6e7a16fa9f452bd2eb6731f7d488e85ef11))
