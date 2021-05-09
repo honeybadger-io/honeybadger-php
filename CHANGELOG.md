@@ -6,7 +6,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ## [2.9.0] - 2021-05-09
-### Fixed
+### Modified
 - Make internal methods of client `protected` ([953c7b258bc75d33a7045c6005ed0a5eda3f9a11](https://github.com/honeybadger-io/honeybadger-php/commit/953c7b258bc75d33a7045c6005ed0a5eda3f9a11))
 
 ## [2.8.3] - 2021-04-13
