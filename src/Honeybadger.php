@@ -193,7 +193,7 @@ class Honeybadger implements Reporter
      * @param  \Throwable  $throwable
      * @return bool
      */
-    private function excludedException(Throwable $throwable): bool
+    protected function excludedException(Throwable $throwable): bool
     {
         return $throwable instanceof ServiceException
             || in_array(
@@ -206,7 +206,7 @@ class Honeybadger implements Reporter
      * @param  \Throwable  $throwable
      * @return bool
      */
-    private function shouldReport(Throwable $throwable): bool
+    protected function shouldReport(Throwable $throwable): bool
     {
         return ! $this->excludedException($throwable)
             && ! empty($this->config['api_key'])

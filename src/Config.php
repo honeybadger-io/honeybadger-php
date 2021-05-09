@@ -29,6 +29,8 @@ class Config extends Repository
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
                 'version' => Honeybadger::VERSION,
             ],
+            'environment_name' => 'production',
+            'report_data' => true,
             'service_exception_handler' => function (ServiceException $e) {
                 throw $e;
             },
@@ -42,7 +44,6 @@ class Config extends Repository
             'version' => '',
             'hostname' => gethostname(),
             'project_root' => '',
-            'environment_name' => 'production',
             'handlers' => [
                 'exception' => true,
                 'error' => true,
@@ -53,7 +54,6 @@ class Config extends Repository
                 'verify' => true,
             ],
             'excluded_exceptions' => [],
-            'report_data' => true,
             'vendor_paths' => [
                 'vendor\/.*',
             ],
