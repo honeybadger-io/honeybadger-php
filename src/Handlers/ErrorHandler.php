@@ -13,7 +13,7 @@ class ErrorHandler extends Handler implements HandlerContract
     protected $previousHandler;
 
     /**
-     * The fatal error types that cannot be silenced using the @ operator in PHP 8+.
+     * In PHP 8+, these error types are fatal and cannot be silenced with the @ operator.
      */
     private const PHP8_UNSILENCEABLE_ERRORS = [
         E_ERROR,
