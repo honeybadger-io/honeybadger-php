@@ -88,7 +88,7 @@ class HandlerTest extends TestCase
     public function does_not_ignore_php8_unsilenceable_errors()
     {
         if (PHP_MAJOR_VERSION < 8) {
-            $this->markTestSkipped("All errors can be silenced on PHP < 8");
+            $this->markTestSkipped('All errors can be silenced on PHP < 8');
         }
 
         // Cache previous error handler
@@ -98,7 +98,7 @@ class HandlerTest extends TestCase
         $mock->expects($this->once())->method('notify')
             ->willReturnCallback(function (Throwable $exception) {
                 $this->assertInstanceOf(\ErrorException::class, $exception);
-                $this->assertEquals("A fatal error which can not be silenced", $exception->getMessage());
+                $this->assertEquals('A fatal error which can not be silenced', $exception->getMessage());
 
                 return [];
             });
@@ -106,7 +106,7 @@ class HandlerTest extends TestCase
         $handler = new ErrorHandler($mock);
         $handler->register();
 
-        @trigger_error("A fatal error which can not be silenced", E_USER_ERROR);
+        @trigger_error('A fatal error which can not be silenced', E_USER_ERROR);
 
         // Restore PHPUnit's handler
         set_error_handler($previousHandler);

@@ -21,7 +21,7 @@ class ErrorHandler extends Handler implements HandlerContract
         E_CORE_ERROR,
         E_COMPILE_ERROR,
         E_USER_ERROR,
-        E_RECOVERABLE_ERROR
+        E_RECOVERABLE_ERROR,
     ];
 
     /**
