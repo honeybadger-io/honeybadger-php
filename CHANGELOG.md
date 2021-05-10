@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.9.1] - 2021-05-09
+### Fixed
+- Allow for spatie/regex v2 ([#148](https://github.com/honeybadger-io/honeybadger-php/pull/148))
+
 ## [2.9.0] - 2021-05-09
 ### Modified
 - Make internal methods of client `protected` ([953c7b258bc75d33a7045c6005ed0a5eda3f9a11](https://github.com/honeybadger-io/honeybadger-php/commit/953c7b258bc75d33a7045c6005ed0a5eda3f9a11))
