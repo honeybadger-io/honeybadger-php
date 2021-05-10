@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.9.1] - 2021-05-09
+## [2.9.1] - 2021-05-10
 ### Fixed
 - Allow for spatie/regex v2 ([#148](https://github.com/honeybadger-io/honeybadger-php/pull/148))
 
