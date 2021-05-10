@@ -32,7 +32,7 @@ class ErrorHandler extends Handler implements HandlerContract
         $this->previousHandler = set_error_handler([$this, 'handle']);
     }
 
-    public function handle(int $level, string $error, string $file = null, int $line = null): bool
+    public function handle(int $level, string $error, string $file = null, int $line = null)
     {
         // When the @ operator is used, it temporarily changes `error_reporting()`'s return value
         // to reflect what error types should be reported. This means we should get 0 (no errors).
@@ -46,8 +46,9 @@ class ErrorHandler extends Handler implements HandlerContract
             } else {
                 // If an error is silenced, `error_reporting()` won't return 0,
                 // but rather a bitmask of the unsilenceable errors.
-                $unsilenceableErrorsBitmask = array_reduce(self::PHP8_UNSILENCEABLE_ERRORS, function ($bitMask, $errLevel) {
-                    return $bitMask | $errLevel;
+                $unsilenceableErrorsBitmask = array_reduce(
+                    self::PHP8_UNSILENCEABLE_ERRORS, function ($bitMask, $errLevel) {
+                        return $bitMask | $errLevel;
                 });
                 $isSilenced = $errorReportingLevel === $unsilenceableErrorsBitmask;
             }
