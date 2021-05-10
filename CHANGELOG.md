@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.9.2] - 2021-05-10
+### Fixed
+- Handle silenced errors properly on PHP 8 ([#149](https://github.com/honeybadger-io/honeybadger-php/pull/149))
+
 ## [2.9.1] - 2021-05-10
 ### Fixed
 - Allow for spatie/regex v2 ([#148](https://github.com/honeybadger-io/honeybadger-php/pull/148))
