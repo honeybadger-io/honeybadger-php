@@ -428,6 +428,28 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function allows_for_custom_endpoint()
+    {
+        $host = 'invalid.url.reallyinvalid';
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'endpoint' => "http://$host/invalid",
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ]);
+
+        try {
+            $badger->notify(new Exception('Test exception'));
+        } catch (ServiceException $e) {
+            $this->assertStringContainsString($host, $e->getPrevious()->getMessage());
+        }
+
+    }
+
+    /** @test */
     public function it_doesnt_report_service_exceptions()
     {
         $client = HoneybadgerClient::new([

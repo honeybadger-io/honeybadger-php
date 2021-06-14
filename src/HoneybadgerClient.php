@@ -43,7 +43,7 @@ class HoneybadgerClient
                 ['body' => json_encode($notification, JSON_PARTIAL_OUTPUT_ON_ERROR)]
             );
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic());
+            $this->handleServiceException(ServiceException::generic($e));
 
             return [];
         }
@@ -68,7 +68,7 @@ class HoneybadgerClient
         try {
             $response = $this->client->head(sprintf('check_in/%s', $key));
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic());
+            $this->handleServiceException(ServiceException::generic($e));
 
             return;
         }
@@ -92,7 +92,7 @@ class HoneybadgerClient
     private function makeClient(): Client
     {
         return new Client([
-            'base_uri' => Honeybadger::API_URL,
+            'base_uri' => $this->config['endpoint'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::HEADERS => [
                 'X-API-Key' => $this->config['api_key'],
