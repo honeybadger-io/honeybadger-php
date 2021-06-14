@@ -2,7 +2,6 @@
 
 namespace Honeybadger\Exceptions;
 
-use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 

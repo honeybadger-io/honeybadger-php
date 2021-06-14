@@ -39,7 +39,7 @@ class ConfigTest extends TestCase
                 'error' => true,
             ],
             'client' => [
-                'timeout' => 0,
+                'timeout' => 15,
                 'proxy' => [],
                 'verify' => true,
             ],
