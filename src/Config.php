@@ -49,7 +49,7 @@ class Config extends Repository
                 'error' => true,
             ],
             'client' => [
-                'timeout' => 0,
+                'timeout' => 15,
                 'proxy' => [],
                 'verify' => true,
             ],
