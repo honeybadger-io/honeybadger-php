@@ -39,7 +39,7 @@ class HoneybadgerClient
     {
         try {
             $response = $this->client->post(
-                'notices',
+                'v1/notices',
                 ['body' => json_encode($notification, JSON_PARTIAL_OUTPUT_ON_ERROR)]
             );
         } catch (Throwable $e) {
@@ -66,7 +66,7 @@ class HoneybadgerClient
     public function checkin(string $key): void
     {
         try {
-            $response = $this->client->head(sprintf('check_in/%s', $key));
+            $response = $this->client->head(sprintf('v1/check_in/%s', $key));
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic($e));
 

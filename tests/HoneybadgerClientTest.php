@@ -78,7 +78,7 @@ class HoneybadgerClientTest extends TestCase
 
         $clientMock = Mockery::mock(Client::class);
         $clientMock->shouldReceive('post')
-            ->with('notices', ['body' => '{"data":null}'])
+            ->with('v1/notices', ['body' => '{"data":null}'])
             ->andReturn($responseMock);
 
         $client = new HoneybadgerClient($config, $clientMock);

@@ -24,7 +24,7 @@ class Honeybadger implements Reporter
     /**
      * Honeybadger API URL.
      */
-    const API_URL = 'https://api.honeybadger.io/v1/';
+    const API_URL = 'https://api.honeybadger.io/';
 
     /**
      * @var \Honeybadger\HoneybadgerClient;
