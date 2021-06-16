@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.10.0] - 2021-06-16
+### Added
+- Add endpoint config option ([#150](https://github.com/honeybadger-io/honeybadger-php/pull/150))
+- Set default client timeout ([#151](https://github.com/honeybadger-io/honeybadger-php/pull/151))
+
 ## [2.9.2] - 2021-05-10
 ### Fixed
 - Handle silenced errors properly on PHP 8 ([#149](https://github.com/honeybadger-io/honeybadger-php/pull/149))
