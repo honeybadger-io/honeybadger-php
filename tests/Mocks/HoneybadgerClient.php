@@ -9,12 +9,22 @@ class HoneybadgerClient extends Client
         return $this->calls();
     }
 
-    public function requestBody()
+    /**
+     * @return \GuzzleHttp\Psr7\Request|null
+     */
+    public function getLatestRequest()
     {
         if ($calls = $this->calls()) {
-            $lastCall = $calls[count($calls) - 1];
+            return $calls[count($calls) - 1]['request'];
+        }
 
-            return json_decode($lastCall['request']->getBody(), true);
+        return null;
+    }
+
+    public function requestBody()
+    {
+        if ($latestRequest = $this->getLatestRequest()) {
+            return json_decode($latestRequest->getBody(), true);
         }
 
         return null;

@@ -18,6 +18,7 @@ class ConfigTest extends TestCase
 
         $this->assertEquals([
             'api_key' => '1234',
+            'endpoint' => Honeybadger::API_URL,
             'notifier' => [
                 'name' => 'honeybadger-php',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',

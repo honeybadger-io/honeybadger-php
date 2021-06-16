@@ -24,7 +24,7 @@ class Client
         ];
     }
 
-    public function make($responses = null)
+    public function make()
     {
         $stack = HandlerStack::create(new MockHandler($this->responses));
 

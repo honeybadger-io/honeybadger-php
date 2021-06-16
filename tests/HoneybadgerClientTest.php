@@ -18,7 +18,7 @@ class HoneybadgerClientTest extends TestCase
     public function throws_generic_exception_for_notifications()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger.');
+        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();
@@ -32,7 +32,7 @@ class HoneybadgerClientTest extends TestCase
     public function throws_generic_exception_for_checkins()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger.');
+        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();
@@ -58,7 +58,7 @@ class HoneybadgerClientTest extends TestCase
         $client = new HoneybadgerClient($config, $mock);
         $client->notification([]);
 
-        $this->assertEquals('There was an error sending the payload to Honeybadger.', $message);
+        $this->assertStringContainsString('There was an error sending the payload to Honeybadger', $message);
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class HoneybadgerClientTest extends TestCase
 
         $clientMock = Mockery::mock(Client::class);
         $clientMock->shouldReceive('post')
-            ->with('notices', ['body' => '{"data":null}'])
+            ->with('v1/notices', ['body' => '{"data":null}'])
             ->andReturn($responseMock);
 
         $client = new HoneybadgerClient($config, $clientMock);

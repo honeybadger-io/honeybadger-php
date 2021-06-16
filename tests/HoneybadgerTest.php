@@ -258,7 +258,7 @@ class HoneybadgerTest extends TestCase
 
         $request = $client->request()[0]['request'];
 
-        $this->assertEquals('check_in/1234', $request->getUri()->getPath());
+        $this->assertEquals('v1/check_in/1234', $request->getUri()->getPath());
     }
 
     /** @test */
@@ -425,6 +425,28 @@ class HoneybadgerTest extends TestCase
         ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
+    }
+
+    /** @test */
+    public function allows_for_custom_endpoint()
+    {
+        $host = 'invalid.url.reallyinvalid';
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'endpoint' => "http://$host/invalid",
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ]);
+
+        try {
+            $badger->notify(new Exception('Test exception'));
+        } catch (ServiceException $e) {
+            $this->assertStringContainsString($host, $e->getPrevious()->getMessage());
+        }
+
     }
 
     /** @test */
