@@ -45,7 +45,7 @@ class LogHandlerTest extends TestCase
         $logger = new Logger('test-logger');
         $logger->pushHandler(new LogHandler($reporter));
 
-        $logger->info('Test log message');
+        $logger->info('Test log message', ['some' => 'data']);
 
         $this->assertEquals([
             'notifier' => [
@@ -55,17 +55,15 @@ class LogHandlerTest extends TestCase
             ],
             'request' => [
                 'context' => [
-                    'context' => [],
                     'level_name' => 'INFO',
                     'log_channel' => 'test-logger',
-                    'message' => 'Test log message',
+                    'some' => 'data',
                 ],
             ],
-            'server' => [
-                'time' => (new DateTime)->format(DateTime::ISO8601),
-                'environment_name' => 'production',
-            ],
-        ], array_only($reporter->notification, ['notifier', 'request', 'server']));
+        ], array_only($reporter->notification, ['notifier', 'request',]));
+
+        $this->assertArrayHasKey('time', $reporter->notification['server']);
+        $this->assertEquals('production', $reporter->notification['server']['environment_name']);
 
         $this->assertEquals([
             'class' => 'INFO Log',
@@ -73,6 +71,67 @@ class LogHandlerTest extends TestCase
             'tags' => [
                 'log',
                 'test-logger.INFO',
+            ],
+        ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
+
+        $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
+    }
+
+    /** @test */
+    public function formats_exception_logs_properly()
+    {
+        $reporter = new class extends Honeybadger {
+            public $notification;
+
+            public function __construct()
+            {
+                parent::__construct();
+            }
+
+            public function rawNotification(callable $fn): array
+            {
+                $this->notification = $fn($this->config);
+
+                return [];
+            }
+        };
+
+        $logger = new Logger('test-logger');
+        $logger->pushHandler(new LogHandler($reporter));
+
+        $e = new \InvalidArgumentException('Baa baa');
+        $logger->error('Test log message', ['exception' => $e]);
+
+        $this->assertEquals([
+            'notifier' => [
+                'name' => 'Honeybadger Log Handler',
+                'url' => 'https://github.com/honeybadger-io/honeybadger-php',
+                'version' => Honeybadger::VERSION,
+            ],
+            'request' => [
+                'context' => [
+                    'level_name' => 'ERROR',
+                    'log_channel' => 'test-logger',
+                    'exception' => [
+                        'message' => $e->getMessage(),
+                        'code' => $e->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => $e->getTrace(),
+                    ],
+                ],
+            ],
+        ], array_only($reporter->notification, ['notifier', 'request',]));
+
+        $this->assertArrayHasKey('time', $reporter->notification['server']);
+        $this->assertEquals('production', $reporter->notification['server']['environment_name']);
+
+        $this->assertEquals([
+            'class' => get_class($e),
+            'message' => $e->getMessage(),
+            'tags' => [
+                'log',
+                'test-logger.ERROR',
             ],
         ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
 
