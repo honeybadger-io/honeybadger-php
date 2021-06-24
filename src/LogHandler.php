@@ -35,7 +35,7 @@ class LogHandler extends AbstractProcessingHandler
         $this->honeybadger->rawNotification(function ($config) use ($record) {
             return [
                 'notifier' => array_merge($config['notifier'], ['name' => 'Honeybadger Log Handler']),
-                'error' => $this->getHoneybadgerErrorFromMonologRecord($record),
+                'error' => $this->getHoneybadgerErrorFromMonologRecord($record, $config),
                 'request' => [
                     'context' => $this->getHoneybadgerContextFromMonologRecord($record),
                 ],
@@ -55,7 +55,7 @@ class LogHandler extends AbstractProcessingHandler
         return new LineFormatter('[%datetime%] %channel%.%level_name%: %message%');
     }
 
-    protected function getHoneybadgerErrorFromMonologRecord(array $record): array
+    protected function getHoneybadgerErrorFromMonologRecord(array $record, $config): array
     {
         $error = [
             'tags' => [
@@ -68,6 +68,7 @@ class LogHandler extends AbstractProcessingHandler
         if ($e instanceof \Throwable) {
             $error['class'] = get_class($e);
             $error['message'] = $e->getMessage();
+            $error['backtrace'] = (new BacktraceFactory($e, $config))->trace();
         } else {
             $error['class'] = "{$record['level_name']} Log";
             $error['message'] = $record['message'];
@@ -90,7 +91,6 @@ class LogHandler extends AbstractProcessingHandler
                 'code' => $e->getCode(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTrace(),
             ];
         }
 

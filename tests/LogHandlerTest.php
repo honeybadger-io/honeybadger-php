@@ -2,6 +2,8 @@
 
 namespace Honeybadger\Tests;
 
+use Honeybadger\BacktraceFactory;
+use Honeybadger\Config;
 use Honeybadger\Contracts\Reporter;
 use Honeybadger\Honeybadger;
 use Honeybadger\LogHandler;
@@ -116,7 +118,6 @@ class LogHandlerTest extends TestCase
                         'code' => $e->getCode(),
                         'file' => $e->getFile(),
                         'line' => $e->getLine(),
-                        'trace' => $e->getTrace(),
                     ],
                 ],
             ],
@@ -128,11 +129,12 @@ class LogHandlerTest extends TestCase
         $this->assertEquals([
             'class' => get_class($e),
             'message' => $e->getMessage(),
+            'backtrace' => (new BacktraceFactory($e, new Config([])))->trace(),
             'tags' => [
                 'log',
                 'test-logger.ERROR',
             ],
-        ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
+        ], array_except($reporter->notification['error'], ['fingerprint']));
 
         $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
     }
