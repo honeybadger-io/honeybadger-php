@@ -2,7 +2,6 @@
 
 namespace Honeybadger\Tests;
 
-use DateTime;
 use Honeybadger\Contracts\Reporter;
 use Honeybadger\Honeybadger;
 use Honeybadger\LogHandler;
@@ -60,7 +59,7 @@ class LogHandlerTest extends TestCase
                     'some' => 'data',
                 ],
             ],
-        ], array_only($reporter->notification, ['notifier', 'request',]));
+        ], array_only($reporter->notification, ['notifier', 'request']));
 
         $this->assertArrayHasKey('time', $reporter->notification['server']);
         $this->assertEquals('production', $reporter->notification['server']['environment_name']);
@@ -121,7 +120,7 @@ class LogHandlerTest extends TestCase
                     ],
                 ],
             ],
-        ], array_only($reporter->notification, ['notifier', 'request',]));
+        ], array_only($reporter->notification, ['notifier', 'request']));
 
         $this->assertArrayHasKey('time', $reporter->notification['server']);
         $this->assertEquals('production', $reporter->notification['server']['environment_name']);

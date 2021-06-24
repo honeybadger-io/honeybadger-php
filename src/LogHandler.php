@@ -2,7 +2,6 @@
 
 namespace Honeybadger;
 
-use DateTime;
 use Honeybadger\Contracts\Reporter;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Formatter\LineFormatter;
