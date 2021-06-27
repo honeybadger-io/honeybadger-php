@@ -62,7 +62,7 @@ class LogHandler extends AbstractProcessingHandler
                 'log',
                 sprintf('%s.%s', $record['channel'], $record['level_name']),
             ],
-            'fingerprint' => md5($record['message']),
+            'fingerprint' => md5($record['level_name'].$record['message']),
         ];
         $e = $record['context']['exception'] ?? null;
         if ($e instanceof \Throwable) {
