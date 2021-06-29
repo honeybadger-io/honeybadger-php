@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.11.0] - 2021-06-29
+### Added
+- Improve how Monolog messages are formatted/displayed ([#152](https://github.com/honeybadger-io/honeybadger-php/pull/152))
+
 ## [2.10.0] - 2021-06-16
 ### Added
 - Add endpoint config option ([#150](https://github.com/honeybadger-io/honeybadger-php/pull/150))
