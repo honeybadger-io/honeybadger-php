@@ -5,6 +5,7 @@ namespace Honeybadger\Tests;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use GuzzleHttp\Psr7\Utils;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\HoneybadgerClient;
@@ -72,7 +73,7 @@ class HoneybadgerClientTest extends TestCase
         $responseMock = Mockery::mock(GuzzleResponse::class)
             ->shouldReceive([
                 'getStatusCode' => Response::HTTP_CREATED,
-                'getBody' => '',
+                'getBody' => Utils::streamFor(''),
             ])
             ->getMock();
 
