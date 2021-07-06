@@ -73,7 +73,8 @@ class HoneybadgerClientTest extends TestCase
         $responseMock = Mockery::mock(GuzzleResponse::class)
             ->shouldReceive([
                 'getStatusCode' => Response::HTTP_CREATED,
-                'getBody' => Utils::streamFor(''),
+                // Utils was added in a newer version of Guzzle
+                'getBody' => class_exists(Utils::class) ? Utils::streamFor('') : '',
             ])
             ->getMock();
 
