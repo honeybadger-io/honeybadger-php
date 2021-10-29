@@ -4,6 +4,7 @@ namespace Honeybadger;
 
 use Honeybadger\Concerns\FiltersData;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
+use function GuzzleHttp\Psr7\parse_query;
 
 class Request
 {
@@ -33,9 +34,26 @@ class Request
      */
     public function url(): string
     {
-        return $this->httpRequest()
+        $url = $this->httpRequest()
             ? $this->request->getUri()
             : '';
+
+        if (!$url) {
+            return $url;
+        }
+
+        // Manually filter out sensitive data from URL query string
+        $queryString = parse_url($url, PHP_URL_QUERY);
+        $filteredQueryParams = array_map(function ($keyAndValue) {
+            $parts = explode('=', $keyAndValue);
+            if (isset($parts[1]) && in_array($parts[0], $this->keysToFilter)) {
+                return "{$parts[0]}=[FILTERED]";
+            }
+
+            return $keyAndValue;
+        }, explode('&', $queryString));
+
+        return str_replace($queryString, implode('&', $filteredQueryParams), $url);
     }
 
     /**

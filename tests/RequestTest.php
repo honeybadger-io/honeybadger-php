@@ -132,6 +132,7 @@ class RequestTest extends TestCase
 
         $request->overrideGlobals();
 
+        $filteredRequest = (new Request($request))->filterKeys(['query2']);
         $this->assertEquals([
             'method' => 'GET',
             'query' => [
@@ -139,7 +140,8 @@ class RequestTest extends TestCase
                 'query2' => '[FILTERED]',
             ],
             'data' => [],
-        ], (new Request($request))->filterKeys(['query2'])->params());
+        ], $filteredRequest->params());
+        $this->assertEquals('http://honeybadger.dev/test?query1=foo&query2=[FILTERED]', $filteredRequest->url());
     }
 
     /** @test */
