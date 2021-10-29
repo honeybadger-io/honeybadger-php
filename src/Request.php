@@ -46,7 +46,8 @@ class Request
         $queryString = parse_url($url, PHP_URL_QUERY);
         $filteredQueryParams = array_map(function ($keyAndValue) {
             $parts = explode('=', $keyAndValue);
-            if (isset($parts[1]) && in_array($parts[0], $this->keysToFilter)) {
+            if (isset($parts[1]) && $parts[1] !== ''
+                && in_array($parts[0], $this->keysToFilter)) {
                 return "{$parts[0]}=[FILTERED]";
             }
 

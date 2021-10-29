@@ -37,7 +37,7 @@ trait FiltersData
                 return $this->filter($value);
             }
 
-            if (in_array($key, $this->keysToFilter)) {
+            if ($value !== '' && in_array($key, $this->keysToFilter)) {
                 return '[FILTERED]';
             }
 
