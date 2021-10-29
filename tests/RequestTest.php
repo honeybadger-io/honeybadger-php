@@ -152,7 +152,7 @@ class RequestTest extends TestCase
                 'query1' => 'foo',
                 'query2' => '[FILTERED]',
             ],
-            'http://honeybadger.dev/test?query1=foo&query2=[FILTERED]'
+            'http://honeybadger.dev/test?query1=foo&query2=[FILTERED]',
         ];
         yield 'with empty value' => [
             'http://honeybadger.dev/test?query1=foo&query2=',
@@ -160,7 +160,7 @@ class RequestTest extends TestCase
                 'query1' => 'foo',
                 'query2' => '',
             ],
-            'http://honeybadger.dev/test?query1=foo&query2='
+            'http://honeybadger.dev/test?query1=foo&query2=',
         ];
     }
 

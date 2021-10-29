@@ -4,7 +4,6 @@ namespace Honeybadger;
 
 use Honeybadger\Concerns\FiltersData;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
-use function GuzzleHttp\Psr7\parse_query;
 
 class Request
 {
@@ -38,7 +37,7 @@ class Request
             ? $this->request->getUri()
             : '';
 
-        if (!$url) {
+        if (! $url) {
             return $url;
         }
 
