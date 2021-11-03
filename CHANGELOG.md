@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Filter configured query parameters from the URL ([#154](https://github.com/honeybadger-io/honeybadger-php/pull/154))
 
 ## [2.11.0] - 2021-06-29
 ### Added

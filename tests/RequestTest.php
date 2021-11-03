@@ -122,24 +122,46 @@ class RequestTest extends TestCase
         );
     }
 
-    /** @test */
-    public function it_filters_query_params()
+    /**
+     * @dataProvider queryParamUrls
+     * @test
+     */
+    public function it_filters_query_params($url, $filteredQueryParams, $filteredUrl)
     {
         $request = FoundationRequest::create(
-            'http://honeybadger.dev/test?query1=foo&query2=bar',
+            $url,
             'GET'
         );
 
         $request->overrideGlobals();
 
+        $filteredRequest = (new Request($request))->filterKeys(['query2']);
         $this->assertEquals([
             'method' => 'GET',
-            'query' => [
+            'query' => $filteredQueryParams,
+            'data' => [],
+        ], $filteredRequest->params());
+        $this->assertEquals($filteredUrl, $filteredRequest->url());
+    }
+
+    public function queryParamUrls()
+    {
+        yield 'with value' => [
+            'http://honeybadger.dev/test?query1=foo&query2=bar',
+            [
                 'query1' => 'foo',
                 'query2' => '[FILTERED]',
             ],
-            'data' => [],
-        ], (new Request($request))->filterKeys(['query2'])->params());
+            'http://honeybadger.dev/test?query1=foo&query2=[FILTERED]',
+        ];
+        yield 'with empty value' => [
+            'http://honeybadger.dev/test?query1=foo&query2=',
+            [
+                'query1' => 'foo',
+                'query2' => '',
+            ],
+            'http://honeybadger.dev/test?query1=foo&query2=',
+        ];
     }
 
     /** @test */
