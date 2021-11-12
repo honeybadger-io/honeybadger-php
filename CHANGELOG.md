@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Fixed
-- Filter configured query parameters from the URL in environment variables ([#155](https://github.com/honeybadger-io/honeybadger-php/pull/155))
+- Remove unnecessary environment variables ([#155](https://github.com/honeybadger-io/honeybadger-php/pull/155))
 
 ## [2.11.1] - 2021-11-03
 ### Fixed

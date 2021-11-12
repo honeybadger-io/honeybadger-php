@@ -9,39 +9,37 @@ class Environment
     use FiltersData;
 
     const KEY_WHITELIST = [
-        'PHP_SELF',
         'argv',
         'argc',
-        'GATEWAY_INTERFACE',
-        'SERVER_ADDR',
-        'SERVER_NAME',
-        'SERVER_SOFTWARE',
-        'SERVER_PROTOCOL',
-        'REQUEST_METHOD',
-        'REQUEST_TIME',
-        'REQUEST_TIME_FLOAT',
-        'QUERY_STRING',
+        'APP_ENV',
+        'AUTH_TYPE',
         'DOCUMENT_ROOT',
+        'GATEWAY_INTERFACE',
         'HTTPS',
+        'ORIG_PATH_INFO',
+        'PATH_INFO',
+        'PATH_TRANSLATED',
+        'PHP_AUTH_DIGEST',
+        'PHP_AUTH_USER',
+        'PHP_AUTH_PW',
+        'PHP_SELF',
+        'REDIRECT_REMOTE_USER',
         'REMOTE_ADDR',
         'REMOTE_HOST',
         'REMOTE_PORT',
         'REMOTE_USER',
-        'REDIRECT_REMOTE_USER',
+        'REQUEST_METHOD',
+        'REQUEST_TIME',
+        'REQUEST_TIME_FLOAT',
+        'SCRIPT_NAME',
+        'SERVER_ADDR',
+        'SERVER_NAME',
+        'SERVER_SOFTWARE',
+        'SERVER_PROTOCOL',
         'SCRIPT_FILENAME',
         'SERVER_ADMIN',
         'SERVER_PORT',
         'SERVER_SIGNATURE',
-        'PATH_TRANSLATED',
-        'SCRIPT_NAME',
-        'REQUEST_URI',
-        'PHP_AUTH_DIGEST',
-        'PHP_AUTH_USER',
-        'PHP_AUTH_PW',
-        'AUTH_TYPE',
-        'PATH_INFO',
-        'ORIG_PATH_INFO',
-        'APP_ENV',
     ];
 
     /**
@@ -54,10 +52,6 @@ class Environment
      */
     protected $server = [];
 
-    /**
-     * @param  array  $server
-     * @param  array  $env
-     */
     public function __construct(array $server = null, array $env = null)
     {
         $this->server = array_merge(
