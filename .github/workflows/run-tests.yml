@@ -3,6 +3,8 @@ name: Run Tests
 on: 
   push:
   pull_request:
+  schedule:
+    - cron: "0 0 * * *"
 
 jobs:
   run:
@@ -10,7 +12,7 @@ jobs:
     strategy:
       matrix:
         composer-flags: ["--prefer-stable", "--prefer-lowest"]
-        php-versions: ['7.3', '7.4', '8.0']
+        php-versions: ['7.3', '7.4', '8.0', '8.1']
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
     - name: Checkout

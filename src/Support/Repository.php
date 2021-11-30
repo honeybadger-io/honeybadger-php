@@ -66,6 +66,7 @@ class Repository implements \ArrayAccess
      * @param  int|string  $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->items[$offset];

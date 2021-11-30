@@ -136,7 +136,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new InvalidArgumentException('Exception One');
         } catch (InvalidArgumentException $e) {
-            throw new RuntimeException('Exception Two', null, $e);
+            throw new RuntimeException('Exception Two', 0, $e);
         }
     }
 
