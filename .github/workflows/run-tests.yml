@@ -13,6 +13,8 @@ jobs:
       matrix:
         composer-flags: ["--prefer-stable", "--prefer-lowest"]
         php-versions: ['7.3', '7.4', '8.0', '8.1']
+        exclude:
+          - {php-versions: '8.1', composer-flags: "--prefer-lowest"}
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
     - name: Checkout
