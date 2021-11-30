@@ -4,8 +4,11 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.11.2] - 2021-11-30
 ### Fixed
 - Remove unnecessary environment variables ([#155](https://github.com/honeybadger-io/honeybadger-php/pull/155))
+- PHP 8.1 fixes ([092b1bb7e8b2733fad40d6724a59e4370391a8e9](https://github.com/honeybadger-io/honeybadger-php/commit/092b1bb7e8b2733fad40d6724a59e4370391a8e9)))
 
 ## [2.11.1] - 2021-11-03
 ### Fixed
