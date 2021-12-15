@@ -42,7 +42,7 @@ class Request
         }
 
         // Manually filter out sensitive data from URL query string
-        $queryString = parse_url($url, PHP_URL_QUERY);
+        $queryString = parse_url($url, PHP_URL_QUERY) ?? '';
         $filteredQueryParams = array_map(function ($keyAndValue) {
             $parts = explode('=', $keyAndValue);
             if (isset($parts[1]) && $parts[1] !== ''
