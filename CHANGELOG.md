@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.11.3] - 2022-02-07
 ### Fixed
 - Fix deprecation warning for type mismatch on PHP 8.1 ([#158](https://github.com/honeybadger-io/honeybadger-php/pull/158))
 

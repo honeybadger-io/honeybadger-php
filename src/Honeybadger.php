@@ -19,7 +19,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.11.2';
+    const VERSION = '2.11.3';
 
     /**
      * Honeybadger API URL.
@@ -46,10 +46,6 @@ class Honeybadger implements Reporter
      */
     protected $breadcrumbs;
 
-    /**
-     * @param  array  $config
-     * @param  \GuzzleHttp\Client  $client
-     */
     public function __construct(array $config = [], Client $client = null)
     {
         $this->config = new Config($config);
