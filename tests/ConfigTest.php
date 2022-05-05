@@ -45,6 +45,7 @@ class ConfigTest extends TestCase
                 'verify' => true,
             ],
             'excluded_exceptions' => [],
+            'capture_deprecations' => false,
             'report_data' => true,
             'vendor_paths' => [
                 'vendor\/.*',
