@@ -53,7 +53,7 @@ class Request
             return $keyAndValue;
         }, explode('&', $queryString));
 
-        return str_replace($queryString, implode('&', $filteredQueryParams), $url);
+        return str_replace($queryString || '', implode('&', $filteredQueryParams), $url);
     }
 
     /**

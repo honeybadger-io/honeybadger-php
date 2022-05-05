@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use ErrorException;
 use Honeybadger\Support\Arr;
 use Honeybadger\Support\Repository;
 use stdClass;
@@ -91,7 +92,7 @@ class ExceptionNotification
             ],
             'notifier' => $this->config['notifier'],
             'error' => [
-                'class' => get_class($this->throwable),
+                'class' => $this->getExceptionType(),
                 'message' => $this->throwable->getMessage(),
                 'backtrace' => $this->backtrace->trace(),
                 'causes' => $this->backtrace->previous(),
@@ -144,5 +145,42 @@ class ExceptionNotification
     {
         return (new Request($request))
             ->filterKeys($this->config['request']['filter']);
+    }
+
+    private function getExceptionType(): string
+    {
+        // ErrorExceptions are not exceptions, but wrappers around errors.
+        if ($this->throwable instanceof ErrorException) {
+            $severity = $this->throwable->getSeverity();
+            $severityName = $this->friendlyErrorName($severity);
+
+            return $severity == E_DEPRECATED || $severity == E_USER_DEPRECATED
+                ? "Deprecation Error ($severityName)"
+                : "Error ($severityName)";
+        }
+
+        return get_class($this->throwable);
+    }
+
+    protected function friendlyErrorName(int $severity): string
+    {
+        // See https://www.php.net/manual/en/errorfunc.constants.php
+        return [
+            E_ERROR => 'E_ERROR',
+            E_WARNING => 'E_WARNING',
+            E_PARSE => 'E_PARSE',
+            E_NOTICE => 'E_NOTICE',
+            E_CORE_ERROR => 'E_CORE_ERROR',
+            E_CORE_WARNING => 'E_CORE_WARNING',
+            E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+            E_USER_ERROR => 'E_USER_ERROR',
+            E_USER_WARNING => 'E_USER_WARNING',
+            E_USER_NOTICE => 'E_USER_NOTICE',
+            E_STRICT => 'E_STRICT',
+            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+            E_DEPRECATED => 'E_DEPRECATED',
+            E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+        ][$severity] ?? '';
     }
 }
