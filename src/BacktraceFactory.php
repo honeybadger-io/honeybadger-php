@@ -80,7 +80,7 @@ class BacktraceFactory
             // For errors (ie not exceptions), the trace wrongly starts from
             // when we created the wrapping ErrorException class.
             // So we unwind it to the actual error location
-            while (strpos($backtrace[0]['class'], 'Honeybadger\\') !== false) {
+            while (strpos($backtrace[0]['class'] ?? '', 'Honeybadger\\') !== false) {
                 array_shift($backtrace);
             }
         } else {

@@ -155,7 +155,7 @@ class ExceptionNotification
             $severityName = $this->friendlyErrorName($severity);
 
             return $severity == E_DEPRECATED || $severity == E_USER_DEPRECATED
-                ? "Deprecation Error ($severityName)"
+                ? "Deprecation Warning ($severityName)"
                 : "Error ($severityName)";
         }
 
