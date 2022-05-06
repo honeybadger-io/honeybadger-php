@@ -59,11 +59,16 @@ class ErrorHandler extends Handler implements HandlerContract
         }
 
         $this->honeybadger->notify(
-            new ErrorException($error, 0, $level, $file, $line)
+            $this->wrapError($error, $level, $file, $line)
         );
 
         if (is_callable($this->previousHandler)) {
             call_user_func($this->previousHandler, $level, $error, $file, $line);
         }
+    }
+
+    protected function wrapError(string $error, int $level, ?string $file, ?int $line): ErrorException
+    {
+        return new ErrorException($error, 0, $level, $file, $line);
     }
 }

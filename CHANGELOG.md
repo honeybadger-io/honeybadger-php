@@ -4,6 +4,9 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Format errors differently from exceptions ([#160](https://github.com/honeybadger-io/honeybadger-php/pull/160))
+- `capture_deprecations` option to disable capturing deprecation warnings ([#160](https://github.com/honeybadger-io/honeybadger-php/pull/160))
 
 ## [2.11.3] - 2022-02-07
 ### Fixed

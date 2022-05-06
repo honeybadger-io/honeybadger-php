@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use ErrorException;
 use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
 use Honeybadger\Contracts\Reporter;
@@ -204,6 +205,12 @@ class Honeybadger implements Reporter
      */
     protected function shouldReport(Throwable $throwable): bool
     {
+        if ($throwable instanceof ErrorException
+            && in_array($throwable->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED])
+            && $this->config['capture_deprecations'] == false) {
+            return false;
+        }
+
         return ! $this->excludedException($throwable)
             && ! empty($this->config['api_key'])
             && $this->config['report_data'];

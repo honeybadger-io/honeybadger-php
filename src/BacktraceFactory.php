@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use ErrorException;
 use ReflectionClass;
 use ReflectionException;
 use Spatie\Regex\Regex;
@@ -75,10 +76,19 @@ class BacktraceFactory
      */
     private function offsetForThrownException(array $backtrace): array
     {
-        $backtrace[0] = array_merge($backtrace[0] ?? [], [
-            'line' => $this->exception->getLine(),
-            'file' => $this->exception->getFile(),
-        ]);
+        if ($this->exception instanceof ErrorException) {
+            // For errors (ie not exceptions), the trace wrongly starts from
+            // when we created the wrapping ErrorException class.
+            // So we unwind it to the actual error location
+            while (strpos($backtrace[0]['class'] ?? '', 'Honeybadger\\') !== false) {
+                array_shift($backtrace);
+            }
+        } else {
+            $backtrace[0] = array_merge($backtrace[0] ?? [], [
+                'line' => $this->exception->getLine(),
+                'file' => $this->exception->getFile(),
+            ]);
+        }
 
         return $backtrace;
     }

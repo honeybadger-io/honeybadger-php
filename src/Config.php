@@ -55,6 +55,7 @@ class Config extends Repository
                 'verify' => true,
             ],
             'excluded_exceptions' => [],
+            'capture_deprecations' => false,
             'vendor_paths' => [
                 'vendor\/.*',
             ],
