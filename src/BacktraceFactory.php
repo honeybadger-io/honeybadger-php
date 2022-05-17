@@ -21,8 +21,8 @@ class BacktraceFactory
     protected $config;
 
     /**
-     * @param  \Throwable  $exception
-     * @param  \Honeybadger\Config  $config
+     * @param \Throwable $exception
+     * @param \Honeybadger\Config $config
      */
     public function __construct(Throwable $exception, Config $config)
     {
@@ -51,8 +51,9 @@ class BacktraceFactory
     }
 
     /**
-     * @param  \Throwable  $e
-     * @param  array  $previousCauses
+     * @param \Throwable $e
+     * @param array $previousCauses
+     *
      * @return array
      */
     private function formatPrevious(Throwable $e, array $previousCauses = []): array
@@ -71,7 +72,8 @@ class BacktraceFactory
     }
 
     /**
-     * @param  array  $backtrace
+     * @param array $backtrace
+     *
      * @return array
      */
     private function offsetForThrownException(array $backtrace): array
@@ -83,24 +85,25 @@ class BacktraceFactory
             while (strpos($backtrace[0]['class'] ?? '', 'Honeybadger\\') !== false) {
                 array_shift($backtrace);
             }
-        } else {
-            $backtrace[0] = array_merge($backtrace[0] ?? [], [
-                'line' => $this->exception->getLine(),
-                'file' => $this->exception->getFile(),
-            ]);
         }
+
+        $backtrace[0] = array_merge($backtrace[0] ?? [], [
+            'line' => $this->exception->getLine(),
+            'file' => $this->exception->getFile(),
+        ]);
 
         return $backtrace;
     }
 
     /**
-     * @param  array  $backtrace
+     * @param array $backtrace
+     *
      * @return array
      */
     private function formatBacktrace(array $backtrace): array
     {
         return array_map(function ($frame) {
-            if (! array_key_exists('file', $frame)) {
+            if (!array_key_exists('file', $frame)) {
                 $context = $this->contextWithoutFile($frame);
             } else {
                 $context = $this->contextWithFile($frame);
@@ -119,6 +122,7 @@ class BacktraceFactory
      * Parse method arguments and make any transformations.
      *
      * @param array $args
+     *
      * @return array
      */
     private function parseArgs(array $args): array
@@ -129,12 +133,13 @@ class BacktraceFactory
     }
 
     /**
-     * @param  array  $frame
+     * @param array $frame
+     *
      * @return array
      */
     private function contextWithoutFile(array $frame): array
     {
-        if (! empty($frame['class'])) {
+        if (!empty($frame['class'])) {
             $filename = sprintf('%s%s%s', $frame['class'], $frame['type'], $frame['function']);
 
             try {
@@ -143,7 +148,7 @@ class BacktraceFactory
             } catch (ReflectionException $e) {
                 // Forget it if we run into errors, it's not worth it.
             }
-        } elseif (! empty($frame['function'])) {
+        } elseif (!empty($frame['function'])) {
             $filename = sprintf('%s(anonymous)', $frame['function']);
         } else {
             $filename = sprintf('(anonymous)');
@@ -161,7 +166,8 @@ class BacktraceFactory
     }
 
     /**
-     * @param  array  $frame
+     * @param array $frame
+     *
      * @return array
      */
     private function contextWithFile(array $frame): array
@@ -169,7 +175,7 @@ class BacktraceFactory
         return [
             'source' => (new FileSource($frame['file'], $frame['line']))->getSource(),
             'file' => $frame['file'],
-            'number' => (string) $frame['line'],
+            'number' => (string)$frame['line'],
             'context' => $this->fileFromApplication($frame['file'], $this->config['vendor_paths'])
                 ? 'app' : 'all',
         ];
@@ -182,11 +188,11 @@ class BacktraceFactory
         // On Windows, file paths use backslashes, so we have to normalise them
         $path = str_replace('\\', '/', $path);
 
-        if (Regex::match('/'.array_shift($vendorPaths).'/', $path)->hasMatch()) {
+        if (Regex::match('/' . array_shift($vendorPaths) . '/', $path)->hasMatch()) {
             return false;
         }
 
-        if (! empty($vendorPaths)) {
+        if (!empty($vendorPaths)) {
             return $this->fileFromApplication($filePath, $vendorPaths);
         }
 
@@ -195,10 +201,10 @@ class BacktraceFactory
 
     private function appendProjectRootToFilePath(string $filePath): string
     {
-        $pregProjectRoot = preg_quote($this->config['project_root'].'/', '/');
+        $pregProjectRoot = preg_quote($this->config['project_root'] . '/', '/');
 
         return $this->config['project_root']
-            ? Regex::replace('/'.$pregProjectRoot.'/', '', $filePath)->result()
+            ? Regex::replace('/' . $pregProjectRoot . '/', '', $filePath)->result()
             : '';
     }
 }

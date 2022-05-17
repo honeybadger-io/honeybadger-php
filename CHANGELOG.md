@@ -4,6 +4,12 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [2.12.1] - 2022-05-14
+### Added
+- Fix occasionally missing backtrace in errors (closes #162) ([341aefc](https://github.com/honeybadger-io/honeybadger-php/commit/341aefc3bb17c7beb71e81b4d7f918125f69c8ff))
+
+## [2.12.0] - 2022-05-06
 ### Added
 - Format errors differently from exceptions ([#160](https://github.com/honeybadger-io/honeybadger-php/pull/160))
 - `capture_deprecations` option to disable capturing deprecation warnings ([#160](https://github.com/honeybadger-io/honeybadger-php/pull/160))
