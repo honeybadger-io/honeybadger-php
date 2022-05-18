@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.12.1] - 2022-05-14
+## [2.12.1] - 2022-05-18
 ### Added
 - Fix occasionally missing backtrace in errors (closes #162) ([341aefc](https://github.com/honeybadger-io/honeybadger-php/commit/341aefc3bb17c7beb71e81b4d7f918125f69c8ff))
 
