@@ -437,8 +437,8 @@ If you're adding a new feature, please [submit an issue](https://github.com/hone
 
 ## Credits
 
-This library was originally created by [Gabe Evans](https://github.com/gevans). Thanks Gabe!
+This library was originally created by [Ivy Evans](https://github.com/ivy). Thanks Ivy!
 
 ### License
 
-This library is MIT licensed. See the [LICENSE](https://raw.github.com/honeybadger-io/honeybadger-php/master/LICENSE) file in this repository for details.
+This library is MIT licensed. See the [LICENSE](https://github.com/honeybadger-io/honeybadger-php/blob/0.x/LICENSE) file in this repository for details.
