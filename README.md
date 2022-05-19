@@ -31,10 +31,11 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
-If you discover any security related issues, please email oss@tjmiller.co instead of using the issue tracker.
+If you discover any security related issues, please email security@honeybadger.io instead of using the issue tracker.
 
 ## Credits
 - [TJ Miller](https://github.com/sixlive)
+- [Ivy Evans](https://github.com/ivy)
 - [All Contributors](../../contributors)
 
 ## License
