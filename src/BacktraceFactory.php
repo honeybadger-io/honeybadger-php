@@ -5,7 +5,6 @@ namespace Honeybadger;
 use ErrorException;
 use ReflectionClass;
 use ReflectionException;
-use Spatie\Regex\Regex;
 use Throwable;
 
 class BacktraceFactory
@@ -188,7 +187,7 @@ class BacktraceFactory
         // On Windows, file paths use backslashes, so we have to normalise them
         $path = str_replace('\\', '/', $path);
 
-        if (Regex::match('/' . array_shift($vendorPaths) . '/', $path)->hasMatch()) {
+        if (preg_match('/' . array_shift($vendorPaths) . '/', $path)) {
             return false;
         }
 
@@ -204,7 +203,7 @@ class BacktraceFactory
         $pregProjectRoot = preg_quote($this->config['project_root'] . '/', '/');
 
         return $this->config['project_root']
-            ? Regex::replace('/' . $pregProjectRoot . '/', '', $filePath)->result()
+            ? preg_replace('/' . $pregProjectRoot . '/', '', $filePath)
             : '';
     }
 }
