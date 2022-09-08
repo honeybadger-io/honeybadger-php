@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.13.0] - 2022-09-08
+### Modified
+- Remove spatie/regex dependency ([#165](https://github.com/honeybadger-io/honeybadger-php/pull/165))
+
 ## [2.12.1] - 2022-05-18
 ### Added
 - Fix occasionally missing backtrace in errors (closes #162) ([341aefc](https://github.com/honeybadger-io/honeybadger-php/commit/341aefc3bb17c7beb71e81b4d7f918125f69c8ff))
@@ -144,7 +148,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 ## [1.6.0] - 2019-07-18
 ### Added
 - Added the ability to pass additional API parameters to exception captures specifically component and action ([#85](https://github.com/honeybadger-io/honeybadger-php/pull/85))
-- Adds fingerprint and tags to the additional paramaters ([#76](https://github.com/honeybadger-io/honeybadger-php/pull/76))
+- Adds fingerprint and tags to the additional parameters ([#76](https://github.com/honeybadger-io/honeybadger-php/pull/76))
 - Adds method arguments to backtrace where possible ([#86](https://github.com/honeybadger-io/honeybadger-php/pull/86))
 
 ## [1.5.1] - 2019-06-10
