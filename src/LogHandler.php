@@ -28,9 +28,9 @@ class LogHandler extends AbstractProcessingHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @param array|\Monolog\LogRecord $record
      */
-    protected function write(array $record): void
+    protected function write($record): void
     {
         $this->honeybadger->rawNotification(function ($config) use ($record) {
             return [
@@ -55,7 +55,10 @@ class LogHandler extends AbstractProcessingHandler
         return new LineFormatter('[%datetime%] %channel%.%level_name%: %message%');
     }
 
-    protected function getHoneybadgerErrorFromMonologRecord(array $record, $config): array
+    /**
+     * @param array|\Monolog\LogRecord $record
+     */
+    protected function getHoneybadgerErrorFromMonologRecord($record, $config): array
     {
         $error = [
             'tags' => [
@@ -77,7 +80,10 @@ class LogHandler extends AbstractProcessingHandler
         return $error;
     }
 
-    protected function getHoneybadgerContextFromMonologRecord(array $record): array
+    /**
+     * @param array|\Monolog\LogRecord $record
+     */
+    protected function getHoneybadgerContextFromMonologRecord($record): array
     {
         $context = $record['context'];
         $context['level_name'] = $record['level_name'];
