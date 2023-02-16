@@ -5,6 +5,9 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.14.0] - 2023-02-16
+- Monolog 3 support
+
 ## [2.13.0] - 2022-09-08
 ### Modified
 - Remove spatie/regex dependency ([#165](https://github.com/honeybadger-io/honeybadger-php/pull/165))
