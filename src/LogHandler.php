@@ -17,10 +17,10 @@ class LogHandler extends AbstractProcessingHandler
 
     /**
      * @param \Honeybadger\Contracts\Reporter $honeybadger
-     * @param int $level
+     * @param $level
      * @param bool $bubble
      */
-    public function __construct(Reporter $honeybadger, int $level = Logger::DEBUG, bool $bubble = true)
+    public function __construct(Reporter $honeybadger, $level = Logger::ERROR, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
 
@@ -32,6 +32,10 @@ class LogHandler extends AbstractProcessingHandler
      */
     protected function write($record): void
     {
+        if (!$this->isHandling($record)) {
+            return;
+        }
+
         $this->honeybadger->rawNotification(function ($config) use ($record) {
             return [
                 'notifier' => array_merge($config['notifier'], ['name' => 'Honeybadger Log Handler']),
