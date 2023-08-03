@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- LogHandler: Check log level before writing the log [#168](https://github.com/honeybadger-io/honeybadger-php/pull/168)
 
 ## [2.14.0] - 2023-02-16
 - Monolog 3 support
