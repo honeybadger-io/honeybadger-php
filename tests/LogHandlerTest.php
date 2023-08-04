@@ -25,15 +25,10 @@ class LogHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_will_format_a_log_for_honeybadger()
+    public function it_formats_a_log_for_honeybadger()
     {
         $reporter = new class extends Honeybadger {
             public $notification;
-
-            public function __construct()
-            {
-                parent::__construct();
-            }
 
             public function rawNotification(callable $fn): array
             {
@@ -46,7 +41,7 @@ class LogHandlerTest extends TestCase
         $logger = new Logger('test-logger');
         $logger->pushHandler(new LogHandler($reporter));
 
-        $logger->info('Test log message', ['some' => 'data']);
+        $logger->error('Test log message', ['some' => 'data']);
 
         $this->assertEquals([
             'notifier' => [
@@ -56,7 +51,7 @@ class LogHandlerTest extends TestCase
             ],
             'request' => [
                 'context' => [
-                    'level_name' => 'INFO',
+                    'level_name' => 'ERROR',
                     'log_channel' => 'test-logger',
                     'some' => 'data',
                 ],
@@ -67,6 +62,43 @@ class LogHandlerTest extends TestCase
         $this->assertEquals('production', $reporter->notification['server']['environment_name']);
 
         $this->assertEquals([
+            'class' => 'ERROR Log',
+            'message' => 'Test log message',
+            'tags' => [
+                'log',
+                'test-logger.ERROR',
+            ],
+        ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
+
+        $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
+    }
+
+    /** @test */
+    public function it_ignores_logs_below_its_minimum_level()
+    {
+        $reporter = new class extends Honeybadger {
+            public $notification;
+
+            public function rawNotification(callable $fn): array
+            {
+                $this->notification = $fn($this->config);
+
+                return [];
+            }
+        };
+
+        $logger = new Logger('test-logger');
+        $logger->pushHandler(new LogHandler($reporter, Logger::ERROR));
+
+        $logger->info('Test log message', ['some' => 'data']);
+
+        $this->assertEquals(null, $reporter->notification);
+
+        $logger = new Logger('test-logger');
+        $logger->pushHandler(new LogHandler($reporter, Logger::INFO));
+        $logger->info('Test log message', ['some' => 'data']);
+
+        $this->assertEquals([
             'class' => 'INFO Log',
             'message' => 'Test log message',
             'tags' => [
@@ -75,7 +107,6 @@ class LogHandlerTest extends TestCase
             ],
         ], array_only($reporter->notification['error'], ['class', 'tags', 'message']));
 
-        $this->assertFalse(empty($reporter->notification['error']['fingerprint']));
     }
 
     /** @test */
