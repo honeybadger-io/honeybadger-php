@@ -196,7 +196,7 @@ class CheckinsClient extends ApiClient
             $url = sprintf('v2/projects/%s/check_ins/%s', $projectId, $checkinId);
             $response = $this->client->delete($url);
 
-            if ($response->getStatusCode() !== Response::HTTP_OK) {
+            if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 throw (new ServiceExceptionFactory($response))->make();
             }
         } catch (Throwable $e) {
