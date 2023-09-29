@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Honeybadger\Contracts\ApiClient;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
@@ -37,4 +39,22 @@ class HoneybadgerClient extends ApiClient
             ? json_decode($response->getBody(), true)
             : [];
     }
+
+    public function makeClient(): Client
+    {
+        return new Client([
+            'base_uri' => $this->config['endpoint'],
+            RequestOptions::HTTP_ERRORS => false,
+            RequestOptions::HEADERS => [
+                'X-API-Key' => $this->config['api_key'],
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+            ],
+            RequestOptions::TIMEOUT => $this->config['client']['timeout'],
+            RequestOptions::PROXY => $this->config['client']['proxy'],
+            RequestOptions::VERIFY => $this->config['client']['verify'] ?? true,
+        ]);
+    }
+
+
 }

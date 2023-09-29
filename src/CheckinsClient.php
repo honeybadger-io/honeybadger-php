@@ -2,6 +2,8 @@
 
 namespace Honeybadger;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Honeybadger\Contracts\ApiClient;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
@@ -10,6 +12,8 @@ use Throwable;
 
 class CheckinsClient extends ApiClient
 {
+    const BASE_URL = 'https://app.honeybadger.io/';
+
     /**
      * @var Checkin[][]
      */
@@ -200,5 +204,16 @@ class CheckinsClient extends ApiClient
         }
 
         return true;
+    }
+
+    public function makeClient(): Client
+    {
+        return new Client([
+            'base_uri' => self::BASE_URL,
+            RequestOptions::HTTP_ERRORS => false,
+            RequestOptions::AUTH => [
+                $this->config['personal_auth_token'], ''
+            ],
+        ]);
     }
 }
