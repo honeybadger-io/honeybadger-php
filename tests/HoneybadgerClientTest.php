@@ -30,20 +30,6 @@ class HoneybadgerClientTest extends TestCase
     }
 
     /** @test */
-    public function throws_generic_exception_for_checkins()
-    {
-        $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
-
-        $config = new Config(['api_key' => '1234']);
-        $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('head')->andThrow(new Exception);
-
-        $client = new HoneybadgerClient($config, $mock);
-        $client->checkin('1234');
-    }
-
-    /** @test */
     public function allows_service_exceptions_to_be_handled()
     {
         $message = null;

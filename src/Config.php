@@ -24,6 +24,7 @@ class Config extends Repository
     {
         return array_merge([
             'api_key' => null,
+            'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
             'notifier' => [
                 'name' => 'honeybadger-php',
@@ -62,6 +63,7 @@ class Config extends Repository
             'breadcrumbs' => [
                 'enabled' => true,
             ],
+            'checkins' => [],
         ], $config);
     }
 }

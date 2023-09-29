@@ -28,22 +28,27 @@ class Honeybadger implements Reporter
     const API_URL = 'https://api.honeybadger.io/';
 
     /**
-     * @var \Honeybadger\HoneybadgerClient;
+     * @var HoneybadgerClient;
      */
     protected $client;
 
     /**
-     * @var \Honeybadger\Config
+     * @var CheckinsClient;
+     */
+    protected $checkinsClient;
+
+    /**
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Honeybadger\Support\Repository
+     * @var Repository
      */
     protected $context;
 
     /**
-     * @var \Honeybadger\Breadcrumbs
+     * @var Breadcrumbs
      */
     protected $breadcrumbs;
 
@@ -52,6 +57,7 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
+        $this->checkinsClient = new CheckinsClient($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 
@@ -116,7 +122,7 @@ class Honeybadger implements Reporter
      */
     public function checkin(string $key): void
     {
-        $this->client->checkin($key);
+        $this->checkinsClient->checkin($key);
     }
 
     /**
@@ -165,7 +171,7 @@ class Honeybadger implements Reporter
     }
 
     /**
-     * @return \Honeybadger\Support\Repository
+     * @return Repository
      */
     public function getContext(): Repository
     {
