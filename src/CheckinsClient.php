@@ -41,7 +41,7 @@ class CheckinsClient extends ApiClient
         if (! $this->hasPersonalAuthToken()) {
             $this->handleServiceException(ServiceException::missingPersonalAuthToken());
 
-            return null;
+            return [];
         }
 
         if (isset($this->projectCheckins[$projectId])) {
@@ -55,7 +55,7 @@ class CheckinsClient extends ApiClient
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 $this->handleServiceException((new ServiceExceptionFactory($response))->make());
 
-                return null;
+                return [];
             }
 
             $data = json_decode($response->getBody(), true);
@@ -67,7 +67,7 @@ class CheckinsClient extends ApiClient
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic($e));
 
-            return null;
+            return [];
         }
     }
 

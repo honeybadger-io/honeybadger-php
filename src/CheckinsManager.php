@@ -86,14 +86,16 @@ class CheckinsManager implements CheckinsSync {
 
             if ($existingCheckin) {
                 if (! $existingCheckin->equals($localCheckin)) {
-                    $result[] = $this->update($localCheckin);
+                    if ($updated = $this->update($localCheckin)) {
+                        $result[] = $updated;
+                    }
                 } else {
                     // no change - just add to resulting array
                     $result[] = $existingCheckin;
                 }
             }
-            else {
-                $result[] = $this->create($localCheckin);
+            else if ($created = $this->create($localCheckin)) {
+                $result[] = $created;
             }
         }
 
