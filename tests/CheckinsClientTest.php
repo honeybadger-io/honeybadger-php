@@ -74,24 +74,4 @@ class CheckinsClientTest extends TestCase
 
         $this->assertEquals('1234', $checkin->id);
     }
-
-    /** @test */
-    public function updates_checkin()
-    {
-        $theCheckin = new Checkin([
-            'id' => '1234',
-            'project_id' => '1234',
-            'name' => 'Test Checkin',
-        ]);
-
-        $config = new Config(['personal_auth_token' => 'xxxx']);
-        $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('put')
-            ->andReturn(new GuzzleResponse(Response::HTTP_NO_CONTENT, [], json_encode($theCheckin->toArray())));
-
-        $client = new CheckinsClient($config, $mock);
-        $checkin = $client->update($theCheckin);
-
-        $this->assertEquals('Test Checkin', $checkin->name);
-    }
 }

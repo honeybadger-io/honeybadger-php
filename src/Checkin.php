@@ -135,31 +135,47 @@ class Checkin
         }
     }
 
-    /**
-     * @return array
-     */
-    public function toArray(): array
+    public function asRequestData(): array
     {
-        return [
-            'id' => $this->id,
-            'projectId' => $this->projectId,
-            'name' => $this->name,
-            'schedule_type' => $this->scheduleType,
-            'report_period' => $this->reportPeriod,
-            'grace_period' => $this->gracePeriod,
-            'cron_schedule' => $this->cronSchedule,
-            'cron_timezone' => $this->cronTimezone,
+        $result = [
+            'name' => $this->name
         ];
+
+        if (!is_null($this->scheduleType)) {
+            $result['schedule_type'] = $this->scheduleType;
+        }
+
+        if (!is_null($this->reportPeriod)) {
+            $result['report_period'] = $this->reportPeriod;
+        }
+
+        if (!is_null($this->gracePeriod)) {
+            $result['grace_period'] = $this->gracePeriod;
+        }
+
+        if (!is_null($this->cronSchedule)) {
+            $result['cron_schedule'] = $this->cronSchedule;
+        }
+
+        if (!is_null($this->cronTimezone)) {
+            $result['cron_timezone'] = $this->cronTimezone;
+        }
+
+        return $result;
     }
 
     /**
      * Compares two checkins for equality.
-     * It does not compare the id because it's not persisted locally.
+     * 'id' is not persisted locally so we only compare if it exists on both sides.
      *
      * @param Checkin $other
      * @return bool
      */
     public function equals(Checkin $other): bool {
+        if ($this->id !== null && $other->id !== null) {
+            return $this->id === $other->id;
+        }
+
         return $this->name === $other->name
             && $this->projectId === $other->projectId
             && $this->scheduleType === $other->scheduleType

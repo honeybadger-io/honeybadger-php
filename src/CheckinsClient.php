@@ -127,9 +127,7 @@ class CheckinsClient extends ApiClient
             $url = sprintf('v2/projects/%s/check_ins', $checkin->projectId);
             $response = $this->client->post($url, [
                 'json' => [
-                    'check_in' => array_filter($checkin->toArray(), function ($value) {
-                        return ! is_null($value);
-                    }),
+                    'check_in' => $checkin->asRequestData()
                 ]
             ]);
 
@@ -164,9 +162,7 @@ class CheckinsClient extends ApiClient
             $url = sprintf('v2/projects/%s/check_ins/%s', $checkin->projectId, $checkin->id);
             $response = $this->client->put($url, [
                 'json' => [
-                    'check_in' => array_filter($checkin->toArray(), function ($value) {
-                        return ! is_null($value);
-                    }),
+                    'check_in' => $checkin->asRequestData()
                 ]
             ]);
 
