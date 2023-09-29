@@ -63,9 +63,12 @@ class CheckinsClient extends ApiClient
             }
 
             $data = json_decode($response->getBody(), true);
-            $this->projectCheckins[$projectId] = array_map(function ($checkin) {
-                return new Checkin($checkin);
-            }, $data['check_ins']);
+            $this->projectCheckins[$projectId] = array_map(function ($checkin) use ($projectId) {
+                $result = new Checkin($checkin);
+                $result->projectId = $projectId;
+
+                return $result;
+            }, $data['results']);
 
             return $this->projectCheckins[$projectId];
         } catch (Throwable $e) {
@@ -121,7 +124,7 @@ class CheckinsClient extends ApiClient
         }
 
         try {
-            $url = sprintf('v2/projects/%s/check_ins/%s', $checkin->projectId, $checkin->id);
+            $url = sprintf('v2/projects/%s/check_ins', $checkin->projectId);
             $response = $this->client->post($url, [
                 'json' => [
                     'check_in' => $checkin->toArray(),
@@ -163,14 +166,13 @@ class CheckinsClient extends ApiClient
                 ]
             ]);
 
-            if ($response->getStatusCode() !== Response::HTTP_OK) {
+            if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 $this->handleServiceException((new ServiceExceptionFactory($response))->make());
 
                 return null;
             }
 
-            $data = json_decode($response->getBody(), true);
-            return new Checkin($data);
+            return $checkin;
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic($e));
 
