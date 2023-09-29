@@ -20,11 +20,11 @@ class CheckinsManagerTest extends TestCase
         $this->expectException(ServiceException::class);
         $this->expectExceptionMessage('The configuration is invalid: name is required for each checkin');
 
-        $config = new Config(['api_key' => '1234']);
+        $config = ['api_key' => '1234'];
         $mock = Mockery::mock(Client::class);
         $mock->shouldReceive('head')->andThrow(new Exception);
 
-        $client = new CheckinsClient($config, $mock);
+        $client = new CheckinsClient(new Config($config), $mock);
         $manager = new CheckinsManager($config, $client);
         $checkinsConfig = [
             [
@@ -41,9 +41,9 @@ class CheckinsManagerTest extends TestCase
     /** @test */
     public function creates_checkin_when_not_found_in_project_checkins()
     {
-        $config = new Config([
+        $config = [
             'personal_auth_token' => 'abcd'
-        ]);
+        ];
         $localCheckin = [
             'project_id' => 'p1234',
             'name' => 'Test Checkin',
@@ -72,9 +72,9 @@ class CheckinsManagerTest extends TestCase
     /** @test */
     public function updates_checkin_when_local_checkin_is_modified()
     {
-        $config = new Config([
+        $config = [
             'personal_auth_token' => 'abcd'
-        ]);
+        ];
         $localCheckin = [
             'project_id' => 'p1234',
             'name' => 'Test Checkin',
@@ -106,9 +106,9 @@ class CheckinsManagerTest extends TestCase
     /** @test */
     public function does_not_call_api_when_checkin_is_not_modified()
     {
-        $config = new Config([
+        $config = [
             'personal_auth_token' => 'abcd'
-        ]);
+        ];
         $localCheckin = [
             'project_id' => 'p1234',
             'name' => 'Another Test Checkin',
@@ -134,9 +134,9 @@ class CheckinsManagerTest extends TestCase
     /** @test */
     public function removes_checkin_and_marks_as_deleted()
     {
-        $config = new Config([
+        $config = [
             'personal_auth_token' => 'abcd'
-        ]);
+        ];
         $localCheckin = [
             'project_id' => 'p1234',
             'name' => 'Another Test Checkin',
