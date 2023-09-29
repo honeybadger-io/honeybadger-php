@@ -21,12 +21,13 @@ class CheckinsManager implements CheckinsSync {
     protected $client;
 
     /**
-     * @param Config $config
+     * @param array $config
      * @param CheckinsClient|null $client
      */
-    public function __construct(Config $config, CheckinsClient $client = null) {
-        $this->config = $config;
-        $this->client = $client ?? new CheckinsClient($config);
+    public function __construct(array $config, CheckinsClient $client = null) {
+        $this->config = new Config($config);
+
+        $this->client = $client ?? new CheckinsClient($this->config);
     }
 
 
