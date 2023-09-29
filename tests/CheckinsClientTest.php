@@ -87,7 +87,7 @@ class CheckinsClientTest extends TestCase
         $config = new Config(['personal_auth_token' => 'xxxx']);
         $mock = Mockery::mock(Client::class)->makePartial();
         $mock->shouldReceive('put')
-            ->andReturn(new GuzzleResponse(Response::HTTP_OK, [], json_encode($theCheckin->toArray())));
+            ->andReturn(new GuzzleResponse(Response::HTTP_NO_CONTENT, [], json_encode($theCheckin->toArray())));
 
         $client = new CheckinsClient($config, $mock);
         $checkin = $client->update($theCheckin);
