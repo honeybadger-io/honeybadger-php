@@ -66,7 +66,7 @@ class CheckinsManagerTest extends TestCase
 
         $newCheckin = $result[0];
         $this->assertEquals('c1234', $newCheckin->id);
-        $this->assertTrue($newCheckin->equals(new Checkin($localCheckin)));
+        $this->assertTrue($newCheckin->isInSync(new Checkin($localCheckin)));
     }
 
     /** @test */
@@ -100,7 +100,7 @@ class CheckinsManagerTest extends TestCase
 
         $newCheckin = $result[0];
         $this->assertEquals('c1234', $newCheckin->id);
-        $this->assertTrue($newCheckin->equals(new Checkin($localCheckin)));
+        $this->assertTrue($newCheckin->isInSync(new Checkin($localCheckin)));
     }
 
     /** @test */

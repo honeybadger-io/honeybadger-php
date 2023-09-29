@@ -171,11 +171,7 @@ class Checkin
      * @param Checkin $other
      * @return bool
      */
-    public function equals(Checkin $other): bool {
-        if ($this->id !== null && $other->id !== null) {
-            return $this->id === $other->id;
-        }
-
+    public function isInSync(Checkin $other): bool {
         return $this->name === $other->name
             && $this->projectId === $other->projectId
             && $this->scheduleType === $other->scheduleType
