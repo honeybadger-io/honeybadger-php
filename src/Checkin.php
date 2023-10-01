@@ -78,6 +78,7 @@ class Checkin
     /**
      * Only set when the checkin has been deleted
      * after an update request.
+     * Note: this property exists only locally.
      *
      * @var bool
      */
