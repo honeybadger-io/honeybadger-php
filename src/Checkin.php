@@ -113,7 +113,7 @@ class Checkin
      */
     public function validate(): void {
         if ($this->projectId === null) {
-            throw ServiceException::invalidConfig('projectId is required for each checkin');
+            throw ServiceException::invalidConfig('project_id is required for each checkin');
         }
 
         if ($this->name === null) {
@@ -123,45 +123,32 @@ class Checkin
         $name = $this->name;
 
         if (in_array($this->scheduleType, ['simple', 'cron']) === false) {
-            throw ServiceException::invalidConfig("$name [scheduleType] must be either 'simple' or 'cron'");
+            throw ServiceException::invalidConfig("$name [schedule_type] must be either 'simple' or 'cron'");
         }
 
         if ($this->scheduleType === 'simple' && $this->reportPeriod === null) {
-            throw ServiceException::invalidConfig("$name [reportPeriod] is required for simple checkins");
+            throw ServiceException::invalidConfig("$name [report_period] is required for simple checkins");
         }
 
         if ($this->scheduleType === 'cron' && $this->cronSchedule === null) {
-            throw ServiceException::invalidConfig("$name [cronSchedule] is required for cron checkins");
+            throw ServiceException::invalidConfig("$name [cron_schedule] is required for cron checkins");
         }
     }
 
     public function asRequestData(): array
     {
         $result = [
-            'name' => $this->name
+            'name' => $this->name,
+            'schedule_type' => $this->scheduleType,
+            'report_period' => $this->reportPeriod,
+            'grace_period' => $this->gracePeriod,
+            'cron_schedule' => $this->cronSchedule,
+            'cron_timezone' => $this->cronTimezone,
         ];
 
-        if (!is_null($this->scheduleType)) {
-            $result['schedule_type'] = $this->scheduleType;
-        }
-
-        if (!is_null($this->reportPeriod)) {
-            $result['report_period'] = $this->reportPeriod;
-        }
-
-        if (!is_null($this->gracePeriod)) {
-            $result['grace_period'] = $this->gracePeriod;
-        }
-
-        if (!is_null($this->cronSchedule)) {
-            $result['cron_schedule'] = $this->cronSchedule;
-        }
-
-        if (!is_null($this->cronTimezone)) {
-            $result['cron_timezone'] = $this->cronTimezone;
-        }
-
-        return $result;
+        return array_filter($result, function ($value) {
+            return !is_null($value);
+        });
     }
 
     /**
