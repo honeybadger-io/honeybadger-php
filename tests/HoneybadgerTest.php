@@ -248,7 +248,7 @@ class HoneybadgerTest extends TestCase
             new Response(200),
         ]);
 
-        $badger = Honeybadger::new([
+        Honeybadger::new([
             'api_key' => 'asdf',
             'handlers' => [
                 'exception' => false,
@@ -356,7 +356,7 @@ class HoneybadgerTest extends TestCase
             new Response(500),
         ]);
 
-        $badger = Honeybadger::new([
+        Honeybadger::new([
             'api_key' => 'asdf',
             'handlers' => [
                 'exception' => false,

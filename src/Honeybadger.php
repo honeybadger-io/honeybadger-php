@@ -33,11 +33,6 @@ class Honeybadger implements Reporter
     protected $client;
 
     /**
-     * @var CheckinsClient;
-     */
-    protected $checkinsClient;
-
-    /**
      * @var Config
      */
     protected $config;
@@ -57,7 +52,6 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
-        $this->checkinsClient = new CheckinsClient($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 
@@ -122,7 +116,7 @@ class Honeybadger implements Reporter
      */
     public function checkin(string $key): void
     {
-        $this->checkinsClient->checkin($key);
+        $this->client->checkin($key);
     }
 
     /**

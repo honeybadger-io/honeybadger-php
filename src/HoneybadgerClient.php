@@ -40,6 +40,23 @@ class HoneybadgerClient extends ApiClient
             : [];
     }
 
+    /**
+     * @param  string  $checkinId
+     * @return void
+     */
+    public function checkin(string $checkinId): void
+    {
+        try {
+            $response = $this->client->head(sprintf('v1/check_in/%s', $checkinId));
+
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
+                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            }
+        } catch (Throwable $e) {
+            $this->handleServiceException(ServiceException::generic($e));
+        }
+    }
+
     public function makeClient(): Client
     {
         return new Client([
