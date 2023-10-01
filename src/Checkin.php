@@ -152,8 +152,9 @@ class Checkin
     }
 
     /**
-     * Compares two checkins for equality.
-     * 'id' is not persisted locally so we only compare if it exists on both sides.
+     * Compares two checkins, usually the one from the API and the one from the config file.
+     * If the one in the config file does not match the checkin from the API,
+     * then we issue an update request.
      *
      * @param Checkin $other
      * @return bool
