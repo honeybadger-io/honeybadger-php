@@ -61,11 +61,6 @@ class CheckinsClient extends ApiClient
         }
     }
 
-    /**
-     * @param string $projectId
-     * @param string $checkinId
-     * @return Checkin|null
-     */
     public function get(string $projectId, string $checkinId): ?Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
@@ -94,10 +89,6 @@ class CheckinsClient extends ApiClient
         }
     }
 
-    /**
-     * @param Checkin $checkin
-     * @return Checkin|null
-     */
     public function create(Checkin $checkin): ?Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
@@ -129,10 +120,6 @@ class CheckinsClient extends ApiClient
         }
     }
 
-    /**
-     * @param Checkin $checkin
-     * @return Checkin|null
-     */
     public function update(Checkin $checkin): ?Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
@@ -163,11 +150,6 @@ class CheckinsClient extends ApiClient
         }
     }
 
-    /**
-     * @param string $projectId
-     * @param string $checkinId
-     * @return bool
-     */
     public function remove(string $projectId, string $checkinId): bool {
         if (! $this->hasPersonalAuthToken()) {
             $this->handleServiceException(ServiceException::missingPersonalAuthToken());

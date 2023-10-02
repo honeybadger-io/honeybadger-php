@@ -133,37 +133,21 @@ class CheckinsManager implements CheckinsSync {
         return $result;
     }
 
-    /**
-     * @param Checkin $checkin
-     * @return Checkin|null
-     */
     private function create(Checkin $checkin): ?Checkin
     {
         return $this->client->create($checkin);
     }
 
-    /**
-     * @param Checkin $checkin
-     * @return Checkin|null
-     */
     private function update(Checkin $checkin): ?Checkin
     {
         return $this->client->update($checkin);
     }
 
-    /**
-     * @param Checkin $checkin
-     * @return bool
-     */
     private function remove(Checkin $checkin): bool
     {
         return $this->client->remove($checkin->projectId, $checkin->id);
     }
 
-    /**
-     * @param ServiceException $e
-     * @return void
-     */
     private function handleServiceException(ServiceException $e): void
     {
         $serviceExceptionHandler = $this->config['service_exception_handler'];

@@ -5,14 +5,6 @@ namespace Honeybadger;
 use Honeybadger\Exceptions\ServiceException;
 
 /**
- * @property string $id
- * @property string $name
- * @property string $scheduleType
- * @property string $reportPeriod
- * @property string $gracePeriod
- * @property string $cronSchedule
- * @property string $cronTimezone
- *
  * @see https://docs.honeybadger.io/api/check-ins/#create-a-check-in
  */
 class Checkin
@@ -84,9 +76,6 @@ class Checkin
      */
     private $deleted;
 
-    /**
-     * @param array $params
-     */
     public function __construct(array $params = []) {
         $this->id = $params['id'] ?? null;
         $this->name = $params['name'] ?? null;
@@ -156,9 +145,6 @@ class Checkin
      * Compares two checkins, usually the one from the API and the one from the config file.
      * If the one in the config file does not match the checkin from the API,
      * then we issue an update request.
-     *
-     * @param Checkin $other
-     * @return bool
      */
     public function isInSync(Checkin $other): bool {
         return $this->name === $other->name
