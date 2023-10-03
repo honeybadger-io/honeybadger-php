@@ -11,11 +11,6 @@ use Honeybadger\Exceptions\ServiceException;
 class CheckinsManager implements CheckinsSync {
 
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @var CheckinsClient
      */
     protected $client;
@@ -25,31 +20,25 @@ class CheckinsManager implements CheckinsSync {
      * @param CheckinsClient|null $client
      */
     public function __construct(array $config, CheckinsClient $client = null) {
-        $this->config = new Config($config);
-
-        $this->client = $client ?? new CheckinsClient($this->config);
+        $configRepo = new Config($config);
+        $this->client = $client ?? new CheckinsClient($configRepo);
     }
 
 
     /**
      * @param array $checkins
      * @return Checkin[]
+     *
+     * @throws ServiceException
      */
     public function sync(array $checkins): array
     {
-        try {
-            $localCheckins = array_map(function ($checkin) {
-                $checkin = new Checkin($checkin);
-                $checkin->validate();
+        $localCheckins = array_map(function ($checkin) {
+            $checkin = new Checkin($checkin);
+            $checkin->validate();
 
-                return $checkin;
-            }, $checkins);
-        }
-        catch (ServiceException $e) {
-            $this->handleServiceException($e);
-
-            return [];
-        }
+            return $checkin;
+        }, $checkins);
 
         $createdOrUpdated = $this->synchronizeLocalCheckins($localCheckins);
         $removed = $this->removeNotFoundCheckins($localCheckins);
@@ -146,11 +135,5 @@ class CheckinsManager implements CheckinsSync {
     private function remove(Checkin $checkin): bool
     {
         return $this->client->remove($checkin->projectId, $checkin->id);
-    }
-
-    private function handleServiceException(ServiceException $e): void
-    {
-        $serviceExceptionHandler = $this->config['service_exception_handler'];
-        call_user_func_array($serviceExceptionHandler, [$e]);
     }
 }
