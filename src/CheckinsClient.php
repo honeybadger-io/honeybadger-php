@@ -51,6 +51,8 @@ class CheckinsClient extends ApiClient
                 return $result;
             }, $data['results']);
             return $this->projectCheckins[$projectId];
+        } catch (ServiceException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw ServiceException::generic($e);
         }
@@ -75,6 +77,8 @@ class CheckinsClient extends ApiClient
 
             $data = json_decode($response->getBody(), true);
             return new Checkin($data);
+        } catch (ServiceException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw ServiceException::generic($e);
         }
@@ -103,6 +107,8 @@ class CheckinsClient extends ApiClient
 
             $data = json_decode($response->getBody(), true);
             return new Checkin($data);
+        } catch (ServiceException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw ServiceException::generic($e);
         }
@@ -130,6 +136,8 @@ class CheckinsClient extends ApiClient
             }
 
             return $checkin;
+        } catch (ServiceException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw ServiceException::generic($e);
         }
@@ -150,6 +158,8 @@ class CheckinsClient extends ApiClient
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
                 throw (new ServiceExceptionFactory($response))->make();
             }
+        } catch (ServiceException $e) {
+            throw $e;
         } catch (Throwable $e) {
             throw ServiceException::generic($e);
         }
