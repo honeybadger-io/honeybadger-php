@@ -32,25 +32,6 @@ class CheckinsClientTest extends TestCase
     }
 
     /** @test */
-    public function allows_service_exceptions_to_be_handled()
-    {
-        $message = null;
-        $config = new Config([
-            'personal_auth_token' => '5678',
-            'service_exception_handler' => function (ServiceException $e) use (&$message) {
-                $message = $e->getMessage();
-            },
-        ]);
-        $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('get')->andReturn(new GuzzleResponse(Response::HTTP_INTERNAL_SERVER_ERROR));
-
-        $client = new CheckinsClient($config, $mock);
-        $client->get('p1234', 'c1234');
-
-        $this->assertStringContainsString('There was an error on our end.', $message);
-    }
-
-    /** @test */
     public function throws_exception_when_personal_auth_token_is_missing()
     {
         $this->expectException(ServiceException::class);

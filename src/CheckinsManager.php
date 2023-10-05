@@ -2,13 +2,13 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Contracts\CheckinsSync;
+use Honeybadger\Contracts\SyncCheckins;
 use Honeybadger\Exceptions\ServiceException;
 
 /**
  * Synchronize a local checkins configuration array with Honeybadger's Checkins API.
  */
-class CheckinsManager implements CheckinsSync {
+class CheckinsManager implements SyncCheckins {
 
     /**
      * @var CheckinsClient
@@ -52,6 +52,8 @@ class CheckinsManager implements CheckinsSync {
      *
      * @param Checkin[] $localCheckins
      * @return Checkin[]
+     *
+     * @throws ServiceException
      */
     private function synchronizeLocalCheckins(array $localCheckins): array
     {
@@ -97,6 +99,8 @@ class CheckinsManager implements CheckinsSync {
      *
      * @param Checkin[] $localCheckins
      * @return Checkin[]
+     *
+     * @throws ServiceException
      */
     private function removeNotFoundCheckins(array $localCheckins): array
     {
@@ -112,8 +116,8 @@ class CheckinsManager implements CheckinsSync {
                 $filtered = array_filter($localCheckins, function ($checkin) use ($projectCheckin) {
                     return $checkin->id === $projectCheckin->id;
                 });
-                if (count($filtered) === 0 && $this->remove($projectCheckin)) {
-                    $projectCheckin->markAsDeleted();
+                if (count($filtered) === 0) {
+                    $this->remove($projectCheckin);
                     $result[] = $projectCheckin;
                 }
             }
@@ -122,18 +126,28 @@ class CheckinsManager implements CheckinsSync {
         return $result;
     }
 
+    /**
+     * @throws ServiceException
+     */
     private function create(Checkin $checkin): ?Checkin
     {
         return $this->client->create($checkin);
     }
 
+    /**
+     * @throws ServiceException
+     */
     private function update(Checkin $checkin): ?Checkin
     {
         return $this->client->update($checkin);
     }
 
-    private function remove(Checkin $checkin): bool
+    /**
+     * @throws ServiceException
+     */
+    private function remove(Checkin $checkin): void
     {
-        return $this->client->remove($checkin->projectId, $checkin->id);
+        $this->client->remove($checkin->projectId, $checkin->id);
+        $checkin->markAsDeleted();
     }
 }

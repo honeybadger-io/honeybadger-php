@@ -22,13 +22,13 @@ class CheckinsClient extends ApiClient
     /**
      * @param string $projectId
      * @return Checkin[]|null
+     *
+     * @throws ServiceException
      */
     public function listForProject(string $projectId): ?array
     {
         if (! $this->hasPersonalAuthToken()) {
-            $this->handleServiceException(ServiceException::missingPersonalAuthToken());
-
-            return [];
+            throw ServiceException::missingPersonalAuthToken();
         }
 
         if (isset($this->projectCheckins[$projectId])) {
@@ -40,9 +40,7 @@ class CheckinsClient extends ApiClient
             $response = $this->client->get($url);
 
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
-
-                return [];
+                throw (new ServiceExceptionFactory($response))->make();
             }
 
             $data = json_decode($response->getBody(), true);
@@ -52,21 +50,19 @@ class CheckinsClient extends ApiClient
 
                 return $result;
             }, $data['results']);
-
             return $this->projectCheckins[$projectId];
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
-
-            return [];
+            throw ServiceException::generic($e);
         }
     }
 
-    public function get(string $projectId, string $checkinId): ?Checkin
+    /**
+     * @throws ServiceException
+     */
+    public function get(string $projectId, string $checkinId): Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
-            $this->handleServiceException(ServiceException::missingPersonalAuthToken());
-
-            return null;
+            throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
@@ -74,27 +70,23 @@ class CheckinsClient extends ApiClient
             $response = $this->client->get($url);
 
             if ($response->getStatusCode() !== Response::HTTP_OK) {
-                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
-
-                return null;
+                throw (new ServiceExceptionFactory($response))->make();
             }
 
             $data = json_decode($response->getBody(), true);
-
             return new Checkin($data);
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
-
-            return null;
+            throw ServiceException::generic($e);
         }
     }
 
-    public function create(Checkin $checkin): ?Checkin
+    /**
+     * @throws ServiceException
+     */
+    public function create(Checkin $checkin): Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
-            $this->handleServiceException(ServiceException::missingPersonalAuthToken());
-
-            return null;
+            throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
@@ -106,26 +98,23 @@ class CheckinsClient extends ApiClient
             ]);
 
             if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
-
-                return null;
+                throw (new ServiceExceptionFactory($response))->make();
             }
 
             $data = json_decode($response->getBody(), true);
             return new Checkin($data);
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
-
-            return null;
+            throw ServiceException::generic($e);
         }
     }
 
-    public function update(Checkin $checkin): ?Checkin
+    /**
+     * @throws ServiceException
+     */
+    public function update(Checkin $checkin): Checkin
     {
         if (! $this->hasPersonalAuthToken()) {
-            $this->handleServiceException(ServiceException::missingPersonalAuthToken());
-
-            return null;
+            throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
@@ -137,24 +126,21 @@ class CheckinsClient extends ApiClient
             ]);
 
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
-                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
-
-                return null;
+                throw (new ServiceExceptionFactory($response))->make();
             }
 
             return $checkin;
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
-
-            return null;
+            throw ServiceException::generic($e);
         }
     }
 
-    public function remove(string $projectId, string $checkinId): bool {
+    /**
+     * @throws ServiceException
+     */
+    public function remove(string $projectId, string $checkinId): void {
         if (! $this->hasPersonalAuthToken()) {
-            $this->handleServiceException(ServiceException::missingPersonalAuthToken());
-
-            return false;
+            throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
@@ -165,12 +151,8 @@ class CheckinsClient extends ApiClient
                 throw (new ServiceExceptionFactory($response))->make();
             }
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
-
-            return false;
+            throw ServiceException::generic($e);
         }
-
-        return true;
     }
 
     public function makeClient(): Client

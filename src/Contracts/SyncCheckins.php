@@ -4,7 +4,7 @@ namespace Honeybadger\Contracts;
 
 use Honeybadger\Checkin;
 
-interface CheckinsSync
+interface SyncCheckins
 {
     /**
      * Given an array of checkin definitions,
