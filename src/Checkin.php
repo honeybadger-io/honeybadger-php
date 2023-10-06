@@ -34,6 +34,7 @@ class Checkin
     /**
      * For simple check-ins, the amount of time that can elapse before the check-in is reported as missing.
      * E.g., "1 day" would require a hit to the API daily to maintain the "reporting" status.
+     * Valid time periods are "minute", "hour", "day", "week", and "month": "5 minutes", "7 days", etc.
      *
      * @var string|null
      */
@@ -41,6 +42,7 @@ class Checkin
 
     /**
      * The amount of time to allow a job to not report before it's reported as missing.
+     * Valid values are the same as the report_report field.
      *
      * @var string|null
      */
@@ -55,6 +57,7 @@ class Checkin
 
     /**
      * The timezone setting for your server that is running the cron job to be monitored.
+     * Valid timezone values are listed here {@link https://docs.honeybadger.io/api/check-ins/timezones here}.
      *
      * @var string|null
      */
