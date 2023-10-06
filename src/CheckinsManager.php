@@ -91,7 +91,7 @@ class CheckinsManager implements SyncCheckins {
      * @throws ServiceException
      */
     private function getByName(string $projectId, string $name): ?Checkin {
-        $checkins = $this->client->listForProject($projectId);
+        $checkins = $this->client->listForProject($projectId) ?? [];
         $filtered = array_filter($checkins, function ($checkin) use ($name) {
             return $checkin->name === $name;
         });
@@ -120,7 +120,7 @@ class CheckinsManager implements SyncCheckins {
         }, $localCheckins));
 
         foreach ($projectIds as $projectId) {
-            $projectCheckins = $this->client->listForProject($projectId);
+            $projectCheckins = $this->client->listForProject($projectId) ?? [];
             foreach ($projectCheckins as $projectCheckin) {
                 $filtered = array_filter($localCheckins, function ($checkin) use ($projectCheckin) {
                     return $checkin->id === $projectCheckin->id;

@@ -57,7 +57,7 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
-        $this->checkinsClient = new CheckinsClient($this->config, $client);
+        $this->checkinsClient = new CheckinsClientProxy($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 
@@ -160,7 +160,7 @@ class Honeybadger implements Reporter
      * @throws ServiceException
      */
     private function getCheckinByName(string $projectId, string $name): ?Checkin {
-        $checkins = $this->checkinsClient->listForProject($projectId);
+        $checkins = $this->checkinsClient->listForProject($projectId) ?? [];
         $filtered = array_filter($checkins, function ($checkin) use ($name) {
             return $checkin->name === $name;
         });
