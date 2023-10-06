@@ -4,33 +4,14 @@ namespace Honeybadger;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
+use Honeybadger\Contracts\ApiClient;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class HoneybadgerClient
+class HoneybadgerClient extends ApiClient
 {
-    /**
-     * @var \Honeybadger\Config
-     */
-    protected $config;
-
-    /**
-     * @var \GuzzleHttp\Client
-     */
-    protected $client;
-
-    /**
-     * @param  \Honeybadger\Config  $config
-     * @param  \GuzzleHttp\Client|null  $client
-     */
-    public function __construct(Config $config, Client $client = null)
-    {
-        $this->config = $config;
-        $this->client = $client ?? $this->makeClient();
-    }
-
     /**
      * @param  array  $notification
      * @return array
@@ -60,36 +41,23 @@ class HoneybadgerClient
     }
 
     /**
-     * @param  string  $key
+     * @param  string  $checkinId
      * @return void
      */
-    public function checkin(string $key): void
+    public function checkin(string $checkinId): void
     {
         try {
-            $response = $this->client->head(sprintf('v1/check_in/%s', $key));
+            $response = $this->client->head(sprintf('v1/check_in/%s', $checkinId));
+
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
+                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            }
         } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic($e));
-
-            return;
-        }
-
-        if ($response->getStatusCode() !== Response::HTTP_OK) {
-            $this->handleServiceException((new ServiceExceptionFactory($response))->make());
-
-            return;
         }
     }
 
-    private function handleServiceException(ServiceException $e): void
-    {
-        $serviceExceptionHandler = $this->config['service_exception_handler'];
-        call_user_func_array($serviceExceptionHandler, [$e]);
-    }
-
-    /**
-     * @return \GuzzleHttp\Client
-     */
-    private function makeClient(): Client
+    public function makeClient(): Client
     {
         return new Client([
             'base_uri' => $this->config['endpoint'],
@@ -104,4 +72,6 @@ class HoneybadgerClient
             RequestOptions::VERIFY => $this->config['client']['verify'] ?? true,
         ]);
     }
+
+
 }

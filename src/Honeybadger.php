@@ -20,7 +20,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.14.0';
+    const VERSION = '2.15.0';
 
     /**
      * Honeybadger API URL.
@@ -28,22 +28,22 @@ class Honeybadger implements Reporter
     const API_URL = 'https://api.honeybadger.io/';
 
     /**
-     * @var \Honeybadger\HoneybadgerClient;
+     * @var HoneybadgerClient;
      */
     protected $client;
 
     /**
-     * @var \Honeybadger\Config
+     * @var Config
      */
     protected $config;
 
     /**
-     * @var \Honeybadger\Support\Repository
+     * @var Repository
      */
     protected $context;
 
     /**
-     * @var \Honeybadger\Breadcrumbs
+     * @var Breadcrumbs
      */
     protected $breadcrumbs;
 
@@ -165,7 +165,7 @@ class Honeybadger implements Reporter
     }
 
     /**
-     * @return \Honeybadger\Support\Repository
+     * @return Repository
      */
     public function getContext(): Repository
     {

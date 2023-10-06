@@ -18,6 +18,7 @@ class ConfigTest extends TestCase
 
         $this->assertEquals([
             'api_key' => '1234',
+            'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
             'notifier' => [
                 'name' => 'honeybadger-php',
@@ -53,6 +54,7 @@ class ConfigTest extends TestCase
             'breadcrumbs' => [
                 'enabled' => true,
             ],
+            'checkins' => []
         ], $config);
     }
 }
