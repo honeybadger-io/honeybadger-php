@@ -35,12 +35,15 @@ interface Reporter
     public function rawNotification(callable $callable): array;
 
     /**
-     * @param  string  $key
+     * Checkin using id or name.
+     * Pass checkin name only if checkins are defined in your config file.
+     *
+     * @param  string  $idOrName
      * @return void
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function checkin(string $key): void;
+    public function checkin(string $idOrName): void;
 
     /**
      * Attach some additional context to an error report. Context can be specified as a $key and $value, or as an array with key-value pairs.

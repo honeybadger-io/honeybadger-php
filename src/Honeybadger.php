@@ -28,6 +28,11 @@ class Honeybadger implements Reporter
     const API_URL = 'https://api.honeybadger.io/';
 
     /**
+     * @var CheckinsClient;
+     */
+    protected $checkinsClient;
+
+    /**
      * @var HoneybadgerClient;
      */
     protected $client;
@@ -52,6 +57,7 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
+        $this->checkinsClient = new CheckinsClient($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 
@@ -114,9 +120,55 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function checkin(string $key): void
+    public function checkin(string $idOrName): void
     {
-        $this->client->checkin($key);
+        $id = $this->getCheckinId($idOrName);
+        $this->client->checkin($id);
+    }
+
+    /**
+     * Identify whether this could be the name of the checkin
+     * by looking at the checkins array
+     *
+     * @param $identifier
+     * @return string
+     * @throws ServiceException
+     */
+    private function getCheckinId($identifier): string {
+        $id = $identifier;
+        $checkins = $this->config['checkins'];
+        if (count($checkins) > 0) {
+            $filtered = array_filter($checkins, function ($checkin) use ($identifier) {
+                return $checkin->name === $identifier;
+            });
+            if (count($filtered) > 0) {
+                /** @var Checkin $checkin */
+                $checkin = array_values($filtered)[0];
+                if (isset($checkin->id)) {
+                    $id = $checkin->id;
+                }
+                else if ($checkin = $this->getCheckinByName($checkin->projectId, $checkin->name)) {
+                    $id = $checkin->id;
+                }
+            }
+        }
+
+        return $id;
+    }
+
+    /**
+     * @throws ServiceException
+     */
+    private function getCheckinByName(string $projectId, string $name): ?Checkin {
+        $checkins = $this->checkinsClient->listForProject($projectId);
+        $filtered = array_filter($checkins, function ($checkin) use ($name) {
+            return $checkin->name === $name;
+        });
+        if (count($filtered) > 0) {
+            return array_values($filtered)[0];
+        }
+
+        return null;
     }
 
     /**
