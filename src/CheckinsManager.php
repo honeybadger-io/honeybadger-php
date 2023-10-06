@@ -69,8 +69,8 @@ class CheckinsManager implements SyncCheckins {
             }
 
             if ($existingCheckin) {
+                $localCheckin->id = $existingCheckin->id;
                 if (! $existingCheckin->isInSync($localCheckin)) {
-                    $localCheckin->id = $existingCheckin->id;
                     if ($updated = $this->update($localCheckin)) {
                         $result[] = $updated;
                     }
