@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Honeybadger\Exceptions\ServiceException;
 use Throwable;
 
-class CheckinsClientProxy
+class CheckinsClientWithErrorHandling
 {
     /**
      * @var Config

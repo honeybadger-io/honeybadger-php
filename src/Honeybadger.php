@@ -57,7 +57,7 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
-        $this->checkinsClient = new CheckinsClientProxy($this->config, $client);
+        $this->checkinsClient = new CheckinsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 

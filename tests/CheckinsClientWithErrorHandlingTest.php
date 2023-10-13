@@ -7,14 +7,14 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use Honeybadger\Checkin;
 use Honeybadger\CheckinsClient;
-use Honeybadger\CheckinsClientProxy;
+use Honeybadger\CheckinsClientWithErrorHandling;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckinsClientProxyTest extends TestCase
+class CheckinsClientWithErrorHandlingTest extends TestCase
 {
     /** @test */
     public function allows_service_exceptions_to_be_handled()
@@ -31,7 +31,7 @@ class CheckinsClientProxyTest extends TestCase
         $mock->shouldReceive('get')->andThrow(new Exception);
 
         /** @var CheckinsClient $client */
-        $client = new CheckinsClientProxy($config, $mock);
+        $client = new CheckinsClientWithErrorHandling($config, $mock);
         $client->get('p1234', 'c1234');
 
         $this->assertStringContainsString('There was an error sending the payload to Honeybadger', $message);
