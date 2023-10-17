@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- Allow calling the checkin method with a checkin id or name
 
 ## [2.15.0] - 2023-10-06
 ### Added

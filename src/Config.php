@@ -13,6 +13,11 @@ class Config extends Repository
     public function __construct($config = [])
     {
         $this->items = $this->mergeConfig($config);
+        $checkinsRaw = $this->get('checkins') ?? [];
+        $checkins = array_map(function ($checkin) {
+            return new Checkin($checkin);
+        }, $checkinsRaw);
+        $this->set('checkins', $checkins);
     }
 
     /**

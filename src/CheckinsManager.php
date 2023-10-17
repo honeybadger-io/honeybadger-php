@@ -65,17 +65,11 @@ class CheckinsManager implements SyncCheckins {
                 $existingCheckin = $this->client->get($localCheckin->projectId, $localCheckin->id);
             }
             else {
-                $projectCheckins = $this->client->listForProject($localCheckin->projectId);
-                $filtered = array_filter($projectCheckins, function ($projectCheckin) use ($localCheckin) {
-                    return $projectCheckin->name === $localCheckin->name;
-                });
-                if (count($filtered) > 0) {
-                    $existingCheckin = $filtered[0];
-                    $localCheckin->id = $existingCheckin->id;
-                }
+                $existingCheckin = $this->getByName($localCheckin->projectId, $localCheckin->name);
             }
 
             if ($existingCheckin) {
+                $localCheckin->id = $existingCheckin->id;
                 if (! $existingCheckin->isInSync($localCheckin)) {
                     if ($updated = $this->update($localCheckin)) {
                         $result[] = $updated;
@@ -91,6 +85,21 @@ class CheckinsManager implements SyncCheckins {
         }
 
         return $result;
+    }
+
+    /**
+     * @throws ServiceException
+     */
+    private function getByName(string $projectId, string $name): ?Checkin {
+        $checkins = $this->client->listForProject($projectId) ?? [];
+        $filtered = array_filter($checkins, function ($checkin) use ($name) {
+            return $checkin->name === $name;
+        });
+        if (count($filtered) > 0) {
+            return array_values($filtered)[0];
+        }
+
+        return null;
     }
 
     /**
@@ -111,7 +120,7 @@ class CheckinsManager implements SyncCheckins {
         }, $localCheckins));
 
         foreach ($projectIds as $projectId) {
-            $projectCheckins = $this->client->listForProject($projectId);
+            $projectCheckins = $this->client->listForProject($projectId) ?? [];
             foreach ($projectCheckins as $projectCheckin) {
                 $filtered = array_filter($localCheckins, function ($checkin) use ($projectCheckin) {
                     return $checkin->id === $projectCheckin->id;
