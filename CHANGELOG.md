@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.17.0] - 2023-10-27
+### Added
+- Check-Ins: Support for slug configuration within the package
+
 ## [2.16.0] - 2023-10-17
 ### Added
 - Allow calling the checkin method with a checkin id or name

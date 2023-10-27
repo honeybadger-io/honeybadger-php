@@ -24,6 +24,13 @@ class Checkin
     public $name;
 
     /**
+     * Checkin slug.
+     *
+     * @var string|null
+     */
+    public $slug;
+
+    /**
      * Valid values are "simple" or "cron".
      * If you specify "cron", then the "cron_schedule" field is required.
      *
@@ -82,6 +89,7 @@ class Checkin
     public function __construct(array $params = []) {
         $this->id = $params['id'] ?? null;
         $this->name = $params['name'] ?? null;
+        $this->slug = $params['slug'] ?? null;
         $this->scheduleType = $params['schedule_type'] ?? null;
         $this->reportPeriod = $params['report_period'] ?? null;
         $this->gracePeriod = $params['grace_period'] ?? null;
@@ -132,6 +140,7 @@ class Checkin
     {
         $result = [
             'name' => $this->name,
+            'slug' => $this->slug,
             'schedule_type' => $this->scheduleType,
             'report_period' => $this->reportPeriod,
             'grace_period' => $this->gracePeriod,
@@ -151,6 +160,7 @@ class Checkin
      */
     public function isInSync(Checkin $other): bool {
         return $this->name === $other->name
+            && $this->slug === $other->slug
             && $this->projectId === $other->projectId
             && $this->scheduleType === $other->scheduleType
             && $this->reportPeriod === $other->reportPeriod
