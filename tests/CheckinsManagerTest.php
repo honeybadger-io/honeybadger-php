@@ -39,6 +39,35 @@ class CheckinsManagerTest extends TestCase
     }
 
     /** @test */
+    public function throws_when_checkins_have_same_names_and_project_id()
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('The configuration is invalid: Check-ins must have unique names and project ids');
+
+        $config = ['api_key' => '1234'];
+        $mock = Mockery::mock(Client::class);
+        $mock->shouldReceive('head')->andThrow(new Exception);
+
+        $client = new CheckinsClient(new Config($config), $mock);
+        $manager = new CheckinsManager($config, $client);
+        $checkinsConfig = [
+            [
+                'project_id' => '1234',
+                 'name' => 'Test Checkin',
+                'schedule_type' => 'simple',
+                'report_period' => '1 day',
+            ],
+            [
+                'project_id' => '1234',
+                'name' => 'Test Checkin',
+                'schedule_type' => 'simple',
+                'report_period' => '2 days',
+            ],
+        ];
+        $manager->sync($checkinsConfig);
+    }
+
+    /** @test */
     public function creates_checkin_when_not_found_in_project_checkins()
     {
         $config = [

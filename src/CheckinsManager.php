@@ -33,6 +33,21 @@ class CheckinsManager implements SyncCheckins {
      */
     public function sync(array $checkins): array
     {
+        $localCheckins = $this->getLocalCheckins($checkins);
+        $createdOrUpdated = $this->synchronizeLocalCheckins($localCheckins);
+        $removed = $this->removeNotFoundCheckins($localCheckins);
+
+        return array_merge($createdOrUpdated, $removed);
+    }
+
+    /**
+     * @param array $checkins
+     * @return Checkin[]
+     *
+     * @throws ServiceException
+     */
+    private function getLocalCheckins(array $checkins): array
+    {
         $localCheckins = array_map(function ($checkin) {
             $checkin = new Checkin($checkin);
             $checkin->validate();
@@ -40,10 +55,16 @@ class CheckinsManager implements SyncCheckins {
             return $checkin;
         }, $checkins);
 
-        $createdOrUpdated = $this->synchronizeLocalCheckins($localCheckins);
-        $removed = $this->removeNotFoundCheckins($localCheckins);
+        // check that there are no checkins with same name and project id
+        $checkinNames = array_unique(array_map(function ($checkin) {
+            return "$checkin->projectId $checkin->name";
+        }, $localCheckins));
 
-        return array_merge($createdOrUpdated, $removed);
+        if (count($checkinNames) !== count($localCheckins)) {
+            throw ServiceException::invalidConfig('Check-ins must have unique names and project ids');
+        }
+
+        return $localCheckins;
     }
 
     /**
