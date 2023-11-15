@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.17.1] - 2023-11-10
+## [2.17.1] - 2023-11-15
 ### Fixed
 - Check-Ins: Do not allow check-ins with same names and project id
 - Check-Ins: Send empty string for optional values so that they will be updated when unset
