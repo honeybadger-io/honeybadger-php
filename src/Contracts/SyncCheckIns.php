@@ -2,9 +2,9 @@
 
 namespace Honeybadger\Contracts;
 
-use Honeybadger\Checkin;
+use Honeybadger\CheckIn;
 
-interface SyncCheckins
+interface SyncCheckIns
 {
     /**
      * Given an array of checkin definitions,
@@ -12,8 +12,8 @@ interface SyncCheckins
      *
      * The return value is an array of checkins that were created, updated or deleted.
      *
-     * @param array $checkins
-     * @return Checkin[] An array of checkins that were created, updated or deleted.
+     * @param array $checkIns
+     * @return CheckIn[] An array of checkins that were created, updated or deleted.
      */
-    public function sync(array $checkins): array;
+    public function sync(array $checkIns): array;
 }

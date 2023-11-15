@@ -15,7 +15,7 @@ class Config extends Repository
         $this->items = $this->mergeConfig($config);
         $checkinsRaw = $this->get('checkins') ?? [];
         $checkins = array_map(function ($checkin) {
-            return new Checkin($checkin);
+            return new CheckIn($checkin);
         }, $checkinsRaw);
         $this->set('checkins', $checkins);
     }

@@ -41,13 +41,13 @@ class HoneybadgerClient extends ApiClient
     }
 
     /**
-     * @param  string  $checkinId
+     * @param  string  $checkInId
      * @return void
      */
-    public function checkin(string $checkinId): void
+    public function checkIn(string $checkInId): void
     {
         try {
-            $response = $this->client->head(sprintf('v1/check_in/%s', $checkinId));
+            $response = $this->client->head(sprintf('v1/check_in/%s', $checkInId));
 
             if ($response->getStatusCode() !== Response::HTTP_OK) {
                 $this->handleServiceException((new ServiceExceptionFactory($response))->make());

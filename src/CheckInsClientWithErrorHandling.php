@@ -6,7 +6,7 @@ use GuzzleHttp\Client;
 use Honeybadger\Exceptions\ServiceException;
 use Throwable;
 
-class CheckinsClientWithErrorHandling
+class CheckInsClientWithErrorHandling
 {
     /**
      * @var Config
@@ -14,14 +14,14 @@ class CheckinsClientWithErrorHandling
     private $config;
 
     /**
-     * @var CheckinsClient
+     * @var CheckInsClient
      */
     private $baseClient;
 
     public function __construct(Config $config, Client $httpClient = null)
     {
         $this->config = $config;
-        $this->baseClient = new CheckinsClient($config, $httpClient);
+        $this->baseClient = new CheckInsClient($config, $httpClient);
     }
 
     /**

@@ -35,7 +35,7 @@ interface Reporter
     public function rawNotification(callable $callable): array;
 
     /**
-     * Checkin using id or name.
+     * CheckIn using id or name.
      * Pass checkin name only if checkins are defined in your config file.
      *
      * @param  string  $idOrName
