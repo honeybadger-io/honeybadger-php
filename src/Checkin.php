@@ -140,17 +140,21 @@ class Checkin
     {
         $result = [
             'name' => $this->name,
-            'slug' => $this->slug,
             'schedule_type' => $this->scheduleType,
-            'report_period' => $this->reportPeriod,
-            'grace_period' => $this->gracePeriod,
-            'cron_schedule' => $this->cronSchedule,
-            'cron_timezone' => $this->cronTimezone,
+            'slug' => $this->slug ?? '',
+            'grace_period' => $this->gracePeriod ?? '',
         ];
 
-        return array_filter($result, function ($value) {
-            return !is_null($value);
-        });
+        if ($this->scheduleType === 'simple') {
+            $result['report_period'] = $this->reportPeriod;
+        }
+
+        if ($this->scheduleType === 'cron') {
+            $result['cron_schedule'] = $this->cronSchedule;
+            $result['cron_timezone'] = $this->cronTimezone ?? '';
+        }
+
+        return $result;
     }
 
     /**
@@ -160,12 +164,12 @@ class Checkin
      */
     public function isInSync(Checkin $other): bool {
         return $this->name === $other->name
-            && $this->slug === $other->slug
+            && ($this->slug ?? '') === ($other->slug ?? '')
             && $this->projectId === $other->projectId
             && $this->scheduleType === $other->scheduleType
             && $this->reportPeriod === $other->reportPeriod
-            && $this->gracePeriod === $other->gracePeriod
+            && ($this->gracePeriod ?? '') === ($other->gracePeriod ?? '')
             && $this->cronSchedule === $other->cronSchedule
-            && $this->cronTimezone === $other->cronTimezone;
+            && ($this->cronTimezone ?? '') === ($other->cronTimezone ?? '');
     }
 }
