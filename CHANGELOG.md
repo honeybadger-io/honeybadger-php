@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.17.2] - 2023-11-15
+## [2.17.2] - 2023-11-16
 ### Refactored
 - Check-Ins: checkins to check-ins
 
