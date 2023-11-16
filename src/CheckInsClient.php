@@ -10,18 +10,18 @@ use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class CheckinsClient extends ApiClient
+class CheckInsClient extends ApiClient
 {
     const BASE_URL = 'https://app.honeybadger.io/';
 
     /**
-     * @var Checkin[][]
+     * @var CheckIn[][]
      */
-    private $projectCheckins = [];
+    private $projectCheckIns = [];
 
     /**
      * @param string $projectId
-     * @return Checkin[]|null
+     * @return CheckIn[]|null
      *
      * @throws ServiceException
      */
@@ -31,8 +31,8 @@ class CheckinsClient extends ApiClient
             throw ServiceException::missingPersonalAuthToken();
         }
 
-        if (isset($this->projectCheckins[$projectId])) {
-            return $this->projectCheckins[$projectId];
+        if (isset($this->projectCheckIns[$projectId])) {
+            return $this->projectCheckIns[$projectId];
         }
 
         try {
@@ -44,13 +44,13 @@ class CheckinsClient extends ApiClient
             }
 
             $data = json_decode($response->getBody(), true);
-            $this->projectCheckins[$projectId] = array_map(function ($checkin) use ($projectId) {
-                $result = new Checkin($checkin);
+            $this->projectCheckIns[$projectId] = array_map(function ($checkIn) use ($projectId) {
+                $result = new CheckIn($checkIn);
                 $result->projectId = $projectId;
 
                 return $result;
             }, $data['results']);
-            return $this->projectCheckins[$projectId];
+            return $this->projectCheckIns[$projectId];
         } catch (ServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
@@ -61,7 +61,7 @@ class CheckinsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function get(string $projectId, string $checkinId): Checkin
+    public function get(string $projectId, string $checkinId): CheckIn
     {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
@@ -76,7 +76,7 @@ class CheckinsClient extends ApiClient
             }
 
             $data = json_decode($response->getBody(), true);
-            return new Checkin($data);
+            return new CheckIn($data);
         } catch (ServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
@@ -87,17 +87,17 @@ class CheckinsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function create(Checkin $checkin): Checkin
+    public function create(CheckIn $checkIn): CheckIn
     {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
-            $url = sprintf('v2/projects/%s/check_ins', $checkin->projectId);
+            $url = sprintf('v2/projects/%s/check_ins', $checkIn->projectId);
             $response = $this->client->post($url, [
                 'json' => [
-                    'check_in' => $checkin->asRequestData()
+                    'check_in' => $checkIn->asRequestData()
                 ]
             ]);
 
@@ -106,7 +106,7 @@ class CheckinsClient extends ApiClient
             }
 
             $data = json_decode($response->getBody(), true);
-            return new Checkin($data);
+            return new CheckIn($data);
         } catch (ServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
@@ -117,17 +117,17 @@ class CheckinsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function update(Checkin $checkin): Checkin
+    public function update(CheckIn $checkIn): CheckIn
     {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
-            $url = sprintf('v2/projects/%s/check_ins/%s', $checkin->projectId, $checkin->id);
+            $url = sprintf('v2/projects/%s/check_ins/%s', $checkIn->projectId, $checkIn->id);
             $response = $this->client->put($url, [
                 'json' => [
-                    'check_in' => $checkin->asRequestData()
+                    'check_in' => $checkIn->asRequestData()
                 ]
             ]);
 
@@ -135,7 +135,7 @@ class CheckinsClient extends ApiClient
                 throw (new ServiceExceptionFactory($response))->make();
             }
 
-            return $checkin;
+            return $checkIn;
         } catch (ServiceException $e) {
             throw $e;
         } catch (Throwable $e) {
@@ -146,13 +146,13 @@ class CheckinsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function remove(string $projectId, string $checkinId): void {
+    public function remove(string $projectId, string $checkInId): void {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
         }
 
         try {
-            $url = sprintf('v2/projects/%s/check_ins/%s', $projectId, $checkinId);
+            $url = sprintf('v2/projects/%s/check_ins/%s', $projectId, $checkInId);
             $response = $this->client->delete($url);
 
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {

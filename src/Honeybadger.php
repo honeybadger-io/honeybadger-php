@@ -20,7 +20,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.17.1';
+    const VERSION = '2.17.2';
 
     /**
      * Honeybadger API URL.
@@ -28,9 +28,9 @@ class Honeybadger implements Reporter
     const API_URL = 'https://api.honeybadger.io/';
 
     /**
-     * @var CheckinsClient;
+     * @var CheckInsClient;
      */
-    protected $checkinsClient;
+    protected $checkInsClient;
 
     /**
      * @var HoneybadgerClient;
@@ -57,7 +57,7 @@ class Honeybadger implements Reporter
         $this->config = new Config($config);
 
         $this->client = new HoneybadgerClient($this->config, $client);
-        $this->checkinsClient = new CheckinsClientWithErrorHandling($this->config, $client);
+        $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
 
@@ -122,33 +122,33 @@ class Honeybadger implements Reporter
      */
     public function checkin(string $idOrName): void
     {
-        $id = $this->getCheckinId($idOrName);
-        $this->client->checkin($id);
+        $id = $this->getCheckInId($idOrName);
+        $this->client->checkIn($id);
     }
 
     /**
-     * Identify whether this could be the name of the checkin
-     * by looking at the checkins array
+     * Identify whether this could be the name of the check-in
+     * by looking at the check-ins array
      *
      * @param $identifier
      * @return string
      * @throws ServiceException
      */
-    private function getCheckinId($identifier): string {
+    private function getCheckInId($identifier): string {
         $id = $identifier;
-        $checkins = $this->config['checkins'];
-        if (count($checkins) > 0) {
-            $filtered = array_filter($checkins, function ($checkin) use ($identifier) {
-                return $checkin->name === $identifier;
+        $checkIns = $this->config['checkins'];
+        if (count($checkIns) > 0) {
+            $filtered = array_filter($checkIns, function ($checkIn) use ($identifier) {
+                return $checkIn->name === $identifier;
             });
             if (count($filtered) > 0) {
-                /** @var Checkin $checkin */
-                $checkin = array_values($filtered)[0];
-                if (isset($checkin->id)) {
-                    $id = $checkin->id;
+                /** @var CheckIn $checkIn */
+                $checkIn = array_values($filtered)[0];
+                if (isset($checkIn->id)) {
+                    $id = $checkIn->id;
                 }
-                else if ($checkin = $this->getCheckinByName($checkin->projectId, $checkin->name)) {
-                    $id = $checkin->id;
+                else if ($checkIn = $this->getCheckInByName($checkIn->projectId, $checkIn->name)) {
+                    $id = $checkIn->id;
                 }
             }
         }
@@ -159,10 +159,10 @@ class Honeybadger implements Reporter
     /**
      * @throws ServiceException
      */
-    private function getCheckinByName(string $projectId, string $name): ?Checkin {
-        $checkins = $this->checkinsClient->listForProject($projectId) ?? [];
-        $filtered = array_filter($checkins, function ($checkin) use ($name) {
-            return $checkin->name === $name;
+    private function getCheckInByName(string $projectId, string $name): ?CheckIn {
+        $checkIns = $this->checkInsClient->listForProject($projectId) ?? [];
+        $filtered = array_filter($checkIns, function ($checkIn) use ($name) {
+            return $checkIn->name === $name;
         });
         if (count($filtered) > 0) {
             return array_values($filtered)[0];

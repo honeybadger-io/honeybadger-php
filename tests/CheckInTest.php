@@ -2,24 +2,24 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\Checkin;
+use Honeybadger\CheckIn;
 use Honeybadger\Exceptions\ServiceException;
 use PHPUnit\Framework\TestCase;
 
-class CheckinTest extends TestCase {
+class CheckInTest extends TestCase {
 
     /** @test */
-    public function it_validates_simple_checkin()
+    public function it_validates_simple_check_in()
     {
-        $checkin = new Checkin([
+        $checkIn = new CheckIn([
             'project_id' => 'p1234',
-            'name' => 'Test Checkin',
+            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour',
         ]);
         try {
-            $checkin->validate();
+            $checkIn->validate();
         } catch (ServiceException $e) {
             $msg = $e->getMessage();
             $this->fail("should not reach here: $msg");
@@ -28,17 +28,17 @@ class CheckinTest extends TestCase {
     }
 
     /** @test */
-    public function it_validates_cron_checkin()
+    public function it_validates_cron_check_in()
     {
-        $checkin = new Checkin([
+        $checkIn = new CheckIn([
             'project_id' => 'p1234',
-            'name' => 'Test Checkin',
+            'name' => 'Test CheckIn',
             'schedule_type' => 'cron',
             'cron_schedule' => '* * * * *',
             'grace_period' => '1 hour',
         ]);
         try {
-            $checkin->validate();
+            $checkIn->validate();
         } catch (ServiceException $e) {
             $msg = $e->getMessage();
             $this->fail("should not reach here: $msg");
@@ -50,79 +50,79 @@ class CheckinTest extends TestCase {
     public function it_throws_for_missing_project_id()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessageMatches('/project_id is required for each checkin/');
+        $this->expectExceptionMessageMatches('/project_id is required for each check-in/');
 
-        $checkin = new Checkin([
-            'name' => 'Test Checkin',
+        $checkIn = new CheckIn([
+            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'grace_period' => '1 hour',
             'report_period' => '1 day',
         ]);
 
-        $checkin->validate();
+        $checkIn->validate();
     }
 
     /** @test */
-    public function it_throws_for_invalid_simple_checkin()
+    public function it_throws_for_invalid_simple_check_in()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessageMatches('/\[report_period\] is required for simple checkins/');
+        $this->expectExceptionMessageMatches('/\[report_period\] is required for simple check-ins/');
 
-        $checkin = new Checkin([
+        $checkIn = new CheckIn([
             'project_id' => 'p1234',
-            'name' => 'Test Checkin',
+            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'grace_period' => '1 hour',
         ]);
 
-        $checkin->validate();
+        $checkIn->validate();
     }
 
     /** @test */
-    public function it_throws_for_invalid_cron_checkin()
+    public function it_throws_for_invalid_cron_check_in()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessageMatches('/\[cron_schedule\] is required for cron checkins/');
+        $this->expectExceptionMessageMatches('/\[cron_schedule\] is required for cron check-ins/');
 
-        $checkin = new Checkin([
+        $checkIn = new CheckIn([
             'project_id' => 'p1234',
-            'name' => 'Test Checkin',
+            'name' => 'Test CheckIn',
             'schedule_type' => 'cron',
             'grace_period' => '1 hour'
         ]);
 
-        $checkin->validate();
+        $checkIn->validate();
     }
 
     /** @test */
-    public function it_marks_checkin_as_deleted()
+    public function it_marks_check_in_as_deleted()
     {
-        $checkin = new Checkin([
+        $checkIn = new CheckIn([
             'project_id' => 'p1234',
-            'name' => 'Test Checkin',
+            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour'
         ]);
 
-        $this->assertFalse($checkin->isDeleted());
-        $checkin->markAsDeleted();
-        $this->assertTrue($checkin->isDeleted());
+        $this->assertFalse($checkIn->isDeleted());
+        $checkIn->markAsDeleted();
+        $this->assertTrue($checkIn->isDeleted());
     }
 
     /** @test */
     public function it_does_not_include_null_values()
     {
-        $checkin = new Checkin([
-            'name' => 'Test Checkin',
+        $checkIn = new CheckIn([
+            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour'
         ]);
 
-        $this->assertNull($checkin->cronSchedule);
+        $this->assertNull($checkIn->cronSchedule);
 
-        $requestData = $checkin->asRequestData();
+        $requestData = $checkIn->asRequestData();
         $this->assertArrayNotHasKey('cronSchedule', $requestData);
     }
 }

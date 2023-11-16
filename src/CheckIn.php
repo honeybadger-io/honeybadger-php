@@ -7,24 +7,24 @@ use Honeybadger\Exceptions\ServiceException;
 /**
  * @see https://docs.honeybadger.io/api/check-ins/#create-a-check-in
  */
-class Checkin
+class CheckIn
 {
     /**
-     * Checkin identifier.
+     * CheckIn identifier.
      *
      * @var string|null
      */
     public $id;
 
     /**
-     * Checkin name.
+     * CheckIn name.
      *
      * @var string|null
      */
     public $name;
 
     /**
-     * Checkin slug.
+     * CheckIn slug.
      *
      * @var string|null
      */
@@ -114,11 +114,11 @@ class Checkin
      */
     public function validate(): void {
         if ($this->projectId === null) {
-            throw ServiceException::invalidConfig('project_id is required for each checkin');
+            throw ServiceException::invalidConfig('project_id is required for each check-in');
         }
 
         if ($this->name === null) {
-            throw ServiceException::invalidConfig('name is required for each checkin');
+            throw ServiceException::invalidConfig('name is required for each check-in');
         }
 
         $name = $this->name;
@@ -128,11 +128,11 @@ class Checkin
         }
 
         if ($this->scheduleType === 'simple' && $this->reportPeriod === null) {
-            throw ServiceException::invalidConfig("$name [report_period] is required for simple checkins");
+            throw ServiceException::invalidConfig("$name [report_period] is required for simple check-ins");
         }
 
         if ($this->scheduleType === 'cron' && $this->cronSchedule === null) {
-            throw ServiceException::invalidConfig("$name [cron_schedule] is required for cron checkins");
+            throw ServiceException::invalidConfig("$name [cron_schedule] is required for cron check-ins");
         }
     }
 
@@ -162,7 +162,7 @@ class Checkin
      * If the one in the config file does not match the checkin from the API,
      * then we issue an update request.
      */
-    public function isInSync(Checkin $other): bool {
+    public function isInSync(CheckIn $other): bool {
         return $this->name === $other->name
             && ($this->slug ?? '') === ($other->slug ?? '')
             && $this->projectId === $other->projectId

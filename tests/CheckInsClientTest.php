@@ -5,18 +5,18 @@ namespace Honeybadger\Tests;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Honeybadger\Checkin;
-use Honeybadger\CheckinsClient;
+use Honeybadger\CheckIn;
+use Honeybadger\CheckInsClient;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckinsClientTest extends TestCase
+class CheckInsClientTest extends TestCase
 {
     /** @test */
-    public function throws_generic_exception_for_checkins()
+    public function throws_generic_exception_for_check_ins()
     {
         $this->expectException(ServiceException::class);
         $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
@@ -27,7 +27,7 @@ class CheckinsClientTest extends TestCase
         $mock = Mockery::mock(Client::class)->makePartial();
         $mock->shouldReceive('get')->andThrow(new Exception);
 
-        $client = new CheckinsClient($config, $mock);
+        $client = new CheckInsClient($config, $mock);
         $client->get('p1234', 'c1234');
     }
 
@@ -40,12 +40,12 @@ class CheckinsClientTest extends TestCase
         $config = new Config([]);
         $mock = Mockery::mock(Client::class);
 
-        $client = new CheckinsClient($config, $mock);
+        $client = new CheckInsClient($config, $mock);
         $client->get('p1234', 'c1234');
     }
 
     /** @test */
-    public function creates_checkin_and_populates_id()
+    public function creates_check_in_and_populates_id()
     {
         $config = new Config([
             'personal_auth_token' => '5678'
@@ -54,9 +54,9 @@ class CheckinsClientTest extends TestCase
         $mock->shouldReceive('post')
             ->andReturn(new GuzzleResponse(Response::HTTP_CREATED, [], json_encode(['id' => '1234'])));
 
-        $client = new CheckinsClient($config, $mock);
-        $checkin = $client->create(new Checkin());
+        $client = new CheckInsClient($config, $mock);
+        $checkIn = $client->create(new CheckIn());
 
-        $this->assertEquals('1234', $checkin->id);
+        $this->assertEquals('1234', $checkIn->id);
     }
 }

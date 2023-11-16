@@ -40,7 +40,7 @@ class HoneybadgerClientTest extends TestCase
         $mock->shouldReceive('head')->andThrow(new Exception);
 
         $client = new HoneybadgerClient($config, $mock);
-        $client->checkin('1234');
+        $client->checkIn('1234');
     }
 
     /** @test */

@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.17.2] - 2023-11-15
+### Refactored
+- Check-Ins: checkins to check-ins
+
 ## [2.17.1] - 2023-11-15
 ### Fixed
 - Check-Ins: Do not allow check-ins with same names and project id
