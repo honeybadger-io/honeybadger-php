@@ -30,7 +30,7 @@ jobs:
         coverage: xdebug
 
     - name: Install dependencies
-      run: composer update ${{ matrix.composer-flags }} --prefer-dist --no-interaction
+      run: composer install
 
     - name: Run Tests
       run: vendor/bin/phpunit
