@@ -4,6 +4,8 @@ CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Fixed
+- Use $request->getContentTypeFormat
 
 ## [2.17.2] - 2023-11-16
 ### Refactored
