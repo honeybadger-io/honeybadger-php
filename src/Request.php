@@ -97,11 +97,11 @@ class Request
      */
     private function data(): array
     {
-        if ($this->request->getContentType() === 'json') {
+        if ($this->request->getContentTypeFormat() === 'json') {
             return json_decode($this->request->getContent(), true) ?: [];
         }
 
-        if ($this->request->getContentType() === 'form') {
+        if ($this->request->getContentTypeFormat() === 'form') {
             return $this->request->request->all();
         }
 
