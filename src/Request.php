@@ -92,16 +92,26 @@ class Request
         return isset($_SERVER['REQUEST_METHOD']);
     }
 
+    private function getRequestContentType(): ?string
+    {
+        if (method_exists($this->request, 'getContentType')) {
+            return $this->request->getContentType();
+        }
+
+        return $this->request->getContentTypeFormat();
+    }
+
     /**
      * @return array
      */
     private function data(): array
     {
-        if ($this->request->getContentTypeFormat() === 'json') {
+        $contentType = $this->getRequestContentType();
+        if ($contentType === 'json') {
             return json_decode($this->request->getContent(), true) ?: [];
         }
 
-        if ($this->request->getContentTypeFormat() === 'form') {
+        if ($contentType === 'form') {
             return $this->request->request->all();
         }
 
