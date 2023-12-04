@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.17.3] - 2023-12-04
+### Fixed
+- Use $request->getContentTypeFormat
+
 ## [2.17.2] - 2023-11-16
 ### Refactored
 - Check-Ins: checkins to check-ins
