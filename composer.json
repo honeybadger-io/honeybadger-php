@@ -30,7 +30,7 @@
     "require-dev": {
         "larapack/dd": "^1.1",
         "mockery/mockery": "^1.4",
-        "phpunit/phpunit": "^8.5|^9.4"
+        "phpunit/phpunit": "^10.5.1"
     },
     "extra": {
         "branch-alias": {
