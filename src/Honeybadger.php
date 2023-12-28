@@ -120,40 +120,27 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function checkin(string $idOrName): void
+    public function checkin(string $idOrSlug): void
     {
-        $id = $this->getCheckInId($idOrName);
-        $this->client->checkIn($id);
-    }
-
-    /**
-     * Identify whether this could be the name of the check-in
-     * by looking at the check-ins array
-     *
-     * @param $identifier
-     * @return string
-     * @throws ServiceException
-     */
-    private function getCheckInId($identifier): string {
-        $id = $identifier;
-        $checkIns = $this->config['checkins'];
-        if (count($checkIns) > 0) {
-            $filtered = array_filter($checkIns, function ($checkIn) use ($identifier) {
-                return $checkIn->name === $identifier;
-            });
-            if (count($filtered) > 0) {
-                /** @var CheckIn $checkIn */
-                $checkIn = array_values($filtered)[0];
-                if (isset($checkIn->id)) {
-                    $id = $checkIn->id;
-                }
-                else if ($checkIn = $this->getCheckInByName($checkIn->projectId, $checkIn->name)) {
-                    $id = $checkIn->id;
-                }
-            }
+        if ($this->isCheckInSlug($idOrSlug)) {
+            $this->client->checkInWithSlug($this->config->get('api_key'), $idOrSlug);
+            return;
         }
 
-        return $id;
+        $this->client->checkIn($idOrSlug);
+    }
+
+    private function isCheckInSlug(string $idOrSlug): bool
+    {
+        $checkIns = $this->config->get('checkins') ?? [];
+        if (count($checkIns) > 0) {
+            $filtered = array_filter($checkIns, function ($checkIn) use ($idOrSlug) {
+                return $checkIn->slug === $idOrSlug;
+            });
+            return count($filtered) > 0;
+        }
+
+        return false;
     }
 
     /**

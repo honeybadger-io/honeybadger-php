@@ -25,7 +25,7 @@ class CheckInsManagerTest extends TestCase
     public function throws_when_config_is_invalid()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('The configuration is invalid: name is required for each check-in');
+        $this->expectExceptionMessage('The configuration is invalid: slug is required for each check-in');
 
         $config = ['api_key' => '1234'];
         $mock = Mockery::mock(Client::class);
@@ -49,7 +49,7 @@ class CheckInsManagerTest extends TestCase
     public function throws_when_check_ins_have_same_names_and_project_id()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('The configuration is invalid: Check-ins must have unique names and project ids');
+        $this->expectExceptionMessage('The configuration is invalid: Check-ins must have unique slug values');
 
         $config = ['api_key' => '1234'];
         $mock = Mockery::mock(Client::class);
@@ -59,14 +59,12 @@ class CheckInsManagerTest extends TestCase
         $manager = new CheckInsManager($config, $client);
         $checkInsConfig = [
             [
-                'project_id' => '1234',
-                 'name' => 'Test CheckIn',
+                'slug' => 'test-check-in',
                 'schedule_type' => 'simple',
                 'report_period' => '1 day',
             ],
             [
-                'project_id' => '1234',
-                'name' => 'Test CheckIn',
+                'slug' => 'test-check-in',
                 'schedule_type' => 'simple',
                 'report_period' => '2 days',
             ],
@@ -78,19 +76,24 @@ class CheckInsManagerTest extends TestCase
     public function creates_check_in_when_not_found_in_project_check_ins()
     {
         $config = [
+            'api_key' => 'hbp_ABC',
             'personal_auth_token' => 'abcd'
         ];
         $localCheckIn = [
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
         ];
         $checkInsConfig = [$localCheckIn];
 
         $mock = Mockery::mock(CheckInsClient::class);
+        $mock->shouldReceive('getProjectId')
+            ->withArgs(['hbp_ABC'])
+            ->once()
+            ->andReturn('p1234');
         $mock->shouldReceive('listForProject')
-            ->twice()
+            ->withArgs(['p1234'])
+            ->once()
             ->andReturn([]);
         $mock->shouldReceive('create')
             ->once()
@@ -111,11 +114,11 @@ class CheckInsManagerTest extends TestCase
     public function updates_check_in_when_local_check_in_is_modified()
     {
         $config = [
+            'api_key' => 'hbp_ABC',
             'personal_auth_token' => 'abcd'
         ];
         $localCheckIn = [
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
         ];
@@ -125,8 +128,13 @@ class CheckInsManagerTest extends TestCase
         ];
 
         $mock = Mockery::mock(CheckInsClient::class, ['config' => $config]);
+        $mock->shouldReceive('getProjectId')
+            ->withArgs(['hbp_ABC'])
+            ->once()
+            ->andReturn('p1234');
         $mock->shouldReceive('listForProject')
-            ->twice()
+            ->withArgs(['p1234'])
+            ->once()
             ->andReturn($remoteCheckins);
         $mock->shouldReceive('update')
             ->once()
@@ -144,52 +152,14 @@ class CheckInsManagerTest extends TestCase
     }
 
     /** @test */
-    public function unsets_check_ins_optional_value() {
-        $checkInId = 'c1234';
-        $config = [
-            'personal_auth_token' => 'abcd'
-        ];
-        $localCheckIn = [
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
-            'schedule_type' => 'simple',
-            'report_period' => '1 day',
-        ];
-        $checkInsConfig = [$localCheckIn];
-        $remoteCheckins = [
-            new CheckIn(array_merge($localCheckIn, ['id' => $checkInId, 'slug' => 'test-checkin'])),
-        ];
-
-        $mock = Mockery::mock(CheckInsClient::class, ['config' => $config]);
-        $mock->shouldReceive('listForProject')
-            ->twice()
-            ->andReturn($remoteCheckins);
-        $mock->shouldReceive('update')
-            ->once()
-            ->andReturn(new CheckIn(array_merge(['id' => $checkInId], $localCheckIn)));
-
-        $manager = new CheckInsManager($config, $mock);
-        echo 'is in sync';
-        $result = $manager->sync($checkInsConfig);
-
-        $this->assertIsArray($result);
-        $this->assertCount(1, $result);
-
-        $newCheckin = $result[0];
-        $this->assertEquals($checkInId, $newCheckin->id);
-        $this->assertNull($newCheckin->slug);
-        $this->assertTrue($newCheckin->isInSync(new CheckIn($localCheckIn)));
-    }
-
-    /** @test */
     public function does_not_call_api_when_check_in_is_not_modified()
     {
         $config = [
+            'api_key' => 'hbp_ABC',
             'personal_auth_token' => 'abcd'
         ];
         $localCheckIn = [
-            'project_id' => 'p1234',
-            'name' => 'Another Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
         ];
@@ -197,8 +167,12 @@ class CheckInsManagerTest extends TestCase
         $remoteCheckins = [new CheckIn(array_merge($localCheckIn, ['id' => 'c0000'])),];
 
         $mock = Mockery::mock(CheckInsClient::class, ['config' => $config]);
+        $mock->shouldReceive('getProjectId')
+            ->withArgs(['hbp_ABC'])
+            ->once()
+            ->andReturn('p1234');
         $mock->shouldReceive('listForProject')
-            ->twice()
+            ->once()
             ->andReturn($remoteCheckins);
         $mock->shouldNotReceive('update');
 
@@ -215,11 +189,11 @@ class CheckInsManagerTest extends TestCase
     public function removes_check_in_and_marks_as_deleted()
     {
         $config = [
+            'api_key' => 'hbp_ABC',
             'personal_auth_token' => 'abcd'
         ];
         $localCheckIn = [
-            'project_id' => 'p1234',
-            'name' => 'Another Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
         ];
@@ -228,16 +202,19 @@ class CheckInsManagerTest extends TestCase
             new CheckIn(array_merge($localCheckIn, ['id' => 'c0000'])),
             new CheckIn([
                 'id' => 'c1234',
-                'project_id' => 'p1234',
-                'name' => 'To be deleted',
+                'slug' => 'to-be-deleted',
                 'schedule_type' => 'simple',
                 'report_period' => '1 day',
             ]),
         ];
 
         $mock = Mockery::mock(CheckInsClient::class, ['config' => $config]);
+        $mock->shouldReceive('getProjectId')
+            ->withArgs(['hbp_ABC'])
+            ->once()
+            ->andReturn('p1234');
         $mock->shouldReceive('listForProject')
-            ->twice()
+            ->once()
             ->andReturn($remoteCheckIns);
         $mock->shouldReceive('remove')
             ->once()
@@ -251,7 +228,7 @@ class CheckInsManagerTest extends TestCase
         $this->assertCount(2, $result);
 
         $removedCheckIn = array_values(array_filter($result, function ($checkIn) {
-            return $checkIn->name === 'To be deleted';
+            return $checkIn->slug === 'to-be-deleted';
         }))[0];
         $this->assertTrue($removedCheckIn->isDeleted());
     }

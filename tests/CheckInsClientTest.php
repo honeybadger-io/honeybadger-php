@@ -45,6 +45,23 @@ class CheckInsClientTest extends TestCase
     }
 
     /** @test */
+    public function gets_project_id_from_project_api_key()
+    {
+        $config = new Config([
+            'api_key' => 'hbp_ABC',
+            'personal_auth_token' => '5678'
+        ]);
+        $mock = Mockery::mock(Client::class)->makePartial();
+        $mock->shouldReceive('get')
+            ->andReturn(new GuzzleResponse(Response::HTTP_OK, [], json_encode(['project' => ['id' => '1234']])));
+
+        $client = new CheckInsClient($config, $mock);
+        $projectId = $client->getProjectId($config->get('api_key'));
+
+        $this->assertEquals('1234', $projectId);
+    }
+
+    /** @test */
     public function creates_check_in_and_populates_id()
     {
         $config = new Config([
@@ -55,7 +72,7 @@ class CheckInsClientTest extends TestCase
             ->andReturn(new GuzzleResponse(Response::HTTP_CREATED, [], json_encode(['id' => '1234'])));
 
         $client = new CheckInsClient($config, $mock);
-        $checkIn = $client->create(new CheckIn());
+        $checkIn = $client->create('p1234', new CheckIn());
 
         $this->assertEquals('1234', $checkIn->id);
     }

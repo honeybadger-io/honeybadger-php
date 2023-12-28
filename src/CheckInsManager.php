@@ -11,6 +11,11 @@ use Honeybadger\Exceptions\ServiceException;
 class CheckInsManager implements SyncCheckIns {
 
     /**
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * @var CheckInsClient
      */
     protected $client;
@@ -20,8 +25,8 @@ class CheckInsManager implements SyncCheckIns {
      * @param CheckInsClient|null $client
      */
     public function __construct(array $config, CheckInsClient $client = null) {
-        $configRepo = new Config($config);
-        $this->client = $client ?? new CheckInsClient($configRepo);
+        $this->config = new Config($config);
+        $this->client = $client ?? new CheckInsClient($this->config);
     }
 
 
@@ -34,8 +39,10 @@ class CheckInsManager implements SyncCheckIns {
     public function sync(array $checkIns): array
     {
         $localCheckIns = $this->getLocalCheckIns($checkIns);
-        $createdOrUpdated = $this->synchronizeLocalCheckIns($localCheckIns);
-        $removed = $this->removeNotFoundCheckIns($localCheckIns);
+        $projectId = $this->client->getProjectId($this->config->get('api_key'));
+        $remoteCheckIns = $this->client->listForProject($projectId) ?? [];
+        $createdOrUpdated = $this->synchronizeLocalCheckIns($projectId, $localCheckIns, $remoteCheckIns);
+        $removed = $this->removeNotFoundCheckIns($projectId, $localCheckIns, $remoteCheckIns);
 
         return array_merge($createdOrUpdated, $removed);
     }
@@ -55,13 +62,13 @@ class CheckInsManager implements SyncCheckIns {
             return $checkIn;
         }, $checkIns);
 
-        // check that there are no check-ins with same name and project id
-        $checkInNames = array_unique(array_map(function ($checkIn) {
-            return "$checkIn->projectId $checkIn->name";
+        // check that there are no check-ins with same slug
+        $checkInSlugs = array_unique(array_map(function ($checkIn) {
+            return $checkIn->slug;
         }, $localCheckIns));
 
-        if (count($checkInNames) !== count($localCheckIns)) {
-            throw ServiceException::invalidConfig('Check-ins must have unique names and project ids');
+        if (count($checkInSlugs) !== count($localCheckIns)) {
+            throw ServiceException::invalidConfig('Check-ins must have unique slug values');
         }
 
         return $localCheckIns;
@@ -71,36 +78,38 @@ class CheckInsManager implements SyncCheckIns {
      * Loop through local check-ins array and
      * create or update each check-ins.
      *
+     * @param string $projectId
      * @param CheckIn[] $localCheckIns
+     * @param CheckIn[] $remoteCheckIns
      * @return CheckIn[]
      *
      * @throws ServiceException
      */
-    private function synchronizeLocalCheckIns(array $localCheckIns): array
+    private function synchronizeLocalCheckIns(string $projectId, array $localCheckIns, array $remoteCheckIns): array
     {
         $result = [];
 
         foreach ($localCheckIns as $localCheckIn) {
-            $existingCheckIn = null;
-            if ($localCheckIn->id != null) {
-                $existingCheckIn = $this->client->get($localCheckIn->projectId, $localCheckIn->id);
-            }
-            else {
-                $existingCheckIn = $this->getByName($localCheckIn->projectId, $localCheckIn->name);
+            $remoteCheckIn = null;
+            $filtered = array_filter($remoteCheckIns, function ($checkIn) use ($localCheckIn) {
+                return $checkIn->slug === $localCheckIn->slug;
+            });
+            if (count($filtered) > 0) {
+                $remoteCheckIn = array_values($filtered)[0];
             }
 
-            if ($existingCheckIn) {
-                $localCheckIn->id = $existingCheckIn->id;
-                if (! $existingCheckIn->isInSync($localCheckIn)) {
-                    if ($updated = $this->update($localCheckIn)) {
+            if ($remoteCheckIn) {
+                $localCheckIn->id = $remoteCheckIn->id;
+                if (! $remoteCheckIn->isInSync($localCheckIn)) {
+                    if ($updated = $this->update($projectId, $localCheckIn)) {
                         $result[] = $updated;
                     }
                 } else {
                     // no change - just add to resulting array
-                    $result[] = $existingCheckIn;
+                    $result[] = $remoteCheckIn;
                 }
             }
-            else if ($created = $this->create($localCheckIn)) {
+            else if ($created = $this->create($projectId, $localCheckIn)) {
                 $result[] = $created;
             }
         }
@@ -109,47 +118,27 @@ class CheckInsManager implements SyncCheckIns {
     }
 
     /**
-     * @throws ServiceException
-     */
-    private function getByName(string $projectId, string $name): ?CheckIn {
-        $checkIns = $this->client->listForProject($projectId) ?? [];
-        $filtered = array_filter($checkIns, function ($checkIn) use ($name) {
-            return $checkIn->name === $name;
-        });
-        if (count($filtered) > 0) {
-            return array_values($filtered)[0];
-        }
-
-        return null;
-    }
-
-    /**
      * Loop through existing check-ins and
      * remove any that are not in the local check-ins array.
      *
+     * @param string $projectId
      * @param CheckIn[] $localCheckIns
+     * @param CheckIn[] $remoteCheckIns
      * @return CheckIn[]
      *
      * @throws ServiceException
      */
-    private function removeNotFoundCheckIns(array $localCheckIns): array
+    private function removeNotFoundCheckIns(string $projectId, array $localCheckIns, array $remoteCheckIns): array
     {
         $result = [];
 
-        $projectIds = array_unique(array_map(function ($checkIn) {
-            return $checkIn->projectId;
-        }, $localCheckIns));
-
-        foreach ($projectIds as $projectId) {
-            $projectCheckIns = $this->client->listForProject($projectId) ?? [];
-            foreach ($projectCheckIns as $projectCheckIn) {
-                $filtered = array_filter($localCheckIns, function ($checkIn) use ($projectCheckIn) {
-                    return $checkIn->id === $projectCheckIn->id;
-                });
-                if (count($filtered) === 0) {
-                    $this->remove($projectCheckIn);
-                    $result[] = $projectCheckIn;
-                }
+        foreach ($remoteCheckIns as $remoteCheckIn) {
+            $filtered = array_filter($localCheckIns, function ($checkIn) use ($remoteCheckIn) {
+                return $checkIn->slug === $remoteCheckIn->slug;
+            });
+            if (count($filtered) === 0) {
+                $this->remove($projectId, $remoteCheckIn);
+                $result[] = $remoteCheckIn;
             }
         }
 
@@ -159,25 +148,25 @@ class CheckInsManager implements SyncCheckIns {
     /**
      * @throws ServiceException
      */
-    private function create(CheckIn $checkIn): ?CheckIn
+    private function create(string $projectId, CheckIn $checkIn): ?CheckIn
     {
-        return $this->client->create($checkIn);
+        return $this->client->create($projectId, $checkIn);
     }
 
     /**
      * @throws ServiceException
      */
-    private function update(CheckIn $checkIn): ?CheckIn
+    private function update(string $projectId, CheckIn $checkIn): ?CheckIn
     {
-        return $this->client->update($checkIn);
+        return $this->client->update($projectId, $checkIn);
     }
 
     /**
      * @throws ServiceException
      */
-    private function remove(CheckIn $checkIn): void
+    private function remove(string $projectId, CheckIn $checkIn): void
     {
-        $this->client->remove($checkIn->projectId, $checkIn->id);
+        $this->client->remove($projectId, $checkIn->id);
         $checkIn->markAsDeleted();
     }
 }
