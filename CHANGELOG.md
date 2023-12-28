@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.18.0] - 2023-12-28
+### Changed
+- Check-Ins: Remove project_id from configuration API
+
 ## [2.17.3] - 2023-12-04
 ### Fixed
 - Use $request->getContentTypeFormat
