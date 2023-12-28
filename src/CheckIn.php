@@ -71,13 +71,6 @@ class CheckIn
     public $cronTimezone;
 
     /**
-     * The project ID that this checkin belongs to.
-     *
-     * @var string|null
-     */
-    public $projectId;
-
-    /**
      * Only set when the checkin has been deleted
      * after an update request.
      * Note: this property exists only locally.
@@ -95,7 +88,6 @@ class CheckIn
         $this->gracePeriod = $params['grace_period'] ?? null;
         $this->cronSchedule = $params['cron_schedule'] ?? null;
         $this->cronTimezone = $params['cron_timezone'] ?? null;
-        $this->projectId = $params['project_id'] ?? null;
         $this->deleted = false;
     }
 
@@ -113,35 +105,31 @@ class CheckIn
      * @throws ServiceException
      */
     public function validate(): void {
-        if ($this->projectId === null) {
-            throw ServiceException::invalidConfig('project_id is required for each check-in');
+        if ($this->slug === null) {
+            throw ServiceException::invalidConfig('slug is required for each check-in');
         }
 
-        if ($this->name === null) {
-            throw ServiceException::invalidConfig('name is required for each check-in');
-        }
-
-        $name = $this->name;
+        $slug = $this->slug;
 
         if (in_array($this->scheduleType, ['simple', 'cron']) === false) {
-            throw ServiceException::invalidConfig("$name [schedule_type] must be either 'simple' or 'cron'");
+            throw ServiceException::invalidConfig("$slug [schedule_type] must be either 'simple' or 'cron'");
         }
 
         if ($this->scheduleType === 'simple' && $this->reportPeriod === null) {
-            throw ServiceException::invalidConfig("$name [report_period] is required for simple check-ins");
+            throw ServiceException::invalidConfig("$slug [report_period] is required for simple check-ins");
         }
 
         if ($this->scheduleType === 'cron' && $this->cronSchedule === null) {
-            throw ServiceException::invalidConfig("$name [cron_schedule] is required for cron check-ins");
+            throw ServiceException::invalidConfig("$slug [cron_schedule] is required for cron check-ins");
         }
     }
 
     public function asRequestData(): array
     {
         $result = [
-            'name' => $this->name,
+            'name' => $this->name ?? '',
             'schedule_type' => $this->scheduleType,
-            'slug' => $this->slug ?? '',
+            'slug' => $this->slug,
             'grace_period' => $this->gracePeriod ?? '',
         ];
 
@@ -162,14 +150,18 @@ class CheckIn
      * If the one in the config file does not match the checkin from the API,
      * then we issue an update request.
      */
-    public function isInSync(CheckIn $other): bool {
-        return $this->name === $other->name
-            && ($this->slug ?? '') === ($other->slug ?? '')
-            && $this->projectId === $other->projectId
+    public function isInSync(CheckIn $other): bool
+    {
+        $ignoreNameCheck = $this->name === null;
+        $ignoreGracePeriodCheck = $this->gracePeriod === null;
+        $ignoreCronTimezoneCheck = $this->cronTimezone === null;
+
+        return $this->slug === $other->slug
             && $this->scheduleType === $other->scheduleType
             && $this->reportPeriod === $other->reportPeriod
-            && ($this->gracePeriod ?? '') === ($other->gracePeriod ?? '')
             && $this->cronSchedule === $other->cronSchedule
-            && ($this->cronTimezone ?? '') === ($other->cronTimezone ?? '');
+            && ($ignoreNameCheck || $this->name === $other->name)
+            && ($ignoreGracePeriodCheck || $this->gracePeriod === $other->gracePeriod)
+            && ($ignoreCronTimezoneCheck || $this->cronTimezone === $other->cronTimezone);
     }
 }

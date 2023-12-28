@@ -57,6 +57,19 @@ class HoneybadgerClient extends ApiClient
         }
     }
 
+    public function checkInWithSlug(string $apiKey, string $checkInSlug): void
+    {
+        try {
+            $response = $this->client->head(sprintf('v1/check_in/%s/%s', $apiKey, $checkInSlug));
+
+            if ($response->getStatusCode() !== Response::HTTP_OK) {
+                $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            }
+        } catch (Throwable $e) {
+            $this->handleServiceException(ServiceException::generic($e));
+        }
+    }
+
     public function makeClient(): Client
     {
         return new Client([

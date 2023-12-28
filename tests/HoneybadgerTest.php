@@ -262,14 +262,22 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_sends_a_checkin_using_name() {
+    public function it_sends_a_checkin_using_slug() {
         $client = HoneybadgerClient::new([
+            //checkinsClient->getProjectId()
+            new Response(200, [], json_encode([
+                'project' => [
+                    [
+                        'id' => 'p1234',
+                    ],
+                ]
+            ])),
             //checkinsClient->listForProject()
             new Response(200, [], json_encode([
                 'results' => [
                     [
                         'id' => 'c1234',
-                        'name' => 'a simple checkin',
+                        'slug' => 'a-simple-check-in',
                         'schedule_type' => 'simple',
                         'report_period' => 60,
                     ],
@@ -288,16 +296,15 @@ class HoneybadgerTest extends TestCase
             ],
             'checkins' => [
                 [
-                    'project_id' => 'p1234',
-                    'name' => 'a simple checkin',
+                    'slug' => 'a-simple-check-in',
                     'schedule_type' => 'simple',
                     'report_period' => 60,
                 ],
             ]
-        ], $client->make())->checkin('a simple checkin');
+        ], $client->make())->checkin('a-simple-check-in');
 
         $request = $client->getLatestRequest();
-        $this->assertEquals('v1/check_in/c1234', $request->getUri()->getPath());
+        $this->assertEquals('v1/check_in/asdf/a-simple-check-in', $request->getUri()->getPath());
     }
 
     /** @test */

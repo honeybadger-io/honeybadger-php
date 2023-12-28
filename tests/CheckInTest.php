@@ -12,8 +12,7 @@ class CheckInTest extends TestCase {
     public function it_validates_simple_check_in()
     {
         $checkIn = new CheckIn([
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour',
@@ -31,8 +30,7 @@ class CheckInTest extends TestCase {
     public function it_validates_cron_check_in()
     {
         $checkIn = new CheckIn([
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'cron',
             'cron_schedule' => '* * * * *',
             'grace_period' => '1 hour',
@@ -47,13 +45,12 @@ class CheckInTest extends TestCase {
     }
 
     /** @test */
-    public function it_throws_for_missing_project_id()
+    public function it_throws_for_missing_slug()
     {
         $this->expectException(ServiceException::class);
-        $this->expectExceptionMessageMatches('/project_id is required for each check-in/');
+        $this->expectExceptionMessageMatches('/slug is required for each check-in/');
 
         $checkIn = new CheckIn([
-            'name' => 'Test CheckIn',
             'schedule_type' => 'simple',
             'grace_period' => '1 hour',
             'report_period' => '1 day',
@@ -69,8 +66,7 @@ class CheckInTest extends TestCase {
         $this->expectExceptionMessageMatches('/\[report_period\] is required for simple check-ins/');
 
         $checkIn = new CheckIn([
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'grace_period' => '1 hour',
         ]);
@@ -85,8 +81,7 @@ class CheckInTest extends TestCase {
         $this->expectExceptionMessageMatches('/\[cron_schedule\] is required for cron check-ins/');
 
         $checkIn = new CheckIn([
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'cron',
             'grace_period' => '1 hour'
         ]);
@@ -98,8 +93,7 @@ class CheckInTest extends TestCase {
     public function it_marks_check_in_as_deleted()
     {
         $checkIn = new CheckIn([
-            'project_id' => 'p1234',
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour'
@@ -114,7 +108,7 @@ class CheckInTest extends TestCase {
     public function it_does_not_include_null_values()
     {
         $checkIn = new CheckIn([
-            'name' => 'Test CheckIn',
+            'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
             'grace_period' => '1 hour'
