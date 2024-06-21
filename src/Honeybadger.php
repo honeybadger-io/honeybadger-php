@@ -9,6 +9,7 @@ use Honeybadger\Contracts\Reporter;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
+use Honeybadger\Handlers\ShutdownHandler;
 use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 use Throwable;
@@ -52,6 +53,11 @@ class Honeybadger implements Reporter
      */
     protected $breadcrumbs;
 
+    /**
+     * @var BulkEventDispatcher
+     */
+    protected $events;
+
     public function __construct(array $config = [], Client $client = null)
     {
         $this->config = new Config($config);
@@ -60,6 +66,7 @@ class Honeybadger implements Reporter
         $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
+        $this->events = new BulkEventDispatcher($this->config, $this->client);
 
         $this->setHandlers();
     }
@@ -204,6 +211,27 @@ class Honeybadger implements Reporter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function event(string $eventType, array $payload = []): void
+    {
+        if (!$this->config['events']['enabled']) {
+            return;
+        }
+
+        $event = array_merge(['event_type' => $eventType], $payload);
+        $this->events->addEvent($event);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flushEvents(): void
+    {
+        $this->events->flushEvents();
+    }
+
+    /**
      * @return Repository
      */
     public function getContext(): Repository
@@ -222,6 +250,10 @@ class Honeybadger implements Reporter
 
         if ($this->config['handlers']['error']) {
             (new ErrorHandler($this))->register();
+        }
+
+        if ($this->config['handlers']['shutdown']) {
+            (new ShutdownHandler($this))->register();
         }
     }
 

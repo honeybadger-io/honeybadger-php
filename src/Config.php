@@ -54,6 +54,7 @@ class Config extends Repository
             'handlers' => [
                 'exception' => true,
                 'error' => true,
+                'shutdown' => true,
             ],
             'client' => [
                 'timeout' => 15,
@@ -69,6 +70,11 @@ class Config extends Repository
                 'enabled' => true,
             ],
             'checkins' => [],
+            'events' => [
+                'enabled' => false,
+                'bulk_threshold' => 50,
+                'dispatch_interval_ms' => 100
+            ],
         ], $config);
     }
 }
