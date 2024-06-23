@@ -39,6 +39,7 @@ class ConfigTest extends TestCase
             'handlers' => [
                 'exception' => true,
                 'error' => true,
+                'shutdown' => true,
             ],
             'client' => [
                 'timeout' => 15,
@@ -54,7 +55,12 @@ class ConfigTest extends TestCase
             'breadcrumbs' => [
                 'enabled' => true,
             ],
-            'checkins' => []
+            'checkins' => [],
+            'events' => [
+                'enabled' => false,
+                'bulk_threshold' => 50,
+                'dispatch_interval_seconds' => 2,
+            ],
         ], $config);
     }
 }

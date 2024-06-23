@@ -2,8 +2,11 @@
 
 namespace Honeybadger\Tests;
 
+use DateTime;
 use Exception;
 use GuzzleHttp\Psr7\Response;
+use Honeybadger\BulkEventDispatcher;
+use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
@@ -892,5 +895,65 @@ class HoneybadgerTest extends TestCase
         $this->assertIsArray($notification['breadcrumbs']);
         $this->assertFalse($notification['breadcrumbs']['enabled']);
         $this->assertCount(0, $notification['breadcrumbs']['trail']);
+    }
+
+    /** @test */
+    public function wont_send_event_if_disabled() {
+        $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
+        $eventsDispatcher->expects($this->never())->method('addEvent');
+
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => false,
+                'bulk_threshold' => 1,
+            ],
+        ], $client->make(), $eventsDispatcher);
+
+        $badger->event('log', ['message' => 'Test message']);
+    }
+
+    /** @test */
+    public function it_adds_event_type_and_ts_to_event_payload() {
+        $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
+        $eventsDispatcher
+            ->expects($this->once())
+            ->method('addEvent')
+            ->with([
+                'event_type' => 'log',
+                'ts' => (new DateTime())->format(DATE_ATOM),
+                'message' => 'Test message',
+            ]);
+
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ], $client->make(), $eventsDispatcher);
+
+        $badger->event('log', ['message' => 'Test message']);
+    }
+
+    /** @test */
+    public function it_queues_an_event() {
+        $config = new Config([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ]);
+        $client = new \Honeybadger\HoneybadgerClient($config);
+        $eventsDispatcher = new BulkEventDispatcher($config, $client);
+        $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
+
+        $badger->event('log', ['message' => 'Test message']);
+        $this->assertTrue($eventsDispatcher->hasEvents());
     }
 }

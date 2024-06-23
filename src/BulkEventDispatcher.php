@@ -5,7 +5,7 @@ namespace Honeybadger;
 class BulkEventDispatcher
 {
     const BULK_THRESHOLD = 50;
-    const DISPATCH_INTERVAL_MS = 100;
+    const DISPATCH_INTERVAL_SECONDS = 2;
 
     /**
      * @var HoneybadgerClient
@@ -37,7 +37,7 @@ class BulkEventDispatcher
         $this->client = $client;
         $eventsConfig = $config->get('events') ?? [];
         $this->maxEvents = $eventsConfig['bulk_threshold'] ?? self::BULK_THRESHOLD;
-        $this->dispatchInterval = $eventsConfig['dispatch_interval_ms'] ?? self::DISPATCH_INTERVAL_MS;
+        $this->dispatchInterval = $eventsConfig['dispatch_interval_seconds'] ?? self::DISPATCH_INTERVAL_SECONDS;
         $this->lastDispatchTime = time();
     }
 
@@ -52,16 +52,20 @@ class BulkEventDispatcher
 
     public function flushEvents()
     {
-        if (empty($this->events)) {
+        if (!$this->hasEvents()) {
             return;
         }
 
         $this->dispatchEvents();
     }
 
+    public function hasEvents(): bool {
+        return !empty($this->events);
+    }
+
     private function dispatchEvents()
     {
-        if (empty($this->events)) {
+        if (!$this->hasEvents()) {
             return;
         }
 

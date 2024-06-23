@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use DateTime;
 use ErrorException;
 use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
@@ -58,7 +59,7 @@ class Honeybadger implements Reporter
      */
     protected $events;
 
-    public function __construct(array $config = [], Client $client = null)
+    public function __construct(array $config = [], Client $client = null, BulkEventDispatcher $eventsDispatcher = null)
     {
         $this->config = new Config($config);
 
@@ -66,7 +67,7 @@ class Honeybadger implements Reporter
         $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
-        $this->events = new BulkEventDispatcher($this->config, $this->client);
+        $this->events = $eventsDispatcher ?? new BulkEventDispatcher($this->config, $this->client);
 
         $this->setHandlers();
     }
@@ -219,7 +220,10 @@ class Honeybadger implements Reporter
             return;
         }
 
-        $event = array_merge(['event_type' => $eventType], $payload);
+        $event = array_merge(
+            ['event_type' => $eventType, 'ts' => (new DateTime())->format(DATE_ATOM)],
+            $payload
+        );
         $this->events->addEvent($event);
     }
 

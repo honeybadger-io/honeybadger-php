@@ -27,7 +27,7 @@ class Config extends Repository
      */
     private function mergeConfig($config = []): array
     {
-        return array_merge([
+        $result = array_merge([
             'api_key' => null,
             'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
@@ -73,8 +73,14 @@ class Config extends Repository
             'events' => [
                 'enabled' => false,
                 'bulk_threshold' => 50,
-                'dispatch_interval_ms' => 100
+                'dispatch_interval_seconds' => 2
             ],
         ], $config);
+
+        if (!isset($result['handlers']['shutdown'])) {
+            $result['handlers']['shutdown'] = false;
+        }
+
+        return $result;
     }
 }
