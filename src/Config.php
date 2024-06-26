@@ -72,8 +72,8 @@ class Config extends Repository
             'checkins' => [],
             'events' => [
                 'enabled' => false,
-                'bulk_threshold' => 50,
-                'dispatch_interval_seconds' => 2
+                'bulk_threshold' => BulkEventDispatcher::BULK_THRESHOLD,
+                'dispatch_interval_seconds' => BulkEventDispatcher::DISPATCH_INTERVAL_SECONDS
             ],
         ], $config);
 
