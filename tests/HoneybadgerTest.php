@@ -949,11 +949,29 @@ class HoneybadgerTest extends TestCase
                 'enabled' => true,
             ],
         ]);
-        $client = new \Honeybadger\HoneybadgerClient($config);
+        $client = $this->createPartialMock(\Honeybadger\HoneybadgerClient::class, ['events', 'makeClient']);
         $eventsDispatcher = new BulkEventDispatcher($config, $client);
         $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
 
         $badger->event('log', ['message' => 'Test message']);
         $this->assertTrue($eventsDispatcher->hasEvents());
+    }
+
+    /** @test */
+    public function it_flushes_events() {
+        $config = new Config([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ]);
+        $client = $this->createPartialMock(\Honeybadger\HoneybadgerClient::class, ['events', 'makeClient']);
+        $eventsDispatcher = new BulkEventDispatcher($config, $client);
+        $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
+
+        $badger->event('log', ['message' => 'Test message']);
+        $this->assertTrue($eventsDispatcher->hasEvents());
+        $badger->flushEvents();
+        $this->assertFalse($eventsDispatcher->hasEvents());
     }
 }
