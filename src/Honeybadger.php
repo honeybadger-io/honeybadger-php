@@ -224,6 +224,12 @@ class Honeybadger implements Reporter
             ['event_type' => $eventType, 'ts' => (new DateTime())->format(DATE_ATOM)],
             $payload
         );
+
+        // if 'ts' is set, we need to make sure it's a string in the correct format
+        if (isset($event['ts']) && $event['ts'] instanceof DateTime) {
+            $event['ts'] = $event['ts']->format(DATE_ATOM);
+        }
+
         $this->events->addEvent($event);
     }
 
