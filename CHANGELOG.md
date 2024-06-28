@@ -5,6 +5,11 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.19.0] - 2024-06-27
+### Added
+- Events: Honeybadger.event() method to send custom events to Honeybadger
+- Events: Monolog logger to send logs as events to Honeybadger
+
 ## [2.18.0] - 2023-12-28
 ### Changed
 - Check-Ins: Remove project_id from configuration API

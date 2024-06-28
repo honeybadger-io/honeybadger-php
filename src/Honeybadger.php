@@ -2,6 +2,7 @@
 
 namespace Honeybadger;
 
+use DateTime;
 use ErrorException;
 use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
@@ -9,6 +10,7 @@ use Honeybadger\Contracts\Reporter;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
+use Honeybadger\Handlers\ShutdownHandler;
 use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 use Throwable;
@@ -20,7 +22,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.18.0';
+    const VERSION = '2.19.0';
 
     /**
      * Honeybadger API URL.
@@ -52,7 +54,12 @@ class Honeybadger implements Reporter
      */
     protected $breadcrumbs;
 
-    public function __construct(array $config = [], Client $client = null)
+    /**
+     * @var BulkEventDispatcher
+     */
+    protected $events;
+
+    public function __construct(array $config = [], Client $client = null, BulkEventDispatcher $eventsDispatcher = null)
     {
         $this->config = new Config($config);
 
@@ -60,6 +67,7 @@ class Honeybadger implements Reporter
         $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
+        $this->events = $eventsDispatcher ?? new BulkEventDispatcher($this->config, $this->client);
 
         $this->setHandlers();
     }
@@ -204,6 +212,47 @@ class Honeybadger implements Reporter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function event($eventTypeOrPayload, array $payload = null): void
+    {
+        if (!$this->config['events']['enabled']) {
+            return;
+        }
+
+        if (is_array($eventTypeOrPayload)) {
+            $payload = $eventTypeOrPayload;
+            $eventType = $payload['event_type'] ?? null;
+        } else {
+            $eventType = $eventTypeOrPayload;
+        }
+
+        if (empty($eventType) || empty($payload)) {
+            return;
+        }
+
+        $event = array_merge(
+            ['event_type' => $eventType, 'ts' => (new DateTime())->format(DATE_ATOM)],
+            $payload
+        );
+
+        // if 'ts' is set, we need to make sure it's a string in the correct format
+        if (isset($event['ts']) && $event['ts'] instanceof DateTime) {
+            $event['ts'] = $event['ts']->format(DATE_ATOM);
+        }
+
+        $this->events->addEvent($event);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function flushEvents(): void
+    {
+        $this->events->flushEvents();
+    }
+
+    /**
      * @return Repository
      */
     public function getContext(): Repository
@@ -222,6 +271,10 @@ class Honeybadger implements Reporter
 
         if ($this->config['handlers']['error']) {
             (new ErrorHandler($this))->register();
+        }
+
+        if ($this->config['handlers']['shutdown']) {
+            (new ShutdownHandler($this))->register();
         }
     }
 

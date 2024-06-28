@@ -2,6 +2,7 @@
 
 namespace Honeybadger\Tests;
 
+use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response as GuzzleResponse;
@@ -41,6 +42,27 @@ class HoneybadgerClientTest extends TestCase
 
         $client = new HoneybadgerClient($config, $mock);
         $client->checkIn('1234');
+    }
+
+    /** @test */
+    public function throws_generic_exception_for_events()
+    {
+        $this->expectException(ServiceException::class);
+        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
+
+        $config = new Config(['api_key' => '1234']);
+        $mock = Mockery::mock(Client::class)->makePartial();
+        $mock->shouldReceive('post')->andThrow(new Exception);
+
+        $client = new HoneybadgerClient($config, $mock);
+        $events = [
+            [
+                'event_type' => 'log',
+                'ts' => (new DateTime())->format(DATE_ATOM),
+                'message' => 'Test message'
+            ]
+        ];
+        $client->events($events);
     }
 
     /** @test */

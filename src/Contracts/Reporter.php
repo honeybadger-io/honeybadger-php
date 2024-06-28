@@ -74,4 +74,28 @@ interface Reporter
      * Clear all breadcrumbs and context.
      */
     public function clear(): self;
+
+    /**
+     * Log an event to the Events API (Honeybadger Insights).
+     * An event is a collection of properties that may be useful later (the more, the better).
+     * They're the best way to prepare for unknown unknowns — the things you can't anticipate before an incident.
+     * Send events to Honeybadger and generate insights around your application's performance and usage.
+     * If this function is called only with 1 argument:
+     *  - it must be an array and have at least a field 'event_type'.
+     *  - it will be treated as the payload and the second argument will be ignored.
+     *
+     * @param string | array $eventTypeOrPayload
+     * @param array | null $payload
+     *
+     * @return void
+     */
+    public function event($eventTypeOrPayload, array $payload = null): void;
+
+    /**
+     * Flush all events from the queue.
+     * Useful when you want to ensure that all events are sent before the script ends.
+     *
+     * @return void
+     */
+    public function flushEvents(): void;
 }

@@ -70,6 +70,29 @@ class HoneybadgerClient extends ApiClient
         }
     }
 
+    /**
+     * @param array $events
+     * @return void
+     */
+    public function events(array $events): void
+    {
+        try {
+            $ndjson = implode("\n", array_map('json_encode', $events));
+            $response = $this->client->post(
+                'v1/events',
+                ['body' => $ndjson]
+            );
+        } catch (Throwable $e) {
+            $this->handleServiceException(ServiceException::generic($e));
+
+            return;
+        }
+
+        if ($response->getStatusCode() !== Response::HTTP_CREATED) {
+            $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+        }
+    }
+
     public function makeClient(): Client
     {
         return new Client([
