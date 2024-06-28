@@ -214,9 +214,20 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function event(string $eventType, array $payload = []): void
+    public function event($eventTypeOrPayload, array $payload = null): void
     {
         if (!$this->config['events']['enabled']) {
+            return;
+        }
+
+        if (is_array($eventTypeOrPayload)) {
+            $payload = $eventTypeOrPayload;
+            $eventType = $payload['event_type'] ?? null;
+        } else {
+            $eventType = $eventTypeOrPayload;
+        }
+
+        if (empty($eventType) || empty($payload)) {
             return;
         }
 
@@ -224,6 +235,12 @@ class Honeybadger implements Reporter
             ['event_type' => $eventType, 'ts' => (new DateTime())->format(DATE_ATOM)],
             $payload
         );
+
+        // if 'ts' is set, we need to make sure it's a string in the correct format
+        if (isset($event['ts']) && $event['ts'] instanceof DateTime) {
+            $event['ts'] = $event['ts']->format(DATE_ATOM);
+        }
+
         $this->events->addEvent($event);
     }
 
