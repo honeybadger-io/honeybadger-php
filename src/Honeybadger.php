@@ -214,9 +214,20 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function event(string $eventType, array $payload = []): void
+    public function event($eventTypeOrPayload, array $payload = null): void
     {
         if (!$this->config['events']['enabled']) {
+            return;
+        }
+
+        if (is_array($eventTypeOrPayload)) {
+            $payload = $eventTypeOrPayload;
+            $eventType = $payload['event_type'] ?? null;
+        } else {
+            $eventType = $eventTypeOrPayload;
+        }
+
+        if (empty($eventType) || empty($payload)) {
             return;
         }
 

@@ -958,6 +958,38 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function it_queues_an_event_with_payload_only() {
+        $config = new Config([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ]);
+        $client = $this->createPartialMock(\Honeybadger\HoneybadgerClient::class, ['events', 'makeClient']);
+        $eventsDispatcher = new BulkEventDispatcher($config, $client);
+        $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
+
+        $badger->event(['event_type' => 'log', 'message' => 'Test message']);
+        $this->assertTrue($eventsDispatcher->hasEvents());
+    }
+
+    /** @test */
+    public function wont_send_event_if_payload_is_missing_event_type() {
+        $config = new Config([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ]);
+        $client = $this->createPartialMock(\Honeybadger\HoneybadgerClient::class, ['events', 'makeClient']);
+        $eventsDispatcher = new BulkEventDispatcher($config, $client);
+        $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
+
+        $badger->event(['message' => 'Test message']);
+        $this->assertFalse($eventsDispatcher->hasEvents());
+    }
+
+    /** @test */
     public function it_flushes_events() {
         $config = new Config([
             'api_key' => 'asdf',
