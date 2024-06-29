@@ -5,6 +5,10 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.19.1] - 2024-06-29
+### Fixed
+- Events: Allow Honeybadger.event() without event_type
+
 ## [2.19.0] - 2024-06-28
 ### Added
 - Events: Honeybadger.event() method to send custom events to Honeybadger
