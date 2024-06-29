@@ -222,22 +222,22 @@ class Honeybadger implements Reporter
 
         if (is_array($eventTypeOrPayload)) {
             $payload = $eventTypeOrPayload;
-            $eventType = $payload['event_type'] ?? null;
         } else {
-            $eventType = $eventTypeOrPayload;
+            $payload = $payload ?? [];
+            $payload['event_type'] = $eventTypeOrPayload;
         }
 
-        if (empty($eventType) || empty($payload)) {
+        if (empty($payload)) {
             return;
         }
 
         $event = array_merge(
-            ['event_type' => $eventType, 'ts' => (new DateTime())->format(DATE_ATOM)],
+            ['ts' => (new DateTime())->format(DATE_ATOM)],
             $payload
         );
 
         // if 'ts' is set, we need to make sure it's a string in the correct format
-        if (isset($event['ts']) && $event['ts'] instanceof DateTime) {
+        if ($event['ts'] instanceof DateTime) {
             $event['ts'] = $event['ts']->format(DATE_ATOM);
         }
 

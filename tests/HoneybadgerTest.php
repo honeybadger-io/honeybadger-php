@@ -942,6 +942,29 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function it_adds_ts_to_event_payload() {
+        $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
+        $eventsDispatcher
+            ->expects($this->once())
+            ->method('addEvent')
+            ->with([
+                'ts' => (new DateTime())->format(DATE_ATOM),
+                'message' => 'Test message',
+            ]);
+
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'events' => [
+                'enabled' => true,
+            ],
+        ], $client->make(), $eventsDispatcher);
+        $badger->event(['message' => 'Test message']);
+    }
+
+    /** @test */
     public function it_queues_an_event() {
         $config = new Config([
             'api_key' => 'asdf',
@@ -974,7 +997,7 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function wont_send_event_if_payload_is_missing_event_type() {
+    public function wont_send_event_if_payload_is_empty() {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -985,7 +1008,7 @@ class HoneybadgerTest extends TestCase
         $eventsDispatcher = new BulkEventDispatcher($config, $client);
         $badger = Honeybadger::new($config->all(), $client->makeClient(), $eventsDispatcher);
 
-        $badger->event(['message' => 'Test message']);
+        $badger->event([]);
         $this->assertFalse($eventsDispatcher->hasEvents());
     }
 

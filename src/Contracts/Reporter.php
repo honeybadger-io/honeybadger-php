@@ -81,7 +81,7 @@ interface Reporter
      * They're the best way to prepare for unknown unknowns — the things you can't anticipate before an incident.
      * Send events to Honeybadger and generate insights around your application's performance and usage.
      * If this function is called only with 1 argument:
-     *  - it must be an array and have at least a field 'event_type'.
+     *  - it must be an array.
      *  - it will be treated as the payload and the second argument will be ignored.
      *
      * @param string | array $eventTypeOrPayload
