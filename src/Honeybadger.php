@@ -22,7 +22,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.19.1';
+    const VERSION = '2.19.2';
 
     /**
      * Honeybadger API URL.
@@ -249,6 +249,10 @@ class Honeybadger implements Reporter
      */
     public function flushEvents(): void
     {
+        if (!$this->config['events']['enabled']) {
+            return;
+        }
+
         $this->events->flushEvents();
     }
 

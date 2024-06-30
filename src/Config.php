@@ -78,7 +78,9 @@ class Config extends Repository
         ], $config);
 
         if (!isset($result['handlers']['shutdown'])) {
-            $result['handlers']['shutdown'] = false;
+            // the 'shutdown' field is new, array_merge only merges on the first level
+            // so we need to manually set it if the config has a 'handlers' key but not a 'shutdown' key inside
+            $result['handlers']['shutdown'] = true;
         }
 
         return $result;
