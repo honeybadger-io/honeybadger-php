@@ -3,8 +3,6 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-
 ## [2.19.2] - 2024-07-06
 ### Fixed
 - Events: Honeybadger.flushEvents() should check if events are enabled before sending to Honeybadger
