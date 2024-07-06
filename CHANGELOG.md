@@ -5,6 +5,12 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [2.19.2] - 2024-07-06
+### Fixed
+- Events: Honeybadger.flushEvents() should check if events are enabled before sending to Honeybadger
+### Changed
+- Events: Register shutdown handler by default
+
 ## [2.19.1] - 2024-06-29
 ### Fixed
 - Events: Allow Honeybadger.event() without event_type
