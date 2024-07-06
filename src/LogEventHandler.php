@@ -27,7 +27,7 @@ class LogEventHandler extends AbstractProcessingHandler
     }
 
     /**
-     * @param array|\Monolog\LogRecord $record
+     * @param array|LogRecord $record
      */
     protected function write($record): void
     {
@@ -39,16 +39,20 @@ class LogEventHandler extends AbstractProcessingHandler
         $this->honeybadger->event('log', $eventPayload);
     }
 
-    protected function getEventPayloadFromMonologRecord(LogRecord $record): array {
+    /**
+     * @param array|LogRecord $record
+     * @return array
+     */
+    protected function getEventPayloadFromMonologRecord($record): array {
         $payload = [
-            'ts' => $record->datetime->format(DATE_ATOM),
-            'severity' => strtolower($record->level->getName()),
-            'message' => $record->message,
-            'channel' => $record->channel,
+            'ts' => $record['datetime']->format(DATE_ATOM),
+            'severity' => strtolower($record['level_name']),
+            'message' => $record['message'],
+            'channel' => $record['channel'],
         ];
 
-        if (isset($record->context) && $record->context != null) {
-            $payload = array_merge($payload, $record->context);
+        if (isset($record['context']) && $record['context'] != null) {
+            $payload = array_merge($payload, $record['context']);
         }
 
         return $payload;
