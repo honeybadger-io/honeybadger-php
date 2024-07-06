@@ -21,6 +21,9 @@ jobs:
               with:
                   release-type: php
 
+            - name: Checkout
+              uses: actions/checkout@v4
+
             - name: Update version in Honeybadger.php
               if: ${{ steps.release.outputs.release_created }}
               run: php scripts/SyncSourceCodeWithPackageVersion.php ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
