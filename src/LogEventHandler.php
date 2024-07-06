@@ -4,7 +4,7 @@ namespace Honeybadger;
 
 use Honeybadger\Contracts\Reporter;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Level;
+use Monolog\Logger;
 use Monolog\LogRecord;
 
 class LogEventHandler extends AbstractProcessingHandler
@@ -19,7 +19,7 @@ class LogEventHandler extends AbstractProcessingHandler
      * @param $level
      * @param bool $bubble
      */
-    public function __construct(Reporter $honeybadger, $level = Level::Info, bool $bubble = true)
+    public function __construct(Reporter $honeybadger, $level = Logger::INFO, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
 
