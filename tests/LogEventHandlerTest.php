@@ -9,7 +9,6 @@ use Honeybadger\Honeybadger;
 use Honeybadger\HoneybadgerClient;
 use Honeybadger\LogEventHandler;
 use Monolog\Handler\AbstractProcessingHandler;
-use Monolog\Level;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
 
@@ -88,7 +87,7 @@ class LogEventHandlerTest extends TestCase
         };
         $reporter = new Honeybadger($config->all(), null, $eventsDispatcher);
         $logger = new Logger('test-logger');
-        $logger->pushHandler(new LogEventHandler($reporter, Level::Info));
+        $logger->pushHandler(new LogEventHandler($reporter, Logger::INFO));
 
         $logger->debug('Test debug message', ['some' => 'data']);
         $logger->warning('Test warning message', ['some' => 'data']);
