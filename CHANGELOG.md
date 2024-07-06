@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.3](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.2...v2.19.3) (2024-07-06)
+
+
+### Bug Fixes
+
+* revert to deprecated version of logger levels for wider support ([#196](https://github.com/honeybadger-io/honeybadger-php/issues/196)) ([4ab5c01](https://github.com/honeybadger-io/honeybadger-php/commit/4ab5c01c790a6d1cc06d9b8ebeea35d33d2e3fca))
+
+
+### Miscellaneous Chores
+
+* minor typo fix ([a3df488](https://github.com/honeybadger-io/honeybadger-php/commit/a3df48835266f21f5ed5ab16f5d2bf6b96f39fdc))
+
 ## [2.19.2] - 2024-07-06
 ### Fixed
 - Events: Honeybadger.flushEvents() should check if events are enabled before sending to Honeybadger
