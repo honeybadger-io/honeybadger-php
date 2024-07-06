@@ -5,7 +5,7 @@ adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [2.19.2] - 2024-07-01
+## [2.19.2] - 2024-07-06
 ### Fixed
 - Events: Honeybadger.flushEvents() should check if events are enabled before sending to Honeybadger
 ### Changed
