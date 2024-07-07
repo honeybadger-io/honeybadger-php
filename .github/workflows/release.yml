@@ -24,6 +24,8 @@ jobs:
             - name: Checkout
               if: ${{ steps.release.outputs.prs_created == 'true' }}
               uses: actions/checkout@v4
+              with:
+                  ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
 
             - name: Update version in Honeybadger.php
               if: ${{ steps.release.outputs.prs_created == 'true' }}
@@ -32,7 +34,6 @@ jobs:
             - uses: stefanzweifel/git-auto-commit-action@v5
               if: ${{ steps.release.outputs.prs_created == 'true' }}
               with:
-                  branch: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
                   create_branch: false
                   commit_message: "chore: update version to ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }} [skip ci]"
                   commit_user_name: "honeybadger-robot"
