@@ -22,16 +22,18 @@ jobs:
                   release-type: php
 
             - name: Checkout
-              if: ${{ steps.release.outputs.release_created }}
+              if: ${{ steps.release.outputs.prs_created }}
               uses: actions/checkout@v4
 
             - name: Update version in Honeybadger.php
-              if: ${{ steps.release.outputs.release_created }}
+              if: ${{ steps.release.outputs.prs_created }}
               run: php scripts/SyncSourceCodeWithPackageVersion.php ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
 
             - uses: stefanzweifel/git-auto-commit-action@v5
-              if: ${{ steps.release.outputs.release_created }}
+              if: ${{ steps.release.outputs.prs_created }}
               with:
-                commit_message: "chore: update version to ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }} [skip ci]"
-                commit_user_name: "honeybadger-robot"
-                commit_user_email: "honeybadger-robot@honeybadger.io"
+                  branch: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+                  create_branch: false
+                  commit_message: "chore: update version to ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }} [skip ci]"
+                  commit_user_name: "honeybadger-robot"
+                  commit_user_email: "honeybadger-robot@honeybadger.io"
