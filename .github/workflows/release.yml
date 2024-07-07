@@ -16,21 +16,21 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Create Release PR
-              uses: google-github-actions/release-please-action@v4
+              uses: googleapis/release-please-action@v4
               id: release
               with:
                   release-type: php
 
             - name: Checkout
-              if: ${{ steps.release.outputs.prs_created }}
+              if: ${{ steps.release.outputs.prs_created == 'true' }}
               uses: actions/checkout@v4
 
             - name: Update version in Honeybadger.php
-              if: ${{ steps.release.outputs.prs_created }}
+              if: ${{ steps.release.outputs.prs_created == 'true' }}
               run: php scripts/SyncSourceCodeWithPackageVersion.php ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}
 
             - uses: stefanzweifel/git-auto-commit-action@v5
-              if: ${{ steps.release.outputs.prs_created }}
+              if: ${{ steps.release.outputs.prs_created == 'true' }}
               with:
                   branch: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
                   create_branch: false
