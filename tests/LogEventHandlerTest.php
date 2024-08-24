@@ -30,6 +30,7 @@ class LogEventHandlerTest extends TestCase
     {
         $client = $this->createMock(HoneybadgerClient::class);
         $config = new Config([
+            'api_key' => '1234',
             'events' => [
                 'enabled' => true
             ]
@@ -68,6 +69,7 @@ class LogEventHandlerTest extends TestCase
     {
         $client = $this->createMock(HoneybadgerClient::class);
         $config = new Config([
+            'api_key' => '1234',
             'events' => [
                 'enabled' => true
             ]
