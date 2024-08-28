@@ -216,7 +216,7 @@ class Honeybadger implements Reporter
      */
     public function event($eventTypeOrPayload, array $payload = null): void
     {
-        if (!$this->config['events']['enabled']) {
+        if (empty($this->config['api_key']) || ! $this->config['events']['enabled']) {
             return;
         }
 
