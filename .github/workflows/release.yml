@@ -27,6 +27,12 @@ jobs:
               with:
                   ref: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
 
+            - name: Job Summary
+              if: ${{ steps.release.outputs.prs_created == 'true' }}
+              run: |
+                echo "Release PR created with the following outputs:" >> $GITHUB_STEP_SUMMARY
+                echo "${{ toJSON(steps.release.outputs) }}" >> $GITHUB_STEP_SUMMARY    
+
             - name: Update version in Honeybadger.php
               if: ${{ steps.release.outputs.prs_created == 'true' }}
               run: php scripts/SyncSourceCodeWithPackageVersion.php ${{ steps.release.outputs.major }}.${{ steps.release.outputs.minor }}.${{ steps.release.outputs.patch }}

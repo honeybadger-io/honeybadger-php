@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.4](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.3...v2.19.4) (2024-08-28)
+
+
+### Bug Fixes
+
+* check if api key is set in Honeybadger::event ([#198](https://github.com/honeybadger-io/honeybadger-php/issues/198)) ([9fb1390](https://github.com/honeybadger-io/honeybadger-php/commit/9fb13908b7d2f53a0c902a8ab66afdc239afba7f))
+
 ## [2.19.3](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.2...v2.19.3) (2024-07-06)
 
 
