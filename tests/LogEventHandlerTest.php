@@ -56,7 +56,7 @@ class LogEventHandlerTest extends TestCase
 
         $this->assertEquals([[
             'event_type' => 'log',
-            'ts' => (new \DateTime())->format(DATE_ATOM),
+            'ts' => (new \DateTime())->format(DATE_RFC3339_EXTENDED),
             'channel' => 'test-logger',
             'message' => 'Test log message',
             'severity' => 'info',
@@ -96,7 +96,7 @@ class LogEventHandlerTest extends TestCase
 
         $this->assertEquals([[
             'event_type' => 'log',
-            'ts' => (new \DateTime())->format(DATE_ATOM),
+            'ts' => (new \DateTime())->format(DATE_RFC3339_EXTENDED),
             'channel' => 'test-logger',
             'message' => 'Test warning message',
             'severity' => 'warning',

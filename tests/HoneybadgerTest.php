@@ -924,7 +924,7 @@ class HoneybadgerTest extends TestCase
             ->method('addEvent')
             ->with([
                 'event_type' => 'log',
-                'ts' => (new DateTime())->format(DATE_ATOM),
+                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
                 'message' => 'Test message',
             ]);
 
@@ -948,7 +948,7 @@ class HoneybadgerTest extends TestCase
             ->expects($this->once())
             ->method('addEvent')
             ->with([
-                'ts' => (new DateTime())->format(DATE_ATOM),
+                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
                 'message' => 'Test message',
             ]);
 
