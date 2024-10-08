@@ -58,7 +58,7 @@ class HoneybadgerClientTest extends TestCase
         $events = [
             [
                 'event_type' => 'log',
-                'ts' => (new DateTime())->format(DATE_ATOM),
+                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
                 'message' => 'Test message'
             ]
         ];
