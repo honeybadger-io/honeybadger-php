@@ -232,13 +232,13 @@ class Honeybadger implements Reporter
         }
 
         $event = array_merge(
-            ['ts' => (new DateTime())->format(DATE_ATOM)],
+            ['ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED)],
             $payload
         );
 
         // if 'ts' is set, we need to make sure it's a string in the correct format
         if ($event['ts'] instanceof DateTime) {
-            $event['ts'] = $event['ts']->format(DATE_ATOM);
+            $event['ts'] = $event['ts']->format(DATE_RFC3339_EXTENDED);
         }
 
         $this->events->addEvent($event);

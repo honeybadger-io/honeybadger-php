@@ -45,7 +45,7 @@ class LogEventHandler extends AbstractProcessingHandler
      */
     protected function getEventPayloadFromMonologRecord($record): array {
         $payload = [
-            'ts' => $record['datetime']->format(DATE_ATOM),
+            'ts' => $record['datetime']->format(DATE_RFC3339_EXTENDED),
             'severity' => strtolower($record['level_name']),
             'message' => $record['message'],
             'channel' => $record['channel'],

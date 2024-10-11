@@ -28,7 +28,7 @@ class BulkEventDispatcherTest extends TestCase {
         ]);
         $hbMock = $this->createMock(HoneybadgerClient::class);
         $dispatcher = new BulkEventDispatcher($config, $hbMock);
-        $dispatcher->addEvent(['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM)]);
+        $dispatcher->addEvent(['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED)]);
         $this->assertTrue($dispatcher->hasEvents());
     }
 
@@ -42,8 +42,8 @@ class BulkEventDispatcherTest extends TestCase {
             ]
         ]);
         $events = [
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 1'],
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 2'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 2'],
         ];
         $hbMock = $this->createMock(HoneybadgerClient::class);
         $hbMock->expects($this->once())->method('events')->with($events);
@@ -64,8 +64,8 @@ class BulkEventDispatcherTest extends TestCase {
             ]
         ]);
         $events = [
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 1'],
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 2'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 2'],
         ];
         $hbMock = $this->createMock(HoneybadgerClient::class);
         $hbMock->expects($this->once())->method('events')->with($events);
@@ -87,8 +87,8 @@ class BulkEventDispatcherTest extends TestCase {
             ]
         ]);
         $events = [
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 1'],
-            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_ATOM), 'message' => 'test 2'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],
+            ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 2'],
         ];
         $hbMock = $this->createMock(HoneybadgerClient::class);
         $hbMock->expects($this->once())->method('events')->with($events);
