@@ -2,12 +2,15 @@
 
 // Check if version input is provided
 if ($argc < 2) {
-    echo "Usage: php SyncSourceCodeWithPackageVersion.php <version>\n";
+    echo "Usage: php SyncSourceCodeWithPackageVersion.php <pr-title>\n";
     exit(1);
 }
 
-$versionInput = $argv[1];
-$filePath = 'src/Honeybadger.php';
+// Given the title of the PR, we can extract the version from it
+// Example: chore(master): release 4.2.0
+$prTitle = $argv[1];
+$versionInput = trim(preg_replace('/^chore\(master\): release /', '', $prTitle));
+$filePath = 'src/HoneybadgerLaravel.php';
 
 // Read the content of the file
 $fileContent = file_get_contents($filePath);
