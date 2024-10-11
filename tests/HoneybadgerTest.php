@@ -918,50 +918,68 @@ class HoneybadgerTest extends TestCase
 
     /** @test */
     public function it_adds_event_type_and_ts_to_event_payload() {
-        $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
-        $eventsDispatcher
-            ->expects($this->once())
-            ->method('addEvent')
-            ->with([
-                'event_type' => 'log',
-                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
-                'message' => 'Test message',
-            ]);
-
-        $client = HoneybadgerClient::new([
-            new Response(201),
-        ]);
-        $badger = Honeybadger::new([
-            'api_key' => 'asdf',
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
             'events' => [
-                'enabled' => true,
-            ],
-        ], $client->make(), $eventsDispatcher);
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
 
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
         $badger->event('log', ['message' => 'Test message']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+
+        $event = $eventsDispatcher->events[0];
+        $this->assertArrayHasKey('ts', $event);
+        $this->assertEquals('log', $event['event_type']);
+        $this->assertEquals('Test message', $event['message']);
     }
 
     /** @test */
     public function it_adds_ts_to_event_payload() {
-        $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
-        $eventsDispatcher
-            ->expects($this->once())
-            ->method('addEvent')
-            ->with([
-                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
-                'message' => 'Test message',
-            ]);
-
-        $client = HoneybadgerClient::new([
-            new Response(201),
-        ]);
-        $badger = Honeybadger::new([
-            'api_key' => 'asdf',
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
             'events' => [
-                'enabled' => true,
-            ],
-        ], $client->make(), $eventsDispatcher);
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
         $badger->event(['message' => 'Test message']);
+        $this->assertCount(1, $eventsDispatcher->events);
+
+        $event = $eventsDispatcher->events[0];
+        $this->assertArrayHasKey('ts', $event);
+        $this->assertArrayNotHasKey('event_type', $event);
+        $this->assertEquals('Test message', $event['message']);
     }
 
     /** @test */

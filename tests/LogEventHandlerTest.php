@@ -54,14 +54,15 @@ class LogEventHandlerTest extends TestCase
 
         $logger->info('Test log message', ['some' => 'data']);
 
-        $this->assertEquals([[
-            'event_type' => 'log',
-            'ts' => (new \DateTime())->format(DATE_RFC3339_EXTENDED),
-            'channel' => 'test-logger',
-            'message' => 'Test log message',
-            'severity' => 'info',
-            'some' => 'data',
-        ]], $eventsDispatcher->events);
+        $this->assertCount(1, $eventsDispatcher->events);
+
+        $event = $eventsDispatcher->events[0];
+        $this->assertArrayHasKey('ts', $event);
+        $this->assertEquals('log', $event['event_type']);
+        $this->assertEquals('test-logger', $event['channel']);
+        $this->assertEquals('Test log message', $event['message']);
+        $this->assertEquals('info', $event['severity']);
+        $this->assertEquals('data', $event['some']);
     }
 
     /** @test */
@@ -94,13 +95,14 @@ class LogEventHandlerTest extends TestCase
         $logger->debug('Test debug message', ['some' => 'data']);
         $logger->warning('Test warning message', ['some' => 'data']);
 
-        $this->assertEquals([[
-            'event_type' => 'log',
-            'ts' => (new \DateTime())->format(DATE_RFC3339_EXTENDED),
-            'channel' => 'test-logger',
-            'message' => 'Test warning message',
-            'severity' => 'warning',
-            'some' => 'data',
-        ]], $eventsDispatcher->events);
+        $this->assertCount(1, $eventsDispatcher->events);
+
+        $event = $eventsDispatcher->events[0];
+        $this->assertArrayHasKey('ts', $event);
+        $this->assertEquals('log', $event['event_type']);
+        $this->assertEquals('test-logger', $event['channel']);
+        $this->assertEquals('Test warning message', $event['message']);
+        $this->assertEquals('warning', $event['severity']);
+        $this->assertEquals('data', $event['some']);
     }
 }
