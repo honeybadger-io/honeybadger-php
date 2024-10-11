@@ -10,7 +10,7 @@ if ($argc < 2) {
 // Example: chore(master): release 4.2.0
 $prTitle = $argv[1];
 $versionInput = trim(preg_replace('/^chore\(master\): release /', '', $prTitle));
-$filePath = 'src/HoneybadgerLaravel.php';
+$filePath = 'src/Honeybadger.php';
 
 // Read the content of the file
 $fileContent = file_get_contents($filePath);
