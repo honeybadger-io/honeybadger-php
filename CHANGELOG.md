@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.19.5](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.4...v2.19.5) (2024-10-11)
+
+
+### Bug Fixes
+
+* use RFC3339 extended date format ([#200](https://github.com/honeybadger-io/honeybadger-php/issues/200)) ([1cf4ba3](https://github.com/honeybadger-io/honeybadger-php/commit/1cf4ba3f8fb29e78f929633e298faf2ab3b68409))
+
 ## [2.19.4](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.3...v2.19.4) (2024-08-28)
 
 
