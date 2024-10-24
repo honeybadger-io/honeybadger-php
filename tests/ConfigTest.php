@@ -13,7 +13,7 @@ class ConfigTest extends TestCase
     {
         $config = (new Config([
             'api_key' => '1234',
-            'endpoint_app' => 'https://eu-app.honeybadger.io',
+            'app_endpoint' => 'https://eu-app.honeybadger.io',
         ]))->all();
 
         $this->assertArrayHasKey('service_exception_handler', $config);
@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
             'api_key' => '1234',
             'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
-            'endpoint_app' => 'https://eu-app.honeybadger.io',
+            'app_endpoint' => 'https://eu-app.honeybadger.io',
             'notifier' => [
                 'name' => 'honeybadger-php',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
@@ -86,7 +86,7 @@ class ConfigTest extends TestCase
             'api_key' => '1234',
             'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
-            'endpoint_app' => Honeybadger::APP_URL,
+            'app_endpoint' => Honeybadger::APP_URL,
             'notifier' => [
                 'name' => 'honeybadger-php',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',

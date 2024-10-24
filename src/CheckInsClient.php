@@ -186,7 +186,7 @@ class CheckInsClient extends ApiClient
     public function makeClient(): Client
     {
         return new Client([
-            'base_uri' => $this->config['endpoint_app'],
+            'base_uri' => $this->config['app_endpoint'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::AUTH => [
                 $this->config['personal_auth_token'], ''
