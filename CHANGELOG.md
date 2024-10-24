@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.20.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.5...v2.20.0) (2024-10-24)
+
+
+### Features
+
+* make endpoint app url configurable ([#204](https://github.com/honeybadger-io/honeybadger-php/issues/204)) ([f6f5dcf](https://github.com/honeybadger-io/honeybadger-php/commit/f6f5dcfea3076239a673b13b012ce24f047e7e81))
+
 ## [2.19.5](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.4...v2.19.5) (2024-10-11)
 
 
