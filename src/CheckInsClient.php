@@ -12,8 +12,6 @@ use Throwable;
 
 class CheckInsClient extends ApiClient
 {
-    const BASE_URL = 'https://app.honeybadger.io/';
-
     /**
      * @param string $projectApiKey
      * @return string The project ID for the given API key.
@@ -188,7 +186,7 @@ class CheckInsClient extends ApiClient
     public function makeClient(): Client
     {
         return new Client([
-            'base_uri' => self::BASE_URL,
+            'base_uri' => $this->config['endpoint_app'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::AUTH => [
                 $this->config['personal_auth_token'], ''

@@ -26,8 +26,17 @@ class Honeybadger implements Reporter
 
     /**
      * Honeybadger API URL.
+     * Used to send notices (errors), events (Insights), and check-ins.
+     * If you are using our EU stack, this should be set to "https://eu-api.honeybadger.io/".
      */
     const API_URL = 'https://api.honeybadger.io/';
+
+    /**
+     * Honeybadger APP URL.
+     * Used to configure/synchronize check-ins.
+     * If you are using our EU stack, this should be set to "https://eu-app.honeybadger.io/".
+     */
+    const APP_URL = 'https://app.honeybadger.io/';
 
     /**
      * @var CheckInsClient;
