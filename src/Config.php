@@ -31,6 +31,7 @@ class Config extends Repository
             'api_key' => null,
             'personal_auth_token' => null,
             'endpoint' => Honeybadger::API_URL,
+            'app_endpoint' => Honeybadger::APP_URL,
             'notifier' => [
                 'name' => 'honeybadger-php',
                 'url' => 'https://github.com/honeybadger-io/honeybadger-php',
