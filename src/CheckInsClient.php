@@ -192,7 +192,7 @@ class CheckInsClient extends ApiClient
                 $this->config['personal_auth_token'], ''
             ],
             RequestOptions::HEADERS => [
-                'User-Agent' => 'Honeybadger PHP ' . Honeybadger::VERSION . '; ' . PHP_VERSION,
+                'User-Agent' => $this->config['notifier']['name'] . $this->config['notifier']['version'] . '; ' . PHP_VERSION,
             ],
         ]);
     }

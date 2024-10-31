@@ -102,7 +102,7 @@ class HoneybadgerClient extends ApiClient
                 'X-API-Key' => $this->config['api_key'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
-                'User-Agent' => 'Honeybadger PHP ' . Honeybadger::VERSION . '; ' . PHP_VERSION,
+                'User-Agent' => $this->config['notifier']['name'] . $this->config['notifier']['version'] . '; ' . PHP_VERSION,
             ],
             RequestOptions::TIMEOUT => $this->config['client']['timeout'],
             RequestOptions::PROXY => $this->config['client']['proxy'],
