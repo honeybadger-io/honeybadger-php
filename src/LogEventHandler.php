@@ -35,6 +35,11 @@ class LogEventHandler extends AbstractProcessingHandler
             return;
         }
 
+        if (strpos($record->message, __FILE__) !== false) {
+            // prevent infinite loop
+            return;
+        }
+
         $eventPayload = $this->getEventPayloadFromMonologRecord($record);
         $this->honeybadger->event('log', $eventPayload);
     }
