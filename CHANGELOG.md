@@ -3,6 +3,19 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.21.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.20.0...v2.21.0) (2024-11-01)
+
+
+### Features
+
+* add events api exception message ([#213](https://github.com/honeybadger-io/honeybadger-php/issues/213)) ([e0a0b90](https://github.com/honeybadger-io/honeybadger-php/commit/e0a0b90c6a1acfc188be3cabaf7907d448824bba))
+* send user agent in http clients ([#207](https://github.com/honeybadger-io/honeybadger-php/issues/207)) ([3bd7466](https://github.com/honeybadger-io/honeybadger-php/commit/3bd7466f258711de43676db5240c05129926fe43))
+
+
+### Bug Fixes
+
+* add noop handler for events exceptions ([#208](https://github.com/honeybadger-io/honeybadger-php/issues/208)) ([3eb1947](https://github.com/honeybadger-io/honeybadger-php/commit/3eb1947f5f0f1f7f49782d9020f7a75964fbb0cb))
+
 ## [2.20.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.19.5...v2.20.0) (2024-10-24)
 
 
