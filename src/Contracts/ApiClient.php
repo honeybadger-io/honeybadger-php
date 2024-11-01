@@ -38,6 +38,12 @@ abstract class ApiClient {
         call_user_func_array($serviceExceptionHandler, [$e]);
     }
 
+    protected function handleEventsException(ServiceException $e): void
+    {
+        $eventsExceptionHandler = $this->config['events_exception_handler'];
+        call_user_func_array($eventsExceptionHandler, [$e]);
+    }
+
     public function hasPersonalAuthToken(): bool
     {
         return !empty($this->config['personal_auth_token']);

@@ -83,13 +83,13 @@ class HoneybadgerClient extends ApiClient
                 ['body' => $ndjson]
             );
         } catch (Throwable $e) {
-            $this->handleServiceException(ServiceException::generic($e));
+            $this->handleEventsException(ServiceException::generic($e));
 
             return;
         }
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-            $this->handleServiceException((new ServiceExceptionFactory($response))->make());
+            $this->handleEventsException((new ServiceExceptionFactory($response))->make());
         }
     }
 
