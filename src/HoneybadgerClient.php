@@ -95,6 +95,7 @@ class HoneybadgerClient extends ApiClient
 
     public function makeClient(): Client
     {
+
         return new Client([
             'base_uri' => $this->config['endpoint'],
             RequestOptions::HTTP_ERRORS => false,
@@ -102,6 +103,7 @@ class HoneybadgerClient extends ApiClient
                 'X-API-Key' => $this->config['api_key'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
+                'User-Agent' => $this->getUserAgent(),
             ],
             RequestOptions::TIMEOUT => $this->config['client']['timeout'],
             RequestOptions::PROXY => $this->config['client']['proxy'],

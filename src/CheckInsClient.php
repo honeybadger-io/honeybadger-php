@@ -191,6 +191,9 @@ class CheckInsClient extends ApiClient
             RequestOptions::AUTH => [
                 $this->config['personal_auth_token'], ''
             ],
+            RequestOptions::HEADERS => [
+                'User-Agent' => $this->getUserAgent(),
+            ],
         ]);
     }
 }
