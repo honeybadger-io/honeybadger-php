@@ -89,7 +89,7 @@ class HoneybadgerClient extends ApiClient
         }
 
         if ($response->getStatusCode() !== Response::HTTP_CREATED) {
-            $this->handleEventsException((new ServiceExceptionFactory($response))->make());
+            $this->handleEventsException((new ServiceExceptionFactory($response))->make(true));
         }
     }
 

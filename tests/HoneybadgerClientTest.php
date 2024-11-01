@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Response as GuzzleResponse;
 use GuzzleHttp\Psr7\Utils;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Honeybadger\HoneybadgerClient;
 use Mockery;
 use PHPUnit\Framework\TestCase;
@@ -42,6 +43,32 @@ class HoneybadgerClientTest extends TestCase
 
         $client = new HoneybadgerClient($config, $mock);
         $client->checkIn('1234');
+    }
+
+    /** @test */
+    public function throws_rate_limit_exception_for_events()
+    {
+        $message = null;
+        $config = new Config([
+            'api_key' => '1234',
+            'events_exception_handler' => function (ServiceException $e) use (&$message) {
+                $message = $e->getMessage();
+            },
+        ]);
+        $mock = Mockery::mock(Client::class)->makePartial();
+        $mock->shouldReceive('post')->andThrow(ServiceException::eventsRateLimit());
+
+        $client = new HoneybadgerClient($config, $mock);
+        $events = [
+            [
+                'event_type' => 'log',
+                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
+                'message' => 'Test message'
+            ]
+        ];
+        $client->events($events);
+
+        $this->assertStringContainsString('You have hit your events rate limit.', $message);
     }
 
     /** @test */
