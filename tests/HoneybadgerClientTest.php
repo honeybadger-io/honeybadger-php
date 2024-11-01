@@ -45,7 +45,7 @@ class HoneybadgerClientTest extends TestCase
     }
 
     /** @test */
-    public function does_not_throw_generic_exception_for_events()
+    public function doesnt_throw_generic_exception_for_events()
     {
         // client should not throw an exception -> test will pass
         $this->expectNotToPerformAssertions();
@@ -80,6 +80,32 @@ class HoneybadgerClientTest extends TestCase
 
         $client = new HoneybadgerClient($config, $mock);
         $client->notification([]);
+
+        $this->assertStringContainsString('There was an error sending the payload to Honeybadger', $message);
+    }
+
+    /** @test */
+    public function allows_events_exceptions_to_be_handled()
+    {
+        $message = null;
+        $config = new Config([
+            'api_key' => '1234',
+            'events_exception_handler' => function (ServiceException $e) use (&$message) {
+                $message = $e->getMessage();
+            },
+        ]);
+        $mock = Mockery::mock(Client::class)->makePartial();
+        $mock->shouldReceive('post')->andThrow(new Exception);
+
+        $client = new HoneybadgerClient($config, $mock);
+        $events = [
+            [
+                'event_type' => 'log',
+                'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
+                'message' => 'Test message'
+            ]
+        ];
+        $client->events($events);
 
         $this->assertStringContainsString('There was an error sending the payload to Honeybadger', $message);
     }
