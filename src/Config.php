@@ -42,6 +42,12 @@ class Config extends Repository
             'service_exception_handler' => function (ServiceException $e) {
                 throw $e;
             },
+            'events_exception_handler' => function (ServiceException $e) {
+                // default: noop
+                // this should be a noop operation by default.
+                // many events could be sent from your application and in case of errors, even logging them will add to much noise.
+                // you may want to override this in your application to log or handle the error in a different way (or debug).
+            },
             'environment' => [
                 'filter' => [],
                 'include' => [],
