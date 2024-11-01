@@ -20,12 +20,12 @@ class ServiceExceptionFactory
         $this->response = $response;
     }
 
-    public function make(): ServiceException
+    public function make(bool $isFromEventsApi = false): ServiceException
     {
-        return $this->exception();
+        return $this->exception($isFromEventsApi);
     }
 
-    private function exception(): ServiceException
+    private function exception(bool $isFromEventsApi = false): ServiceException
     {
         if ($this->response->getStatusCode() === Response::HTTP_FORBIDDEN) {
             return ServiceException::invalidApiKey();
@@ -36,7 +36,9 @@ class ServiceExceptionFactory
         }
 
         if ($this->response->getStatusCode() === Response::HTTP_TOO_MANY_REQUESTS) {
-            return ServiceException::rateLimit();
+            return $isFromEventsApi
+                ? ServiceException::eventsRateLimit()
+                : ServiceException::rateLimit();
         }
 
         if ($this->response->getStatusCode() === Response::HTTP_INTERNAL_SERVER_ERROR) {

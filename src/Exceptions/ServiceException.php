@@ -34,6 +34,14 @@ class ServiceException extends Exception
     /**
      * @return ServiceException
      */
+    public static function eventsRateLimit(): self
+    {
+        return new static('You have hit your events rate limit.');
+    }
+
+    /**
+     * @return ServiceException
+     */
     public static function serverError(): self
     {
         return new static('There was an error on our end.');
