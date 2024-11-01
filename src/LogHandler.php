@@ -36,11 +36,6 @@ class LogHandler extends AbstractProcessingHandler
             return;
         }
 
-        if (strpos($record->message, __FILE__) !== false) {
-            // prevent infinite loop
-            return;
-        }
-
         $this->honeybadger->rawNotification(function ($config) use ($record) {
             return [
                 'notifier' => array_merge($config['notifier'], ['name' => 'Honeybadger Log Handler']),
