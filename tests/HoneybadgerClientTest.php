@@ -45,10 +45,10 @@ class HoneybadgerClientTest extends TestCase
     }
 
     /** @test */
-    public function throws_generic_exception_for_events()
+    public function does_not_throw_generic_exception_for_events()
     {
-        $this->expectException(ServiceException::class);
-        $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
+        // client should not throw an exception -> test will pass
+        $this->expectNotToPerformAssertions();
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();

@@ -17,7 +17,9 @@ class ConfigTest extends TestCase
         ]))->all();
 
         $this->assertArrayHasKey('service_exception_handler', $config);
+        $this->assertArrayHasKey('events_exception_handler', $config);
         unset($config['service_exception_handler']);
+        unset($config['events_exception_handler']);
 
         $this->assertEquals([
             'api_key' => '1234',
@@ -80,7 +82,9 @@ class ConfigTest extends TestCase
         ]))->all();
 
         $this->assertArrayHasKey('service_exception_handler', $config);
+        $this->assertArrayHasKey('events_exception_handler', $config);
         unset($config['service_exception_handler']);
+        unset($config['events_exception_handler']);
 
         $this->assertEquals([
             'api_key' => '1234',
