@@ -43,4 +43,14 @@ abstract class ApiClient {
         return !empty($this->config['personal_auth_token']);
     }
 
+    public function getUserAgent(): string
+    {
+        $userAgent = 'Honeybadger PHP; ' . PHP_VERSION;
+        if (isset($this->config['notifier'], $this->config['notifier']['name'], $this->config['notifier']['version'])) {
+            $userAgent = $this->config['notifier']['name'] . ' ' . $this->config['notifier']['version'] . '; ' . PHP_VERSION;
+        }
+
+        return $userAgent;
+    }
+
 }
