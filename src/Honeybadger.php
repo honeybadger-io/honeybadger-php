@@ -201,7 +201,7 @@ class Honeybadger implements Reporter
 
     public function addBreadcrumb(string $message, array $metadata = [], string $category = 'custom'): Reporter
     {
-        if ($this->config['breadcrumbs']['enabled']) {
+        if ($this->config['breadcrumbs']['enabled'] && !empty($message)) {
             $this->breadcrumbs->add([
                 'message' => $message,
                 'metadata' => $metadata,
