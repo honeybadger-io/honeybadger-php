@@ -870,6 +870,45 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function does_not_add_breadcrumbs_with_empty_message()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        sleep(1);
+        $badger
+            ->addBreadcrumb('', ['this will not be' => 'sent'], 'render')
+            ->setComponent('HomeController')
+            ->setAction('index')
+            ->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        $this->assertTrue($notification['breadcrumbs']['enabled']);
+
+        // only the notice breadcrumb should be sent
+        $this->assertCount(1, $notification['breadcrumbs']['trail']);
+
+        $noticeBreadcrumb = $notification['breadcrumbs']['trail'][0];
+        $this->assertEquals('Honeybadger Notice', $noticeBreadcrumb['message']);
+        $this->assertEquals('notice', $noticeBreadcrumb['category']);
+        $this->assertInstanceOf(\DateTime::class, date_create($noticeBreadcrumb['timestamp']));
+        $this->assertEquals([
+            'message' => 'Test exception',
+            'name' => Exception::class,
+        ], $noticeBreadcrumb['metadata']);
+    }
+
+    /** @test */
     public function wont_send_breadcrumbs_if_disabled()
     {
         $client = HoneybadgerClient::new([
