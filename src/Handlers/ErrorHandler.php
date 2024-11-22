@@ -32,7 +32,7 @@ class ErrorHandler extends Handler implements HandlerContract
         $this->previousHandler = set_error_handler([$this, 'handle']);
     }
 
-    public function handle(int $level, string $error, string $file = null, ?int $line = null)
+    public function handle(int $level, string $error, ?string $file = null, ?int $line = null)
     {
         // When the @ operator is used, it temporarily changes `error_reporting()`'s return value
         // to reflect what error types should be reported. This means we should get 0 (no errors).
