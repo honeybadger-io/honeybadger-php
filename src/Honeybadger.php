@@ -68,7 +68,7 @@ class Honeybadger implements Reporter
      */
     protected $events;
 
-    public function __construct(array $config = [], Client $client = null, BulkEventDispatcher $eventsDispatcher = null)
+    public function __construct(array $config = [], ?Client $client = null, ?BulkEventDispatcher $eventsDispatcher = null)
     {
         $this->config = new Config($config);
 
@@ -84,7 +84,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []): array
+    public function notify(Throwable $throwable, ?FoundationRequest $request = null, array $additionalParams = []): array
     {
         if (! $this->shouldReport($throwable)) {
             return [];
@@ -223,7 +223,7 @@ class Honeybadger implements Reporter
     /**
      * {@inheritdoc}
      */
-    public function event($eventTypeOrPayload, array $payload = null): void
+    public function event($eventTypeOrPayload, ?array $payload = null): void
     {
         if (empty($this->config['api_key']) || ! $this->config['events']['enabled']) {
             return;

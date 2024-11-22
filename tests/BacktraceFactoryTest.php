@@ -62,7 +62,7 @@ class BacktraceFactoryTest extends TestCase
     }
 
     /** @test */
-    public function bactraces_send_class()
+    public function backtraces_send_class()
     {
         try {
             throw new Exception('test');
@@ -74,7 +74,7 @@ class BacktraceFactoryTest extends TestCase
     }
 
     /** @test */
-    public function bactraces_send_type()
+    public function backtraces_send_type()
     {
         try {
             throw new Exception('test');
