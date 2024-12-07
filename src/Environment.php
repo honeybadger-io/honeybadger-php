@@ -52,7 +52,7 @@ class Environment
      */
     protected $server = [];
 
-    public function __construct(array $server = null, array $env = null)
+    public function __construct(?array $server = null, ?array $env = null)
     {
         $this->server = array_merge(
             $server ?? $_SERVER,

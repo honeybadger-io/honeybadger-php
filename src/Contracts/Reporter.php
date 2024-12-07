@@ -9,13 +9,13 @@ interface Reporter
 {
     /**
      * @param  \Throwable  $throwable
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  ?\Symfony\Component\HttpFoundation\Request  $request
      * @param  array  $additionalParams
      * @return array
      *
      * @throws \Honeybadger\Exceptions\ServiceException
      */
-    public function notify(Throwable $throwable, FoundationRequest $request = null, array $additionalParams = []): array;
+    public function notify(Throwable $throwable, ?FoundationRequest $request = null, array $additionalParams = []): array;
 
     /**
      * @param  array  $payload
@@ -89,7 +89,7 @@ interface Reporter
      *
      * @return void
      */
-    public function event($eventTypeOrPayload, array $payload = null): void;
+    public function event($eventTypeOrPayload, ?array $payload = null): void;
 
     /**
      * Flush all events from the queue.

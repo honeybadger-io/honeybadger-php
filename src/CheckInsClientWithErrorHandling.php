@@ -18,7 +18,7 @@ class CheckInsClientWithErrorHandling
      */
     private $baseClient;
 
-    public function __construct(Config $config, Client $httpClient = null)
+    public function __construct(Config $config, ?Client $httpClient = null)
     {
         $this->config = $config;
         $this->baseClient = new CheckInsClient($config, $httpClient);

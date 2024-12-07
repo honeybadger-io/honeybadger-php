@@ -20,9 +20,9 @@ abstract class ApiClient {
 
     /**
      * @param Config $config
-     * @param Client|null $httpClient
+     * @param ?Client $httpClient
      */
-    public function __construct(Config $config, Client $httpClient = null) {
+    public function __construct(Config $config, ?Client $httpClient = null) {
         $this->config = $config;
         $this->client = $httpClient ?? $this->makeClient();
     }

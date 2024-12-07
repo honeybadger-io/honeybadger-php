@@ -60,7 +60,7 @@ class ServiceException extends Exception
      * @param Throwable|null $e
      * @return self
      */
-    public static function generic(Throwable $e = null): self
+    public static function generic(?Throwable $e = null): self
     {
         $message = $e
             ? 'There was an error sending the payload to Honeybadger: '.$e->getMessage()
