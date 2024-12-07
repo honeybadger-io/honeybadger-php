@@ -3,13 +3,6 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
-## 2.22.1 (2024-11-22)
-
-
-### Fixed
-
-* add PHP 8.4 compatibility
-
 ## [2.22.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.21.0...v2.22.0) (2024-11-16)
 
 
