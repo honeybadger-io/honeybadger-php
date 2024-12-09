@@ -40,7 +40,12 @@ class BacktraceFactoryTest extends TestCase
             $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
-        $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        // if php version is 8.4.0 or higher, then we need to check for a more specific closure name
+        if (version_compare(PHP_VERSION, '8.4.0', '>=')) {
+            $this->assertEquals('{closure:Honeybadger\Tests\BacktraceFactoryTest::it_correctly_formats_annonymous_functions():33}', $backtrace[0]['method']);
+        } else {
+            $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        }
         $this->assertEquals(['bar'], $backtrace[0]['args']);
     }
 
@@ -62,7 +67,7 @@ class BacktraceFactoryTest extends TestCase
     }
 
     /** @test */
-    public function bactraces_send_class()
+    public function backtraces_send_class()
     {
         try {
             throw new Exception('test');
@@ -74,7 +79,7 @@ class BacktraceFactoryTest extends TestCase
     }
 
     /** @test */
-    public function bactraces_send_type()
+    public function backtraces_send_type()
     {
         try {
             throw new Exception('test');
@@ -153,7 +158,12 @@ class BacktraceFactoryTest extends TestCase
             $backtrace = (new BacktraceFactory($e, new Config))->trace();
         }
 
-        $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        // if php version is 8.4.0 or higher, then we need to check for a more specific closure name
+        if (version_compare(PHP_VERSION, '8.4.0', '>=')) {
+            $this->assertEquals('{closure:Honeybadger\Tests\BacktraceFactoryTest::args_with_object_should_be_literals():151}', $backtrace[0]['method']);
+        } else {
+            $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
+        }
         $this->assertEquals(['bar', '[LITERAL]Object('.TestClass::class.')'], $backtrace[0]['args']);
     }
 }

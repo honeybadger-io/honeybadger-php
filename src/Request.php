@@ -15,10 +15,10 @@ class Request
     protected $request;
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  ?\Symfony\Component\HttpFoundation\Request  $request
      * @param  array  $options
      */
-    public function __construct(FoundationRequest $request = null)
+    public function __construct(?FoundationRequest $request = null)
     {
         $this->request = $request ?? FoundationRequest::createFromGlobals();
 

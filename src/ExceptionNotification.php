@@ -65,11 +65,11 @@ class ExceptionNotification
 
     /**
      * @param  \Throwable  $e
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  ?\Symfony\Component\HttpFoundation\Request  $request
      * @param  array  $additionalParams
      * @return array
      */
-    public function make(Throwable $e, FoundationRequest $request = null, array $additionalParams = []): array
+    public function make(Throwable $e, ?FoundationRequest $request = null, array $additionalParams = []): array
     {
         $this->throwable = $e;
         $this->backtrace = $this->makeBacktrace();
@@ -138,10 +138,10 @@ class ExceptionNotification
     }
 
     /**
-     * @param  \Symfony\Component\HttpFoundation\Request  $request
+     * @param  ?\Symfony\Component\HttpFoundation\Request  $request
      * @return \Honeybadger\Request
      */
-    private function makeRequest(FoundationRequest $request = null): Request
+    private function makeRequest(?FoundationRequest $request = null): Request
     {
         return (new Request($request))
             ->filterKeys($this->config['request']['filter']);
