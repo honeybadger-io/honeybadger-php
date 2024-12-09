@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.22.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.22.0...v2.22.1) (2024-12-09)
+
+
+### Performance Improvements
+
+* add PHP 8.4 to test matrix ([#218](https://github.com/honeybadger-io/honeybadger-php/issues/218)) ([de5747f](https://github.com/honeybadger-io/honeybadger-php/commit/de5747f3c1f818c1caf6750cd103f376ed442204))
+
 ## [2.22.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.21.0...v2.22.0) (2024-11-16)
 
 
