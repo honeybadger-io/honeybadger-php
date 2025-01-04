@@ -8,7 +8,7 @@ use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
 use Honeybadger\Contracts\Reporter;
 use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Handlers\BeforeInsightsEventHandler;
+use Honeybadger\Handlers\BeforeEventHandler;
 use Honeybadger\Handlers\BeforeNotifyHandler;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
@@ -73,12 +73,12 @@ class Honeybadger implements Reporter
     /**
      * @var BeforeNotifyHandler
      */
-    protected $beforeNotifyHandler;
+    protected $beforeNotifyHandlers;
 
     /**
-     * @var BeforeInsightsEventHandler
+     * @var BeforeEventHandler
      */
-    protected $beforeInsightsEventHandler;
+    protected $beforeEventHandlers;
 
     public function __construct(array $config = [], ?Client $client = null, ?BulkEventDispatcher $eventsDispatcher = null)
     {
@@ -112,7 +112,7 @@ class Honeybadger implements Reporter
         }
 
         $notification = $notification->make($throwable, $request, $additionalParams);
-        if (!$this->beforeNotifyHandler->handle($notification)) {
+        if (!$this->beforeNotifyHandlers->handle($notification)) {
             return [];
         }
 
@@ -265,7 +265,7 @@ class Honeybadger implements Reporter
             $event['ts'] = $event['ts']->format(DATE_RFC3339_EXTENDED);
         }
 
-        if (!$this->beforeInsightsEventHandler->handle($event)) {
+        if (!$this->beforeEventHandlers->handle($event)) {
             return;
         }
 
@@ -289,7 +289,7 @@ class Honeybadger implements Reporter
      */
     public function beforeNotify(callable $callback): void
     {
-        $this->beforeNotifyHandler->register($callback);
+        $this->beforeNotifyHandlers->register($callback);
     }
 
     /**
@@ -297,7 +297,7 @@ class Honeybadger implements Reporter
      */
     public function beforeEvent(callable $callback): void
     {
-        $this->beforeInsightsEventHandler->register($callback);
+        $this->beforeEventHandlers->register($callback);
     }
 
     /**
@@ -313,8 +313,8 @@ class Honeybadger implements Reporter
      */
     private function setHandlers(): void
     {
-        $this->beforeNotifyHandler = new BeforeNotifyHandler();
-        $this->beforeInsightsEventHandler = new BeforeInsightsEventHandler();
+        $this->beforeNotifyHandlers = new BeforeNotifyHandler();
+        $this->beforeEventHandlers = new BeforeEventHandler();
 
         if ($this->config['handlers']['exception']) {
             (new ExceptionHandler($this))->register();
