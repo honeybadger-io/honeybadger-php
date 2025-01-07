@@ -98,4 +98,28 @@ interface Reporter
      * @return void
      */
     public function flushEvents(): void;
+
+    /**
+     * Register a callback to be executed before an error report is sent to Honeybadger.
+     * The callback is called with the error report payload as its only argument.
+     *
+     * You can modify the payload in the callback, but be careful not to remove any required keys.
+     * If the callback returns false, the error report will not be sent to Honeybadger.
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function beforeNotify(callable $callback): void;
+
+    /**
+     * Register a callback to be executed before an event is sent to Honeybadger.
+     * The callback is called with the event payload as its only argument.
+     *
+     * You can modify the payload in the callback, but be careful not to remove any required keys.
+     * If the callback returns false, the event will not be sent to Honeybadger.
+     *
+     * @param callable $callback
+     * @return void
+     */
+    public function beforeEvent(callable $callback): void;
 }
