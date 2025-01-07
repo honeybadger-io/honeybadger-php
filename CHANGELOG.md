@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.23.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.22.1...v2.23.0) (2025-01-07)
+
+
+### Features
+
+* add support for beforeNotify and beforeEvent handlers ([#222](https://github.com/honeybadger-io/honeybadger-php/issues/222)) ([534634c](https://github.com/honeybadger-io/honeybadger-php/commit/534634c66bd22f0ddfa11d535c4f958aa898d0de))
+
+
+### Bug Fixes
+
+* **checkins:** read error message from response body ([#224](https://github.com/honeybadger-io/honeybadger-php/issues/224)) ([f6fd084](https://github.com/honeybadger-io/honeybadger-php/commit/f6fd084522a371b992d9544dfd36469eff43689e))
+
 ## [2.22.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.22.0...v2.22.1) (2024-12-09)
 
 
