@@ -85,4 +85,13 @@ class ServiceException extends Exception
     {
         return new static("Missing personal auth token. This token is required to use Honeybadger's Data APIs.");
     }
+
+    /**
+     * @param string $message
+     * @return self
+     */
+    public static function withMessage(string $message): self
+    {
+        return new static($message);
+    }
 }

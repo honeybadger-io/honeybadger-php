@@ -27,6 +27,19 @@ class ServiceExceptionFactory
 
     private function exception(bool $isFromEventsApi = false): ServiceException
     {
+        try {
+            $message = $this->response->getBody()->getContents();
+            if (!empty($message)) {
+                $data = json_decode($message, true);
+                if (isset($data['errors'])) {
+                    return ServiceException::withMessage($data['errors']);
+                }
+            }
+        } catch (\Exception $e) {
+            // Do nothing
+            // Fallback to default error messages based on status code
+        }
+
         if ($this->response->getStatusCode() === Response::HTTP_FORBIDDEN) {
             return ServiceException::invalidApiKey();
         }
