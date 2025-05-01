@@ -420,8 +420,10 @@ class Honeybadger implements Reporter
 
         // If requestId is present, use it for consistent sampling
         if (isset($event['requestId'])) {
-            // Use CRC32 of requestId for consistent sampling
-            return crc32((string) $event['requestId']) % 100 < $samplingRate;
+            // Use CRC32 of requestId for consistent sampling,
+            // and use sprintf to convert to unsigned integer
+            $crc = sprintf('%u', crc32((string) $event['requestId']));
+            return $crc % 100 < $samplingRate;
         }
 
         // Otherwise, use random sampling
