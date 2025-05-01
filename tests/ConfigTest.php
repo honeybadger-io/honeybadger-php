@@ -66,6 +66,7 @@ class ConfigTest extends TestCase
                 'enabled' => false,
                 'bulk_threshold' => 50,
                 'dispatch_interval_seconds' => 2,
+                'sample_rate' => 100,
             ],
         ], $config);
     }
@@ -131,6 +132,7 @@ class ConfigTest extends TestCase
                 'enabled' => false,
                 'bulk_threshold' => 50,
                 'dispatch_interval_seconds' => 2,
+                'sample_rate' => 100,
             ],
         ], $config);
     }
