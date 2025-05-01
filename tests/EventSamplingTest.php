@@ -10,19 +10,15 @@ use PHPUnit\Framework\TestCase;
 class EventSamplingTest extends TestCase
 {
     /** @test */
-    public function it_samples_events_based_on_sample_rate()
+    public function it_does_not_send_events_when_sample_rate_is_zero()
     {
         // Create a mock client
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
 
+        $config = events_config(0);
+
         // Create a custom event dispatcher that tracks events
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -32,28 +28,25 @@ class EventSamplingTest extends TestCase
         };
 
         // Create Honeybadger instance with 0% sampling rate
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Send an event
         $badger->event('log', ['message' => 'Test message']);
 
         // No events should be in the queue
         $this->assertCount(0, $eventsDispatcher->events);
+    }
+
+    /** @test */
+    public function it_sends_all_events_when_sample_rate_is_one_hundred()
+    {
+        // Create a mock client
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+
+        $config = events_config(100);
 
         // Now create a new instance with 100% sampling rate
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 100 // All events should be sent
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -62,13 +55,7 @@ class EventSamplingTest extends TestCase
             }
         };
 
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 100 // All events should be sent
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Send an event
         $badger->event('log', ['message' => 'Test message']);
@@ -83,14 +70,10 @@ class EventSamplingTest extends TestCase
         // Create a mock client
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
 
+        $config = events_config(50);
+
         // Create a custom event dispatcher that tracks events
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 50 // 50% of events should be sent
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -100,13 +83,7 @@ class EventSamplingTest extends TestCase
         };
 
         // Create Honeybadger instance with 50% sampling rate
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 50 // 50% of events should be sent
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Create a requestId that will be sampled (using a known value that will pass the CRC32 check)
         $sampledRequestId = 'sampled-request-123';
@@ -151,14 +128,10 @@ class EventSamplingTest extends TestCase
         // Create a mock client
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
 
+        $config = events_config(0);
+
         // Create a custom event dispatcher that tracks events
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent by default
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -168,13 +141,7 @@ class EventSamplingTest extends TestCase
         };
 
         // Create Honeybadger instance with 0% sampling rate
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent by default
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Send an event with no override - should not be sent
         $badger->event('log', ['message' => 'This event should not be sent']);
@@ -196,14 +163,10 @@ class EventSamplingTest extends TestCase
         // Create a mock client
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
 
+        $config = events_config(100);
+
         // Create a custom event dispatcher that tracks events
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 100 // All events should be sent
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -213,13 +176,7 @@ class EventSamplingTest extends TestCase
         };
 
         // Create Honeybadger instance
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 100
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Send an event with _hb metadata
         $badger->event('log', [
@@ -247,14 +204,10 @@ class EventSamplingTest extends TestCase
         // Create a mock client
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
 
+        $config = events_config(0);
+
         // Create a custom event dispatcher that tracks events
-        $eventsDispatcher = new class(new Config([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent by default
-            ]
-        ]), $client) extends BulkEventDispatcher {
+        $eventsDispatcher = new class(new Config($config), $client) extends BulkEventDispatcher {
             public $events = [];
 
             public function addEvent($event): void
@@ -264,13 +217,7 @@ class EventSamplingTest extends TestCase
         };
 
         // Create Honeybadger instance with 0% sampling rate
-        $badger = new Honeybadger([
-            'api_key' => '1234',
-            'events' => [
-                'enabled' => true,
-                'sample_rate' => 0 // No events should be sent by default
-            ]
-        ], null, $eventsDispatcher);
+        $badger = new Honeybadger($config, null, $eventsDispatcher);
 
         // Register a before_event callback that adds the _hb metadata to override sampling
         $badger->beforeEvent(function (&$event) {
