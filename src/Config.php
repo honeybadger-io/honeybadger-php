@@ -80,7 +80,8 @@ class Config extends Repository
             'events' => [
                 'enabled' => false,
                 'bulk_threshold' => BulkEventDispatcher::BULK_THRESHOLD,
-                'dispatch_interval_seconds' => BulkEventDispatcher::DISPATCH_INTERVAL_SECONDS
+                'dispatch_interval_seconds' => BulkEventDispatcher::DISPATCH_INTERVAL_SECONDS,
+                'sample_rate' => 100
             ],
         ], $config);
 

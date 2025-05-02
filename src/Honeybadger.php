@@ -269,6 +269,16 @@ class Honeybadger implements Reporter
             return;
         }
 
+        // Apply sampling after before_event callbacks
+        if (!$this->shouldSampleEvent($event)) {
+            return;
+        }
+
+        // Remove internal metadata before sending
+        if (isset($event['_hb'])) {
+            unset($event['_hb']);
+        }
+
         $this->events->addEvent($event);
     }
 
@@ -379,5 +389,44 @@ class Honeybadger implements Reporter
         $this->context('honeybadger_action', $action);
 
         return $this;
+    }
+
+    /**
+     * Determines if an event should be sampled based on sampling rate configuration
+     * and any override in the event payload.
+     *
+     * @param array $event The event payload
+     * @return bool Whether the event should be sent
+     */
+    protected function shouldSampleEvent(array $event): bool
+    {
+        // Get the configured sampling rate (0-100)
+        $samplingRate = $this->config['events']['sample_rate'] ?? 100;
+
+        // Check for override in event payload
+        if (isset($event['_hb']['sample_rate']) && is_numeric($event['_hb']['sample_rate'])) {
+            $samplingRate = (int) $event['_hb']['sample_rate'];
+        }
+
+        // If sampling rate is 0, don't send any events
+        if ($samplingRate <= 0) {
+            return false;
+        }
+
+        // If sampling rate is 100 or greater, send all events
+        if ($samplingRate >= 100) {
+            return true;
+        }
+
+        // If requestId is present, use it for consistent sampling
+        if (isset($event['requestId'])) {
+            // Use CRC32 of requestId for consistent sampling,
+            // and use sprintf to convert to unsigned integer
+            $crc = sprintf('%u', crc32((string) $event['requestId']));
+            return $crc % 100 < $samplingRate;
+        }
+
+        // Otherwise, use random sampling
+        return mt_rand(0, 99) < $samplingRate;
     }
 }
