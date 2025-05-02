@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.24.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.23.0...v2.24.0) (2025-05-02)
+
+
+### Features
+
+* add Insights event sampling ([#227](https://github.com/honeybadger-io/honeybadger-php/issues/227)) ([bb506c8](https://github.com/honeybadger-io/honeybadger-php/commit/bb506c89755d0b83f1f7451c7dae6fa5eeff7ba5))
+
 ## [2.23.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.22.1...v2.23.0) (2025-01-07)
 
 
