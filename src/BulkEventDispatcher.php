@@ -4,8 +4,8 @@ namespace Honeybadger;
 
 class BulkEventDispatcher
 {
-    const BULK_THRESHOLD = 50;
-    const DISPATCH_INTERVAL_SECONDS = 2;
+    const BULK_THRESHOLD = 200;
+    const DISPATCH_INTERVAL_SECONDS = 30;
 
     /**
      * @var HoneybadgerClient
