@@ -64,8 +64,8 @@ class ConfigTest extends TestCase
             'checkins' => [],
             'events' => [
                 'enabled' => false,
-                'bulk_threshold' => 50,
-                'dispatch_interval_seconds' => 2,
+                'bulk_threshold' => 200,
+                'dispatch_interval_seconds' => 30,
                 'sample_rate' => 100,
             ],
         ], $config);
@@ -130,8 +130,8 @@ class ConfigTest extends TestCase
             'checkins' => [],
             'events' => [
                 'enabled' => false,
-                'bulk_threshold' => 50,
-                'dispatch_interval_seconds' => 2,
+                'bulk_threshold' => 200,
+                'dispatch_interval_seconds' => 30,
                 'sample_rate' => 100,
             ],
         ], $config);
