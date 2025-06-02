@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.24.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.24.0...v2.24.1) (2025-06-02)
+
+
+### Performance Improvements
+
+* increase defaults for events dispatcher ([#229](https://github.com/honeybadger-io/honeybadger-php/issues/229)) ([11ec9d3](https://github.com/honeybadger-io/honeybadger-php/commit/11ec9d3e02dfcb6574a1d465b3a625e74974a9b8))
+
 ## [2.24.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.23.0...v2.24.0) (2025-05-02)
 
 
