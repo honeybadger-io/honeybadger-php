@@ -2,7 +2,6 @@
 
 namespace Honeybadger\Tests;
 
-use DateTime;
 use Exception;
 use GuzzleHttp\Psr7\Response;
 use Honeybadger\BulkEventDispatcher;
@@ -1085,5 +1084,923 @@ class HoneybadgerTest extends TestCase
         $this->assertTrue($eventsDispatcher->hasEvents());
         $badger->flushEvents();
         $this->assertFalse($eventsDispatcher->hasEvents());
+    }
+
+    /** @test */
+    public function it_sets_event_context_with_single_key_value_pair()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        $result = $badger->eventContext('user_id', 123);
+
+        // Should return self for method chaining
+        $this->assertSame($badger, $result);
+
+        // Verify context was set by sending an event and checking the result
+        $badger->event('test_event', ['test' => 'data']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+        $this->assertEquals(123, $event['user_id']);
+    }
+
+    /** @test */
+    public function it_sets_event_context_with_array_input()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        $contextData = [
+            'user_id' => 123,
+            'session_id' => 'abc123',
+            'feature_flag' => true,
+        ];
+
+        $result = $badger->eventContext($contextData);
+
+        // Should return self for method chaining
+        $this->assertSame($badger, $result);
+
+        // Verify context was set by sending an event and checking the result
+        $badger->event('test_event', ['test' => 'data']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+        $this->assertEquals(123, $event['user_id']);
+        $this->assertEquals('abc123', $event['session_id']);
+        $this->assertTrue($event['feature_flag']);
+    }
+
+    /** @test */
+    public function it_preserves_data_types_in_event_context()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        $contextData = [
+            'string_value' => 'test',
+            'integer_value' => 42,
+            'float_value' => 3.14,
+            'boolean_true' => true,
+            'boolean_false' => false,
+            'null_value' => null,
+            'array_value' => ['nested' => 'data'],
+        ];
+
+        $badger->eventContext($contextData);
+
+        // Verify data types are preserved by sending an event and checking the result
+        $badger->event('test_event', ['test' => 'data']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        $this->assertSame('test', $event['string_value']);
+        $this->assertSame(42, $event['integer_value']);
+        $this->assertSame(3.14, $event['float_value']);
+        $this->assertTrue($event['boolean_true']);
+        $this->assertFalse($event['boolean_false']);
+        $this->assertNull($event['null_value']);
+        $this->assertEquals(['nested' => 'data'], $event['array_value']);
+    }
+
+    /** @test */
+    public function it_clears_populated_event_context()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set some event context data
+        $badger->eventContext([
+            'user_id' => 123,
+            'session_id' => 'abc123',
+            'feature_flag' => true,
+        ]);
+
+        // Verify context was set by sending an event
+        $badger->event('test_event_before', ['test' => 'before']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $eventBefore = $eventsDispatcher->events[0];
+        $this->assertEquals(123, $eventBefore['user_id']);
+        $this->assertEquals('abc123', $eventBefore['session_id']);
+        $this->assertTrue($eventBefore['feature_flag']);
+
+        // Clear the context
+        $result = $badger->clearEventContext();
+
+        // Should return self for method chaining
+        $this->assertSame($badger, $result);
+
+        // Verify context was cleared by sending another event
+        $badger->event('test_event_after', ['test' => 'after']);
+
+        $this->assertCount(2, $eventsDispatcher->events);
+        $eventAfter = $eventsDispatcher->events[1];
+        $this->assertArrayNotHasKey('user_id', $eventAfter);
+        $this->assertArrayNotHasKey('session_id', $eventAfter);
+        $this->assertArrayNotHasKey('feature_flag', $eventAfter);
+        $this->assertEquals('after', $eventAfter['test']);
+    }
+
+    /** @test */
+    public function it_merges_event_context_into_event_payload()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'session_id' => 'abc123',
+            'environment' => 'test'
+        ]);
+
+        // Send an event
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Verify context data was merged
+        $this->assertEquals(123, $event['user_id']);
+        $this->assertEquals('abc123', $event['session_id']);
+        $this->assertEquals('test', $event['environment']);
+
+        // Verify event-specific data is present
+        $this->assertEquals('user_action', $event['event_type']);
+        $this->assertEquals('login', $event['action']);
+        $this->assertTrue($event['success']);
+
+        // Verify timestamp is present
+        $this->assertArrayHasKey('ts', $event);
+    }
+
+    /** @test */
+    public function it_gives_event_data_precedence_over_context_data()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context with conflicting keys
+        $badger->eventContext([
+            'user_id' => 123,
+            'action' => 'context_action',
+            'priority' => 'low'
+        ]);
+
+        // Send an event with conflicting keys
+        $badger->event('user_action', [
+            'action' => 'event_action',
+            'priority' => 'high',
+            'event_specific' => 'data'
+        ]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Event data should take precedence
+        $this->assertEquals('event_action', $event['action']);
+        $this->assertEquals('high', $event['priority']);
+
+        // Context data should be present for non-conflicting keys
+        $this->assertEquals(123, $event['user_id']);
+
+        // Event-specific data should be present
+        $this->assertEquals('data', $event['event_specific']);
+        $this->assertEquals('user_action', $event['event_type']);
+    }
+
+    /** @test */
+    public function it_merges_nested_data_structures_correctly()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context with nested data
+        $badger->eventContext([
+            'user' => [
+                'id' => 123,
+                'name' => 'John Doe',
+                'preferences' => ['theme' => 'dark']
+            ],
+            'metadata' => [
+                'source' => 'context',
+                'version' => '1.0'
+            ]
+        ]);
+
+        // Send an event with nested data that conflicts
+        $badger->event('user_action', [
+            'user' => [
+                'id' => 456,  // This should override context
+                'email' => 'john@example.com'  // This should be added
+            ],
+            'metadata' => [
+                'source' => 'event',  // This should override context
+                'timestamp' => '2023-01-01'  // This should be added
+            ],
+            'action' => 'login'
+        ]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Event data should completely override context arrays
+        $this->assertEquals([
+            'id' => 456,
+            'email' => 'john@example.com'
+        ], $event['user']);
+
+        $this->assertEquals([
+            'source' => 'event',
+            'timestamp' => '2023-01-01'
+        ], $event['metadata']);
+
+        // Event-specific data should be present
+        $this->assertEquals('login', $event['action']);
+        $this->assertEquals('user_action', $event['event_type']);
+    }
+
+    /** @test */
+    public function it_handles_empty_event_context()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Don't set any event context
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Only event data and timestamp should be present
+        $this->assertEquals('user_action', $event['event_type']);
+        $this->assertEquals('login', $event['action']);
+        $this->assertTrue($event['success']);
+        $this->assertArrayHasKey('ts', $event);
+
+        // Should only have the expected keys
+        $expectedKeys = ['ts', 'event_type', 'action', 'success'];
+        $actualKeys = array_keys($event);
+        sort($expectedKeys);
+        sort($actualKeys);
+        $this->assertEquals($expectedKeys, $actualKeys);
+    }
+
+    /** @test */
+    public function it_handles_null_values_in_context_and_events()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context with null values
+        $badger->eventContext([
+            'user_id' => null,
+            'session_id' => 'abc123',
+            'optional_field' => null
+        ]);
+
+        // Send an event with null values
+        $badger->event('user_action', [
+            'action' => null,
+            'success' => true,
+            'error_message' => null
+        ]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Null values should be preserved
+        $this->assertNull($event['user_id']);
+        $this->assertEquals('abc123', $event['session_id']);
+        $this->assertNull($event['optional_field']);
+        $this->assertNull($event['action']);
+        $this->assertTrue($event['success']);
+        $this->assertNull($event['error_message']);
+    }
+
+    /** @test */
+    public function it_preserves_data_types_during_merging()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context with various data types
+        $badger->eventContext([
+            'string_value' => 'context_string',
+            'integer_value' => 42,
+            'float_value' => 3.14,
+            'boolean_value' => true,
+            'array_value' => ['nested' => 'context_data']
+        ]);
+
+        // Send an event with various data types
+        $badger->event('user_action', [
+            'event_string' => 'event_string',
+            'event_integer' => 100,
+            'event_float' => 2.71,
+            'event_boolean' => false,
+            'event_array' => ['nested' => 'event_data']
+        ]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Context data types should be preserved
+        $this->assertSame('context_string', $event['string_value']);
+        $this->assertSame(42, $event['integer_value']);
+        $this->assertSame(3.14, $event['float_value']);
+        $this->assertTrue($event['boolean_value']);
+        $this->assertEquals(['nested' => 'context_data'], $event['array_value']);
+
+        // Event data types should be preserved
+        $this->assertSame('event_string', $event['event_string']);
+        $this->assertSame(100, $event['event_integer']);
+        $this->assertSame(2.71, $event['event_float']);
+        $this->assertFalse($event['event_boolean']);
+        $this->assertEquals(['nested' => 'event_data'], $event['event_array']);
+    }
+
+    /** @test */
+    public function it_merges_context_after_timestamp_but_before_event_data()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context with a 'ts' key to test precedence
+        $badger->eventContext([
+            'ts' => 'context_timestamp',
+            'user_id' => 123
+        ]);
+
+        // Send an event with a 'ts' key to test precedence
+        $badger->event('user_action', [
+            'ts' => 'event_timestamp',
+            'action' => 'login'
+        ]);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Event 'ts' should take precedence over context 'ts'
+        $this->assertEquals('event_timestamp', $event['ts']);
+
+        // Context data should be present
+        $this->assertEquals(123, $event['user_id']);
+
+        // Event data should be present
+        $this->assertEquals('login', $event['action']);
+        $this->assertEquals('user_action', $event['event_type']);
+    }
+
+    /** @test */
+    public function it_persists_context_across_multiple_events()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'session_id' => 'abc123'
+        ]);
+
+        // Send first event
+        $badger->event('user_login', ['success' => true]);
+
+        // Send second event
+        $badger->event('page_view', ['page' => '/dashboard']);
+
+        // Send third event
+        $badger->event('user_logout', ['duration' => 300]);
+
+        $this->assertCount(3, $eventsDispatcher->events);
+
+        // All events should have the context data
+        foreach ($eventsDispatcher->events as $event) {
+            $this->assertEquals(123, $event['user_id']);
+            $this->assertEquals('abc123', $event['session_id']);
+        }
+
+        // Verify event-specific data
+        $this->assertTrue($eventsDispatcher->events[0]['success']);
+        $this->assertEquals('user_login', $eventsDispatcher->events[0]['event_type']);
+
+        $this->assertEquals('/dashboard', $eventsDispatcher->events[1]['page']);
+        $this->assertEquals('page_view', $eventsDispatcher->events[1]['event_type']);
+
+        $this->assertEquals(300, $eventsDispatcher->events[2]['duration']);
+        $this->assertEquals('user_logout', $eventsDispatcher->events[2]['event_type']);
+    }
+
+    /** @test */
+    public function it_does_not_include_context_after_clearing()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'session_id' => 'abc123'
+        ]);
+
+        // Send first event (should include context)
+        $badger->event('user_login', ['success' => true]);
+
+        // Clear context
+        $badger->clearEventContext();
+
+        // Send second event (should not include context)
+        $badger->event('page_view', ['page' => '/dashboard']);
+
+        $this->assertCount(2, $eventsDispatcher->events);
+
+        // First event should have context
+        $this->assertEquals(123, $eventsDispatcher->events[0]['user_id']);
+        $this->assertEquals('abc123', $eventsDispatcher->events[0]['session_id']);
+        $this->assertTrue($eventsDispatcher->events[0]['success']);
+
+        // Second event should not have context
+        $this->assertArrayNotHasKey('user_id', $eventsDispatcher->events[1]);
+        $this->assertArrayNotHasKey('session_id', $eventsDispatcher->events[1]);
+        $this->assertEquals('/dashboard', $eventsDispatcher->events[1]['page']);
+        $this->assertEquals('page_view', $eventsDispatcher->events[1]['event_type']);
+    }
+
+    /** @test */
+    public function it_keeps_event_context_separate_from_notice_context()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        // Set event context
+        $badger->eventContext([
+            'event_user_id' => 123,
+            'event_session' => 'event_session_123'
+        ]);
+
+        // Set notice context
+        $badger->context([
+            'notice_user_id' => 456,
+            'notice_session' => 'notice_session_456'
+        ]);
+
+        // Send a notice
+        $badger->notify(new Exception('Test exception'));
+
+        $notification = $client->requestBody();
+
+        // Notice should only have notice context, not event context
+        $this->assertEquals([
+            'notice_user_id' => 456,
+            'notice_session' => 'notice_session_456'
+        ], $notification['request']['context']);
+
+        // Event context should not be in the notice
+        $this->assertArrayNotHasKey('event_user_id', $notification['request']['context']);
+        $this->assertArrayNotHasKey('event_session', $notification['request']['context']);
+    }
+
+    /** @test */
+    public function it_keeps_notice_context_separate_from_event_context()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set notice context
+        $badger->context([
+            'notice_user_id' => 456,
+            'notice_session' => 'notice_session_456'
+        ]);
+
+        // Set event context
+        $badger->eventContext([
+            'event_user_id' => 123,
+            'event_session' => 'event_session_123'
+        ]);
+
+        // Send an event
+        $badger->event('user_action', ['action' => 'login']);
+
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Event should only have event context, not notice context
+        $this->assertEquals(123, $event['event_user_id']);
+        $this->assertEquals('event_session_123', $event['event_session']);
+
+        // Notice context should not be in the event
+        $this->assertArrayNotHasKey('notice_user_id', $event);
+        $this->assertArrayNotHasKey('notice_session', $event);
+
+        // Event-specific data should be present
+        $this->assertEquals('login', $event['action']);
+        $this->assertEquals('user_action', $event['event_type']);
+    }
+
+    /** @test */
+    public function it_makes_event_context_data_available_in_before_event_handlers()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'session_id' => 'abc123',
+            'environment' => 'test'
+        ]);
+
+        // Track what data is available in the beforeEvent handler
+        $handlerEventData = null;
+        $badger->beforeEvent(function ($event) use (&$handlerEventData) {
+            $handlerEventData = $event;
+            return true; // Allow the event to proceed
+        });
+
+        // Send an event
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        // Verify the handler received the merged event data including context
+        $this->assertNotNull($handlerEventData);
+
+        // Context data should be available in the handler
+        $this->assertEquals(123, $handlerEventData['user_id']);
+        $this->assertEquals('abc123', $handlerEventData['session_id']);
+        $this->assertEquals('test', $handlerEventData['environment']);
+
+        // Event-specific data should be available in the handler
+        $this->assertEquals('user_action', $handlerEventData['event_type']);
+        $this->assertEquals('login', $handlerEventData['action']);
+        $this->assertTrue($handlerEventData['success']);
+
+        // Timestamp should be available in the handler
+        $this->assertArrayHasKey('ts', $handlerEventData);
+
+        // Verify the event was actually sent with the merged data
+        $this->assertCount(1, $eventsDispatcher->events);
+        $sentEvent = $eventsDispatcher->events[0];
+        $this->assertEquals(123, $sentEvent['user_id']);
+        $this->assertEquals('abc123', $sentEvent['session_id']);
+        $this->assertEquals('test', $sentEvent['environment']);
+        $this->assertEquals('login', $sentEvent['action']);
+        $this->assertTrue($sentEvent['success']);
+    }
+
+    /** @test */
+    public function it_allows_before_event_handlers_to_modify_merged_context_data()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'environment' => 'test'
+        ]);
+
+        // Add a beforeEvent handler that modifies the merged data
+        $badger->beforeEvent(function (&$event) {
+            // Modify context data
+            $event['user_id'] = 456;
+            // Add new data
+            $event['modified_by_handler'] = true;
+            // Modify event data
+            $event['action'] = 'modified_login';
+            return true;
+        });
+
+        // Send an event
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        // Verify the modifications were applied
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+
+        // Handler modifications should be present
+        $this->assertEquals(456, $event['user_id']); // Modified from 123
+        $this->assertTrue($event['modified_by_handler']); // Added by handler
+        $this->assertEquals('modified_login', $event['action']); // Modified from 'login'
+
+        // Unmodified data should still be present
+        $this->assertEquals('test', $event['environment']);
+        $this->assertTrue($event['success']);
+        $this->assertEquals('user_action', $event['event_type']);
     }
 }

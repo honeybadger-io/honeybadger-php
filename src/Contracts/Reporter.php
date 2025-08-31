@@ -72,8 +72,9 @@ interface Reporter
 
     /**
      * Clear all breadcrumbs and context.
+     * Optionally, clear event context.
      */
-    public function clear(): self;
+    public function clear($clearEventContext = false): self;
 
     /**
      * Log an event to the Events API (Honeybadger Insights).
@@ -122,4 +123,21 @@ interface Reporter
      * @return void
      */
     public function beforeEvent(callable $callback): void;
+
+    /**
+     * Set event context data that will be merged into all events.
+     * Context can be specified as a $key and $value, or as an array with key-value pairs.
+     *
+     * @param  int|string|array  $key
+     * @param  mixed  $value
+     * @return self
+     */
+    public function eventContext($key, $value = null): self;
+
+    /**
+     * Clear all event context data.
+     *
+     * @return self
+     */
+    public function clearEventContext(): self;
 }

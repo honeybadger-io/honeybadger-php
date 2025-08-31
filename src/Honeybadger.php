@@ -61,6 +61,11 @@ class Honeybadger implements Reporter
     protected $context;
 
     /**
+     * @var Repository
+     */
+    protected $eventContext;
+
+    /**
      * @var Breadcrumbs
      */
     protected $breadcrumbs;
@@ -87,6 +92,7 @@ class Honeybadger implements Reporter
         $this->client = new HoneybadgerClient($this->config, $client);
         $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
         $this->context = new Repository;
+        $this->eventContext = new Repository;
         $this->breadcrumbs = new Breadcrumbs(40);
         $this->events = $eventsDispatcher ?? new BulkEventDispatcher($this->config, $this->client);
 
@@ -178,7 +184,8 @@ class Honeybadger implements Reporter
     /**
      * @throws ServiceException
      */
-    private function getCheckInByName(string $projectId, string $name): ?CheckIn {
+    private function getCheckInByName(string $projectId, string $name): ?CheckIn
+    {
         $checkIns = $this->checkInsClient->listForProject($projectId) ?? [];
         $filtered = array_filter($checkIns, function ($checkIn) use ($name) {
             return $checkIn->name === $name;
@@ -227,10 +234,14 @@ class Honeybadger implements Reporter
         return $this;
     }
 
-    public function clear(): Reporter
+    public function clear($clearEventContext = false): Reporter
     {
         $this->context = new Repository;
         $this->breadcrumbs->clear();
+
+        if ($clearEventContext) {
+            $this->clearEventContext();
+        }
 
         return $this;
     }
@@ -257,6 +268,7 @@ class Honeybadger implements Reporter
 
         $event = array_merge(
             ['ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED)],
+            $this->eventContext->all(),
             $payload
         );
 
@@ -358,9 +370,11 @@ class Honeybadger implements Reporter
      */
     protected function shouldReport(Throwable $throwable): bool
     {
-        if ($throwable instanceof ErrorException
+        if (
+            $throwable instanceof ErrorException
             && in_array($throwable->getSeverity(), [E_DEPRECATED, E_USER_DEPRECATED])
-            && $this->config['capture_deprecations'] == false) {
+            && $this->config['capture_deprecations'] == false
+        ) {
             return false;
         }
 
@@ -387,6 +401,32 @@ class Honeybadger implements Reporter
     public function setAction(string $action): self
     {
         $this->context('honeybadger_action', $action);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function eventContext($key, $value = null): Reporter
+    {
+        if (is_array($key)) {
+            foreach ($key as $contextKey => $contextValue) {
+                $this->eventContext->set($contextKey, $contextValue);
+            }
+        } else {
+            $this->eventContext->set($key, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function clearEventContext(): Reporter
+    {
+        $this->eventContext = new Repository;
 
         return $this;
     }
