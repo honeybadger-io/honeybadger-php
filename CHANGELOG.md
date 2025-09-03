@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.24.1...v2.25.0) (2025-09-03)
+
+
+### Features
+
+* event context ([#232](https://github.com/honeybadger-io/honeybadger-php/issues/232)) ([0bdd49d](https://github.com/honeybadger-io/honeybadger-php/commit/0bdd49d43f11d28aca3f2df12508c190e153372b)), closes [#231](https://github.com/honeybadger-io/honeybadger-php/issues/231)
+
+
+### Miscellaneous Chores
+
+* release if needed from workflow_dispatch ([26c4d85](https://github.com/honeybadger-io/honeybadger-php/commit/26c4d85b7a5e63423d77b830e3aa823367aefc14))
+
 ## [2.24.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.24.0...v2.24.1) (2025-06-02)
 
 
