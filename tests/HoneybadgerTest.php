@@ -2003,4 +2003,60 @@ class HoneybadgerTest extends TestCase
         $this->assertTrue($event['success']);
         $this->assertEquals('user_action', $event['event_type']);
     }
+
+    /** @test */
+    public function it_allows_before_event_handlers_to_block_events_with_context_data()
+    {
+        $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
+        $config = new Config([
+            'api_key' => '1234',
+            'events' => [
+                'enabled' => true
+            ]
+        ]);
+        $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
+            public $events = [];
+
+            public function __construct(Config $config, \Honeybadger\HoneybadgerClient $client)
+            {
+                parent::__construct($config, $client);
+            }
+
+            public function addEvent($event): void
+            {
+                $this->events[] = $event;
+            }
+        };
+        $badger = new Honeybadger($config->all(), null, $eventsDispatcher);
+
+        // Set event context
+        $badger->eventContext([
+            'user_id' => 123,
+            'environment' => 'test'
+        ]);
+
+        // Add a beforeEvent handler that blocks events based on context data
+        $badger->beforeEvent(function ($event) {
+            // Block events for user_id 123
+            return $event['user_id'] !== 123;
+        });
+
+        // Send an event - should be blocked
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        // Verify the event was blocked
+        $this->assertCount(0, $eventsDispatcher->events);
+
+        // Change context and try again
+        $badger->eventContext(['user_id' => 456, 'environment' => 'test']);
+
+        // Send another event - should not be blocked
+        $badger->event('user_action', ['action' => 'login', 'success' => true]);
+
+        // Verify the second event was sent
+        $this->assertCount(1, $eventsDispatcher->events);
+        $event = $eventsDispatcher->events[0];
+        $this->assertEquals(456, $event['user_id']);
+        $this->assertEquals('login', $event['action']);
+    }
 }
