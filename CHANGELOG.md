@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.0...v2.25.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* use literal 2048 for E_STRICT to avoid PHP 8.4 deprecation (fixes [#234](https://github.com/honeybadger-io/honeybadger-php/issues/234)) ([#235](https://github.com/honeybadger-io/honeybadger-php/issues/235)) ([c044803](https://github.com/honeybadger-io/honeybadger-php/commit/c04480366aafe5791a7f79ccc196281b2ffdefbc))
+
 ## [2.25.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.24.1...v2.25.0) (2025-09-03)
 
 
