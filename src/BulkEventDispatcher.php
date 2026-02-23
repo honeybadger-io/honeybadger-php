@@ -59,7 +59,8 @@ class BulkEventDispatcher
         $this->dispatchEvents();
     }
 
-    public function hasEvents(): bool {
+    public function hasEvents(): bool
+    {
         return !empty($this->events);
     }
 
