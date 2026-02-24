@@ -6,7 +6,8 @@ use GuzzleHttp\Client;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 
-abstract class ApiClient {
+abstract class ApiClient
+{
 
     /**
      * @var Config
@@ -22,7 +23,8 @@ abstract class ApiClient {
      * @param Config $config
      * @param ?Client $httpClient
      */
-    public function __construct(Config $config, ?Client $httpClient = null) {
+    public function __construct(Config $config, ?Client $httpClient = null)
+    {
         $this->config = $config;
         $this->client = $httpClient ?? $this->makeClient();
     }

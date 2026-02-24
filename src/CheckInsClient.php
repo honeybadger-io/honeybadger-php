@@ -164,7 +164,8 @@ class CheckInsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function remove(string $projectId, string $checkInId): void {
+    public function remove(string $projectId, string $checkInId): void
+    {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
         }
