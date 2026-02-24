@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         composer-flags: ['--prefer-stable', '--prefer-lowest']
-        php-versions: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.4', '8.5', '8.5']
+        php-versions: ['7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
         exclude:
           - php-versions: '8.1'
             composer-flags: --prefer-lowest
