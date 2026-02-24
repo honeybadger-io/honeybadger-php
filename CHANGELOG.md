@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.3](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.2...v2.25.3) (2026-02-24)
+
+
+### Miscellaneous Chores
+
+* add support for Laravel 13.x ([#240](https://github.com/honeybadger-io/honeybadger-php/issues/240)) ([c7c1c59](https://github.com/honeybadger-io/honeybadger-php/commit/c7c1c59a53d865cfbdfe954d33843529b88a50a2))
+* fix PSR-2 brace placement and elseif style violations ([#241](https://github.com/honeybadger-io/honeybadger-php/issues/241)) ([74916cb](https://github.com/honeybadger-io/honeybadger-php/commit/74916cbd6e7a91b115229a4d89e1993f2660da9b))
+
 ## [2.25.2](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.1...v2.25.2) (2026-02-18)
 
 
