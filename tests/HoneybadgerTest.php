@@ -464,6 +464,7 @@ class HoneybadgerTest extends TestCase
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
+                'tags' => [],
             ],
             'request' => [
                 'context' => [
@@ -473,6 +474,92 @@ class HoneybadgerTest extends TestCase
         ], array_only($request, ['error', 'request']));
 
         $this->assertArrayHasKey('notifier', $request);
+    }
+
+    /** @test */
+    public function custom_notification_includes_breadcrumbs()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'breadcrumbs' => ['enabled' => true],
+        ], $client->make());
+
+        $badger->addBreadcrumb('Test Breadcrumb', ['key' => 'value'], 'custom');
+
+        $badger->customNotification([
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+        ]);
+
+        $request = $client->requestBody();
+
+        $this->assertTrue($request['breadcrumbs']['enabled']);
+        $this->assertCount(1, $request['breadcrumbs']['trail']);
+        $this->assertEquals('Test Breadcrumb', $request['breadcrumbs']['trail'][0]['message']);
+        $this->assertEquals('custom', $request['breadcrumbs']['trail'][0]['category']);
+        $this->assertEquals(['key' => 'value'], $request['breadcrumbs']['trail'][0]['metadata']);
+    }
+
+    /** @test */
+    public function custom_notification_includes_empty_breadcrumbs_when_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'breadcrumbs' => ['enabled' => false],
+        ], $client->make());
+
+        $badger->customNotification([
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+        ]);
+
+        $request = $client->requestBody();
+
+        $this->assertIsArray($request['breadcrumbs']);
+        $this->assertFalse($request['breadcrumbs']['enabled']);
+        $this->assertCount(0, $request['breadcrumbs']['trail']);
+    }
+
+    /** @test */
+    public function custom_notification_includes_tags()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->customNotification([
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+            'tags' => ['user', 'core'],
+        ]);
+
+        $request = $client->requestBody();
+
+        $this->assertEquals(['user', 'core'], $request['error']['tags']);
     }
 
     /** @test */
