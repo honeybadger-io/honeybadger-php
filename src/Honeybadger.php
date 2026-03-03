@@ -134,7 +134,7 @@ class Honeybadger implements Reporter
             return [];
         }
 
-        $notification = (new CustomNotification($this->config, $this->context))
+        $notification = (new CustomNotification($this->config, $this->context, $this->breadcrumbs))
             ->make($payload);
 
         return $this->client->notification($notification);
