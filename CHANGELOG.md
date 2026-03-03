@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.4](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.3...v2.25.4) (2026-03-03)
+
+
+### Bug Fixes
+
+* include breadcrumbs and tags in custom notifications ([#243](https://github.com/honeybadger-io/honeybadger-php/issues/243)) ([be340ee](https://github.com/honeybadger-io/honeybadger-php/commit/be340ee6c623a265ba91e923b38a92ff59f9320f))
+
 ## [2.25.3](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.2...v2.25.3) (2026-02-24)
 
 
