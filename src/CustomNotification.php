@@ -40,26 +40,36 @@ class CustomNotification
      */
     public function make(array $payload): array
     {
-        return array_merge(
-            [],
-            ['breadcrumbs' => [
+        $notification = [];
+
+        $trail = $this->breadcrumbs->toArray();
+        if (! empty($trail)) {
+            $notification['breadcrumbs'] = [
                 'enabled' => $this->config['breadcrumbs']['enabled'],
-                'trail' => $this->breadcrumbs->toArray(),
-            ]],
-            ['notifier' => $this->config['notifier']],
-            [
-                'error' => [
-                    'class' => $payload['title'] ?? '',
-                    'message' => $payload['message'] ?? '',
-                    'tags' => Arr::wrap($payload['tags'] ?? null),
-                ],
-            ],
-            ['request' => [
-                'context' => (object) $this->context->all(), ],
-            ],
-            ['server' => (object) [
-                'environment_name' => $this->config['environment_name'],
-            ]]
-        );
+                'trail' => $trail,
+            ];
+        }
+
+        $notification['notifier'] = $this->config['notifier'];
+
+        $error = [
+            'class' => $payload['title'] ?? '',
+            'message' => $payload['message'] ?? '',
+        ];
+
+        $tags = Arr::wrap($payload['tags'] ?? null);
+        if (! empty($tags)) {
+            $error['tags'] = $tags;
+        }
+
+        $notification['error'] = $error;
+        $notification['request'] = [
+            'context' => (object) $this->context->all(),
+        ];
+        $notification['server'] = (object) [
+            'environment_name' => $this->config['environment_name'],
+        ];
+
+        return $notification;
     }
 }

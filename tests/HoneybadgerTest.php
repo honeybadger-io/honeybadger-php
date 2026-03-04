@@ -464,7 +464,6 @@ class HoneybadgerTest extends TestCase
             'error' => [
                 'class' => 'Special Error',
                 'message' => 'Special Error: this was a super special case',
-                'tags' => [],
             ],
             'request' => [
                 'context' => [
@@ -509,7 +508,7 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function custom_notification_includes_empty_breadcrumbs_when_disabled()
+    public function custom_notification_omits_breadcrumbs_when_none_added()
     {
         $client = HoneybadgerClient::new([
             new Response(201),
@@ -521,7 +520,7 @@ class HoneybadgerTest extends TestCase
                 'exception' => false,
                 'error' => false,
             ],
-            'breadcrumbs' => ['enabled' => false],
+            'breadcrumbs' => ['enabled' => true],
         ], $client->make());
 
         $badger->customNotification([
@@ -531,9 +530,32 @@ class HoneybadgerTest extends TestCase
 
         $request = $client->requestBody();
 
-        $this->assertIsArray($request['breadcrumbs']);
-        $this->assertFalse($request['breadcrumbs']['enabled']);
-        $this->assertCount(0, $request['breadcrumbs']['trail']);
+        $this->assertArrayNotHasKey('breadcrumbs', $request);
+    }
+
+    /** @test */
+    public function custom_notification_omits_tags_when_none_provided()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+        ], $client->make());
+
+        $badger->customNotification([
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+        ]);
+
+        $request = $client->requestBody();
+
+        $this->assertArrayNotHasKey('tags', $request['error']);
     }
 
     /** @test */
