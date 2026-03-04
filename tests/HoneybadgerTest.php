@@ -534,6 +534,34 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function custom_notification_omits_breadcrumbs_when_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+
+        $badger = Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'breadcrumbs' => ['enabled' => false],
+        ], $client->make());
+
+        $badger->addBreadcrumb('Should Be Ignored', ['key' => 'value'], 'custom');
+
+        $badger->customNotification([
+            'title' => 'Test Title',
+            'message' => 'Test Message',
+        ]);
+
+        $request = $client->requestBody();
+
+        $this->assertArrayNotHasKey('breadcrumbs', $request);
+    }
+
+    /** @test */
     public function custom_notification_omits_tags_when_none_provided()
     {
         $client = HoneybadgerClient::new([
