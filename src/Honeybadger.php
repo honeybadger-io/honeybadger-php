@@ -24,7 +24,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.25.4';
+    const VERSION = '2.25.5';
 
     /**
      * Honeybadger API URL.
