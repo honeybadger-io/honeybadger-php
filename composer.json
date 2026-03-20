@@ -28,7 +28,7 @@
         "symfony/http-foundation": ">=3.3"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "3.94.2",
+        "friendsofphp/php-cs-fixer": "*",
         "larapack/dd": "^1.1",
         "mockery/mockery": "^1.4",
         "phpunit/phpunit": "^8.5|^9.4"
