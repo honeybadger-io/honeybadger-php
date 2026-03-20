@@ -8,7 +8,6 @@ use Honeybadger\Exceptions\ServiceException;
 
 abstract class ApiClient
 {
-
     /**
      * @var Config
      */
@@ -32,7 +31,7 @@ abstract class ApiClient
     /**
      * @return Client
      */
-    public abstract function makeClient(): Client;
+    abstract public function makeClient(): Client;
 
     protected function handleServiceException(ServiceException $e): void
     {
@@ -48,7 +47,7 @@ abstract class ApiClient
 
     public function hasPersonalAuthToken(): bool
     {
-        return !empty($this->config['personal_auth_token']);
+        return ! empty($this->config['personal_auth_token']);
     }
 
     public function getUserAgent(): string

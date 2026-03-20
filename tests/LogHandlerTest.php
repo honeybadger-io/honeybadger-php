@@ -2,14 +2,14 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\BacktraceFactory;
-use Honeybadger\Config;
-use Honeybadger\Contracts\Reporter;
-use Honeybadger\Honeybadger;
-use Honeybadger\LogHandler;
-use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Honeybadger\Config;
+use Honeybadger\LogHandler;
+use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\BacktraceFactory;
+use Honeybadger\Contracts\Reporter;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LogHandlerTest extends TestCase
 {

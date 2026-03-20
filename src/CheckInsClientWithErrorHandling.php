@@ -2,9 +2,9 @@
 
 namespace Honeybadger;
 
+use Throwable;
 use GuzzleHttp\Client;
 use Honeybadger\Exceptions\ServiceException;
-use Throwable;
 
 class CheckInsClientWithErrorHandling
 {
@@ -31,11 +31,9 @@ class CheckInsClientWithErrorHandling
     {
         try {
             return $this->baseClient->{$name}(...$arguments);
-        }
-        catch (ServiceException $e) {
+        } catch (ServiceException $e) {
             $this->handleServiceException($e);
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             $this->handleServiceException(ServiceException::generic($e));
         }
 

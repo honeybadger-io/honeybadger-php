@@ -29,7 +29,7 @@ class ServiceExceptionFactory
     {
         try {
             $message = $this->response->getBody()->getContents();
-            if (!empty($message)) {
+            if (! empty($message)) {
                 $data = json_decode($message, true);
                 if (isset($data['errors'])) {
                     return ServiceException::withMessage($data['errors']);

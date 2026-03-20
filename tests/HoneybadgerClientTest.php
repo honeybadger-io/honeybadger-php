@@ -2,18 +2,17 @@
 
 namespace Honeybadger\Tests;
 
+use Mockery;
 use DateTime;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use GuzzleHttp\Psr7\Utils;
 use Honeybadger\Config;
-use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Exceptions\ServiceExceptionFactory;
-use Honeybadger\HoneybadgerClient;
-use Mockery;
+use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\HoneybadgerClient;
+use Honeybadger\Exceptions\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class HoneybadgerClientTest extends TestCase
 {
@@ -25,7 +24,7 @@ class HoneybadgerClientTest extends TestCase
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('post')->andThrow(new Exception);
+        $mock->shouldReceive('post')->andThrow(new Exception());
 
         $client = new HoneybadgerClient($config, $mock);
         $client->notification([]);
@@ -39,7 +38,7 @@ class HoneybadgerClientTest extends TestCase
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('head')->andThrow(new Exception);
+        $mock->shouldReceive('head')->andThrow(new Exception());
 
         $client = new HoneybadgerClient($config, $mock);
         $client->checkIn('1234');
@@ -63,8 +62,8 @@ class HoneybadgerClientTest extends TestCase
             [
                 'event_type' => 'log',
                 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
-                'message' => 'Test message'
-            ]
+                'message' => 'Test message',
+            ],
         ];
         $client->events($events);
 
@@ -79,15 +78,15 @@ class HoneybadgerClientTest extends TestCase
 
         $config = new Config(['api_key' => '1234']);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('post')->andThrow(new Exception);
+        $mock->shouldReceive('post')->andThrow(new Exception());
 
         $client = new HoneybadgerClient($config, $mock);
         $events = [
             [
                 'event_type' => 'log',
                 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
-                'message' => 'Test message'
-            ]
+                'message' => 'Test message',
+            ],
         ];
         $client->events($events);
     }
@@ -103,7 +102,7 @@ class HoneybadgerClientTest extends TestCase
             },
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('post')->andThrow(new Exception);
+        $mock->shouldReceive('post')->andThrow(new Exception());
 
         $client = new HoneybadgerClient($config, $mock);
         $client->notification([]);
@@ -122,15 +121,15 @@ class HoneybadgerClientTest extends TestCase
             },
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('post')->andThrow(new Exception);
+        $mock->shouldReceive('post')->andThrow(new Exception());
 
         $client = new HoneybadgerClient($config, $mock);
         $events = [
             [
                 'event_type' => 'log',
                 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED),
-                'message' => 'Test message'
-            ]
+                'message' => 'Test message',
+            ],
         ];
         $client->events($events);
 

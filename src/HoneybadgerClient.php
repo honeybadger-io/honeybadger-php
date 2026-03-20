@@ -2,13 +2,13 @@
 
 namespace Honeybadger;
 
+use Throwable;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Honeybadger\Contracts\ApiClient;
 use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Honeybadger\Exceptions\ServiceExceptionFactory;
 
 class HoneybadgerClient extends ApiClient
 {

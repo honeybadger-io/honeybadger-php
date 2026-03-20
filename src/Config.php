@@ -2,8 +2,8 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Support\Repository;
+use Honeybadger\Exceptions\ServiceException;
 
 class Config extends Repository
 {
@@ -81,11 +81,11 @@ class Config extends Repository
                 'enabled' => false,
                 'bulk_threshold' => BulkEventDispatcher::BULK_THRESHOLD,
                 'dispatch_interval_seconds' => BulkEventDispatcher::DISPATCH_INTERVAL_SECONDS,
-                'sample_rate' => 100
+                'sample_rate' => 100,
             ],
         ], $config);
 
-        if (!isset($result['handlers']['shutdown'])) {
+        if (! isset($result['handlers']['shutdown'])) {
             // the 'shutdown' field is new, array_merge only merges on the first level
             // so we need to manually set it if the config has a 'handlers' key but not a 'shutdown' key inside
             $result['handlers']['shutdown'] = true;

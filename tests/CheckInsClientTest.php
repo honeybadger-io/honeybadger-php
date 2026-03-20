@@ -2,16 +2,16 @@
 
 namespace Honeybadger\Tests;
 
+use Mockery;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Honeybadger\Config;
 use Honeybadger\CheckIn;
 use Honeybadger\CheckInsClient;
-use Honeybadger\Config;
-use Honeybadger\Exceptions\ServiceException;
-use Mockery;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Exceptions\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
 
 class CheckInsClientTest extends TestCase
 {
@@ -22,10 +22,10 @@ class CheckInsClientTest extends TestCase
         $this->expectExceptionMessage('There was an error sending the payload to Honeybadger');
 
         $config = new Config([
-            'personal_auth_token' => '5678'
+            'personal_auth_token' => '5678',
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('get')->andThrow(new Exception);
+        $mock->shouldReceive('get')->andThrow(new Exception());
 
         $client = new CheckInsClient($config, $mock);
         $client->get('p1234', 'c1234');
@@ -49,7 +49,7 @@ class CheckInsClientTest extends TestCase
     {
         $config = new Config([
             'api_key' => 'hbp_ABC',
-            'personal_auth_token' => '5678'
+            'personal_auth_token' => '5678',
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
         $mock->shouldReceive('get')
@@ -65,7 +65,7 @@ class CheckInsClientTest extends TestCase
     public function creates_check_in_and_populates_id()
     {
         $config = new Config([
-            'personal_auth_token' => '5678'
+            'personal_auth_token' => '5678',
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
         $mock->shouldReceive('post')

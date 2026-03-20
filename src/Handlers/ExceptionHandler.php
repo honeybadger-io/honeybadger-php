@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Handlers;
 
-use Honeybadger\Contracts\Handler as HandlerContract;
 use Throwable;
+use Honeybadger\Contracts\Handler as HandlerContract;
 
 class ExceptionHandler extends Handler implements HandlerContract
 {

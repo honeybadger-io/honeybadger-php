@@ -18,7 +18,7 @@ function events_config(int $sample_rate): array
         'api_key' => '1234',
         'events' => [
             'enabled' => true,
-            'sample_rate' => $sample_rate
-        ]
+            'sample_rate' => $sample_rate,
+        ],
     ];
 }

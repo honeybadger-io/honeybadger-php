@@ -4,8 +4,8 @@ namespace Honeybadger\Tests;
 
 use Honeybadger\Request;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Request as FoundationRequest;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 
 class RequestTest extends TestCase
@@ -167,7 +167,7 @@ class RequestTest extends TestCase
     /** @test */
     public function it_filters_session_data()
     {
-        $session = new Session(new MockArraySessionStorage);
+        $session = new Session(new MockArraySessionStorage());
         $session->start();
         $session->set('uid', 1234);
 

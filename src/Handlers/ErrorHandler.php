@@ -47,9 +47,11 @@ class ErrorHandler extends Handler implements HandlerContract
                 // If an error is silenced, `error_reporting()` won't return 0,
                 // but rather a bitmask of the unsilenceable errors.
                 $unsilenceableErrorsBitmask = array_reduce(
-                    self::PHP8_UNSILENCEABLE_ERRORS, function ($bitMask, $errLevel) {
+                    self::PHP8_UNSILENCEABLE_ERRORS,
+                    function ($bitMask, $errLevel) {
                         return $bitMask | $errLevel;
-                });
+                    }
+                );
                 $isSilenced = $errorReportingLevel === $unsilenceableErrorsBitmask;
             }
         }

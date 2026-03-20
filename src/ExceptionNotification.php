@@ -2,12 +2,12 @@
 
 namespace Honeybadger;
 
+use stdClass;
+use Throwable;
 use ErrorException;
 use Honeybadger\Support\Arr;
 use Honeybadger\Support\Repository;
-use stdClass;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
-use Throwable;
 
 class ExceptionNotification
 {
@@ -101,11 +101,11 @@ class ExceptionNotification
             ],
             'request' => [
                 // Important to set empty maps to stdClass so they don't get JSON-encoded as arrays
-                'cgi_data' => $this->environment->values() ?: new stdClass,
-                'params' => $this->request->params() ?: new stdClass,
-                'session' => $this->request->session() ?: new stdClass,
+                'cgi_data' => $this->environment->values() ?: new stdClass(),
+                'params' => $this->request->params() ?: new stdClass(),
+                'session' => $this->request->session() ?: new stdClass(),
                 'url' => $this->request->url(),
-                'context' => $this->context->except(['honeybadger_component', 'honeybadger_action']) ?: new stdClass,
+                'context' => $this->context->except(['honeybadger_component', 'honeybadger_action']) ?: new stdClass(),
                 'component' => Arr::get($this->additionalParams, 'component', null) ?? Arr::get($this->context, 'honeybadger_component', null),
                 'action' => Arr::get($this->additionalParams, 'action', null) ?? Arr::get($this->context, 'honeybadger_action', null),
             ],
@@ -124,7 +124,7 @@ class ExceptionNotification
      */
     private function makeEnvironment(): Environment
     {
-        return (new Environment)
+        return (new Environment())
             ->filterKeys($this->config['environment']['filter'])
             ->include($this->config['environment']['include']);
     }

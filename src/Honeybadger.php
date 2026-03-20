@@ -3,19 +3,19 @@
 namespace Honeybadger;
 
 use DateTime;
+use Throwable;
 use ErrorException;
 use GuzzleHttp\Client;
 use Honeybadger\Concerns\Newable;
 use Honeybadger\Contracts\Reporter;
+use Honeybadger\Support\Repository;
+use Honeybadger\Handlers\ErrorHandler;
+use Honeybadger\Handlers\ShutdownHandler;
+use Honeybadger\Handlers\ExceptionHandler;
 use Honeybadger\Exceptions\ServiceException;
 use Honeybadger\Handlers\BeforeEventHandler;
 use Honeybadger\Handlers\BeforeNotifyHandler;
-use Honeybadger\Handlers\ErrorHandler;
-use Honeybadger\Handlers\ExceptionHandler;
-use Honeybadger\Handlers\ShutdownHandler;
-use Honeybadger\Support\Repository;
 use Symfony\Component\HttpFoundation\Request as FoundationRequest;
-use Throwable;
 
 class Honeybadger implements Reporter
 {
@@ -91,8 +91,8 @@ class Honeybadger implements Reporter
 
         $this->client = new HoneybadgerClient($this->config, $client);
         $this->checkInsClient = new CheckInsClientWithErrorHandling($this->config, $client);
-        $this->context = new Repository;
-        $this->eventContext = new Repository;
+        $this->context = new Repository();
+        $this->eventContext = new Repository();
         $this->breadcrumbs = new Breadcrumbs(40);
         $this->events = $eventsDispatcher ?? new BulkEventDispatcher($this->config, $this->client);
 
@@ -118,7 +118,7 @@ class Honeybadger implements Reporter
         }
 
         $notification = $notification->make($throwable, $request, $additionalParams);
-        if (!$this->beforeNotifyHandlers->handle($notification)) {
+        if (! $this->beforeNotifyHandlers->handle($notification)) {
             return [];
         }
 
@@ -218,12 +218,12 @@ class Honeybadger implements Reporter
      */
     public function resetContext(): void
     {
-        $this->context = new Repository;
+        $this->context = new Repository();
     }
 
     public function addBreadcrumb(string $message, array $metadata = [], string $category = 'custom'): Reporter
     {
-        if ($this->config['breadcrumbs']['enabled'] && !empty($message)) {
+        if ($this->config['breadcrumbs']['enabled'] && ! empty($message)) {
             $this->breadcrumbs->add([
                 'message' => $message,
                 'metadata' => $metadata,
@@ -236,7 +236,7 @@ class Honeybadger implements Reporter
 
     public function clear($clearEventContext = false): Reporter
     {
-        $this->context = new Repository;
+        $this->context = new Repository();
         $this->breadcrumbs->clear();
 
         if ($clearEventContext) {
@@ -277,12 +277,12 @@ class Honeybadger implements Reporter
             $event['ts'] = $event['ts']->format(DATE_RFC3339_EXTENDED);
         }
 
-        if (!$this->beforeEventHandlers->handle($event)) {
+        if (! $this->beforeEventHandlers->handle($event)) {
             return;
         }
 
         // Apply sampling after before_event callbacks
-        if (!$this->shouldSampleEvent($event)) {
+        if (! $this->shouldSampleEvent($event)) {
             return;
         }
 
@@ -299,7 +299,7 @@ class Honeybadger implements Reporter
      */
     public function flushEvents(): void
     {
-        if (!$this->config['events']['enabled']) {
+        if (! $this->config['events']['enabled']) {
             return;
         }
 
@@ -426,7 +426,7 @@ class Honeybadger implements Reporter
      */
     public function clearEventContext(): Reporter
     {
-        $this->eventContext = new Repository;
+        $this->eventContext = new Repository();
 
         return $this;
     }

@@ -3,10 +3,10 @@
 namespace Honeybadger\Tests;
 
 use Closure;
-use Honeybadger\ArgumentValueNormalizer;
+use stdClass;
 use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
-use stdClass;
+use Honeybadger\ArgumentValueNormalizer;
 
 class ArgumentValueNormalizerTest extends TestCase
 {
@@ -34,16 +34,15 @@ class ArgumentValueNormalizerTest extends TestCase
     {
         $obj = new stdClass();
         $honeybadger = new Honeybadger([]);
-        $this->assertEquals('[LITERAL]Object('.stdClass::class.')', ArgumentValueNormalizer::normalize($obj));
-        $this->assertEquals('[LITERAL]Object('.Honeybadger::class.')', ArgumentValueNormalizer::normalize($honeybadger));
+        $this->assertEquals('[LITERAL]Object(' . stdClass::class . ')', ArgumentValueNormalizer::normalize($obj));
+        $this->assertEquals('[LITERAL]Object(' . Honeybadger::class . ')', ArgumentValueNormalizer::normalize($honeybadger));
     }
 
     /** @test */
     public function it_normalizes_closures_to_literals()
     {
-        $closure = function ($something) {
-        };
-        $this->assertEquals('[LITERAL]Object('.Closure::class.')', ArgumentValueNormalizer::normalize($closure));
+        $closure = function ($something) {};
+        $this->assertEquals('[LITERAL]Object(' . Closure::class . ')', ArgumentValueNormalizer::normalize($closure));
     }
 
     /** @test */

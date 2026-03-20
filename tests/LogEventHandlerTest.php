@@ -2,15 +2,15 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\BulkEventDispatcher;
-use Honeybadger\Config;
-use Honeybadger\Contracts\Reporter;
-use Honeybadger\Honeybadger;
-use Honeybadger\HoneybadgerClient;
-use Honeybadger\LogEventHandler;
-use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Honeybadger\Config;
+use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\LogEventHandler;
+use Honeybadger\HoneybadgerClient;
+use Honeybadger\Contracts\Reporter;
+use Honeybadger\BulkEventDispatcher;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LogEventHandlerTest extends TestCase
 {
@@ -32,8 +32,8 @@ class LogEventHandlerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -72,8 +72,8 @@ class LogEventHandlerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];

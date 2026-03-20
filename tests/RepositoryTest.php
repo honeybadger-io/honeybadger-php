@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\Support\Repository;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Support\Repository;
 
 class RepositoryTest extends TestCase
 {
@@ -40,7 +40,7 @@ class RepositoryTest extends TestCase
         $this->assertEquals(
             ['foo' => 'bar', 'baz' => 'bax', 'qaz' => 'qux'],
             $repository->all()
-       );
+        );
     }
 
     /** @test */
@@ -58,7 +58,7 @@ class RepositoryTest extends TestCase
     /** @test */
     public function it_will_add_items_via_attribute()
     {
-        $repository = new Repository;
+        $repository = new Repository();
         $repository->foo = 'bar';
 
         $this->assertEquals(['foo' => 'bar'], $repository->all());

@@ -4,8 +4,8 @@ namespace Honeybadger;
 
 class BulkEventDispatcher
 {
-    const BULK_THRESHOLD = 200;
-    const DISPATCH_INTERVAL_SECONDS = 30;
+    public const BULK_THRESHOLD = 200;
+    public const DISPATCH_INTERVAL_SECONDS = 30;
 
     /**
      * @var HoneybadgerClient
@@ -52,7 +52,7 @@ class BulkEventDispatcher
 
     public function flushEvents()
     {
-        if (!$this->hasEvents()) {
+        if (! $this->hasEvents()) {
             return;
         }
 
@@ -61,12 +61,12 @@ class BulkEventDispatcher
 
     public function hasEvents(): bool
     {
-        return !empty($this->events);
+        return ! empty($this->events);
     }
 
     private function dispatchEvents()
     {
-        if (!$this->hasEvents()) {
+        if (! $this->hasEvents()) {
             return;
         }
 

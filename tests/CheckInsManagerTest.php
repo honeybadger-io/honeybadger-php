@@ -2,15 +2,15 @@
 
 namespace Honeybadger\Tests;
 
+use Mockery;
 use Exception;
 use GuzzleHttp\Client;
+use Honeybadger\Config;
 use Honeybadger\CheckIn;
 use Honeybadger\CheckInsClient;
-use Honeybadger\CheckInsManager;
-use Honeybadger\Config;
-use Honeybadger\Exceptions\ServiceException;
-use Mockery;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\CheckInsManager;
+use Honeybadger\Exceptions\ServiceException;
 
 class CheckInsManagerTest extends TestCase
 {
@@ -29,7 +29,7 @@ class CheckInsManagerTest extends TestCase
 
         $config = ['api_key' => '1234'];
         $mock = Mockery::mock(Client::class);
-        $mock->shouldReceive('head')->andThrow(new Exception);
+        $mock->shouldReceive('head')->andThrow(new Exception());
 
         $client = new CheckInsClient(new Config($config), $mock);
         $manager = new CheckInsManager($config, $client);
@@ -53,7 +53,7 @@ class CheckInsManagerTest extends TestCase
 
         $config = ['api_key' => '1234'];
         $mock = Mockery::mock(Client::class);
-        $mock->shouldReceive('head')->andThrow(new Exception);
+        $mock->shouldReceive('head')->andThrow(new Exception());
 
         $client = new CheckInsClient(new Config($config), $mock);
         $manager = new CheckInsManager($config, $client);
@@ -77,7 +77,7 @@ class CheckInsManagerTest extends TestCase
     {
         $config = [
             'api_key' => 'hbp_ABC',
-            'personal_auth_token' => 'abcd'
+            'personal_auth_token' => 'abcd',
         ];
         $localCheckIn = [
             'slug' => 'test-check-in',
@@ -115,7 +115,7 @@ class CheckInsManagerTest extends TestCase
     {
         $config = [
             'api_key' => 'hbp_ABC',
-            'personal_auth_token' => 'abcd'
+            'personal_auth_token' => 'abcd',
         ];
         $localCheckIn = [
             'slug' => 'test-check-in',
@@ -156,7 +156,7 @@ class CheckInsManagerTest extends TestCase
     {
         $config = [
             'api_key' => 'hbp_ABC',
-            'personal_auth_token' => 'abcd'
+            'personal_auth_token' => 'abcd',
         ];
         $localCheckIn = [
             'slug' => 'test-check-in',
@@ -190,7 +190,7 @@ class CheckInsManagerTest extends TestCase
     {
         $config = [
             'api_key' => 'hbp_ABC',
-            'personal_auth_token' => 'abcd'
+            'personal_auth_token' => 'abcd',
         ];
         $localCheckIn = [
             'slug' => 'test-check-in',

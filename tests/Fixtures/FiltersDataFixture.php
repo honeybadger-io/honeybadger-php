@@ -2,12 +2,13 @@
 
 namespace Honeybadger\Tests\Fixtures;
 
-use Honeybadger\Concerns\FiltersData;
 use Honeybadger\Concerns\Newable;
+use Honeybadger\Concerns\FiltersData;
 
 class FiltersDataFixture
 {
-    use Newable, FiltersData;
+    use Newable;
+    use FiltersData;
 
     public $items = [];
 

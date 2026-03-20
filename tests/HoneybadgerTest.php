@@ -3,16 +3,16 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
-use Honeybadger\BulkEventDispatcher;
 use Honeybadger\Config;
-use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Handlers\ErrorHandler;
-use Honeybadger\Handlers\ExceptionHandler;
 use Honeybadger\Honeybadger;
-use Honeybadger\Tests\Mocks\HoneybadgerClient;
+use GuzzleHttp\Psr7\Response;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\BulkEventDispatcher;
+use Honeybadger\Handlers\ErrorHandler;
+use Honeybadger\Handlers\ExceptionHandler;
+use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\Tests\Mocks\HoneybadgerClient;
 
 class HoneybadgerTest extends TestCase
 {
@@ -264,7 +264,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_sends_a_checkin_using_slug() {
+    public function it_sends_a_checkin_using_slug()
+    {
         $client = HoneybadgerClient::new([
             //checkinsClient->getProjectId()
             new Response(200, [], json_encode([
@@ -272,7 +273,7 @@ class HoneybadgerTest extends TestCase
                     [
                         'id' => 'p1234',
                     ],
-                ]
+                ],
             ])),
             //checkinsClient->listForProject()
             new Response(200, [], json_encode([
@@ -283,10 +284,10 @@ class HoneybadgerTest extends TestCase
                         'schedule_type' => 'simple',
                         'report_period' => 60,
                     ],
-                ]
+                ],
             ])),
             //client->checkin()
-            new Response(200)
+            new Response(200),
         ]);
 
         Honeybadger::new([
@@ -302,7 +303,7 @@ class HoneybadgerTest extends TestCase
                     'schedule_type' => 'simple',
                     'report_period' => 60,
                 ],
-            ]
+            ],
         ], $client->make())->checkin('a-simple-check-in');
 
         $request = $client->getLatestRequest();
@@ -1023,7 +1024,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function wont_send_event_if_disabled() {
+    public function wont_send_event_if_disabled()
+    {
         $eventsDispatcher = $this->createMock(BulkEventDispatcher::class);
         $eventsDispatcher->expects($this->never())->method('addEvent');
 
@@ -1042,13 +1044,14 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_event_type_and_ts_to_event_payload() {
+    public function it_adds_event_type_and_ts_to_event_payload()
+    {
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1075,13 +1078,14 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_adds_ts_to_event_payload() {
+    public function it_adds_ts_to_event_payload()
+    {
         $client = $this->createMock(\Honeybadger\HoneybadgerClient::class);
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1108,7 +1112,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_queues_an_event() {
+    public function it_queues_an_event()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -1124,7 +1129,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_queues_an_event_with_payload_only() {
+    public function it_queues_an_event_with_payload_only()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -1140,7 +1146,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function wont_send_event_if_payload_is_empty() {
+    public function wont_send_event_if_payload_is_empty()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -1156,7 +1163,8 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
-    public function it_flushes_events() {
+    public function it_flushes_events()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -1180,8 +1188,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1218,8 +1226,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1264,8 +1272,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1316,8 +1324,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1374,8 +1382,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1396,7 +1404,7 @@ class HoneybadgerTest extends TestCase
         $badger->eventContext([
             'user_id' => 123,
             'session_id' => 'abc123',
-            'environment' => 'test'
+            'environment' => 'test',
         ]);
 
         // Send an event
@@ -1426,8 +1434,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1448,14 +1456,14 @@ class HoneybadgerTest extends TestCase
         $badger->eventContext([
             'user_id' => 123,
             'action' => 'context_action',
-            'priority' => 'low'
+            'priority' => 'low',
         ]);
 
         // Send an event with conflicting keys
         $badger->event('user_action', [
             'action' => 'event_action',
             'priority' => 'high',
-            'event_specific' => 'data'
+            'event_specific' => 'data',
         ]);
 
         $this->assertCount(1, $eventsDispatcher->events);
@@ -1480,8 +1488,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1503,25 +1511,25 @@ class HoneybadgerTest extends TestCase
             'user' => [
                 'id' => 123,
                 'name' => 'John Doe',
-                'preferences' => ['theme' => 'dark']
+                'preferences' => ['theme' => 'dark'],
             ],
             'metadata' => [
                 'source' => 'context',
-                'version' => '1.0'
-            ]
+                'version' => '1.0',
+            ],
         ]);
 
         // Send an event with nested data that conflicts
         $badger->event('user_action', [
             'user' => [
                 'id' => 456,  // This should override context
-                'email' => 'john@example.com'  // This should be added
+                'email' => 'john@example.com',  // This should be added
             ],
             'metadata' => [
                 'source' => 'event',  // This should override context
-                'timestamp' => '2023-01-01'  // This should be added
+                'timestamp' => '2023-01-01',  // This should be added
             ],
-            'action' => 'login'
+            'action' => 'login',
         ]);
 
         $this->assertCount(1, $eventsDispatcher->events);
@@ -1530,12 +1538,12 @@ class HoneybadgerTest extends TestCase
         // Event data should completely override context arrays
         $this->assertEquals([
             'id' => 456,
-            'email' => 'john@example.com'
+            'email' => 'john@example.com',
         ], $event['user']);
 
         $this->assertEquals([
             'source' => 'event',
-            'timestamp' => '2023-01-01'
+            'timestamp' => '2023-01-01',
         ], $event['metadata']);
 
         // Event-specific data should be present
@@ -1550,8 +1558,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1595,8 +1603,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1617,14 +1625,14 @@ class HoneybadgerTest extends TestCase
         $badger->eventContext([
             'user_id' => null,
             'session_id' => 'abc123',
-            'optional_field' => null
+            'optional_field' => null,
         ]);
 
         // Send an event with null values
         $badger->event('user_action', [
             'action' => null,
             'success' => true,
-            'error_message' => null
+            'error_message' => null,
         ]);
 
         $this->assertCount(1, $eventsDispatcher->events);
@@ -1646,8 +1654,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1670,7 +1678,7 @@ class HoneybadgerTest extends TestCase
             'integer_value' => 42,
             'float_value' => 3.14,
             'boolean_value' => true,
-            'array_value' => ['nested' => 'context_data']
+            'array_value' => ['nested' => 'context_data'],
         ]);
 
         // Send an event with various data types
@@ -1679,7 +1687,7 @@ class HoneybadgerTest extends TestCase
             'event_integer' => 100,
             'event_float' => 2.71,
             'event_boolean' => false,
-            'event_array' => ['nested' => 'event_data']
+            'event_array' => ['nested' => 'event_data'],
         ]);
 
         $this->assertCount(1, $eventsDispatcher->events);
@@ -1707,8 +1715,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1728,13 +1736,13 @@ class HoneybadgerTest extends TestCase
         // Set event context with a 'ts' key to test precedence
         $badger->eventContext([
             'ts' => 'context_timestamp',
-            'user_id' => 123
+            'user_id' => 123,
         ]);
 
         // Send an event with a 'ts' key to test precedence
         $badger->event('user_action', [
             'ts' => 'event_timestamp',
-            'action' => 'login'
+            'action' => 'login',
         ]);
 
         $this->assertCount(1, $eventsDispatcher->events);
@@ -1758,8 +1766,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1779,7 +1787,7 @@ class HoneybadgerTest extends TestCase
         // Set event context
         $badger->eventContext([
             'user_id' => 123,
-            'session_id' => 'abc123'
+            'session_id' => 'abc123',
         ]);
 
         // Send first event
@@ -1817,8 +1825,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1838,7 +1846,7 @@ class HoneybadgerTest extends TestCase
         // Set event context
         $badger->eventContext([
             'user_id' => 123,
-            'session_id' => 'abc123'
+            'session_id' => 'abc123',
         ]);
 
         // Send first event (should include context)
@@ -1882,13 +1890,13 @@ class HoneybadgerTest extends TestCase
         // Set event context
         $badger->eventContext([
             'event_user_id' => 123,
-            'event_session' => 'event_session_123'
+            'event_session' => 'event_session_123',
         ]);
 
         // Set notice context
         $badger->context([
             'notice_user_id' => 456,
-            'notice_session' => 'notice_session_456'
+            'notice_session' => 'notice_session_456',
         ]);
 
         // Send a notice
@@ -1899,7 +1907,7 @@ class HoneybadgerTest extends TestCase
         // Notice should only have notice context, not event context
         $this->assertEquals([
             'notice_user_id' => 456,
-            'notice_session' => 'notice_session_456'
+            'notice_session' => 'notice_session_456',
         ], $notification['request']['context']);
 
         // Event context should not be in the notice
@@ -1914,8 +1922,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1935,13 +1943,13 @@ class HoneybadgerTest extends TestCase
         // Set notice context
         $badger->context([
             'notice_user_id' => 456,
-            'notice_session' => 'notice_session_456'
+            'notice_session' => 'notice_session_456',
         ]);
 
         // Set event context
         $badger->eventContext([
             'event_user_id' => 123,
-            'event_session' => 'event_session_123'
+            'event_session' => 'event_session_123',
         ]);
 
         // Send an event
@@ -1970,8 +1978,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -1992,7 +2000,7 @@ class HoneybadgerTest extends TestCase
         $badger->eventContext([
             'user_id' => 123,
             'session_id' => 'abc123',
-            'environment' => 'test'
+            'environment' => 'test',
         ]);
 
         // Track what data is available in the beforeEvent handler
@@ -2038,8 +2046,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -2059,7 +2067,7 @@ class HoneybadgerTest extends TestCase
         // Set event context
         $badger->eventContext([
             'user_id' => 123,
-            'environment' => 'test'
+            'environment' => 'test',
         ]);
 
         // Add a beforeEvent handler that modifies the merged data
@@ -2098,8 +2106,8 @@ class HoneybadgerTest extends TestCase
         $config = new Config([
             'api_key' => '1234',
             'events' => [
-                'enabled' => true
-            ]
+                'enabled' => true,
+            ],
         ]);
         $eventsDispatcher = new class($config, $client) extends BulkEventDispatcher {
             public $events = [];
@@ -2119,7 +2127,7 @@ class HoneybadgerTest extends TestCase
         // Set event context
         $badger->eventContext([
             'user_id' => 123,
-            'environment' => 'test'
+            'environment' => 'test',
         ]);
 
         // Add a beforeEvent handler that blocks events based on context data

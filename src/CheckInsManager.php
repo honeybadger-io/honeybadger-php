@@ -10,7 +10,6 @@ use Honeybadger\Exceptions\ServiceException;
  */
 class CheckInsManager implements SyncCheckIns
 {
-
     /**
      * @var Config
      */
@@ -110,8 +109,7 @@ class CheckInsManager implements SyncCheckIns
                     // no change - just add to resulting array
                     $result[] = $remoteCheckIn;
                 }
-            }
-            elseif ($created = $this->create($projectId, $localCheckIn)) {
+            } elseif ($created = $this->create($projectId, $localCheckIn)) {
                 $result[] = $created;
             }
         }
