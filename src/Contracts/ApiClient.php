@@ -6,8 +6,8 @@ use GuzzleHttp\Client;
 use Honeybadger\Config;
 use Honeybadger\Exceptions\ServiceException;
 
-abstract class ApiClient {
-
+abstract class ApiClient
+{
     /**
      * @var Config
      */
@@ -22,7 +22,8 @@ abstract class ApiClient {
      * @param Config $config
      * @param ?Client $httpClient
      */
-    public function __construct(Config $config, ?Client $httpClient = null) {
+    public function __construct(Config $config, ?Client $httpClient = null)
+    {
         $this->config = $config;
         $this->client = $httpClient ?? $this->makeClient();
     }
@@ -30,7 +31,7 @@ abstract class ApiClient {
     /**
      * @return Client
      */
-    public abstract function makeClient(): Client;
+    abstract public function makeClient(): Client;
 
     protected function handleServiceException(ServiceException $e): void
     {
@@ -46,7 +47,7 @@ abstract class ApiClient {
 
     public function hasPersonalAuthToken(): bool
     {
-        return !empty($this->config['personal_auth_token']);
+        return ! empty($this->config['personal_auth_token']);
     }
 
     public function getUserAgent(): string

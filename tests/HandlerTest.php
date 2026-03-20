@@ -3,19 +3,19 @@
 namespace Honeybadger\Tests;
 
 use Exception;
+use Throwable;
+use Honeybadger\Honeybadger;
+use PHPUnit\Framework\TestCase;
 use Honeybadger\Handlers\ErrorHandler;
 use Honeybadger\Handlers\ExceptionHandler;
-use Honeybadger\Honeybadger;
 use Honeybadger\Tests\Fixtures\HandlerFixture;
-use PHPUnit\Framework\TestCase;
-use Throwable;
 
 class HandlerTest extends TestCase
 {
     /** @test */
     public function exception_handler_gets_set()
     {
-        $handlerFixture = new HandlerFixture;
+        $handlerFixture = new HandlerFixture();
         set_exception_handler([$handlerFixture, 'exceptionHandler']);
 
         $mock = $this->createMock(Honeybadger::class);
@@ -39,7 +39,7 @@ class HandlerTest extends TestCase
     {
         // cache previous error handler
         $previousHandler = set_error_handler(null);
-        $handlerFixture = new HandlerFixture;
+        $handlerFixture = new HandlerFixture();
         set_error_handler([$handlerFixture, 'errorHandler']);
 
         $mock = $this->createMock(Honeybadger::class);

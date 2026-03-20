@@ -3,17 +3,18 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use GuzzleHttp\Psr7\Response;
-use Honeybadger\BulkEventDispatcher;
 use Honeybadger\Config;
 use Honeybadger\Honeybadger;
-use Honeybadger\Tests\Mocks\HoneybadgerClient;
+use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\BulkEventDispatcher;
+use Honeybadger\Tests\Mocks\HoneybadgerClient;
 
 class BeforeHandlerTest extends TestCase
 {
     /** @test */
-    public function it_registers_multiple_before_notify_handlers() {
+    public function it_registers_multiple_before_notify_handlers()
+    {
         $handler1Called = false;
         $handler2Called = false;
 
@@ -39,7 +40,8 @@ class BeforeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_registers_multiple_before_insights_event_handlers() {
+    public function it_registers_multiple_before_insights_event_handlers()
+    {
         $handler1Called = false;
         $handler2Called = false;
 
@@ -69,7 +71,8 @@ class BeforeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_modifies_the_notice_before_sending() {
+    public function it_modifies_the_notice_before_sending()
+    {
         $client = HoneybadgerClient::new([
             new Response(201),
         ]);
@@ -90,7 +93,8 @@ class BeforeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_skips_sending_the_notice() {
+    public function it_skips_sending_the_notice()
+    {
         $client = HoneybadgerClient::new([
             new Response(201),
         ]);
@@ -108,7 +112,8 @@ class BeforeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_modifies_the_insights_event_before_sending() {
+    public function it_modifies_the_insights_event_before_sending()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [
@@ -144,7 +149,8 @@ class BeforeHandlerTest extends TestCase
     }
 
     /** @test */
-    public function it_skips_sending_the_insights_event() {
+    public function it_skips_sending_the_insights_event()
+    {
         $config = new Config([
             'api_key' => 'asdf',
             'events' => [

@@ -2,8 +2,8 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\Tests\Fixtures\NewableFixture;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Tests\Fixtures\NewableFixture;
 
 class NewableTest extends TestCase
 {

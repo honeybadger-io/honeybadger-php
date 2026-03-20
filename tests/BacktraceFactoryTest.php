@@ -3,12 +3,12 @@
 namespace Honeybadger\Tests;
 
 use Exception;
-use Honeybadger\BacktraceFactory;
+use Throwable;
+use RuntimeException;
 use Honeybadger\Config;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
-use Throwable;
+use Honeybadger\BacktraceFactory;
 
 class BacktraceFactoryTest extends TestCase
 {
@@ -18,7 +18,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             $this->throwNestedExceptions();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace()[0];
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace()[0];
         }
 
         $this->assertEquals('throwNestedExceptions', $backtrace['method']);
@@ -37,7 +37,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             $throwTestException('bar');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         // if php version is 8.4.0 or higher, then we need to check for a more specific closure name
@@ -60,7 +60,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throwTestException();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         $this->assertEquals('Honeybadger\Tests\throwTestException', $backtrace[0]['method']);
@@ -72,7 +72,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new Exception('test');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         $this->assertEquals(self::class, $backtrace[0]['class']);
@@ -84,7 +84,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new Exception('test');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         $this->assertEquals('->', $backtrace[0]['type']);
@@ -96,7 +96,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             self::throwStaticException();
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         $this->assertEquals('::', $backtrace[0]['type']);
@@ -108,7 +108,7 @@ class BacktraceFactoryTest extends TestCase
         try {
             throw new Exception('test');
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         $this->assertEquals('app', $backtrace[0]['context']);
@@ -118,7 +118,7 @@ class BacktraceFactoryTest extends TestCase
     public function context_is_sent_as_vendor()
     {
         $config = new Config([
-            'project_root' => dirname(getcwd().'/..'),
+            'project_root' => dirname(getcwd() . '/..'),
             'vendor_paths' => ['tests\/.*'],
         ]);
 
@@ -153,9 +153,9 @@ class BacktraceFactoryTest extends TestCase
         };
 
         try {
-            $throwTestException('bar', new TestClass);
+            $throwTestException('bar', new TestClass());
         } catch (Throwable $e) {
-            $backtrace = (new BacktraceFactory($e, new Config))->trace();
+            $backtrace = (new BacktraceFactory($e, new Config()))->trace();
         }
 
         // if php version is 8.4.0 or higher, then we need to check for a more specific closure name
@@ -164,7 +164,7 @@ class BacktraceFactoryTest extends TestCase
         } else {
             $this->assertEquals('Honeybadger\Tests\{closure}', $backtrace[0]['method']);
         }
-        $this->assertEquals(['bar', '[LITERAL]Object('.TestClass::class.')'], $backtrace[0]['args']);
+        $this->assertEquals(['bar', '[LITERAL]Object(' . TestClass::class . ')'], $backtrace[0]['args']);
     }
 }
 

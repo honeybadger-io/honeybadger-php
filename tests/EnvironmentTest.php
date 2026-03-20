@@ -12,7 +12,7 @@ class EnvironmentTest extends TestCase
     {
         $_SERVER['SERVER_NAME'] = 'foo';
         $_SERVER['DOCUMENT_ROOT'] = 'bar';
-        $env = (new Environment)->values();
+        $env = (new Environment())->values();
 
         $this->assertEquals('foo', $env['SERVER_NAME']);
         $this->assertEquals('bar', $env['DOCUMENT_ROOT']);

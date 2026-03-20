@@ -2,10 +2,10 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Contracts\Reporter;
-use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
 use Monolog\LogRecord;
+use Honeybadger\Contracts\Reporter;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LogEventHandler extends AbstractProcessingHandler
 {
@@ -31,7 +31,7 @@ class LogEventHandler extends AbstractProcessingHandler
      */
     protected function write($record): void
     {
-        if (!$this->isHandling($record)) {
+        if (! $this->isHandling($record)) {
             return;
         }
 
@@ -43,7 +43,8 @@ class LogEventHandler extends AbstractProcessingHandler
      * @param array|LogRecord $record
      * @return array
      */
-    protected function getEventPayloadFromMonologRecord($record): array {
+    protected function getEventPayloadFromMonologRecord($record): array
+    {
         $payload = [
             'ts' => $record['datetime']->format(DATE_RFC3339_EXTENDED),
             'severity' => strtolower($record['level_name']),

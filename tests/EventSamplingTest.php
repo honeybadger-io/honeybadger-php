@@ -2,10 +2,10 @@
 
 namespace Honeybadger\Tests;
 
-use Honeybadger\BulkEventDispatcher;
 use Honeybadger\Config;
 use Honeybadger\Honeybadger;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\BulkEventDispatcher;
 
 class EventSamplingTest extends TestCase
 {
@@ -96,14 +96,16 @@ class EventSamplingTest extends TestCase
         for ($i = 0; $i < 5; $i++) {
             $badger->event('log', [
                 'message' => "Test message $i",
-                'requestId' => $sampledRequestId
+                'requestId' => $sampledRequestId,
             ]);
         }
 
         // Check if events were sent consistently (either all or none)
         $sampledCount = count($eventsDispatcher->events);
-        $this->assertTrue($sampledCount === 0 || $sampledCount === 5,
-            "Expected either 0 or 5 events to be sampled, got $sampledCount");
+        $this->assertTrue(
+            $sampledCount === 0 || $sampledCount === 5,
+            "Expected either 0 or 5 events to be sampled, got $sampledCount"
+        );
 
         // Reset the events
         $eventsDispatcher->events = [];
@@ -112,14 +114,16 @@ class EventSamplingTest extends TestCase
         for ($i = 0; $i < 5; $i++) {
             $badger->event('log', [
                 'message' => "Test message $i",
-                'requestId' => $notSampledRequestId
+                'requestId' => $notSampledRequestId,
             ]);
         }
 
         // Check if events were sent consistently (either all or none)
         $sampledCount = count($eventsDispatcher->events);
-        $this->assertTrue($sampledCount === 0 || $sampledCount === 5,
-            "Expected either 0 or 5 events to be sampled, got $sampledCount");
+        $this->assertTrue(
+            $sampledCount === 0 || $sampledCount === 5,
+            "Expected either 0 or 5 events to be sampled, got $sampledCount"
+        );
     }
 
     /** @test */
@@ -149,7 +153,7 @@ class EventSamplingTest extends TestCase
         // Send an event with override to 100% - should be sent
         $badger->event('log', [
             'message' => 'This event should be sent',
-            '_hb' => ['sample_rate' => 100]
+            '_hb' => ['sample_rate' => 100],
         ]);
 
         // Only the second event should be in the queue
@@ -183,8 +187,8 @@ class EventSamplingTest extends TestCase
             'message' => 'Test message',
             '_hb' => [
                 'sample_rate' => 100,
-                'other_metadata' => 'value'
-            ]
+                'other_metadata' => 'value',
+            ],
         ]);
 
         // Verify the event was sent

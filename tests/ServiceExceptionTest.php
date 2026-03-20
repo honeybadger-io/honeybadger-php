@@ -2,11 +2,11 @@
 
 namespace Honeybadger\Tests;
 
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Exceptions\ServiceExceptionFactory;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Exceptions\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Psr7\Response as GuzzleResponse;
+use Honeybadger\Exceptions\ServiceExceptionFactory;
 
 class ServiceExceptionTest extends TestCase
 {

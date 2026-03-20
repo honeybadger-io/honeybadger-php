@@ -79,7 +79,8 @@ class CheckIn
      */
     private $deleted;
 
-    public function __construct(array $params = []) {
+    public function __construct(array $params = [])
+    {
         $this->id = $params['id'] ?? null;
         $this->name = $params['name'] ?? null;
         $this->slug = $params['slug'] ?? null;
@@ -104,7 +105,8 @@ class CheckIn
     /**
      * @throws ServiceException
      */
-    public function validate(): void {
+    public function validate(): void
+    {
         if ($this->slug === null) {
             throw ServiceException::invalidConfig('slug is required for each check-in');
         }

@@ -3,11 +3,11 @@
 namespace Honeybadger\Tests;
 
 use Honeybadger\CheckIn;
-use Honeybadger\Exceptions\ServiceException;
 use PHPUnit\Framework\TestCase;
+use Honeybadger\Exceptions\ServiceException;
 
-class CheckInTest extends TestCase {
-
+class CheckInTest extends TestCase
+{
     /** @test */
     public function it_validates_simple_check_in()
     {
@@ -83,7 +83,7 @@ class CheckInTest extends TestCase {
         $checkIn = new CheckIn([
             'slug' => 'test-check-in',
             'schedule_type' => 'cron',
-            'grace_period' => '1 hour'
+            'grace_period' => '1 hour',
         ]);
 
         $checkIn->validate();
@@ -96,7 +96,7 @@ class CheckInTest extends TestCase {
             'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
-            'grace_period' => '1 hour'
+            'grace_period' => '1 hour',
         ]);
 
         $this->assertFalse($checkIn->isDeleted());
@@ -111,7 +111,7 @@ class CheckInTest extends TestCase {
             'slug' => 'test-check-in',
             'schedule_type' => 'simple',
             'report_period' => '1 day',
-            'grace_period' => '1 hour'
+            'grace_period' => '1 hour',
         ]);
 
         $this->assertNull($checkIn->cronSchedule);

@@ -18,7 +18,7 @@ class FileSourceTest extends TestCase
     /** @test */
     public function it_returns_the_first_line_if_start_is_zero()
     {
-        $source = (new FileSource(__DIR__.'/Fixtures/FileSourceFixture.php', 0))->getSource();
+        $source = (new FileSource(__DIR__ . '/Fixtures/FileSourceFixture.php', 0))->getSource();
 
         $this->assertEquals('<?php', $source[1]);
         $this->assertEquals('namespace Honeybadger\Tests\Fixtures;', $source[3]);
@@ -27,7 +27,7 @@ class FileSourceTest extends TestCase
     /** @test */
     public function it_returns_the_first_line_if_start_is_negative()
     {
-        $source = (new FileSource(__DIR__.'/Fixtures/FileSourceFixture.php', -1))->getSource();
+        $source = (new FileSource(__DIR__ . '/Fixtures/FileSourceFixture.php', -1))->getSource();
 
         $this->assertEquals('<?php', $source[1]);
         $this->assertEquals('namespace Honeybadger\Tests\Fixtures;', $source[3]);
@@ -36,7 +36,7 @@ class FileSourceTest extends TestCase
     /** @test */
     public function it_can_get_a_specfic_set_of_source()
     {
-        $source = (new FileSource(__DIR__.'/Fixtures/FileSourceFixture.php', 5))->getSource();
+        $source = (new FileSource(__DIR__ . '/Fixtures/FileSourceFixture.php', 5))->getSource();
 
         $this->assertEquals('class FileSourceFixture', $source[5]);
     }
@@ -44,7 +44,7 @@ class FileSourceTest extends TestCase
     /** @test */
     public function it_can_use_a_different_radius()
     {
-        $source = (new FileSource(__DIR__.'/Fixtures/FileSourceFixture.php', 5, 6))->getSource();
+        $source = (new FileSource(__DIR__ . '/Fixtures/FileSourceFixture.php', 5, 6))->getSource();
 
         $this->assertEquals('<?php', $source[1]);
         $this->assertEquals('class FileSourceFixture', $source[5]);

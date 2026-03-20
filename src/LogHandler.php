@@ -2,11 +2,11 @@
 
 namespace Honeybadger;
 
-use Honeybadger\Contracts\Reporter;
-use Monolog\Formatter\FormatterInterface;
-use Monolog\Formatter\LineFormatter;
-use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Honeybadger\Contracts\Reporter;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Formatter\FormatterInterface;
+use Monolog\Handler\AbstractProcessingHandler;
 
 class LogHandler extends AbstractProcessingHandler
 {
@@ -32,7 +32,7 @@ class LogHandler extends AbstractProcessingHandler
      */
     protected function write($record): void
     {
-        if (!$this->isHandling($record)) {
+        if (! $this->isHandling($record)) {
             return;
         }
 
@@ -69,7 +69,7 @@ class LogHandler extends AbstractProcessingHandler
                 'log',
                 sprintf('%s.%s', $record['channel'], $record['level_name']),
             ],
-            'fingerprint' => md5($record['level_name'].$record['message']),
+            'fingerprint' => md5($record['level_name'] . $record['message']),
         ];
         $e = $record['context']['exception'] ?? null;
         if ($e instanceof \Throwable) {

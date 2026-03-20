@@ -2,17 +2,14 @@
 
 namespace Honeybadger\Tests;
 
+use Mockery;
 use Exception;
 use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response as GuzzleResponse;
-use Honeybadger\CheckIn;
-use Honeybadger\CheckInsClient;
-use Honeybadger\CheckInsClientWithErrorHandling;
 use Honeybadger\Config;
-use Honeybadger\Exceptions\ServiceException;
-use Mockery;
+use Honeybadger\CheckInsClient;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Response;
+use Honeybadger\Exceptions\ServiceException;
+use Honeybadger\CheckInsClientWithErrorHandling;
 
 class CheckInsClientWithErrorHandlingTest extends TestCase
 {
@@ -28,7 +25,7 @@ class CheckInsClientWithErrorHandlingTest extends TestCase
             },
         ]);
         $mock = Mockery::mock(Client::class)->makePartial();
-        $mock->shouldReceive('get')->andThrow(new Exception);
+        $mock->shouldReceive('get')->andThrow(new Exception());
 
         /** @var CheckInsClient $client */
         $client = new CheckInsClientWithErrorHandling($config, $mock);

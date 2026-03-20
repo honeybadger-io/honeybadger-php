@@ -63,7 +63,7 @@ class ServiceException extends Exception
     public static function generic(?Throwable $e = null): self
     {
         $message = $e
-            ? 'There was an error sending the payload to Honeybadger: '.$e->getMessage()
+            ? 'There was an error sending the payload to Honeybadger: ' . $e->getMessage()
             : 'There was an error sending the payload to Honeybadger.';
 
         return new static($message, 0, $e);

@@ -8,8 +8,8 @@ use Honeybadger\Exceptions\ServiceException;
 /**
  * Synchronize a local check-ins configuration array with Honeybadger's Check-Ins API.
  */
-class CheckInsManager implements SyncCheckIns {
-
+class CheckInsManager implements SyncCheckIns
+{
     /**
      * @var Config
      */
@@ -24,7 +24,8 @@ class CheckInsManager implements SyncCheckIns {
      * @param array $config
      * @param CheckInsClient|null $client
      */
-    public function __construct(array $config, ?CheckInsClient $client = null) {
+    public function __construct(array $config, ?CheckInsClient $client = null)
+    {
         $this->config = new Config($config);
         $this->client = $client ?? new CheckInsClient($this->config);
     }
@@ -108,8 +109,7 @@ class CheckInsManager implements SyncCheckIns {
                     // no change - just add to resulting array
                     $result[] = $remoteCheckIn;
                 }
-            }
-            else if ($created = $this->create($projectId, $localCheckIn)) {
+            } elseif ($created = $this->create($projectId, $localCheckIn)) {
                 $result[] = $created;
             }
         }

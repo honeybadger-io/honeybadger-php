@@ -2,13 +2,13 @@
 
 namespace Honeybadger;
 
+use Throwable;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Honeybadger\Contracts\ApiClient;
 use Honeybadger\Exceptions\ServiceException;
-use Honeybadger\Exceptions\ServiceExceptionFactory;
 use Symfony\Component\HttpFoundation\Response;
-use Throwable;
+use Honeybadger\Exceptions\ServiceExceptionFactory;
 
 class CheckInsClient extends ApiClient
 {
@@ -114,8 +114,8 @@ class CheckInsClient extends ApiClient
             $url = sprintf('v2/projects/%s/check_ins', $projectId);
             $response = $this->client->post($url, [
                 'json' => [
-                    'check_in' => $checkIn->asRequestData()
-                ]
+                    'check_in' => $checkIn->asRequestData(),
+                ],
             ]);
 
             if ($response->getStatusCode() !== Response::HTTP_CREATED) {
@@ -145,8 +145,8 @@ class CheckInsClient extends ApiClient
             $url = sprintf('v2/projects/%s/check_ins/%s', $projectId, $checkIn->id);
             $response = $this->client->put($url, [
                 'json' => [
-                    'check_in' => $checkIn->asRequestData()
-                ]
+                    'check_in' => $checkIn->asRequestData(),
+                ],
             ]);
 
             if ($response->getStatusCode() !== Response::HTTP_NO_CONTENT) {
@@ -164,7 +164,8 @@ class CheckInsClient extends ApiClient
     /**
      * @throws ServiceException
      */
-    public function remove(string $projectId, string $checkInId): void {
+    public function remove(string $projectId, string $checkInId): void
+    {
         if (! $this->hasPersonalAuthToken()) {
             throw ServiceException::missingPersonalAuthToken();
         }
@@ -189,7 +190,7 @@ class CheckInsClient extends ApiClient
             'base_uri' => $this->config['app_endpoint'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::AUTH => [
-                $this->config['personal_auth_token'], ''
+                $this->config['personal_auth_token'], '',
             ],
             RequestOptions::HEADERS => [
                 'User-Agent' => $this->getUserAgent(),

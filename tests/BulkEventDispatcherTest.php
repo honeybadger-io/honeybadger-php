@@ -2,17 +2,18 @@
 
 namespace Honeybadger\Tests;
 
-use DateTime;
-use Honeybadger\BulkEventDispatcher;
-use Honeybadger\Config;
-use Honeybadger\HoneybadgerClient;
-use PHPUnit\Framework\TestCase;
 use Mockery;
+use DateTime;
+use Honeybadger\Config;
+use PHPUnit\Framework\TestCase;
+use Honeybadger\HoneybadgerClient;
+use Honeybadger\BulkEventDispatcher;
 
-class BulkEventDispatcherTest extends TestCase {
-
+class BulkEventDispatcherTest extends TestCase
+{
     /** @test */
-    public function it_initializes_the_bulk_event_dispatcher() {
+    public function it_initializes_the_bulk_event_dispatcher()
+    {
         $config = new Config([
             'api_key' => 'hbp_ABC',
         ]);
@@ -22,7 +23,8 @@ class BulkEventDispatcherTest extends TestCase {
     }
 
     /** @test */
-    public function it_adds_event_to_the_queue() {
+    public function it_adds_event_to_the_queue()
+    {
         $config = new Config([
             'api_key' => 'hbp_ABC',
         ]);
@@ -33,13 +35,14 @@ class BulkEventDispatcherTest extends TestCase {
     }
 
     /** @test */
-    public function it_sends_events_when_threshold_is_reached() {
+    public function it_sends_events_when_threshold_is_reached()
+    {
         $config = new Config([
             'api_key' => 'hbp_ABC',
             'events' => [
                 'bulk_threshold' => 2,
                 'dispatch_interval_seconds' => 2,
-            ]
+            ],
         ]);
         $events = [
             ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],
@@ -55,13 +58,14 @@ class BulkEventDispatcherTest extends TestCase {
     }
 
     /** @test */
-    public function it_sends_events_when_interval_is_reached() {
+    public function it_sends_events_when_interval_is_reached()
+    {
         $config = new Config([
             'api_key' => 'hbp_ABC',
             'events' => [
                 'bulk_threshold' => 50,
                 'dispatch_interval_seconds' => 2,
-            ]
+            ],
         ]);
         $events = [
             ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],
@@ -78,13 +82,14 @@ class BulkEventDispatcherTest extends TestCase {
     }
 
     /** @test */
-    public function it_flushes_events() {
+    public function it_flushes_events()
+    {
         $config = new Config([
             'api_key' => 'hbp_ABC',
             'events' => [
                 'bulk_threshold' => 50,
                 'dispatch_interval_seconds' => 2,
-            ]
+            ],
         ]);
         $events = [
             ['event_type' => 'log', 'ts' => (new DateTime())->format(DATE_RFC3339_EXTENDED), 'message' => 'test 1'],

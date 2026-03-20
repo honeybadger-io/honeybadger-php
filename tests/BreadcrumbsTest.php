@@ -2,9 +2,9 @@
 
 namespace Honeybadger\Tests;
 
+use stdClass;
 use Honeybadger\Breadcrumbs;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class BreadcrumbsTest extends TestCase
 {

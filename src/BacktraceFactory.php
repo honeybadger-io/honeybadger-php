@@ -2,10 +2,10 @@
 
 namespace Honeybadger;
 
+use Throwable;
 use ErrorException;
 use ReflectionClass;
 use ReflectionException;
-use Throwable;
 
 class BacktraceFactory
 {
@@ -102,7 +102,7 @@ class BacktraceFactory
     private function formatBacktrace(array $backtrace): array
     {
         return array_map(function ($frame) {
-            if (!array_key_exists('file', $frame)) {
+            if (! array_key_exists('file', $frame)) {
                 $context = $this->contextWithoutFile($frame);
             } else {
                 $context = $this->contextWithFile($frame);
@@ -138,7 +138,7 @@ class BacktraceFactory
      */
     private function contextWithoutFile(array $frame): array
     {
-        if (!empty($frame['class'])) {
+        if (! empty($frame['class'])) {
             $filename = sprintf('%s%s%s', $frame['class'], $frame['type'], $frame['function']);
 
             try {
@@ -147,7 +147,7 @@ class BacktraceFactory
             } catch (ReflectionException $e) {
                 // Forget it if we run into errors, it's not worth it.
             }
-        } elseif (!empty($frame['function'])) {
+        } elseif (! empty($frame['function'])) {
             $filename = sprintf('%s(anonymous)', $frame['function']);
         } else {
             $filename = sprintf('(anonymous)');
@@ -174,7 +174,7 @@ class BacktraceFactory
         return [
             'source' => (new FileSource($frame['file'], $frame['line']))->getSource(),
             'file' => $frame['file'],
-            'number' => (string)$frame['line'],
+            'number' => (string) $frame['line'],
             'context' => $this->fileFromApplication($frame['file'], $this->config['vendor_paths'])
                 ? 'app' : 'all',
         ];
@@ -191,7 +191,7 @@ class BacktraceFactory
             return false;
         }
 
-        if (!empty($vendorPaths)) {
+        if (! empty($vendorPaths)) {
             return $this->fileFromApplication($filePath, $vendorPaths);
         }
 

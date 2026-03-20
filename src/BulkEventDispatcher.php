@@ -52,20 +52,21 @@ class BulkEventDispatcher
 
     public function flushEvents()
     {
-        if (!$this->hasEvents()) {
+        if (! $this->hasEvents()) {
             return;
         }
 
         $this->dispatchEvents();
     }
 
-    public function hasEvents(): bool {
-        return !empty($this->events);
+    public function hasEvents(): bool
+    {
+        return ! empty($this->events);
     }
 
     private function dispatchEvents()
     {
-        if (!$this->hasEvents()) {
+        if (! $this->hasEvents()) {
             return;
         }
 

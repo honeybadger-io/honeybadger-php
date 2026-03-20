@@ -16,7 +16,7 @@ class ArrTest extends TestCase
         ];
 
         $result = Arr::mapWithKeys($array, function ($item, $key) {
-            return $item.'qux';
+            return $item . 'qux';
         });
 
         $this->assertEquals([
