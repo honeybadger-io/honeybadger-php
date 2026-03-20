@@ -3,6 +3,35 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.4](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.3...v2.25.4) (2026-03-03)
+
+
+### Bug Fixes
+
+* include breadcrumbs and tags in custom notifications ([#243](https://github.com/honeybadger-io/honeybadger-php/issues/243)) ([be340ee](https://github.com/honeybadger-io/honeybadger-php/commit/be340ee6c623a265ba91e923b38a92ff59f9320f))
+
+## [2.25.3](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.2...v2.25.3) (2026-02-24)
+
+
+### Miscellaneous Chores
+
+* add support for Laravel 13.x ([#240](https://github.com/honeybadger-io/honeybadger-php/issues/240)) ([c7c1c59](https://github.com/honeybadger-io/honeybadger-php/commit/c7c1c59a53d865cfbdfe954d33843529b88a50a2))
+* fix PSR-2 brace placement and elseif style violations ([#241](https://github.com/honeybadger-io/honeybadger-php/issues/241)) ([74916cb](https://github.com/honeybadger-io/honeybadger-php/commit/74916cbd6e7a91b115229a4d89e1993f2660da9b))
+
+## [2.25.2](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.1...v2.25.2) (2026-02-18)
+
+
+### Bug Fixes
+
+* getContentType still exists in symfony 6.2, therefore, it should prioritize recommended method ([#237](https://github.com/honeybadger-io/honeybadger-php/issues/237)) ([6d28da9](https://github.com/honeybadger-io/honeybadger-php/commit/6d28da92e4738ea13a8cc2786532e330ac74a014))
+
+## [2.25.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.0...v2.25.1) (2026-02-01)
+
+
+### Bug Fixes
+
+* use literal 2048 for E_STRICT to avoid PHP 8.4 deprecation (fixes [#234](https://github.com/honeybadger-io/honeybadger-php/issues/234)) ([#235](https://github.com/honeybadger-io/honeybadger-php/issues/235)) ([c044803](https://github.com/honeybadger-io/honeybadger-php/commit/c04480366aafe5791a7f79ccc196281b2ffdefbc))
+
 ## [2.25.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.24.1...v2.25.0) (2025-09-03)
 
 

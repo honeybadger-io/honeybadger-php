@@ -94,11 +94,15 @@ class Request
 
     private function getRequestContentType(): ?string
     {
+        if (method_exists($this->request, 'getContentTypeFormat')) {
+            return $this->request->getContentTypeFormat();
+        }
+
         if (method_exists($this->request, 'getContentType')) {
             return $this->request->getContentType();
         }
 
-        return $this->request->getContentTypeFormat();
+        return null;
     }
 
     /**

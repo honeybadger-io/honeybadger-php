@@ -24,7 +24,7 @@ class Honeybadger implements Reporter
     /**
      * SDK Version.
      */
-    const VERSION = '2.25.0';
+    const VERSION = '2.25.4';
 
     /**
      * Honeybadger API URL.
@@ -134,7 +134,7 @@ class Honeybadger implements Reporter
             return [];
         }
 
-        $notification = (new CustomNotification($this->config, $this->context))
+        $notification = (new CustomNotification($this->config, $this->context, $this->breadcrumbs))
             ->make($payload);
 
         return $this->client->notification($notification);
