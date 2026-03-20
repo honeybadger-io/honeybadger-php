@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.25.5](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.4...v2.25.5) (2026-03-20)
+
+
+### Miscellaneous Chores
+
+* setup php-cs-fixer ([#246](https://github.com/honeybadger-io/honeybadger-php/issues/246)) ([da5fd14](https://github.com/honeybadger-io/honeybadger-php/commit/da5fd148919e37097518dd792f4dddf6be94e656))
+
 ## [2.25.4](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.3...v2.25.4) (2026-03-03)
 
 
