@@ -7,7 +7,26 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  run:
+  lint:
+    runs-on: ubuntu-latest
+    name: PHP Lint Check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+            php-version: 8.5
+            ini-values: error_reporting=E_ALL, display_errors=On, zend.exception_ignore_args=Off
+
+      - name: Install dependencies
+        run: composer update --prefer-stable --prefer-dist --no-interaction
+
+      - name: Run Lint Check
+        run: vendor/bin/php-cs-fixer check
+
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,7 +40,7 @@ jobs:
     name: PHP ${{ matrix.php-versions }} Tests (${{ matrix.composer-flags }})
     steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v5
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -36,6 +55,3 @@ jobs:
 
     - name: Run Tests
       run: vendor/bin/phpunit
-
-    - name: Run PHP CS Fixer
-      run: vendor/bin/php-cs-fixer check
