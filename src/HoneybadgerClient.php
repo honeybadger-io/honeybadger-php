@@ -100,7 +100,7 @@ class HoneybadgerClient extends ApiClient
             'base_uri' => $this->config['endpoint'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::HEADERS => [
-                'X-API-Key' => $this->config['api_key'],
+                'X-API-Key' => (string) $this->config['api_key'],
                 'Accept' => 'application/json',
                 'Content-Type' => 'application/json',
                 'User-Agent' => $this->getUserAgent(),

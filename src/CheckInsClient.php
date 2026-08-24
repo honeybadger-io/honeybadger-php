@@ -190,7 +190,7 @@ class CheckInsClient extends ApiClient
             'base_uri' => $this->config['app_endpoint'],
             RequestOptions::HTTP_ERRORS => false,
             RequestOptions::AUTH => [
-                $this->config['personal_auth_token'], '',
+                (string) $this->config['personal_auth_token'], '',
             ],
             RequestOptions::HEADERS => [
                 'User-Agent' => $this->getUserAgent(),
