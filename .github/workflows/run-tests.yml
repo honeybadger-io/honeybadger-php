@@ -6,6 +6,9 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -13,6 +16,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -41,6 +46,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v5
+      with:
+        persist-credentials: false
 
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
@@ -52,6 +59,29 @@ jobs:
 
     - name: Install dependencies
       run: composer update ${{ matrix.composer-flags }} --prefer-dist --no-interaction
+
+    - name: Run Tests
+      run: vendor/bin/phpunit
+
+  test-guzzle7:
+    runs-on: ubuntu-latest
+    name: PHP 8.4 Tests (Guzzle 7)
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      with:
+        persist-credentials: false
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'
+        ini-values: error_reporting=E_ALL, display_errors=On, zend.exception_ignore_args=Off
+        extensions: curl, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, iconv, xdebug
+        coverage: xdebug
+
+    - name: Install dependencies
+      run: composer update --with="guzzlehttp/guzzle:^7.0.1" --prefer-stable --prefer-dist --no-interaction
 
     - name: Run Tests
       run: vendor/bin/phpunit

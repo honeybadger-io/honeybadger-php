@@ -167,4 +167,14 @@ class HoneybadgerClientTest extends TestCase
             $this->assertTrue(false, $assertionMessage);
         }
     }
+
+    /** @test */
+    public function builds_a_real_client_when_the_api_key_is_missing()
+    {
+        // Guzzle 8 validates request options, so a null API key would throw
+        // when the underlying client is constructed.
+        $client = new HoneybadgerClient(new Config());
+
+        $this->assertInstanceOf(Client::class, $client->makeClient());
+    }
 }
