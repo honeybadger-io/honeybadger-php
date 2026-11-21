@@ -853,6 +853,37 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function buffered_events_are_not_flushed_if_reporting_is_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $config = new Config([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'report_data' => false,
+            'events' => [
+                'enabled' => true,
+                'bulk_threshold' => 100,
+                'dispatch_interval_seconds' => 3600,
+            ],
+        ]);
+        $eventsDispatcher = new BulkEventDispatcher($config, new \Honeybadger\HoneybadgerClient($config, $client->make()));
+        $badger = Honeybadger::new($config->all(), $client->make(), $eventsDispatcher);
+
+        // Seed the dispatcher directly, bypassing the guard in event()
+        $eventsDispatcher->addEvent(['event_type' => 'test', 'foo' => 'bar']);
+        $this->assertTrue($eventsDispatcher->hasEvents());
+
+        $badger->flushEvents();
+        $this->assertTrue($eventsDispatcher->hasEvents());
+        $this->assertEmpty($client->request());
+    }
+
+    /** @test */
     public function no_checkins_are_sent_if_reporting_is_disabled()
     {
         $client = HoneybadgerClient::new([
