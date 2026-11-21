@@ -826,6 +826,52 @@ class HoneybadgerTest extends TestCase
     }
 
     /** @test */
+    public function no_events_are_sent_if_reporting_is_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(201),
+        ]);
+        $config = new Config([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'report_data' => false,
+            'events' => [
+                'enabled' => true,
+            ],
+        ]);
+        $eventsDispatcher = new BulkEventDispatcher($config, new \Honeybadger\HoneybadgerClient($config, $client->make()));
+        $badger = Honeybadger::new($config->all(), $client->make(), $eventsDispatcher);
+
+        $badger->event('test', ['foo' => 'bar']);
+        $this->assertFalse($eventsDispatcher->hasEvents());
+
+        $badger->flushEvents();
+        $this->assertEmpty($client->request());
+    }
+
+    /** @test */
+    public function no_checkins_are_sent_if_reporting_is_disabled()
+    {
+        $client = HoneybadgerClient::new([
+            new Response(200),
+        ]);
+
+        Honeybadger::new([
+            'api_key' => 'asdf',
+            'handlers' => [
+                'exception' => false,
+                'error' => false,
+            ],
+            'report_data' => false,
+        ], $client->make())->checkin('1234');
+
+        $this->assertEmpty($client->request());
+    }
+
+    /** @test */
     public function it_can_send_grouping_options()
     {
         $client = HoneybadgerClient::new([

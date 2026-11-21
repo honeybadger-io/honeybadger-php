@@ -160,6 +160,10 @@ class Honeybadger implements Reporter
      */
     public function checkin(string $idOrSlug): void
     {
+        if (! $this->config['report_data']) {
+            return;
+        }
+
         if ($this->isCheckInSlug($idOrSlug)) {
             $this->client->checkInWithSlug($this->config->get('api_key'), $idOrSlug);
             return;
@@ -251,7 +255,7 @@ class Honeybadger implements Reporter
      */
     public function event($eventTypeOrPayload, ?array $payload = null): void
     {
-        if (empty($this->config['api_key']) || ! $this->config['events']['enabled']) {
+        if (! $this->shouldReportEvents()) {
             return;
         }
 
@@ -299,7 +303,7 @@ class Honeybadger implements Reporter
      */
     public function flushEvents(): void
     {
-        if (! $this->config['events']['enabled']) {
+        if (! $this->shouldReportEvents()) {
             return;
         }
 
@@ -381,6 +385,18 @@ class Honeybadger implements Reporter
         return ! $this->excludedException($throwable)
             && ! empty($this->config['api_key'])
             && $this->config['report_data'];
+    }
+
+    /**
+     * Events are sent only when both report_data and events.enabled are true.
+     *
+     * @return bool
+     */
+    protected function shouldReportEvents(): bool
+    {
+        return ! empty($this->config['api_key'])
+            && $this->config['report_data']
+            && $this->config['events']['enabled'];
     }
 
     /**
