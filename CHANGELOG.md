@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file. See [Keep a
 CHANGELOG](http://keepachangelog.com/) for how to update this file. This project
 adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.26.1](https://github.com/honeybadger-io/honeybadger-php/compare/v2.26.0...v2.26.1) (2026-11-21)
+
+
+### Bug Fixes
+
+* respect report_data for events and check-ins ([#253](https://github.com/honeybadger-io/honeybadger-php/issues/253)) ([2f6de38](https://github.com/honeybadger-io/honeybadger-php/commit/2f6de386a6cafddd4c3dcc14041b60ea44486b28))
+
 ## [2.26.0](https://github.com/honeybadger-io/honeybadger-php/compare/v2.25.5...v2.26.0) (2026-08-24)
 
 
